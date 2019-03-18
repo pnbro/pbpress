@@ -14,6 +14,12 @@ include(PB_DOCUMENT_PATH . "includes/common/option.php");
 include(PB_DOCUMENT_PATH . "includes/common/ajax.php");
 include(PB_DOCUMENT_PATH . "includes/common/theme.php");
 
+$current_theme_path_ = pb_current_theme_path();
+
+if(file_exists($current_theme_path_."functions.php")){
+	include($current_theme_path_."functions.php");
+}
+
 include(PB_DOCUMENT_PATH . "includes/common/listtable.php");
 include(PB_DOCUMENT_PATH . "includes/common/adminpage.php");
 

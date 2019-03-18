@@ -5,7 +5,6 @@ require(PB_DOCUMENT_PATH . 'includes/initialize.php');
 
 $current_theme_ = pb_current_theme();
 
-include(pb_current_theme_path()."functions.php");
 pb_hook_do_action("pb_started");
 
 $current_slug_ = pb_current_slug();
