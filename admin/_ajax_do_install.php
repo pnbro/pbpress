@@ -46,7 +46,10 @@ pb_option_update("site_desc", $site_desc_);
 $theme_list_ = pb_theme_list();
 
 if(count($theme_list_) > 0){
-	pb_swich_theme($theme_list_[0]['name']);
+	foreach($theme_list_ as $theme_ => $theme_data_){
+		pb_switch_theme($theme_);
+		break;
+	}
 }
 
 $common_rewrite_bool_ = pb_install_rewrite();

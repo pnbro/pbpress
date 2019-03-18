@@ -40,10 +40,10 @@ function pb_session_instance_token($name_){
     pb_session_put(_PB_SESSION_INSTANCE_CHIP_MAP_,$session_token_maps_);
     return $session_token_maps_[$name_];
 }
-function pb_session_verify_instance_token($name_, $tokenped_text_){
+function pb_session_verify_instance_token($name_, $token_text_){
     $session_token_maps_ = pb_session_get(_PB_SESSION_INSTANCE_CHIP_MAP_);
     if(!isset($session_token_maps_) || !isset($session_token_maps_[$name_])) return false;
-    $bool_ = ($session_token_maps_[$name_] === $tokenped_text_);
+    $bool_ = ($session_token_maps_[$name_] === $token_text_);
     return $bool_;
 }
 
