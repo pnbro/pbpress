@@ -1,0 +1,71 @@
+.pb-image-list-frame{
+
+	display: block;
+
+	> .image-item,
+	> .add-btn{
+		display: inline-block;
+		width: 80px;
+		height: 80px;
+		box-sizing: border-box;
+		
+		margin-right: 10px;
+		margin-bottom: 5px;
+	}
+
+	> .image-item{
+		position: relative;
+		background-color: @gray-lighter;
+		border: 1px solid @gray-lighter;
+		// overflow: hidden;
+
+		> .preview{
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			background-position: center;
+			background-repeat: no-repeat;
+			
+			background-size: 100% auto;
+			background-size: cover;
+			z-index: 1;
+		}
+
+		> .delete-btn{
+			position: absolute;
+			display: inline-block;
+			width: 25px;
+			height: 25px;
+			background-color: @brand-danger;
+			color: white;
+			right: -10px;
+			top: -10px;
+			border-radius: 50%;
+			text-align: center;
+			line-height: 25px;
+			font-size: 20px;
+			box-shadow: -2px 2px 3px rgba(0,0,0,0.3);
+			z-index: 2;
+
+			&:before{
+				.material-icons;
+				content: "close";
+			}
+		}
+	}
+
+	> .add-btn{
+		border: 3px dashed lighten(@gray-light,20%);
+
+		color: lighten(@gray-light,20%);
+		line-height: 10px;
+		text-align: center;
+		vertical-align: top;
+		font-size: 40px;
+		padding: 30px 0;
+
+		&:hover,&:active,&:focus{
+			text-decoration: none;
+		}
+	}
+}

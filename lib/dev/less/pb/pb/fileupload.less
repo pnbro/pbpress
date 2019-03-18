@@ -1,0 +1,130 @@
+.btn-fileupload{
+	position: relative;
+	overflow: hidden;
+	display: inline-block;
+
+	&.loading{
+		
+		> .loading-indicator{
+			display: inline-block;
+
+			> .pb-loading-indicator{
+				height: 50px;
+				width: 50px;
+			}
+		}
+
+		> .label-text,> .label-icon, > .label-dropzone{
+			display: none;
+		}
+	}
+
+	> .loading-indicator{
+		display: none;
+	}
+
+	> input {
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: 0;
+		opacity: 0;
+		-ms-filter: 'alpha(opacity=0)';
+		font-size: 200px !important;
+		direction: ltr;
+		cursor: pointer;
+	}
+
+	> .label-icon{
+		margin-right: 3px;
+	}
+
+	&.btn-fileupload-dropzone{
+	    display: block;
+	    border: 5px dashed @gray-lighter;
+		color: darken(@gray-lighter,20%);
+		background-color: transparent;
+		font-size: 20px;
+		padding: 50px 5px;
+
+		&:hover,&:active,&:visited{
+			color: darken(@gray-lighter,20%);
+			border-color: darken(@gray-lighter,10%);
+			background-color: transparent;
+		}
+
+		&.dropin{
+			border-color: lighten(@brand-primary, 20%);
+			background-color: transparent;	
+		}
+
+		> .label-dropzone{
+			display: block;
+			font-size: 14px;
+			text-align: center;
+		}
+	}
+
+}
+
+.pb-file-list-frame{
+
+    display: block;
+
+    > .file-item,
+    > .add-btn{
+        display: inline-block;
+        width: 80px;
+        height: 40px;
+        box-sizing: border-box;
+        
+        margin-right: 10px;
+        margin-bottom: 5px;
+    }
+
+    > .file-item{
+        position: relative;
+        // background-color: @gray-lighter;
+        // border: 1px solid @gray-lighter;
+        // overflow: hidden;
+        width: auto;
+
+        > .preview{
+        	display: inline-block;
+        	vertical-align: middle;
+
+        	> .icon{
+        		vertical-align: middle;
+        		color: #bfbfbf;
+        	}
+        }
+    
+        > .delete-btn{
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            color: @brand-danger;
+
+            &:before{
+                .material-icons;
+                content: "close";
+                    vertical-align: middle;
+            }
+        }
+    }
+
+    > .add-btn{
+        border: 3px dashed lighten(@gray-light,20%);
+
+        color: #ababab;
+        line-height: 10px;
+        text-align: center;
+        vertical-align: top;
+        font-size: 40px;
+        padding: 5px 0;
+
+        &:hover,&:active,&:focus{
+            text-decoration: none;
+        }
+    }
+}

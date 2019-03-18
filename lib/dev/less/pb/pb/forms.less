@@ -1,0 +1,323 @@
+.help-block.with-errors{
+    color: #b93f21;
+    font-size: 11px;
+
+    margin-top: 3px;
+    opacity: 1;
+
+    -webkit-transition: margin-top .3s, opacity .5s;
+            transition: margin-top .3s, opacity .5s;
+
+}
+
+
+
+.radiobox{
+    > .btn{
+        position: relative;
+        display: block;
+        max-width: auto;
+        width: 100%;
+        margin: 3px 0px;
+        padding: 0px;
+        text-align: left;
+
+        &,&:hover,&:active,&:visited,&:focus{
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            outline: none;
+        }
+        
+        > .wrap{
+            position: relative;
+
+            width: 100%;
+            padding: 7px 10px;
+            height: 35px;
+            border-radius: 3px;
+            border: 1px solid #8e8e8e;
+            vertical-align: middle;
+
+            font-size: 16px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 1.2;
+            letter-spacing: normal;
+            text-align: left;
+            color: #333333;
+
+            -webkit-transition: background-color .5s, color .3s;
+                transition: background-color .5s, color .3s;
+
+            
+            > .numberning{
+                height: 25px;
+                display: inline-block;
+
+                font-size: 16px;
+                font-weight: 500;
+                font-style: normal;
+                font-stretch: normal;
+                line-height: 1.2;
+                letter-spacing: normal;
+                text-align: center;
+                color: lighten(#333333, 7%);
+                padding: 0 6px;
+                vertical-align: middle;
+                margin-right: 10px;
+                color: darken(@brand-primary, 30%);
+                
+            }
+
+            > .text{
+
+            }
+        }
+
+        &.active{
+            > .wrap{
+                background-color: fade(@brand-primary, 30%);
+                border-color: #1d1d1d;
+            }
+        }
+
+
+    }
+
+    .clearfix();
+}
+
+
+.pb-loading-indicator {
+    background-image: url(../img/form-ajax-indicator.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 50px;
+    height: 50px;
+    display: block;
+}
+
+.pb-form-table{
+    .table;
+    .table-bordered;
+    margin-bottom: 0px;
+    border-bottom: 2px solid #dddddd;
+
+    > thead > tr:last-child{
+        border-bottom: 3px double #bfbfbf;
+    }
+    > tfoot > tr:first-child{
+        border-top: 3px double #bfbfbf;
+    }
+
+    > thead > tr > th,
+    > tfoot > tr > th{
+        background-color: #f1f1f1;
+        text-align: center;
+        font-weight: bold;
+    }
+
+
+
+    > tbody > tr > th{
+        background-color: #f1f1f1;
+        width: 130px;
+        text-align: right;
+    }
+    > tbody > tr > td{
+        background-color: white;
+    }
+
+    > thead,
+    > tbody,
+    > tfoot{
+        > tr > th,
+        > tr > td{
+            padding: 5px 10px;
+
+            &.text-center{
+                text-align: center;
+            }
+            &.text-right{
+                text-align: right;
+            }
+        }    
+    }
+    
+ 
+
+    .form-control{
+        .input-sm;
+    }
+
+
+    textarea.form-control{
+        min-height: 100px;
+        width: 100%;
+        max-width: 100%;
+        min-width: 100%;
+    }
+
+    .bootstrap-select.form-control{
+        .input-sm;   
+    }
+
+    .dropdown-toggle{
+        .btn-sm;
+    }
+
+    .help-block,
+    .form-group{
+        margin-bottom: 0px;
+    }
+    .help-block{
+        margin-top: 3px;
+    }
+
+
+    &.valign-top{
+        th,td{
+            vertical-align: top;
+        }
+    }
+
+    &.valign-middle{
+        th,td{
+            vertical-align: middle;
+        }
+    }
+
+    &.valign-bottom{
+        th,td{
+            vertical-align: bottom;
+        }
+    }
+
+    &.tr-hover{
+        > tbody > tr{
+
+            &:hover,
+            &:hover > td{
+                background-color: #fff8f3;
+            }
+
+        }
+    }
+
+    .number-input-group{
+        width: 100px;
+        .btn{
+            .btn-sm;
+        }
+    }
+
+    @media screen and (max-width: @screen-xs-max){
+        display: block;
+        border: none;
+        
+        tbody,
+        tbody > tr,
+        tbody > tr > th,
+        tbody > tr > td{
+            display: block;
+            width: 100%;
+        }   
+
+        tbody > tr{
+            & + tr{margin-top: 4px;}
+        }
+
+        tbody > tr > th{
+            border-bottom: none;
+            text-align: left;
+        }
+    }
+
+}
+
+.pb-top-button-area,
+.pb-bottom-button-area{
+    position: relative;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+
+    > .col-left,
+    > .col-right{
+        position: relative;
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    > .col-right{
+        text-align: right;
+    }
+}
+
+.pb-top-button-area{
+    margin-bottom: 20px;
+}
+
+.pb-bottom-button-area{
+    margin-top: 20px;
+}
+
+.checkbox-scrollable-list,
+.radio-scrollable-list{
+    position: relative;
+    display: block;
+    overflow-y: scroll;
+
+    border: 1px solid @input-border;
+    border-radius: @input-border-radius;
+    height: @input-height-base * 6;
+    -webkit-overflow-scrolling : touch;
+    background-color: #f5f5f5;
+
+    > .checkbox,
+    > .radio{
+        position: relative;
+        display: block;
+        padding: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        background-color: white;
+        border-bottom: 1px solid @input-border;
+
+        .clearfix();
+
+        > label{
+            display: block;
+            padding: 8px 10px 8px 30px;
+        }
+
+        &:hover{
+            background-color: #fdfdfd;
+        }
+
+    }
+
+    > .nodata-text{
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        color: @gray;
+    }
+
+    > .loading-indicator{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-top: -25px;
+        margin-left: -25px;
+    }
+
+}
+
+.datetimepicker-group{
+    position: relative;
+    display: block;
+}
+
