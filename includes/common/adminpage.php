@@ -122,6 +122,7 @@ function pb_adminpage_rewrite_path(){
 	global $pb_adminpage_rewrite_path;
 	if(isset($pb_adminpage_rewrite_path)) return $pb_adminpage_rewrite_path;
 
+	if(!isset($_SERVER['REDIRECT_URL'])) return null;
 	if(strpos($_SERVER['REQUEST_URI'], PB_ADMINPAGE_REWRITE_BASE) === false) return null;
 
 	$admin_subpath_map_ = str_replace(PB_ADMINPAGE_REWRITE_BASE, "", strtok($_SERVER['REQUEST_URI'], "?"));

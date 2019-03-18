@@ -35,6 +35,7 @@ function pb_rewrite_path(){
 	global $pb_rewrite_path;
 	if(isset($pb_rewrite_path)) return $pb_rewrite_path;
 
+	if(!isset($_SERVER['REDIRECT_URL'])) return null;
 	if(strpos($_SERVER['REQUEST_URI'], PB_REWRITE_BASE) === false) return null;
 
 	$subpath_map_ = str_replace(PB_REWRITE_BASE, "", strtok($_SERVER['REQUEST_URI'], "?"));
