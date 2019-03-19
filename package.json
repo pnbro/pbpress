@@ -1,7 +1,7 @@
 {
-  "name": "talksam_PBLibraru",
+    "name": "PBPress",
   "version": "1.0.0",
-  "description": "library for talksam",
+  "description": "PBPress for PHP Frameworks",
   "main": "Gruntfile.js",
   "dependencies": {
     "grunt": "^0.4.5",
