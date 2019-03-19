@@ -10,3 +10,4 @@ lib/dev/comp-lib
 lib/dev/concat-lib/dist
 lib/dev/concat-lib/dist/**/**.*
 admin/.htaccess
+uploads

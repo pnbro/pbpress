@@ -8,9 +8,7 @@ header("Content-Type: text/html; CharSet=utf-8");
 
 function pb_admin_head(){
 
-	$pbvar_ = pb_hook_apply_filters('pb_admin_head_pbvar', array(
-		'home_url' => pb_home_url(),
-	));
+	$pbvar_ = pb_hook_apply_filters('pb-admin-head-pbvar', array());
 
 	global $pb_config;
 	?>

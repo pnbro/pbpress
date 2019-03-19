@@ -43,6 +43,8 @@ $site_theme_ = $settings_data_['site_theme'];
 pb_option_update("site_name", $site_name_);
 pb_option_update("site_desc", $site_desc_);
 
+pb_hook_do_action('pb-admin-update-site-settings', $settings_data_);
+
 $before_theme_ = pb_current_theme();
 
 if($before_theme_ !== $site_theme_){

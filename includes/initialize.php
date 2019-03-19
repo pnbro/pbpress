@@ -16,6 +16,21 @@ if(!$pbdb->exists_table("OPTIONS")){
 	exit;
 }
 
+function pb_head(){
+	$pbvar_ = pb_hook_apply_filters('pb-head-pbvar', array());
+
+	global $pb_config;
+?>
+<script type="text/javascript">window.PBVAR = <?=json_encode($pbvar_)?>;</script>
+
+<?php 
+	pb_hook_do_action('pb_head');
+}
+
+function pb_foot(){
+	pb_hook_do_action('pb_foot');
+}
+
 function pb_end(){
 	pb_hook_do_action('pb_ended');
 	exit;	

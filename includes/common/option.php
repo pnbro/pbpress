@@ -78,7 +78,7 @@ function pb_option_value($option_name_, $default_ = null, $cache_ = true){
 	}
 
 	if(!isset($results_)){
-		return null;
+		return $default_;
 	}
 
 	$_pb_option_map[$option_name_] = unserialize($results_);

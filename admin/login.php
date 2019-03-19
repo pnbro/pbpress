@@ -15,7 +15,7 @@ $redirect_url_ = (isset($_GET["redirect_url"]) && strlen($_GET["redirect_url"]))
 	<meta name="format-detection" content="telephone=no">
 
 	<?php pb_admin_head(); ?>
-	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>/css/pages/admin/login.css">
+	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/login.css">
 </head>
 
 <body class="page-pbpress-login">
@@ -51,16 +51,44 @@ $redirect_url_ = (isset($_GET["redirect_url"]) && strlen($_GET["redirect_url"]))
 
 					<hr>
 					<button type="submit" class="btn btn-primary btn-block btn-lg">로그인</button>
+					<div class="bottom-frame text-center">
+						<a href="" data-toggle="modal" data-target="#pb-admin-login-findpass-modal">비밀번호 찾기</a>
+					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 
+	<div class="modal fade " tabindex="-1" role="dialog" id="pb-admin-login-findpass-modal">
+		<div class="modal-dialog " role="document"><div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">비밀번호 찾기</h4>
+			</div>
+			<div class="modal-body"><form id="pb-admin-login-findpass-form" method="POST" >
+				
+				<div class="form-group">
+
+					<input type="mail" class="form-control" id="pb-admin-login-findpass-form-user-email" placeholder="가입하신 이메일 입력" name="user_email" required >
+					<div class="help-block with-errors"></div>
+					<p class="help-block text-center">가입하신 이메일로 <br class="visible-xs" />암호를 재설정할 수 있습니다.</p>
+				
+				</div>
+
+				<hr>
+
+				<div class="form-margin-xs"></div>
+				<button type="submit" class="btn btn-primary btn-block btn-lg">전송하기</button>
+				</div>
+			</form></div>
+			
+		</div></div>
+	</div>
+
 	<div class="copyrights">© 2019 Paul&Bro Company All Rights Reserved.</div>
 
 	<?php pb_admin_foot(); ?>
-	<script type="text/javascript" src="<?=PB_LIBRARY_URL?>/js/pages/admin/login.js"></script>
-
+	<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/login.js"></script>
 </body>
 </html>
 <?php pb_admin_end(); ?>

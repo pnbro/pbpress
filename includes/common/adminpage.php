@@ -22,7 +22,7 @@ function pb_adminpage_list(){
 			'sort' => 1,
 		),
 		'manage-site' => array(
-			'name' => '사이트정보',
+			'name' => '사이트설정',
 			'type' => 'menu',
 			'directory' => 'common',
 			'page' => PB_DOCUMENT_PATH."admin/manage-site.php",

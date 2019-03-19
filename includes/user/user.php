@@ -18,6 +18,9 @@ function pb_user_list($conditions_ = array()){
 				,USERS.STATUS STATUS
 				,".pb_query_gcode_dtl_name("U0001", "USERS.STATUS")." STATUS_NAME
 
+				,USERS.FINDPASS_VKEY FINDPASS_VKEY
+				,USERS.FINDPASS_VKEY_EXP_DATE FINDPASS_VKEY_EXP_DATE
+
 				,USERS.REG_DATE REG_DATE
 				,DATE_FORMAT(USERS.REG_DATE, '%Y.%m.%d %H:%i:%S') REG_DATE_YMDHIS
 				,DATE_FORMAT(USERS.REG_DATE, '%Y.%m.%d %H:%i') REG_DATE_YMDHI
@@ -96,6 +99,10 @@ function _pb_user_parse_fields($data_){
 		'USER_EMAIL' => '%s',
 		'USER_NAME' => '%s',
 		'STATUS' => '%s',
+			
+		'FINDPASS_VKEY' => '%s',
+		'FINDPASS_VKEY_EXP_DATE' => '%s',
+
 		'REG_DATE' => '%s',
 		'MOD_DATE' => '%s',
 		
@@ -245,6 +252,88 @@ function pb_user_register($data_ = array()){
 
 	$data_['user_pass'] = pb_crypt_hash($data_['user_pass']);
 	return pb_user_add($data_);
+}
+
+
+
+define("PB_USER_FINDPASS_VKEY_NOTVALID", -1);
+define("PB_USER_FINDPASS_VKEY_EXPIRED", -2);
+define("PB_USER_FINDPASS_VKEY_NOTFOUND", -3);
+
+//암호변경용 키 메일 발송
+function pb_user_send_email_for_findpass($user_email_){
+	$user_data_ = pb_user_by_user_email($user_email_);
+
+	if(!isset($user_data_) || empty($user_data_)){
+		return new WP_Error(PB_USER_FINDPASS_VKEY_NOTFOUND, '가입이력없음', '해당 이메일로 가입이력이 존재하지 않습니다.');
+	}
+
+	$user_id_ = $user_data_['ID'];
+	$validation_key_ = pb_user_gen_findpass_validation_key($user_id_);
+
+	$validation_url_ = pb_make_url(pb_home_url("admin/resetpass.php"), array(
+		'user_email' => $user_email_,
+		'vkey' => $validation_key_,
+
+	));
+
+	$mail_content_ = pb_hook_apply_filters('pb-user-findpass-email-content', "");
+
+	if(!strlen($mail_content_)){
+		$mail_content_ = '<a href="'.$validation_url_.'">새로운 비밀번호 설정</a>';
+	}
+
+	$mail_title_ = pb_hook_apply_filters('pb-user-findpass-email-title', "[".pb_option_value('site_name')."] 비밀번호 재설정 안내");
+
+	return pb_mail_template_send($user_email_, $mail_title_, array(
+		'content' => $mail_content_,
+	));
+}
+
+function pb_user_gen_findpass_validation_key($user_id_){
+	$validation_key_ = pb_random_string(20);
+	$expire_datetime_ = date('Y-m-d H:i:s', strtotime(pb_current_time(). ' + 1 days'));
+
+	pb_user_update($user_id_, array(
+		"FINDPASS_VKEY" => $validation_key_,
+		"FINDPASS_VKEY_EXP_DATE" => $expire_datetime_,
+	));
+
+	return $validation_key_;
+}
+
+function pb_user_check_findpass_validation_key($user_id_, $validation_key_){
+	$user_ = pb_user($user_id_);
+
+	if(!isset($user_) || empty($user_)){
+		return new PBError(PB_USER_FINDPASS_VKEY_NOTFOUND, '가입이력없음', '해당 이메일로 가입이력이 존재하지 않습니다.');
+	}
+
+	$stored_validation_key_ = $user_['FINDPASS_VKEY'];
+
+	if($validation_key_ !== $stored_validation_key_){
+		return new PBError(PB_USER_FINDPASS_VKEY_NOTVALID, '잘못된 인증키', '비밀번호인증키가 잘못되었습니다.');
+	}
+
+	global $pbdb;
+
+	$exprie_day_count_ = $pbdb->get_var("SELECT 
+		USERS.FINDPASS_VKEY_EXP_DATE - NOW() CHK
+		FROM USERS
+		WHERE ID = {$user_id_}");
+
+	if($exprie_day_count_ < 0){
+		return new PBError(PB_USER_FINDPASS_VKEY_EXPIRED, '만료된 인증키', '비밀번호인증키가 만료되었습니다.');
+	}
+
+	return true;
+}
+
+function pb_user_remove_findpass_validation_key($user_id_){
+	pb_user_update($user_id_, array(
+		"FINDPASS_VKEY" => null,
+		"FINDPASS_VKEY_EXP_DATE" => null
+	));
 }
 
 

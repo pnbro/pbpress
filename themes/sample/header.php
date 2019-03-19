@@ -9,5 +9,6 @@
 	<script type="text/javascript" src="<?=pb_current_theme_url()?>lib/js/jquery.js"></script>
 	<script type="text/javascript" src="<?=pb_current_theme_url()?>lib/js/bootstrap.min.js"></script>
 	
+	<?php pb_head() ?>
 </head>
 <body>

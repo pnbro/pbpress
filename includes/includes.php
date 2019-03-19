@@ -12,7 +12,9 @@ include(PB_DOCUMENT_PATH . "includes/common/functions.php");
 include(PB_DOCUMENT_PATH . "includes/common/rewrite.php");
 include(PB_DOCUMENT_PATH . "includes/common/option.php");
 include(PB_DOCUMENT_PATH . "includes/common/ajax.php");
+include(PB_DOCUMENT_PATH . "includes/common/fileupload.php");
 include(PB_DOCUMENT_PATH . "includes/common/theme.php");
+include(PB_DOCUMENT_PATH . "includes/common/mail.php");
 
 include(PB_DOCUMENT_PATH . "includes/common/listtable.php");
 include(PB_DOCUMENT_PATH . "includes/common/adminpage.php");

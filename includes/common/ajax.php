@@ -29,12 +29,13 @@ function pb_ajax_url($action_ = null, $extras_ = null){
 
 	return $ajax_base_url_;
 }
-function _pb_ajax_add_to_admin_header_pbvar($results_){
+function _pb_ajax_add_to_header_pbvar($results_){
 	$results_['ajax_url'] = pb_ajax_url();
 
 	return $results_;
 };
-pb_hook_add_filter('pb_admin_head_pbvar', "_pb_ajax_add_to_admin_header_pbvar");
+pb_hook_add_filter('pb-admin-head-pbvar', "_pb_ajax_add_to_header_pbvar");
+pb_hook_add_filter('pb-head-pbvar', "_pb_ajax_add_to_header_pbvar");
 
 function _pb_ajax_rewrite_handler($rewrite_path_, $page_data_){
 	if(count($rewrite_path_) > 2) return new PBError(404, "잘못된 접근", "요청값이 잘못되었습니다.");

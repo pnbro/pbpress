@@ -7,6 +7,12 @@ if(!defined('PB_DOCUMENT_PATH')){
 function pb_home_url($sub_path_ = "", $params_ = array()){
 	return pb_make_url(pb_append_url(PB_DOCUMENT_URL, $sub_path_), $params_);
 }
+function _pb_home_url_add_to_header_pbvar($results_){
+	$results_['home_url'] = pb_home_url();
+	return $results_;
+};
+pb_hook_add_filter('pb-admin-head-pbvar', "_pb_home_url_add_to_header_pbvar");
+pb_hook_add_filter('pb-head-pbvar', "_pb_home_url_add_to_header_pbvar");
 
 function pb_admin_url($sub_path_ = "", $params_ = array()){
 	return pb_make_url(pb_append_url(PB_DOCUMENT_URL."admin/", $sub_path_), $params_);
