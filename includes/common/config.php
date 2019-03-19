@@ -21,8 +21,6 @@ class PBConfig{
 	public $crypt_bits = 2048;
 
 	function __construct(){
-		@include(PB_DOCUMENT_PATH."/pb-config.php");
-
 		$this->devmode = (defined("PB_DEV") && PB_DEV === true);
 
 		if($this->devmode){
