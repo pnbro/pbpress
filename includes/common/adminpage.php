@@ -8,7 +8,7 @@ define('PB_ADMINPAGE_REWRITE_BASE', PB_REWRITE_BASE."admin/");
 function _pb_adminpage_list_sort($a_, $b_){
 	$a_sort_ = isset($a_['sort']) ? $a_['sort'] : 0;
 	$b_sort_ = isset($b_['sort']) ? $b_['sort'] : 0;
-	return $a_sort_ > $b_sort_;
+	return $a_sort_ < $b_sort_ ? -1 : 1;
 }
 
 function pb_adminpage_list(){

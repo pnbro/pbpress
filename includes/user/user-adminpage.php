@@ -9,7 +9,7 @@ function _pb_user_register_adminpage($results_){
 	$results_['user'] = array(
 		'name' => '사용자관리',
 		'type' => 'directory',
-		'sort' => 1,
+		'sort' => 3,
 	);
 		
 	$results_['manage-user'] = array(
