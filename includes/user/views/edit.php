@@ -101,63 +101,8 @@
 
 				<hr>
 				<button type="submit" class="btn btn-primary btn-block btn-lg">변경사항 저장</button>
+				<a href="<?=pb_admin_url("manage-user")?>" class="btn btn-block btn-default ">내역으로</a>
 			</form>
 		</div>
 	</div>
 <script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/user/edit.js"></script>
-<script type="text/javascript">
-jQuery(document).ready(function(){
-	var edit_form_ = $("#pb-manage-user-edit-form");
-	edit_form_.validator();
-	edit_form_.submit_handler(function(){
-		PB.confirm({
-			title : "수정확인",
-			content : "사용자정보를 변경하시겠습니까?"
-		}, function(c_){
-			if(!c_) return;
-			_pb_manage_user_do_update();
-		});
-	});
-
-	edit_form_.find("[name='user_authority']").selectpicker();
-});
-
-function _pb_manage_user_do_update(){
-	var edit_form_ = $("#pb-manage-user-edit-form");
-	var request_data_ = edit_form_.serialize_object();
-
-	if(!request_data_['user_pass'] || request_data_['user_pass'] === ""){
-		delete request_data_['user_pass'];
-	}else{
-		request_data_['user_pass'] = PB.crypt.encrypt(request_data_['user_pass']);
-	}
-
-	if(!request_data_['user_authority']){
-		request_data_['user_authority'] = [];
-	}
-
-	if($.type(request_data_['user_authority']) === "string"){
-		request_data_['user_authority']	= [request_data_['user_authority']];
-	}
-
-	PB.post("pb-admin-manage-user-do-update",{
-		request_data : request_data_
-	}, function(result_, response_json_){
-	if(!result_ || response_json_.success !== true){
-		PB.alert({
-			title : response_json_.error_title || "에러발생",
-			content : response_json_.error_message || "사용자 정보 수정 중, 에러가 발생했습니다.",
-		});
-		return;
-	}
-
-	PB.alert({
-		title : "수정완료",
-		content : "사용자 정보가 수정되었습니다."
-	}, function(){
-		document.location = response_json_.redirect_url;
-	});
-
-}, true);
-}
-</script>
