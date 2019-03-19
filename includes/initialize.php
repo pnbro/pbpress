@@ -4,11 +4,6 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-//check exists config file
-if(!file_exists(PB_DOCUMENT_PATH."pb-config.php")){
-	die("config file not found");
-}
-
 //load common modules
 require(PB_DOCUMENT_PATH . 'includes/includes.php');
 
