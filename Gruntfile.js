@@ -21,7 +21,6 @@ module.exports = function (grunt) {
 
       'defaults-admin' : {
         src: [
-          'lib/dev/concat-lib/src/defaults/underscore.js',
           'lib/dev/concat-lib/src/defaults/moment.js',
           'lib/dev/concat-lib/src/defaults/bootstrap.js',
           'lib/dev/concat-lib/src/defaults/jsencrypt.js',

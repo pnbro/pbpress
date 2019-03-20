@@ -29,4 +29,26 @@ you can make a theme that you want, and just put your theme you made into 'theme
 원하는 테마를 제작할 수 있습니다. 그리고 제작한 테마를 themes 디렉토리에 넣으면 됩니다.(themes 디렉토리에 샘플 테마를 참조)
 
 
+## included open sources
+### Frontend 
+	- jquery 2.x : https://jquery.com
+	- jquery.blockUI : http://malsup.com/jquery/block
+	- jquery.cookie : https://github.com/carhartl/jquery-cookie
+	- imagesloaded : https://imagesloaded.desandro.com/
+	- jquery.ui 1.x : https://jqueryui.com
+	- blueimp fileupload : https://github.com/blueimp/jQuery-File-Upload
+	- Bootstrap 3.x : https://getbootstrap.com 
+	- bootstrap-datetimepicker : https://github.com/Eonasdan/bootstrap-datetimepicker
+	- bootstrap-select : https://developer.snapappointments.com/bootstrap-select
+	- bootstrap-select : https://developer.snapappointments.com/bootstrap-select
+	- jsencrypt : https://github.com/travist/jsencrypt
+	- momentjs : https://momentjs.com
+	- summernote : https://github.com/summernote/summernote
+
+### Backend
+	- blueimp UploadHandler : https://github.com/blueimp/jQuery-File-Upload
+	- phpmailer : https://github.com/PHPMailer/PHPMailer
+
+
+
 # API documentation and manuals will be added to the distribution
