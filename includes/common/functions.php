@@ -53,5 +53,25 @@ function pb_redirect_error($code_, $message_, $title_ = "ERROR!"){
 	include(PB_DOCUMENT_PATH."error.php");
 }
 
+function pb_head(){
+	$pbvar_ = pb_hook_apply_filters('pb-head-pbvar', array());
+
+	global $pb_config;
+?>
+<script type="text/javascript">window.PBVAR = <?=json_encode($pbvar_)?>;</script>
+<?php
+
+	pb_hook_do_action("pb_head");
+}
+
+function pb_foot(){
+	pb_hook_do_action("pb_foot");
+}
+
+function pb_end(){
+	pb_hook_do_action('pb_ended');
+	exit;	
+}
+
 
 ?>

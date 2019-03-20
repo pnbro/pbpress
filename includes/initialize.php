@@ -16,24 +16,17 @@ if(!$pbdb->exists_table("OPTIONS")){
 	exit;
 }
 
-function pb_head(){
-	$pbvar_ = pb_hook_apply_filters('pb-head-pbvar', array());
-
-	global $pb_config;
-?>
-<script type="text/javascript">window.PBVAR = <?=json_encode($pbvar_)?>;</script>
-
-<?php 
-	pb_hook_do_action('pb_head');
-}
-
-function pb_foot(){
-	pb_hook_do_action('pb_foot');
-}
-
-function pb_end(){
+if(!pb_exists_rewrite()){
+	pb_install_rewrite();
+	header('Location: '.pb_home_url());
 	pb_hook_do_action('pb_ended');
-	exit;	
+	exit;
+}
+if(!pb_exists_admin_rewrite()){
+	pb_install_admin_rewrite();
+	header('Location: '.pb_admin_url());
+	pb_hook_do_action('pb_ended');
+	exit;
 }
 
 header("Content-Type: text/html; CharSet=utf-8");

@@ -98,6 +98,9 @@ function pb_adminpage_tree($apply_authority_ = true){
 	return $pb_adminpage_tree;
 }
 
+function pb_exists_admin_rewrite(){
+	return file_exists(PB_DOCUMENT_PATH."admin/.htaccess");
+}
 function pb_install_admin_rewrite(){
 
 	$rewrite_base_ = str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH);

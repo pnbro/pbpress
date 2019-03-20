@@ -6,6 +6,10 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 define('PB_REWRITE_BASE', str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH));
 
+
+function pb_exists_rewrite(){
+	return file_exists(PB_DOCUMENT_PATH.".htaccess");
+}
 function pb_install_rewrite(){
 
 	$rewrite_base_ = str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH);
@@ -19,7 +23,6 @@ function pb_install_rewrite(){
 	fwrite($rewrite_file_, "RewriteEngine On\n
 RewriteBase ".PB_REWRITE_BASE."\n
 RewriteRule ^index\.php$ - [L]\n
-RewriteCond %{REQUEST_FILENAME} !-f\n
 RewriteCond %{REQUEST_FILENAME} !-d\n
 RewriteRule . ".PB_REWRITE_BASE."index.php [L]");
 	fclose($rewrite_file_);
@@ -65,6 +68,14 @@ function pb_current_rewrite(){
 	return $rewrite_list_[$target_slug_];
 }
 
+function pb_is_current_slug($slug_){
+	$target_slug_ = pb_current_slug();
+	return ($target_slug_ === $slug_);
+}
+function pb_is_home(){
+	if(strpos($_SERVER['REQUEST_URI'], PB_REWRITE_BASE) === false) return false;
+	return !isset($_SERVER['REDIRECT_STATUS']);
+}
 
 function pb_rewrite_common_handler($rewrite_path_, $page_data_){
 	if(!isset($page_data_)){

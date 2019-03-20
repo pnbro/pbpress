@@ -11,6 +11,10 @@ if(!$pbdb->exists_table("OPTIONS")){
 	exit;
 }
 
+if(!pb_exists_admin_rewrite()){
+	pb_install_admin_rewrite();
+}
+
 if(!pb_is_user_logged_in()){
 	pb_redirect(pb_admin_login_url(pb_admin_url()));
 	pb_admin_end();

@@ -1,10 +1,15 @@
 <?php pb_theme_header(); ?>
 
-	<h1 class="text-center" class="text-center">Hello World!<br/>
-		<small>이 테마는 샘플테마입니다.</small></h1>
+	<!-- Page Content -->
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<h1 class="mt-5">Bootstrap 4 템플릿을 이용한 PBPress 샘플테마</h1>
+				<p class="lead"><a href="<?=pb_home_url("other-page")?>">다른 페이지 이동</a></p>
 
-	<div class="text-center">
-		<a href="<?=pb_home_url('other-page')?>">다른페이지 이동</a>
+				<a href="https://github.com/BlackrockDigital/startbootstrap-bare" target="_blank">startbootstrap-bare 템플릿</a>을 사용했습니다.
+			</div>
+		</div>
 	</div>
 
 <?php pb_theme_footer(); ?>	

@@ -60,6 +60,7 @@ pb_user_remove_findpass_validation_key($user_data_['ID']);
 
 echo json_encode(array(
 	'success' => true,
+	'redirect_url' => pb_admin_login_url(),
 ));
 
 pb_admin_end();

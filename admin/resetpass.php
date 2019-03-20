@@ -15,7 +15,7 @@ $user_data_ = pb_user_by_user_email($user_email_);
 $check_vkey_ = pb_user_check_findpass_validation_key($user_data_['ID'], $vkey_);
 
 if(pb_is_error($check_vkey_)){
-	echo $check_vkey_->error_message();
+	pb_redirect_error(403, $check_vkey_->error_message(), $check_vkey_->error_title());
 	pb_admin_end();
 }
 
@@ -43,7 +43,7 @@ if(pb_is_error($check_vkey_)){
 
 		<div class="resetpass-form-panel panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title">PBPress 로그인</h3>
+				<h3 class="panel-title">PBPress 비밀번호 재설정</h3>
 			</div>
 			<div class="panel-body">
 				<form id="pb-resetpass-form" method="POST">
