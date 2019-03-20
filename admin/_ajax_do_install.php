@@ -48,6 +48,7 @@ $theme_list_ = pb_theme_list();
 if(count($theme_list_) > 0){
 	foreach($theme_list_ as $theme_ => $theme_data_){
 		pb_switch_theme($theme_);
+		pb_theme_install_tables();
 		break;
 	}
 }

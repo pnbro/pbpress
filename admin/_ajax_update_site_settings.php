@@ -49,6 +49,8 @@ $before_theme_ = pb_current_theme();
 
 if($before_theme_ !== $site_theme_){
 	pb_switch_theme($site_theme_);	
+	global $pbdb;
+	pb_theme_install_tables();
 }
 
 echo json_encode(array(

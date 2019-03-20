@@ -44,5 +44,18 @@ function pb_theme_header(){
 function pb_theme_footer(){
 	include(PB_DOCUMENT_PATH."themes/".pb_current_theme()."/footer.php");	
 }
+
+function pb_theme_install_tables(){
+	global $pbdb;
+	$query_list_ = pb_hook_apply_filters("pb_install_theme_tables", array());
+
+	foreach($query_list_ as $query_){
+		$pbdb->query($query_);
+	}
+
+	pb_hook_do_action("pb_installed_theme_tables");
+	$pbdb->commit();
+}
+pb_hook_add_action('pb_installed_tables', "pb_theme_install_tables");
 	
 ?>
