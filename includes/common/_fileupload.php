@@ -14,15 +14,15 @@ if(!pb_hook_apply_filters('pb_fileupload_before', true)){
 
 include_once(PB_DOCUMENT_PATH."includes/common/lib/UploadHandler.php");
 
-$upload_dir_ = (isset($_GET['upload_dir']) && strlen($_GET['upload_dir'])) ? $_GET['upload_dir'] : "uploads/";
+$upload_dir_ = (isset($_GET['upload_dir']) && strlen($_GET['upload_dir'])) ? $_GET['upload_dir'] : "";
 $upload_dir_ = '/'.trim($upload_dir_, '/');
 $upload_dir_ = rtrim($upload_dir_, '/') . '/';	
 
 $yyymmdd = new DateTime();
 $yyymmdd_ = date_format($yyymmdd,"Ymd")."/";
 
-$upload_path_ = PB_DOCUMENT_PATH.$upload_dir_;
-$upload_url_ = PB_DOCUMENT_URL.$upload_dir_;
+$upload_path_ = PB_DOCUMENT_PATH."uploads/".$upload_dir_;
+$upload_url_ = PB_DOCUMENT_URL."uploads/".$upload_dir_;
 
 $upload_handler_ = new UploadHandler(array(
 	'upload_dir' => $upload_path_.$yyymmdd_,
@@ -43,11 +43,11 @@ foreach($tmps_['files'] as $file_){
 		'upload_path' => $upload_dir_,
 		
 		'o_name' => $yyymmdd_.$file_->name,
-		'r_name' => $yyymmdd_.basename($file_->url),
+		'r_name' => $yyymmdd_.pathinfo($file_->url, PATHINFO_BASENAME),
 	);
 
 	if(strlen($thumbnail_url_)){
-		$row_data_['thumbnail'] = "/thumbnail/".basename($thumbnail_url_);
+		$row_data_['thumbnail'] = $yyymmdd_."/thumbnail/".pathinfo($thumbnail_url_, PATHINFO_BASENAME);
 	}
 
 	$results_[] = $row_data_;
