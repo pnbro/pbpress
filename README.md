@@ -3,8 +3,8 @@ PHP Framework for simple website creation.
 간단한 웹사이트제작을 위한 PHP 프레임워크
 
 ## Requirements
-PHP >= 5.2.17
-MySQL >= 5.x (innoDB)
+	PHP >= 5.2.17
+	MySQL >= 5.x (innoDB)
 
 ## How to install
 PBPress need to initialize frontend library that based by NPM Gruntjs. or just use pre-compiled files.(PBPress.v.x.x.x.zip)
@@ -31,24 +31,26 @@ you can make a theme that you want, and just put your theme you made into 'theme
 
 ## included open sources
 ### Frontend 
-	- jquery 2.x : https://jquery.com
-	- jquery.blockUI : http://malsup.com/jquery/block
-	- jquery.cookie : https://github.com/carhartl/jquery-cookie
-	- imagesloaded : https://imagesloaded.desandro.com/
-	- jquery.ui 1.x : https://jqueryui.com
-	- blueimp fileupload : https://github.com/blueimp/jQuery-File-Upload
-	- Bootstrap 3.x : https://getbootstrap.com 
-	- bootstrap-datetimepicker : https://github.com/Eonasdan/bootstrap-datetimepicker
-	- bootstrap-select : https://developer.snapappointments.com/bootstrap-select
-	- bootstrap-select : https://developer.snapappointments.com/bootstrap-select
-	- jsencrypt : https://github.com/travist/jsencrypt
-	- momentjs : https://momentjs.com
-	- summernote : https://github.com/summernote/summernote
+	jquery 2.x : https://jquery.com
+	jquery.blockUI : http://malsup.com/jquery/block
+	jquery.cookie : https://github.com/carhartl/jquery-cookie
+	imagesloaded : https://imagesloaded.desandro.com/
+	jquery.ui 1.x : https://jqueryui.com
+	blueimp fileupload : https://github.com/blueimp/jQuery-File-Upload
+	Bootstrap 3.x : https://getbootstrap.com 
+	bootstrap-datetimepicker : https://github.com/Eonasdan/bootstrap-datetimepicker
+	bootstrap-select : https://developer.snapappointments.com/bootstrap-select
+	bootstrap-select : https://developer.snapappointments.com/bootstrap-select
+	jsencrypt : https://github.com/travist/jsencrypt
+	momentjs : https://momentjs.com
+	summernote : https://github.com/summernote/summernote
 
 ### Backend
-	- blueimp UploadHandler : https://github.com/blueimp/jQuery-File-Upload
-	- phpmailer : https://github.com/PHPMailer/PHPMailer
+	blueimp UploadHandler : https://github.com/blueimp/jQuery-File-Upload
+	phpmailer : https://github.com/PHPMailer/PHPMailer
 
-
-
-# API documentation and manuals will be added to the distribution
+## TODO
+	1. Write API documentation and manuals.
+	2. Developing plugin features?
+	3. Adding Page Builders?
+	4. Developing multi languages features?

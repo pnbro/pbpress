@@ -170,7 +170,7 @@ function pb_adminpage_rewrite_common_handler($rewrite_path_, $adminpage_data_){
 	}
 
 	if(count($rewrite_path_) <= 0){
-		return PB_DOCUMENT_PATH."admin/dashboard.php";
+		return pb_hook_apply_filters("pb-adminpage-dashboard",PB_DOCUMENT_PATH."admin/dashboard.php");
 	}
 
 	if(isset($adminpage_data_['authority_task']) && !pb_user_has_authority_task(pb_current_user_id(), $adminpage_data_['authority_task'])){
