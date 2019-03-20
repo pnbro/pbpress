@@ -42,10 +42,14 @@ function pb_crypt_shared_keys(){
 }
 
 // RSA 공개키를 사용하여 문자열을 암호화
-function pb_crypt_encrypt($plaintext_){
+function pb_crypt_encrypt($plaintext_, $public_key_ = null){
 	$shared_key_ = pb_crypt_shared_keys();
+	if(!strlen($public_key_)){
+		$public_key_ = $shared_key_['public_key'];
+	}
+	
 
-	$public_decoded_ = openssl_pkey_get_public($shared_key_['public_key']);
+	$public_decoded_ = openssl_pkey_get_public($public_key_);
 	if($public_decoded_ === false) return false;
 	
 	$ciphertext_ = false;
@@ -56,14 +60,24 @@ function pb_crypt_encrypt($plaintext_){
 }
 
 // RSA 개인키를 사용하여 문자열을 복호화
-function pb_crypt_decrypt($ciphertext_){
+function pb_crypt_decrypt($ciphertext_, $private_key_ = null, $password_ = null){
+	$shared_key_ = pb_crypt_shared_keys();
 	global $pb_config;
+
+	if(!strlen($private_key_)){
+		$private_key_ = $shared_key_['private_key'];
+	}
+
+	if(!strlen($password_)){
+		$password_ = $pb_config->crypt_password;
+	}
+
 	$shared_key_ = pb_crypt_shared_keys();
 
 	$ciphertext_ = @base64_decode($ciphertext_, true);
 	if($ciphertext_ === false) return false;
 
-	$privkey_decoded_ = @openssl_pkey_get_private($shared_key_['private_key'], $pb_config->crypt_password);
+	$privkey_decoded_ = @openssl_pkey_get_private($private_key_, $password_);
 	if($privkey_decoded_ === false) return false;
 
 	$plaintext_ = false;
