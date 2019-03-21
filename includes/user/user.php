@@ -246,14 +246,13 @@ function pb_is_user_logged_in(){
 
 //사용자 등록
 function pb_user_register($data_ = array()){
-	if(!isset($data_['user_login']) || !isset($data_['user_email']) || !isset($data_['user_name']) || !isset($data_['user_pass'])){
+	if(!isset($data_['USER_LOGIN']) || !isset($data_['USER_EMAIL']) || !isset($data_['USER_NAME']) || !isset($data_['USER_PASS'])){
 		return new PBError(-1, "등록실패", "필수정보가 누락되었습니다.");
 	}
 
-	$data_['user_pass'] = pb_crypt_hash($data_['user_pass']);
+	$data_['USER_PASS'] = pb_crypt_hash($data_['USER_PASS']);
 	return pb_user_add($data_);
 }
-
 
 
 define("PB_USER_FINDPASS_VKEY_NOTVALID", -1);

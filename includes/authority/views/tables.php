@@ -1,4 +1,4 @@
-<?
+<?php
 
 class PB_authority_list_table extends PBListTable{
 

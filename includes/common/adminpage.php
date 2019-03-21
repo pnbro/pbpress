@@ -128,7 +128,7 @@ function pb_adminpage_rewrite_path(){
 	if(!isset($_SERVER['REDIRECT_URL'])) return null;
 	if(strpos($_SERVER['REQUEST_URI'], PB_ADMINPAGE_REWRITE_BASE) === false) return null;
 
-	$admin_subpath_map_ = str_replace(PB_ADMINPAGE_REWRITE_BASE, "", strtok($_SERVER['REQUEST_URI'], "?"));
+	$admin_subpath_map_ = preg_replace('/'.preg_quote(PB_ADMINPAGE_REWRITE_BASE,"/").'/', '', strtok($_SERVER['REQUEST_URI'], "?"), 1);
 	$admin_subpath_map_ = rtrim($admin_subpath_map_, '/');
 
 	if(strlen($admin_subpath_map_)){

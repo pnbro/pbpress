@@ -1,4 +1,4 @@
-<?
+<?php
 
 require(PB_DOCUMENT_PATH . 'includes/common/config.php');
 include(PB_DOCUMENT_PATH . "includes/common/utils.php");

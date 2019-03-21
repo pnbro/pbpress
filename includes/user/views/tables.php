@@ -1,4 +1,4 @@
-<?
+<?php
 
 class PB_user_list_table extends PBListTable{
 

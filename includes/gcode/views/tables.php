@@ -1,4 +1,4 @@
-<?
+<?php
 
 class PB_gcode_list_table extends PBListTable{
 

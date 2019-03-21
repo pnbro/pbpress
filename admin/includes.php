@@ -1,4 +1,4 @@
-<?
+<?php
 
 require(dirname( __FILE__ ) . '/../defined.php');
 require(PB_DOCUMENT_PATH . 'includes/includes.php');

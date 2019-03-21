@@ -207,7 +207,7 @@ function _pb_mail_hook_update_site_settings($settings_data_){
 	pb_option_update("mail_receipt", $settings_data_['mail_receipt']);
 	pb_option_update("mail_smtp_host", $settings_data_['mail_smtp_host']);
 	pb_option_update("mail_smtp_port", $settings_data_['mail_smtp_port']);
-	pb_option_update("mail_smtp_auth", $settings_data_['mail_smtp_auth']);
+	pb_option_update("mail_smtp_auth", isset($settings_data_['mail_smtp_auth']) ? $settings_data_['mail_smtp_auth'] : "N");
 
 	pb_option_update("mail_smtp_user_id", isset($settings_data_['mail_smtp_user_id']) ? $settings_data_['mail_smtp_user_id'] : null);
 	pb_option_update("mail_smtp_user_pass", isset($settings_data_['mail_smtp_user_pass']) ? $settings_data_['mail_smtp_user_pass'] : null);

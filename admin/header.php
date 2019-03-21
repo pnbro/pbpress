@@ -1,4 +1,4 @@
-<?
+<?php
 	$user_data_ = pb_current_user();
 ?><header id="pb-admin-header"><div class="wrap">
 	<div class="col-left">
