@@ -28,6 +28,7 @@ if(!pb_session_verify_instance_token("pbpress_install", $request_data_['_request
 
 $site_name_ = $request_data_['site_name'];
 $site_desc_ = $request_data_['site_desc'];
+$timezone_ = $request_data_['timezone'];
 
 global $pbdb;
 $pbdb->install_tables();
@@ -43,7 +44,13 @@ if(!$pbdb->exists_table("OPTIONS")){
 
 pb_option_update("site_name", $site_name_);
 pb_option_update("site_desc", $site_desc_);
+pb_option_update("timezone", $timezone_);
 $theme_list_ = pb_theme_list();
+
+if(!strlen($timezone_)){
+	$timezone_ = @date_default_timezone_get();
+	$timezone_ = strlen($timezone_) ? $timezone_ : "Asia/Seoul";
+}
 
 if(count($theme_list_) > 0){
 	foreach($theme_list_ as $theme_ => $theme_data_){

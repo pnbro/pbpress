@@ -16,6 +16,14 @@ if(!$pbdb->exists_table("OPTIONS")){
 	exit;
 }
 
+//set timzone
+$timezone_ = pb_option_value("timezone");
+if(!strlen($timezone_)){
+	$timezone_ = @date_default_timezone_get();
+	$timezone_ = strlen($timezone_) ? $timezone_ : "Asia/Seoul";
+}
+date_default_timezone_set($timezone_);
+
 if(!pb_exists_rewrite()){
 	pb_install_rewrite();
 	header('Location: '.pb_home_url());
