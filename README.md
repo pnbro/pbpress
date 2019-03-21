@@ -7,12 +7,37 @@ PHP Framework for simple website creation.
 	MySQL >= 5.x (innoDB)
 
 ## How to install
-PBPress need to initialize frontend library that based by NPM Gruntjs. or just use pre-compiled files.(PBPress.v.x.x.x.zip)
-PBPress는 NPM Gruntjs 기반으로 이루어진 프론트엔드 라이브러리를 초기화해야 합니다. 또는 컴파일된 파일을 사용하셔도 됩니다. (PBPress.v.x.x.x.zip)
+PBPress need to initialize frontend library that based by NPM Gruntjs.
+PBPress는 NPM Gruntjs 기반으로 이루어진 프론트엔드 라이브러리를 초기화해야 합니다. 
     
     > npm init
     > npm install --save-dev
     
+or just use pre-compiled files.(PBPress.v.x.x.x.zip).
+또는 컴파일된 파일을 사용하셔도 됩니다. (PBPress.v.x.x.x.zip).
+
+[go to releases](https://github.com/pnbro/pbpress/releases)
+
+the PBPress which compiled or downloaded put into your project directory.(directory must be empty.)
+컴파일 또는 다운로드한 PBPress를 프로젝트 디렉토리에 넣습니다.
+* * *
+
+copy pb-config-sample.php, rename to pb-config.php, and edit it for your environment.
+pb-config-sample.php 복사하여 pb-config.php로 이름을 변경하고, 환경에 맞게 편집하세요.
+* * *
+
+access project on browser.
+브라우져를 통해 프로젝트에 접속해봅니다.
+
+       http://{project_url}
+
+* * *
+you can see install screen. and complete a installation!
+인스톨 화면을 볼 수 있습니다. 인스톨을 완료하세요!
+	
+![install](https://i.imgur.com/cnfyMC7.png)
+* * *
+
 ## Build Frontend library
 You have to compile, when resoure files like js,less changed.
 js,less 같은 리소스파일이 변경될 경우, 컴파일을 해야합니다.
@@ -22,7 +47,7 @@ js,less 같은 리소스파일이 변경될 경우, 컴파일을 해야합니다
 
 ## automation Gruntjs
 
-    > grunt less
+    > grunt watch
     
 ## Adding theme
 you can make a theme that you want, and just put your theme you made into 'themes' directory. (See sample theme into themes directory)
