@@ -56,10 +56,11 @@ function pb_redirect_error($code_, $message_, $title_ = "ERROR!"){
 function pb_head(){
 	$pbvar_ = pb_hook_apply_filters('pb-head-pbvar', array());
 
+	$jquery_script_url_ = pb_hook_apply_filters('pb-jquery-script-url', PB_LIBRARY_URL."js/jquery.js");
+
 	global $pb_config;
 ?>
-<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pb-main.css">
-<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/jquery.js"></script>
+<script type="text/javascript" src="<?=$jquery_script_url_?>"></script>
 <script type="text/javascript">window.PBVAR = <?=json_encode($pbvar_)?>;</script>
 <script type="text/javascript" src="<?=PB_LIBRARY_URL?>comp-lib/all-main.js"></script>
 
