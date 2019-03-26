@@ -77,8 +77,6 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/pb/modules/pb.mainmodule.js',
           'lib/dev/concat-lib/src/pb/modules/pb.crypt.js',
           'lib/dev/concat-lib/src/pb/modules/pb.utils.js',
-          
-          'lib/dev/concat-lib/src/pb/pb.main.js',
 
         ],
         dest: 'lib/dev/concat-lib/dist/pb-main.js'

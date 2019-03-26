@@ -125,8 +125,8 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 					<label for="pb-manage-site-form-mail_smtp_secure">SMTP 보안</label>
 					<select class="form-control" name="mail_smtp_secure">
 						<option value="">사용하지 않음</option>
-						<option value="ssl" <?=pb_checked(pb_option_value("mail_smtp_secure"), "ssl")?>>SSL</option>
-						<option value="tls" <?=pb_checked(pb_option_value("mail_smtp_secure"), "tls")?>>TLS</option>
+						<option value="ssl" <?=pb_selected(pb_option_value("mail_smtp_secure"), "ssl")?>>SSL</option>
+						<option value="tls" <?=pb_selected(pb_option_value("mail_smtp_secure"), "tls")?>>TLS</option>
 					</select>
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
