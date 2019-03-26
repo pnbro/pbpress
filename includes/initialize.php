@@ -10,7 +10,7 @@ require(PB_DOCUMENT_PATH . 'includes/includes.php');
 //check install pbress
 global $pbdb;
 
-if(!$pbdb->exists_table("OPTIONS")){
+if(!$pbdb->exists_table("options")){
 	pb_redirect(PB_DOCUMENT_URL."admin/install.php");
 	pb_hook_do_action('pb_ended');
 	exit;

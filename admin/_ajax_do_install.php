@@ -33,7 +33,7 @@ $timezone_ = $request_data_['timezone'];
 global $pbdb;
 $pbdb->install_tables();
 
-if(!$pbdb->exists_table("OPTIONS")){
+if(!$pbdb->exists_table("options")){
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => '에러발생',
@@ -87,12 +87,12 @@ $user_name_ = $request_data_['user_name'];
 $user_pass_ = pb_crypt_decrypt($request_data_['user_pass']);
 
 $admin_id_ = pb_user_add(array(
-	'USER_LOGIN' => $user_login_,
-	'USER_EMAIL' => $user_email_,
-	'USER_NAME' => $user_name_,
-	'USER_PASS' => pb_crypt_hash($user_pass_),
-	'STATUS' => "00003",
-	'REG_DATE' => pb_current_time(),
+	'user_login' => $user_login_,
+	'user_email' => $user_email_,
+	'user_name' => $user_name_,
+	'user_pass' => pb_crypt_hash($user_pass_),
+	'status' => "00003",
+	'reg_date' => pb_current_time(),
 ));
 
 pb_user_grant_authority($admin_id_, PB_AUTHORITY_SLUG_ADMINISTRATOR);

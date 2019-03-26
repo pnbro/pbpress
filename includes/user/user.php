@@ -8,48 +8,48 @@ function pb_user_list($conditions_ = array()){
 	global $pbdb;
 
 	$query_ = "
-		SELECT   USERS.ID ID
+		SELECT   users.id id
 
-				,USERS.USER_LOGIN USER_LOGIN
-				,USERS.USER_EMAIL USER_EMAIL
-				,USERS.USER_PASS USER_PASS
-				,USERS.USER_NAME USER_NAME
+				,users.user_login user_login
+				,users.user_email user_email
+				,users.user_pass user_pass
+				,users.user_name user_name
 
-				,USERS.STATUS STATUS
-				,".pb_query_gcode_dtl_name("U0001", "USERS.STATUS")." STATUS_NAME
+				,users.status status
+				,".pb_query_gcode_dtl_name("U0001", "users.status")." status_name
 
-				,USERS.FINDPASS_VKEY FINDPASS_VKEY
-				,USERS.FINDPASS_VKEY_EXP_DATE FINDPASS_VKEY_EXP_DATE
+				,users.findpass_vkey findpass_vkey
+				,users.findpass_vkey_exp_date findpass_vkey_exp_date
 
-				,USERS.REG_DATE REG_DATE
-				,DATE_FORMAT(USERS.REG_DATE, '%Y.%m.%d %H:%i:%S') REG_DATE_YMDHIS
-				,DATE_FORMAT(USERS.REG_DATE, '%Y.%m.%d %H:%i') REG_DATE_YMDHI
-				,DATE_FORMAT(USERS.REG_DATE, '%Y.%m.%d') REG_DATE_YMD
+				,users.reg_date reg_date
+				,DATE_FORMAT(users.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis
+				,DATE_FORMAT(users.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi
+				,DATE_FORMAT(users.reg_date, '%Y.%m.%d') reg_date_ymd
 
-				,USERS.MOD_DATE MOD_DATE
-				,DATE_FORMAT(USERS.MOD_DATE, '%Y.%m.%d %H:%i:%S') MOD_DATE_YMDHIS
-				,DATE_FORMAT(USERS.MOD_DATE, '%Y.%m.%d %H:%i') MOD_DATE_YMDHI
-				,DATE_FORMAT(USERS.MOD_DATE, '%Y.%m.%d') MOD_DATE_YMD
+				,users.mod_date mod_date
+				,DATE_FORMAT(users.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
+				,DATE_FORMAT(users.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi
+				,DATE_FORMAT(users.mod_date, '%Y.%m.%d') mod_date_ymd
 
 				".pb_hook_apply_filters('pb_user_list_select',"",$conditions_)."
 
-	FROM USERS
+	FROM users
 
 	".pb_hook_apply_filters('pb_user_list_join',"",$conditions_)."
 	
 	WHERE 1 ";
 
-	if(isset($conditions_['ID']) && strlen($conditions_['ID'])){
-		$query_ .= " AND USERS.ID = '".mysql_real_escape_string($conditions_['ID'])."' ";
+	if(isset($conditions_['id']) && strlen($conditions_['id'])){
+		$query_ .= " AND users.id = '".mysql_real_escape_string($conditions_['id'])."' ";
 	}
 	if(isset($conditions_['user_login']) && strlen($conditions_['user_login'])){
-		$query_ .= " AND USERS.USER_LOGIN = '".mysql_real_escape_string($conditions_['user_login'])."' ";
+		$query_ .= " AND users.user_login = '".mysql_real_escape_string($conditions_['user_login'])."' ";
 	}
 	if(isset($conditions_['user_email']) && strlen($conditions_['user_email'])){
-		$query_ .= " AND USERS.USER_EMAIL = '".mysql_real_escape_string($conditions_['user_email'])."' ";
+		$query_ .= " AND users.user_email = '".mysql_real_escape_string($conditions_['user_email'])."' ";
 	}
 	if(isset($conditions_['status']) && strlen($conditions_['status'])){
-		$query_ .= " AND USERS.STATUS = '".mysql_real_escape_string($conditions_['status'])."' ";
+		$query_ .= " AND users.status = '".mysql_real_escape_string($conditions_['status'])."' ";
 	}
 
 	$query_ .= ' '.pb_hook_apply_filters('pb_user_list_where',"",$conditions_)." ";
@@ -62,7 +62,7 @@ function pb_user_list($conditions_ = array()){
     if(isset($conditions_['orderby']) && strlen($conditions_['orderby'])){
         $query_ .= " ".$conditions_['orderby']." ";
     }else{
-    	$query_ .= " ORDER BY REG_DATE DESC";
+    	$query_ .= " ORDER BY reg_date DESC";
     }
 
 	if(isset($conditions_['limit'])){
@@ -79,7 +79,7 @@ function pb_user_by($by_, $val_){
 }
 
 function pb_user($id_){
-	return pb_user_by("ID", $id_);
+	return pb_user_by("id", $id_);
 }
 
 function pb_user_by_user_login($user_login_){
@@ -94,17 +94,17 @@ function pb_user_by_user_email($user_email_){
 function _pb_user_parse_fields($data_){
 	return pb_format_mapping(pb_hook_apply_filters("pb_user_parse_fields",array(
 
-		'USER_LOGIN' => '%s',
-		'USER_PASS' => '%s',
-		'USER_EMAIL' => '%s',
-		'USER_NAME' => '%s',
-		'STATUS' => '%s',
+		'user_login' => '%s',
+		'user_pass' => '%s',
+		'user_email' => '%s',
+		'user_name' => '%s',
+		'status' => '%s',
 			
-		'FINDPASS_VKEY' => '%s',
-		'FINDPASS_VKEY_EXP_DATE' => '%s',
+		'findpass_vkey' => '%s',
+		'findpass_vkey_exp_date' => '%s',
 
-		'REG_DATE' => '%s',
-		'MOD_DATE' => '%s',
+		'reg_date' => '%s',
+		'mod_date' => '%s',
 		
 	)), $data_);
 }
@@ -122,18 +122,18 @@ function pb_user_add($raw_data_){
 	$data_ = $raw_data_['data'];
 	$format_ = $raw_data_['format'];
 
-	$insert_id_ = $pbdb->insert("USERS", $data_, $format_);
+	$insert_id_ = $pbdb->insert("users", $data_, $format_);
 	pb_hook_do_action("pb_user_added", $insert_id_);
 
 	return $insert_id_;
 }
 function _pb_user_before_add_common($raw_data_){
-	$exists_check1_ = pb_user_by_user_login($raw_data_['USER_LOGIN']);
+	$exists_check1_ = pb_user_by_user_login($raw_data_['user_login']);
 	if(isset($exists_check1_)){
 		return new PBError(-1, "사용자추가실패", "이미 존재하는 사용자아이디입니다.");
 	}
 
-	$exists_check2_ = pb_user_by_user_email($raw_data_['USER_EMAIL']);
+	$exists_check2_ = pb_user_by_user_email($raw_data_['user_email']);
 	if(isset($exists_check2_)){
 		return new PBError(-1, "사용자추가실패", "이미 존재하는 이메일입니다.");
 	}
@@ -155,7 +155,7 @@ function pb_user_update($id_, $raw_data_){
 	$data_ = $raw_data_['data'];
 	$format_ = $raw_data_['format'];
 
-	$pbdb->update("USERS", $data_, array("ID" => $id_), $format_, array("%d"));
+	$pbdb->update("users", $data_, array("id" => $id_), $format_, array("%d"));
 	pb_hook_do_action("pb_user_updated", $id_);
 }
 
@@ -167,7 +167,7 @@ function pb_user_delete($id_){
 	}
 
 	global $pbdb;
-	$pbdb->delete("USERS", array("ID" => $id_), array("%d"));
+	$pbdb->delete("users", array("id" => $id_), array("%d"));
 	pb_hook_do_action("pb_user_deleted", $id_);
 }
 
@@ -208,11 +208,11 @@ function pb_user_login_by_both($both_, $plain_password_){
 	return pb_user_create_session($user_data_);
 }
 function _pb_user_check_login_common($result_, $user_data_, $plain_password_){
-	if($user_data_['USER_PASS'] !== pb_crypt_hash($plain_password_)){
+	if($user_data_['user_pass'] !== pb_crypt_hash($plain_password_)){
 		return new PBError(-1, "로그인실패", "비밀번호가 정확하지 않습니다.");
 	}
 
-	if($user_data_['STATUS'] !== "00003"){
+	if($user_data_['status'] !== "00003"){
 		return new PBError(-2, "로그인실패", "로그인할 수 없는 상태입니다.");
 	}
 
@@ -236,7 +236,7 @@ function pb_current_user_id(){
 	$user_data_ = pb_current_user();
 	if(!isset($user_data_)) return null;
 
-	return $user_data_['ID'];
+	return $user_data_['id'];
 }
 
 function pb_is_user_logged_in(){
@@ -246,11 +246,11 @@ function pb_is_user_logged_in(){
 
 //사용자 등록
 function pb_user_register($data_ = array()){
-	if(!isset($data_['USER_LOGIN']) || !isset($data_['USER_EMAIL']) || !isset($data_['USER_NAME']) || !isset($data_['USER_PASS'])){
+	if(!isset($data_['user_login']) || !isset($data_['user_email']) || !isset($data_['user_name']) || !isset($data_['user_pass'])){
 		return new PBError(-1, "등록실패", "필수정보가 누락되었습니다.");
 	}
 
-	$data_['USER_PASS'] = pb_crypt_hash($data_['USER_PASS']);
+	$data_['user_pass'] = pb_crypt_hash($data_['user_pass']);
 	return pb_user_add($data_);
 }
 
@@ -267,7 +267,7 @@ function pb_user_send_email_for_findpass($user_email_){
 		return new WP_Error(PB_USER_FINDPASS_VKEY_NOTFOUND, '가입이력없음', '해당 이메일로 가입이력이 존재하지 않습니다.');
 	}
 
-	$user_id_ = $user_data_['ID'];
+	$user_id_ = $user_data_['id'];
 	$validation_key_ = pb_user_gen_findpass_validation_key($user_id_);
 
 	$validation_url_ = pb_make_url(pb_home_url("admin/resetpass.php"), array(
@@ -294,8 +294,8 @@ function pb_user_gen_findpass_validation_key($user_id_){
 	$expire_datetime_ = date('Y-m-d H:i:s', strtotime(pb_current_time(). ' + 1 days'));
 
 	pb_user_update($user_id_, array(
-		"FINDPASS_VKEY" => $validation_key_,
-		"FINDPASS_VKEY_EXP_DATE" => $expire_datetime_,
+		"findpass_vkey" => $validation_key_,
+		"findpass_vkey_exp_date" => $expire_datetime_,
 	));
 
 	return $validation_key_;
@@ -308,7 +308,7 @@ function pb_user_check_findpass_validation_key($user_id_, $validation_key_){
 		return new PBError(PB_USER_FINDPASS_VKEY_NOTFOUND, '가입이력없음', '해당 이메일로 가입이력이 존재하지 않습니다.');
 	}
 
-	$stored_validation_key_ = $user_['FINDPASS_VKEY'];
+	$stored_validation_key_ = $user_['findpass_vkey'];
 
 	if($validation_key_ !== $stored_validation_key_){
 		return new PBError(PB_USER_FINDPASS_VKEY_NOTVALID, '잘못된 인증키', '비밀번호인증키가 잘못되었습니다.');
@@ -317,9 +317,9 @@ function pb_user_check_findpass_validation_key($user_id_, $validation_key_){
 	global $pbdb;
 
 	$exprie_day_count_ = $pbdb->get_var("SELECT 
-		USERS.FINDPASS_VKEY_EXP_DATE - NOW() CHK
-		FROM USERS
-		WHERE ID = {$user_id_}");
+		users.findpass_vkey_exp_date - NOW() CHK
+		FROM users
+		WHERE id = {$user_id_}");
 
 	if($exprie_day_count_ < 0){
 		return new PBError(PB_USER_FINDPASS_VKEY_EXPIRED, '만료된 인증키', '비밀번호인증키가 만료되었습니다.');
@@ -330,8 +330,8 @@ function pb_user_check_findpass_validation_key($user_id_, $validation_key_){
 
 function pb_user_remove_findpass_validation_key($user_id_){
 	pb_user_update($user_id_, array(
-		"FINDPASS_VKEY" => null,
-		"FINDPASS_VKEY_EXP_DATE" => null
+		"findpass_vkey" => null,
+		"findpass_vkey_exp_date" => null
 	));
 }
 

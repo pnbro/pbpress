@@ -12,7 +12,7 @@ if(!strlen($user_email_) || !strlen($vkey_)){
 
 $user_data_ = pb_user_by_user_email($user_email_);
 
-$check_vkey_ = pb_user_check_findpass_validation_key($user_data_['ID'], $vkey_);
+$check_vkey_ = pb_user_check_findpass_validation_key($user_data_['id'], $vkey_);
 
 if(pb_is_error($check_vkey_)){
 	pb_redirect_error(403, $check_vkey_->error_message(), $check_vkey_->error_title());

@@ -5,12 +5,12 @@
 	}
 
 	global $user_data;
-	$is_root_admin_ = $user_data['ID'] === "1";
-	$temp_user_authority_data_ = pb_user_authority_list(array("user_id" => $user_data['ID']));
+	$is_root_admin_ = $user_data['id'] === "1";
+	$temp_user_authority_data_ = pb_user_authority_list(array("user_id" => $user_data['id']));
 	$user_authority_slugs_ = array();
 
 	foreach($temp_user_authority_data_ as $row_data_){
-		$user_authority_slugs_[] = $row_data_['AUTH_SLUG'];
+		$user_authority_slugs_[] = $row_data_['auth_slug'];
 	}
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/user/edit.css">
@@ -25,10 +25,10 @@
 				<?php pb_hook_do_action('pb_admin_manage_user_edit_form_before')?>
 
 				<input type="hidden" name="_request_chip", value="<?=pb_session_instance_token("pbpress_manage-user")?>">
-				<input type="hidden" name="ID", value="<?=$user_data['ID']?>">
+				<input type="hidden" name="id", value="<?=$user_data['id']?>">
 				<div class="form-group">
 					<label >사용자ID <sup class="text-danger">변경불가</sup></label>
-					<p class="form-control-static"><?=$user_data['USER_LOGIN']?></p>
+					<p class="form-control-static"><?=$user_data['user_login']?></p>
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
@@ -43,14 +43,14 @@
 
 				<div class="form-group">
 					<label for="pb-manage-user-edit-form-user_name">사용자명 <sup class="text-primary">*</sup></label>
-					<input type="text" name="user_name" placeholder="사용자명 입력" id="pb-manage-user-edit-form-user_name" class="form-control" required data-error="사용자명을 입력하세요" value="<?=$user_data['USER_NAME']?>">
+					<input type="text" name="user_name" placeholder="사용자명 입력" id="pb-manage-user-edit-form-user_name" class="form-control" required data-error="사용자명을 입력하세요" value="<?=$user_data['user_name']?>">
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
 
 				<div class="form-group">
 					<label for="pb-manage-user-edit-form-user_email">사용자이메일 <sup class="text-primary">*</sup></label>
-					<input type="email" name="user_email" placeholder="이메일 입력" id="pb-manage-user-edit-form-user_email" class="form-control" required data-error="이메일을 입력하세요" value="<?=$user_data['USER_EMAIL']?>" data-remote="<?=pb_ajax_url("pb-admin-manage-user-check-email", array("user_id" => $user_data['ID']))?>" data-remote-error="이미 사용하고 있는 이메일입니다.">
+					<input type="email" name="user_email" placeholder="이메일 입력" id="pb-manage-user-edit-form-user_email" class="form-control" required data-error="이메일을 입력하세요" value="<?=$user_data['user_email']?>" data-remote="<?=pb_ajax_url("pb-admin-manage-user-check-email", array("user_id" => $user_data['id']))?>" data-remote-error="이미 사용하고 있는 이메일입니다.">
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
@@ -61,7 +61,7 @@
 						<label for="pb-manage-user-edit-form-user_status">상태 <sup class="text-primary">*</sup></label>
 
 						<select class="form-control" name="user_status" required data-error="상태를 선택하세요">
-							<?= pb_gcode_make_options(array("code_id" => "U0001"), $user_data['STATUS']);?>
+							<?= pb_gcode_make_options(array("code_id" => "U0001"), $user_data['status']);?>
 						</select>
 
 						
@@ -85,9 +85,9 @@
 								
 
 								foreach($authority_list_ as $auth_data_){
-									$in_authority_ = in_array($auth_data_['SLUG'], $user_authority_slugs_);
+									$in_authority_ = in_array($auth_data_['slug'], $user_authority_slugs_);
 								?>
-									<option value="<?=$auth_data_['SLUG']?>" <?=$in_authority_ ? "selected" : ""?> ><?=$auth_data_['AUTH_NAME']?></option>
+									<option value="<?=$auth_data_['slug']?>" <?=$in_authority_ ? "selected" : ""?> ><?=$auth_data_['auth_name']?></option>
 								<?php }
 							?>
 						</select>

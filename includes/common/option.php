@@ -8,17 +8,17 @@ function pb_option_list($conditions_ = array()){
 	global $pbdb;
 
 	$query_ = "
-	SELECT   OPTIONS.ID ID
-			,OPTIONS.OPTION_NAME OPTION_NAME
-			,OPTIONS.OPTION_VALUE OPTION_VALUE
+	SELECT   options.id id
+			,options.option_name option_name
+			,options.option_value option_value
 			
-			,OPTIONS.REG_DATE REG_DATE
-			,DATE_FORMAT(OPTIONS.REG_DATE, '%Y.%m.%d %H:%i:%S') REG_DATE_YMDHIS
-			,DATE_FORMAT(OPTIONS.REG_DATE, '%Y.%m.%d') REG_DATE_YMD
+			,options.reg_date reg_date
+			,DATE_FORMAT(options.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis
+			,DATE_FORMAT(options.reg_date, '%Y.%m.%d') reg_date_ymd
 
-			,OPTIONS.MOD_DATE MOD_DATE
-			,DATE_FORMAT(OPTIONS.MOD_DATE, '%Y.%m.%d %H:%i:%S') MOD_DATE_YMDHIS
-			,DATE_FORMAT(OPTIONS.MOD_DATE, '%Y.%m.%d') MOD_DATE_YMD
+			,options.mod_date mod_date
+			,DATE_FORMAT(options.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
+			,DATE_FORMAT(options.mod_date, '%Y.%m.%d') mod_date_ymd
 
 			".pb_hook_apply_filters('pb_option_list_fields', "", $conditions_)."
 		
@@ -34,15 +34,15 @@ function pb_option_list($conditions_ = array()){
 
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
 		$query_ .= " AND ".pb_query_keyword_search(array(
-			'OPTIONS.OPTION_NAME',
+			'options.option_name',
 		), $conditions_['keyword'])." ";
 	}
-	if(isset($conditions_['ID']) && strlen($conditions_['ID'])){
-		$query_ .= " AND OPTIONS.ID = '".mysql_real_escape_string($conditions_['ID'])."' ";
+	if(isset($conditions_['id']) && strlen($conditions_['id'])){
+		$query_ .= " AND options.id = '".mysql_real_escape_string($conditions_['id'])."' ";
 	}
 
 	if(isset($conditions_['option_name']) && strlen($conditions_['option_name'])){
-		$query_ .= " AND OPTIONS.OPTION_NAME = '".mysql_real_escape_string($conditions_['option_name'])."' ";
+		$query_ .= " AND options.option_name = '".mysql_real_escape_string($conditions_['option_name'])."' ";
 	}
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
@@ -50,7 +50,7 @@ function pb_option_list($conditions_ = array()){
         return $pbdb->get_var($query_);
     }
 
-	$query_ .= " ORDER BY REG_DATE DESC";
+	$query_ .= " ORDER BY reg_date DESC";
 
 	if(isset($conditions_['limit'])){
         $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
@@ -73,7 +73,7 @@ function pb_option_value($option_name_, $default_ = null, $cache_ = true){
 	$results_ = null;
 
 	foreach($temp_ as $row_data_){
-		$results_ = $row_data_['OPTION_VALUE'];
+		$results_ = $row_data_['option_value'];
 		break;
 	}
 
@@ -96,21 +96,21 @@ function pb_option_update($option_name_, $option_value_){
 
 	if(strlen($before_value_)){
 		$update_data_ = array(
-			'OPTION_VALUE' => $option_value_,
-			'MOD_DATE' => pb_current_time(),
+			'option_value' => $option_value_,
+			'mod_date' => pb_current_time(),
 		);
 
-		$pbdb->update("OPTIONS", $update_data_, array(
-			'OPTION_NAME' => $option_name_,
+		$pbdb->update("options", $update_data_, array(
+			'option_name' => $option_name_,
 		));
 	}else{
 		$insert_data_ = array(
-			'OPTION_NAME' => $option_name_,
-			'OPTION_VALUE' => $option_value_,
-			'REG_DATE' => pb_current_time(),
+			'option_name' => $option_name_,
+			'option_value' => $option_value_,
+			'reg_date' => pb_current_time(),
 		);
 
-		$pbdb->insert("OPTIONS", $insert_data_);
+		$pbdb->insert("options", $insert_data_);
 	}
 
 	global $_pb_option_map;

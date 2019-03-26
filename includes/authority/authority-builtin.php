@@ -9,30 +9,30 @@ define("PB_AUTHORITY_SLUG_ADMINISTRATOR", "administrator");
 function _pb_authority_install_table($args_){
 	global $pbdb;
 
-	$args_[] = "CREATE TABLE IF NOT EXISTS `AUTH` (
+	$args_[] = "CREATE TABLE IF NOT EXISTS `auth` (
 		
-		`ID` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-		`SLUG` varchar(100) NOT NULL COMMENT '슬러그',
-		`AUTH_NAME` varchar(50) NOT NULL COMMENT '권한명',
-		`AUTH_DESC` varchar(100) DEFAULT NULL COMMENT '권한설명',
+		`id` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+		`slug` varchar(100) NOT NULL COMMENT '슬러그',
+		`auth_name` varchar(50) NOT NULL COMMENT '권한명',
+		`auth_desc` varchar(100) DEFAULT NULL COMMENT '권한설명',
 		
-		`REG_DATE` datetime DEFAULT NULL COMMENT '등록일자',
-		`MOD_DATE` datetime DEFAULT NULL COMMENT '수정일자',
-		PRIMARY KEY (`ID`)
+		`reg_date` datetime DEFAULT NULL COMMENT '등록일자',
+		`mod_date` datetime DEFAULT NULL COMMENT '수정일자',
+		PRIMARY KEY (`id`)
 	) ENGINE=InnoDB COMMENT='권한';";
 
-	$args_[] = "CREATE TABLE IF NOT EXISTS `AUTH_TASK` (
+	$args_[] = "CREATE TABLE IF NOT EXISTS `auth_task` (
 		
-		`ID` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+		`id` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
 		
-		`AUTH_ID` BIGINT(11) NOT NULL COMMENT '슬러그',
-		`SLUG` varchar(100) NOT NULL COMMENT '슬러그',
-		`TASK_NAME` varchar(50) NOT NULL COMMENT '작업명',
+		`auth_id` BIGINT(11) NOT NULL COMMENT '슬러그',
+		`slug` varchar(100) NOT NULL COMMENT '슬러그',
+		`task_name` varchar(50) NOT NULL COMMENT '작업명',
 		
-		`REG_DATE` datetime DEFAULT NULL COMMENT '등록일자',
-		`MOD_DATE` datetime DEFAULT NULL COMMENT '수정일자',
-		PRIMARY KEY (`ID`),
-		CONSTRAINT `AUTH_TASK_FK1` FOREIGN KEY (`AUTH_ID`) REFERENCES `AUTH` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+		`reg_date` datetime DEFAULT NULL COMMENT '등록일자',
+		`mod_date` datetime DEFAULT NULL COMMENT '수정일자',
+		PRIMARY KEY (`id`),
+		CONSTRAINT `auth_task_fk1` FOREIGN KEY (`auth_id`) REFERENCES `auth` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 	) ENGINE=InnoDB COMMENT='권한별 작업범위';";
 
 	return $args_;
@@ -46,17 +46,17 @@ function _pb_authority_insert_defaults(){
 	if(count($check_data_) > 0) return;
 
 	$auth_id_ = pb_authority_add(array(
-		'SLUG' => PB_AUTHORITY_SLUG_ADMINISTRATOR,
-		'AUTH_NAME' => '관리자',
-		'AUTH_DESC' => '사이트를 관리할 수 있는 권한',
-		'REG_DATE' => pb_current_time(),
+		'slug' => PB_AUTHORITY_SLUG_ADMINISTRATOR,
+		'auth_name' => '관리자',
+		'auth_desc' => '사이트를 관리할 수 있는 권한',
+		'reg_date' => pb_current_time(),
 	));
 	
 	foreach(pb_authority_task_types() as $task_slug_ => $task_data_){
 		pb_authority_task_add(array(
-			'AUTH_ID' => $auth_id_,
-			'SLUG' => $task_slug_,
-			'TASK_NAME' => $task_data_['name'],
+			'auth_id' => $auth_id_,
+			'slug' => $task_slug_,
+			'task_name' => $task_data_['name'],
 		));
 	}
 }
@@ -78,10 +78,10 @@ function _pb_authority_register_task(){
 	$auth_data_ = pb_authority_by_slug(PB_AUTHORITY_SLUG_ADMINISTRATOR);
 
 	pb_authority_task_add(array(
-		'AUTH_ID' => $auth_data_['ID'],
-		'SLUG' => "manage_authority",
-		'TASK_NAME' => "권한관리",
-		'REG_DATE' => pb_current_time(),
+		'auth_id' => $auth_data_['id'],
+		'slug' => "manage_authority",
+		'task_name' => "권한관리",
+		'reg_date' => pb_current_time(),
 	));
 }
 pb_hook_add_action('pb_installed_tables', "_pb_authority_register_task");

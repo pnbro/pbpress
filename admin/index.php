@@ -23,7 +23,7 @@ if(!pb_is_user_logged_in()){
 $admin_data_ = pb_current_user();
 $current_adminpage_ = pb_current_adminpage();
 
-if(!pb_user_has_authority_task($admin_data_['ID'], "access_adminpage")){
+if(!pb_user_has_authority_task($admin_data_['id'], "access_adminpage")){
 	echo "Access denied";
 	pb_admin_end();
 }

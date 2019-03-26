@@ -39,7 +39,7 @@ if(!isset($user_data_)){
 	pb_admin_end();	
 }
 
-$check_vkey_ = pb_user_check_findpass_validation_key($user_data_['ID'], $vkey_);
+$check_vkey_ = pb_user_check_findpass_validation_key($user_data_['id'], $vkey_);
 
 if(pb_is_error($check_vkey_)){
 	echo json_encode(array(
@@ -52,11 +52,11 @@ if(pb_is_error($check_vkey_)){
 
 $user_pass_ = pb_crypt_hash($user_pass_);
 
-pb_user_update($user_data_['ID'], array(
-	'USER_PASS' => $user_pass_,
+pb_user_update($user_data_['id'], array(
+	'user_pass' => $user_pass_,
 ));
 
-pb_user_remove_findpass_validation_key($user_data_['ID']);
+pb_user_remove_findpass_validation_key($user_data_['id']);
 
 echo json_encode(array(
 	'success' => true,

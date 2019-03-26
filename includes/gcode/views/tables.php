@@ -28,9 +28,9 @@ class PB_gcode_list_table extends PBListTable{
 
 	function columns(){
 		return array(
-			'CODE_ID' => 'ID',
-			'CODE_NM' => '코드명',
-			'USE_YN' => '사용여부',
+			'code_id' => 'id',
+			'code_nm' => '코드명',
+			'use_yn' => '사용여부',
 			
 			
 			'button_area' => '',
@@ -43,11 +43,11 @@ class PB_gcode_list_table extends PBListTable{
 
 		switch($column_name_){
 		
-			case "CODE_ID" :
+			case "code_id" :
 				return "col-2 text-center";
-			case "CODE_NM" :
+			case "code_nm" :
 				 return "col-4";
-			case "USE_YN" :
+			case "use_yn" :
 				 return "col-2 text-center";
 		
 			case "button_area" :
@@ -68,27 +68,27 @@ class PB_gcode_list_table extends PBListTable{
 
 		switch($column_name_){
 		
-			case "CODE_ID" :
-				return $item_['CODE_ID'];
+			case "code_id" :
+				return $item_['code_id'];
 
-			case "CODE_NM" :
+			case "code_nm" :
 			ob_start();
 
 			?>
-			<a href="" data-master-id="<?=$item_['CODE_ID']?>"><?=$item_['CODE_NM']?></a>
+			<a href="" data-master-id="<?=$item_['code_id']?>"><?=$item_['code_nm']?></a>
 
 			<?php
 
 			return ob_get_clean();
-			case "USE_YN" :
-				 return $item_['USE_YN'];
+			case "use_yn" :
+				 return $item_['use_yn'];
 
 			case "button_area" :
 				 ob_start();
 				 ?>
 
-				 <a href="javascript:_pb_gcode_edit('<?=$item_['CODE_ID']?>');" class="btn btn-default">수정</a>
-				 <a href="javascript:_pb_gcode_remove('<?=$item_['CODE_ID']?>');" class="btn btn-black">삭제</a>
+				 <a href="javascript:_pb_gcode_edit('<?=$item_['code_id']?>');" class="btn btn-default">수정</a>
+				 <a href="javascript:_pb_gcode_remove('<?=$item_['code_id']?>');" class="btn btn-black">삭제</a>
 
 
 				 <?php
@@ -147,10 +147,10 @@ class PB_gcode_dtl_list_table extends PBListTable{
 
 	function columns(){
 		return array(
-			"CODE_DID" => "DID",
-			"CODE_DNM" => "상세코드명",
-			"USE_YN" => "사용여부",
-			'SORT_CHAR' => '정렬순서',
+			"code_did" => "did",
+			"code_dnm" => "상세코드명",
+			"use_yn" => "사용여부",
+			'sort_char' => '정렬순서',
 			"button_area" => "",
 			
 		);
@@ -161,13 +161,13 @@ class PB_gcode_dtl_list_table extends PBListTable{
 
 		switch($column_name_){
 		
-			case "CODE_DID" :
+			case "code_did" :
 				return "col-2 text-center";
-			case "CODE_DNM" :
+			case "code_dnm" :
 				 return "col-4";
-			case "USE_YN" :
+			case "use_yn" :
 				 return "col-2 text-center";
-			case "SORT_CHAR" :
+			case "sort_char" :
 				 return "col-2 text-center";
 			case "button_area" :
 				 return "col-4 text-right";
@@ -187,23 +187,23 @@ class PB_gcode_dtl_list_table extends PBListTable{
 
 		switch($column_name_){
 		
-			case "CODE_DID" :
-				return $item_['CODE_DID'];
+			case "code_did" :
+				return $item_['code_did'];
 
-			case "CODE_DNM" :
-				return $item_['CODE_DNM'];
-			case "USE_YN" :
-				 return $item_['USE_YN'];
-			case "SORT_CHAR" :
-				 return $item_['SORT_CHAR'];
+			case "code_dnm" :
+				return $item_['code_dnm'];
+			case "use_yn" :
+				 return $item_['use_yn'];
+			case "sort_char" :
+				 return $item_['sort_char'];
 
 			
 			case "button_area" :
 				 ob_start();
 				 ?>
 
-				 <a href="javascript:_pb_gcode_dtl_edit('<?=$item_['CODE_ID']?>', '<?=$item_['CODE_DID']?>');" class="btn btn-default">수정</a>
-				 <a href="javascript:_pb_gcode_dtl_remove('<?=$item_['CODE_ID']?>', '<?=$item_['CODE_DID']?>');" class="btn btn-black">삭제</a>
+				 <a href="javascript:_pb_gcode_dtl_edit('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-default">수정</a>
+				 <a href="javascript:_pb_gcode_dtl_remove('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-black">삭제</a>
 
 
 				 <?php

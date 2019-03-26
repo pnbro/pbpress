@@ -9,7 +9,7 @@
 	<div class="col-right">
 		<div class="dropdown mypage-menu">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-				<?=$user_data_['USER_NAME']?>
+				<?=$user_data_['user_name']?>
 			</a>
 			<ul class="dropdown-menu dropdown-menu-right">
 				<?php pb_hook_do_action('pb-admin-header-mypage-menu'); ?>

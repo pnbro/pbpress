@@ -28,9 +28,9 @@ class PB_authority_list_table extends PBListTable{
 
 	function columns(){
 		return array(
-			'SEQ' => 'SEQ',
-			'AUTH_NAME' => '권한명',
-			'SLUG' => '슬러그',
+			'seq' => 'SEQ',
+			'auth_name' => '권한명',
+			'slug' => '슬러그',
 		
 			'button_area' => '',
 		
@@ -42,11 +42,11 @@ class PB_authority_list_table extends PBListTable{
 
 		switch($column_name_){
 		
-			case "SEQ" :
+			case "seq" :
 				return "col-seq text-center";
-			case "AUTH_NAME" :
+			case "auth_name" :
 				 return "col-4";
-			case "SLUG" :
+			case "slug" :
 				 return "col-3 text-center";
 		
 			case "button_area" :
@@ -67,30 +67,30 @@ class PB_authority_list_table extends PBListTable{
 
 		switch($column_name_){
 		
-			case "SEQ" :
+			case "seq" :
 				return $row_index_;
 
-			case "AUTH_NAME" :
+			case "auth_name" :
 			ob_start();
 
 			?>
-			<a href="" data-master-id="<?=$item_['ID']?>"><?=$item_['AUTH_NAME']?></a>
+			<a href="" data-master-id="<?=$item_['id']?>"><?=$item_['auth_name']?></a>
 
 			<?php
 
 			return ob_get_clean();
-			case "SLUG" :
-				 return $item_['SLUG'];
+			case "slug" :
+				 return $item_['slug'];
 
 			case "button_area" :
 
-				if($item_["SLUG"] === PB_AUTHORITY_SLUG_ADMINISTRATOR) return "";
+				if($item_["slug"] === PB_AUTHORITY_SLUG_ADMINISTRATOR) return "";
 
 				 ob_start();
 				 ?>
 
-				 <a href="javascript:_pb_authority_edit('<?=$item_['ID']?>');" class="btn btn-default">수정</a>
-				 <a href="javascript:_pb_authority_remove('<?=$item_['ID']?>');" class="btn btn-black">삭제</a>
+				 <a href="javascript:_pb_authority_edit('<?=$item_['id']?>');" class="btn btn-default">수정</a>
+				 <a href="javascript:_pb_authority_remove('<?=$item_['id']?>');" class="btn btn-black">삭제</a>
 
 
 				 <?php
@@ -161,9 +161,9 @@ class PB_authority_task_list_table extends PBListTable{
 
 	function columns(){
 		return array(
-			"TASK_NAME" => "작업명",
-			"SLUG" => "슬러그",
-			"GRANT_YN" => "권한부여",
+			"task_name" => "작업명",
+			"slug" => "슬러그",
+			"grant_yn" => "권한부여",
 			
 		);
 	}
@@ -173,11 +173,11 @@ class PB_authority_task_list_table extends PBListTable{
 
 		switch($column_name_){
 		
-			case "TASK_NAME" :
+			case "task_name" :
 				return "col-2 text-center";
-			case "SLUG" :
+			case "slug" :
 				 return "col-4";
-			case "GRANT_YN" :
+			case "grant_yn" :
 				 return "col-2 text-center";
 			
 			default : 
@@ -196,19 +196,19 @@ class PB_authority_task_list_table extends PBListTable{
 
 		switch($column_name_){
 		
-			case "TASK_NAME" :
+			case "task_name" :
 				return $item_["name"];
-			case "SLUG" :
+			case "slug" :
 				return $item_["slug"];
 
 		
-			case "GRANT_YN" :
+			case "grant_yn" :
 
 				global $_cached_authority_map, $_cached_auth_data;
 
 
 				$task_checked_ = isset($_cached_authority_map[$item_['slug']]);
-				$task_disabled_ = $_cached_auth_data['SLUG'] === PB_AUTHORITY_SLUG_ADMINISTRATOR;
+				$task_disabled_ = $_cached_auth_data['slug'] === PB_AUTHORITY_SLUG_ADMINISTRATOR;
 
 			ob_start();
 
@@ -216,7 +216,7 @@ class PB_authority_task_list_table extends PBListTable{
 
 			?>
 
-			<input type="checkbox" name="GRANT_YN" value="Y" data-auth-id="<?=$auth_id_?>" data-auth-task="<?=$item_["slug"]?>" <?=$task_checked_? "checked" : "" ?> <?=$task_disabled_ ? "disabled" : ""?>>
+			<input type="checkbox" name="grant_yn" value="Y" data-auth-id="<?=$auth_id_?>" data-auth-task="<?=$item_["slug"]?>" <?=$task_checked_? "checked" : "" ?> <?=$task_disabled_ ? "disabled" : ""?>>
 
 			<?php
 

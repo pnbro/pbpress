@@ -28,11 +28,11 @@ class PB_user_list_table extends PBListTable{
 
 	function columns(){
 		return array(
-			'SEQ' => 'SEQ',
-			'USER_NAME' => '사용자명',
-			'USER_LOGIN' => 'ID',
-			'USER_EMAIL' => '이메일',
-			'STATUS' => '상태',
+			'seq' => 'seq',
+			'user_name' => '사용자명',
+			'user_login' => 'id',
+			'user_email' => '이메일',
+			'status' => '상태',
 		
 			'button_area' => '',
 		
@@ -44,15 +44,15 @@ class PB_user_list_table extends PBListTable{
 
 		switch($column_name_){
 		
-			case "SEQ" :
+			case "seq" :
 				return "col-seq text-center";
-			case "USER_NAME" :
+			case "user_name" :
 				 return "col-2";
-			case "USER_LOGIN" :
+			case "user_login" :
 				 return "col-2 text-center";
-			case "USER_EMAIL" :
+			case "user_email" :
 				 return "col-2 text-center hidden-xs";
-			case "STATUS" :
+			case "status" :
 				 return "col-2 text-center";
 		
 			case "button_area" :
@@ -73,21 +73,21 @@ class PB_user_list_table extends PBListTable{
 
 		switch($column_name_){
 		
-			case "SEQ" :
+			case "seq" :
 				return $seq_;
-			case "USER_NAME" :
-			case "USER_LOGIN" :
-			case "USER_EMAIL" :
+			case "user_name" :
+			case "user_login" :
+			case "user_email" :
 				return $item_[$column_name_];
-			case "STATUS" :
-				return $item_['STATUS_NAME'];
+			case "status" :
+				return $item_['status_name'];
 
 			
 			case "button_area" :
 				 ob_start();
 				 ?>
 
-				 <a href="<?=pb_admin_url("manage-user/edit/".$item_['ID'])?>" class="btn btn-default">수정</a>
+				 <a href="<?=pb_admin_url("manage-user/edit/".$item_['id'])?>" class="btn btn-default">수정</a>
 				
 				 <?php
 

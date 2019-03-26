@@ -44,11 +44,11 @@
 					<tbody>
 						<tr>
 							<th>ID</th>
-							<td data-column="CODE_ID"></td>
+							<td data-column="code_id"></td>
 							<th>코드명</th>
-							<td data-column="CODE_NM"></td>
+							<td data-column="code_nm"></td>
 							<th>사용여부</th>
-							<td data-column="USE_YN"></td>
+							<td data-column="use_yn"></td>
 						</tr>
 					
 					</tbody>
@@ -89,7 +89,7 @@
 				<th>코드ID</th>
 				<td>
 					<div class="form-group">
-						<input type="text" name="CODE_ID" class="form-control" placeholder="코드 입력" required data-error="코드를 입력하세요">
+						<input type="text" name="code_id" class="form-control" placeholder="코드 입력" required data-error="코드를 입력하세요">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>
@@ -101,7 +101,7 @@
 				<th>코드명</th>
 				<td>
 					<div class="form-group">
-						<input type="text" name="CODE_NM" class="form-control" placeholder="코드명 입력" required data-error="레벨명을 입력하세요">
+						<input type="text" name="code_nm" class="form-control" placeholder="코드명 입력" required data-error="레벨명을 입력하세요">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>
@@ -113,11 +113,11 @@
 				<td >
 					<div class="form-group">
 						<label class="radio-inline">
-							<input type="radio" name="USE_YN" value="Y"> Y
+							<input type="radio" name="use_yn" value="Y"> Y
 						</label>
 
 						<label class="radio-inline">
-							<input type="radio" name="USE_YN" value="N"> N
+							<input type="radio" name="use_yn" value="N"> N
 						</label>
 						
 						<div class="help-block with-errors"></div>
@@ -138,14 +138,14 @@
 
 
 <form id="pb-gcode-dtl-edit-form">
-	<input type="hidden" name="CODE_ID">
+	<input type="hidden" name="code_id">
 	<table class="pb-form-table " >
 		<tbody>
 			<tr>
 				<th>상세코드ID</th>
 				<td>
 					<div class="form-group">
-						<input type="text" name="CODE_DID" class="form-control" placeholder="코드 입력" required data-error="코드를 입력하세요">
+						<input type="text" name="code_did" class="form-control" placeholder="코드 입력" required data-error="코드를 입력하세요">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>
@@ -157,7 +157,7 @@
 				<th>상세코드명</th>
 				<td>
 					<div class="form-group">
-						<input type="text" name="CODE_DNM" class="form-control" placeholder="코드명 입력" required data-error="레벨명을 입력하세요">
+						<input type="text" name="code_dnm" class="form-control" placeholder="코드명 입력" required data-error="레벨명을 입력하세요">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>
@@ -169,11 +169,11 @@
 				<td >
 					<div class="form-group">
 						<label class="radio-inline">
-							<input type="radio" name="USE_YN" value="Y"> Y
+							<input type="radio" name="use_yn" value="Y"> Y
 						</label>
 
 						<label class="radio-inline">
-							<input type="radio" name="USE_YN" value="N"> N
+							<input type="radio" name="use_yn" value="N"> N
 						</label>
 						
 						<div class="help-block with-errors"></div>
@@ -186,7 +186,7 @@
 				<th>정렬순서</th>
 				<td >
 					<div class="form-group">
-						<input type="text" name="SORT_CHAR" class="form-control" placeholder="정수로 입력" required data-error="정렬순서를 입력하세요">
+						<input type="text" name="sort_char" class="form-control" placeholder="정수로 입력" required data-error="정렬순서를 입력하세요">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>

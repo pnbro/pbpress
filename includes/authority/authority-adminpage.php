@@ -59,9 +59,9 @@ function _pb_ajax_admin_authority_insert(){
 
 
 	$insert_id_ = pb_authority_add(array(
-		'AUTH_NAME' => $target_data_['AUTH_NAME'],
-		'SLUG' => $target_data_['SLUG'],
-		'REG_DATE' => pb_current_time(),
+		'auth_name' => $target_data_['auth_name'],
+		'slug' => $target_data_['slug'],
+		'reg_date' => pb_current_time(),
 	));
 
 	
@@ -90,8 +90,8 @@ function _pb_ajax_admin_authority_update(){
 	global $pbdb;
 
 	pb_authority_update($auth_id_, array(
-		'AUTH_NAME' => $target_data_['AUTH_NAME'],
-		'SLUG' => $target_data_['SLUG'],
+		'auth_name' => $target_data_['auth_name'],
+		'slug' => $target_data_['slug'],
 		'MOD_DATE' => pb_current_time(),
 	));
 
@@ -141,22 +141,22 @@ function _pb_ajax_admin_authority_task_update(){
 	$revoke_list_ = isset($_REQUEST["revoke_list"]) ? $_REQUEST["revoke_list"] : array();
 
 	foreach($revoke_list_ as $slug_){
-		$task_data_ = pb_authority_task_by_slug($auth_data_["SLUG"], $slug_);
+		$task_data_ = pb_authority_task_by_slug($auth_data_["slug"], $slug_);
 		if(isset($task_data_)){
-			pb_authority_task_delete($task_data_['ID']);
+			pb_authority_task_delete($task_data_['id']);
 		}
 	}
 
 	$task_types_ = pb_authority_task_types();
 
 	foreach($grant_list_ as $slug_){
-		$task_data_ = pb_authority_task_by_slug($auth_data_["SLUG"], $slug_);
+		$task_data_ = pb_authority_task_by_slug($auth_data_["slug"], $slug_);
 		if(isset($task_data_)) continue;
 
 		pb_authority_task_add(array(
-			'AUTH_ID' => $auth_id_,
-			'TASK_NAME' => $task_types_[$slug_]['name'],
-			'SLUG' => $slug_,
+			'auth_id' => $auth_id_,
+			'task_name' => $task_types_[$slug_]['name'],
+			'slug' => $slug_,
 			'REG_DATE' => pb_current_time(),
 		));
 	}
