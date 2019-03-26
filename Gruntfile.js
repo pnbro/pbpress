@@ -19,6 +19,15 @@ module.exports = function (grunt) {
 
     concat : {
 
+      'defaults-main' : {
+        src: [
+          'lib/dev/concat-lib/src/defaults/moment.js',
+          'lib/dev/concat-lib/src/defaults/jsencrypt.js',
+        
+        ],
+        dest: 'lib/dev/concat-lib/dist/defaults-main.js'
+      },
+
       'defaults-admin' : {
         src: [
           'lib/dev/concat-lib/src/defaults/moment.js',
@@ -32,6 +41,16 @@ module.exports = function (grunt) {
 
         ],
         dest: 'lib/dev/concat-lib/dist/defaults-admin.js'
+      },
+
+      'jquery-default-plugins-main' : {
+        src: [
+
+          'lib/dev/concat-lib/src/jquery-default-plugins/jquery.cookie.js',
+          'lib/dev/concat-lib/src/jquery-default-plugins/jquery.blockUI.js',
+
+        ],
+        dest: 'lib/dev/concat-lib/dist/jquery-default-plugins-main.js'
       },
       
   
@@ -53,6 +72,17 @@ module.exports = function (grunt) {
         dest: 'lib/dev/concat-lib/dist/jquery-default-plugins-admin.js'
       },
 
+      'pb-main' : {
+        src: [
+          'lib/dev/concat-lib/src/pb/modules/pb.mainmodule.js',
+          'lib/dev/concat-lib/src/pb/modules/pb.crypt.js',
+          'lib/dev/concat-lib/src/pb/modules/pb.utils.js',
+          
+          'lib/dev/concat-lib/src/pb/pb.main.js',
+
+        ],
+        dest: 'lib/dev/concat-lib/dist/pb-main.js'
+      },
 
       'pb-admin' : {
         src: [
@@ -71,10 +101,19 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/pb/modules/pb.summernote.js',
           'lib/dev/concat-lib/src/pb/modules/pb.summernote-image-uploader.js',
           
-          'lib/dev/concat-lib/src/pb/pb.main.js',
+          'lib/dev/concat-lib/src/pb/pb.admin.js',
 
         ],
         dest: 'lib/dev/concat-lib/dist/pb-admin.js'
+      },
+
+      'concat-all-main' : {
+        src: [
+          'lib/dev/concat-lib/dist/defaults-main.js',
+          'lib/dev/concat-lib/dist/jquery-default-plugins-main.js',
+          'lib/dev/concat-lib/dist/pb-main.js',
+        ],
+        dest: 'lib/dev/comp-lib/all-main.js'
       },
 
       'concat-all-admin' : {
@@ -187,7 +226,13 @@ module.exports = function (grunt) {
     'concat:defaults-admin',
     'concat:jquery-default-plugins-admin',
     'concat:pb-admin',
-    'concat:concat-all-admin'
+    
+    'concat:defaults-main',
+    'concat:jquery-default-plugins-main',
+    'concat:pb-main',
+
+    'concat:concat-all-admin',
+    'concat:concat-all-main'
   ]);
   grunt.registerTask('build-css', ['less']);
   grunt.registerTask('build', ['clean','build-js','build-css']);

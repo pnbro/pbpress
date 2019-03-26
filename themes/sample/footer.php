@@ -5,7 +5,6 @@
 	</footer>
 	
 	<!-- Bootstrap core JavaScript -->
-	<script src="<?=pb_current_theme_url()?>lib/js/jquery.min.js"></script>
 	<script src="<?=pb_current_theme_url()?>lib/js/bootstrap.bundle.min.js"></script>
 	<?php pb_foot() ?>
 </body>

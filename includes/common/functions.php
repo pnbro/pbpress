@@ -58,7 +58,11 @@ function pb_head(){
 
 	global $pb_config;
 ?>
+<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pb-main.css">
+<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/jquery.js"></script>
 <script type="text/javascript">window.PBVAR = <?=json_encode($pbvar_)?>;</script>
+<script type="text/javascript" src="<?=PB_LIBRARY_URL?>comp-lib/all-main.js"></script>
+
 <?php
 
 	pb_hook_do_action("pb_head");
