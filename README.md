@@ -5,7 +5,8 @@ PHP Framework for simple website creation.
 ## Requirements
 	PHP >= 5.2.17
 	MySQL >= 5.x (innoDB)
-
+		- mysql, mysqli
+		
 ## How to install
 PBPress need to initialize frontend library that based by NPM Gruntjs.
 PBPress는 NPM Gruntjs 기반으로 이루어진 프론트엔드 라이브러리를 초기화해야 합니다. 
