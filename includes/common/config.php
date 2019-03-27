@@ -10,6 +10,7 @@ class PBConfig{
 
 	public $charset = "utf8";
 	
+	public $db_connection_type = "mysqli";
 	public $db_host = "";
 	public $db_username = "";
 	public $db_userpass = "";
@@ -30,6 +31,7 @@ class PBConfig{
 
 		$this->charset = (defined("PB_CHARSET")) ? PB_CHARSET : "utf8";
 
+		$this->db_connection_type = (defined("PB_DB_CONNECTION_TYPE")) ?  PB_DB_CONNECTION_TYPE : "mysqli";
 		$this->db_host = (defined("PB_DB_HOST")) ?  PB_DB_HOST : null;
 		$this->db_username = (defined("PB_DB_USERNAME")) ? PB_DB_USERNAME : null;
 		$this->db_userpass = (defined("PB_DB_USERPASS")) ? PB_DB_USERPASS : null;

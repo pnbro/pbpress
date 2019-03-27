@@ -38,11 +38,11 @@ function pb_option_list($conditions_ = array()){
 		), $conditions_['keyword'])." ";
 	}
 	if(isset($conditions_['id']) && strlen($conditions_['id'])){
-		$query_ .= " AND options.id = '".mysql_real_escape_string($conditions_['id'])."' ";
+		$query_ .= " AND options.id = '".pb_database_escape_string($conditions_['id'])."' ";
 	}
 
 	if(isset($conditions_['option_name']) && strlen($conditions_['option_name'])){
-		$query_ .= " AND options.option_name = '".mysql_real_escape_string($conditions_['option_name'])."' ";
+		$query_ .= " AND options.option_name = '".pb_database_escape_string($conditions_['option_name'])."' ";
 	}
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){

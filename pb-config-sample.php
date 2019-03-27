@@ -2,6 +2,8 @@
 
 define('PB_DEV', true);
 
+// define('PB_DB_CONNECTION_TYPE', 'mysqli'); //mysql, mysqli
+
 define('PB_DB_HOST', '');
 define('PB_DB_USERNAME', '');
 define('PB_DB_USERPASS', '');

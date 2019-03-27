@@ -41,7 +41,7 @@ function pb_user_authority_list($conditions_ = array()){
 	WHERE 1 ";
 
 	if(isset($conditions_['id']) && $conditions_['id'] === true){
-		$query_ .= " AND users_auth.id = '".mysql_real_escape_string($conditions_['id'])."' ";
+		$query_ .= " AND users_auth.id = '".pb_database_escape_string($conditions_['id'])."' ";
 	}
 	if(isset($conditions_['auth_id'])){
 		$query_ .= " AND ".pb_query_in_fields($conditions_['auth_id'], "users_auth.auth_id")." ";
@@ -58,13 +58,13 @@ function pb_user_authority_list($conditions_ = array()){
 	}
 
 	if(isset($conditions_['user_id']) && strlen($conditions_['user_id'])){
-		$query_ .= " AND users_auth.user_id = '".mysql_real_escape_string($conditions_['user_id'])."' ";
+		$query_ .= " AND users_auth.user_id = '".pb_database_escape_string($conditions_['user_id'])."' ";
 	}
 	if(isset($conditions_['user_login']) && strlen($conditions_['user_login'])){
-		$query_ .= " AND users.user_login = '".mysql_real_escape_string($conditions_['user_login'])."' ";
+		$query_ .= " AND users.user_login = '".pb_database_escape_string($conditions_['user_login'])."' ";
 	}
 	if(isset($conditions_['user_email']) && strlen($conditions_['user_email'])){
-		$query_ .= " AND users.user_email = '".mysql_real_escape_string($conditions_['user_email'])."' ";
+		$query_ .= " AND users.user_email = '".pb_database_escape_string($conditions_['user_email'])."' ";
 	}
 
 	$query_ .= ' '.pb_hook_apply_filters('pb_user_authority_list_where',"",$conditions_)." ";

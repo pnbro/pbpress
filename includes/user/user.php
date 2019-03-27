@@ -40,16 +40,16 @@ function pb_user_list($conditions_ = array()){
 	WHERE 1 ";
 
 	if(isset($conditions_['id']) && strlen($conditions_['id'])){
-		$query_ .= " AND users.id = '".mysql_real_escape_string($conditions_['id'])."' ";
+		$query_ .= " AND users.id = '".pb_database_escape_string($conditions_['id'])."' ";
 	}
 	if(isset($conditions_['user_login']) && strlen($conditions_['user_login'])){
-		$query_ .= " AND users.user_login = '".mysql_real_escape_string($conditions_['user_login'])."' ";
+		$query_ .= " AND users.user_login = '".pb_database_escape_string($conditions_['user_login'])."' ";
 	}
 	if(isset($conditions_['user_email']) && strlen($conditions_['user_email'])){
-		$query_ .= " AND users.user_email = '".mysql_real_escape_string($conditions_['user_email'])."' ";
+		$query_ .= " AND users.user_email = '".pb_database_escape_string($conditions_['user_email'])."' ";
 	}
 	if(isset($conditions_['status']) && strlen($conditions_['status'])){
-		$query_ .= " AND users.status = '".mysql_real_escape_string($conditions_['status'])."' ";
+		$query_ .= " AND users.status = '".pb_database_escape_string($conditions_['status'])."' ";
 	}
 
 	$query_ .= ' '.pb_hook_apply_filters('pb_user_list_where',"",$conditions_)." ";

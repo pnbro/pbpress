@@ -29,10 +29,10 @@ function pb_gcode_list($conditions_ = array()){
 		$query_ .= " AND gcode.use_yn = 'Y' ";
 	}
 	if(isset($conditions_['code_id']) && strlen($conditions_['code_id'])){
-		$query_ .= " AND gcode.code_id = '".mysql_real_escape_string($conditions_['code_id'])."' ";
+		$query_ .= " AND gcode.code_id = '".pb_database_escape_string($conditions_['code_id'])."' ";
 	}
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
-		$query_ .= " AND gcode.code_nm LIKE '".mysql_real_escape_string($conditions_['keyword'])."%' ";
+		$query_ .= " AND gcode.code_nm LIKE '".pb_database_escape_string($conditions_['keyword'])."%' ";
 	}
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
@@ -90,13 +90,13 @@ function pb_gcode_dtl_list($conditions_ = array()){
 		$query_ .= " AND gcode_dtl.use_yn = 'Y' ";
 	}
 	if(isset($conditions_['code_id']) && strlen($conditions_['code_id'])){
-		$query_ .= " AND   code_id = '".mysql_real_escape_string($conditions_['code_id'])."' ";
+		$query_ .= " AND   code_id = '".pb_database_escape_string($conditions_['code_id'])."' ";
 	}
 	if(isset($conditions_['code_did']) && strlen($conditions_['code_did'])){
-		$query_ .= " AND gcode_dtl.code_did = '".mysql_real_escape_string($conditions_['code_did'])."' ";
+		$query_ .= " AND gcode_dtl.code_did = '".pb_database_escape_string($conditions_['code_did'])."' ";
 	}
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
-		$query_ .= " AND gcode_dtl.code_dnm LIKE '".mysql_real_escape_string($conditions_['keyword'])."%' ";
+		$query_ .= " AND gcode_dtl.code_dnm LIKE '".pb_database_escape_string($conditions_['keyword'])."%' ";
 	}
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] == true){
@@ -146,7 +146,7 @@ function pb_gcode_make_options($conditions_, $default_ = null){
 }
 function pb_query_gcode_dtl_name($code_id_, $column_){
 	global $pbdb;
-	return "(SELECT gcode_dtl.code_dnm FROM gcode_dtl WHERE gcode_dtl.code_id = '".mysql_real_escape_string($code_id_)."' AND gcode_dtl.code_did = {$column_})";
+	return "(SELECT gcode_dtl.code_dnm FROM gcode_dtl WHERE gcode_dtl.code_id = '".pb_database_escape_string($code_id_)."' AND gcode_dtl.code_did = {$column_})";
 }
 
 include(PB_DOCUMENT_PATH . 'includes/gcode/gcode-builtin.php');

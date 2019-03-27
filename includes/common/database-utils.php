@@ -12,7 +12,7 @@ function pb_query_keyword_search($fields_, $keyword_){
 			$query_where_keyword_ .= " OR ";
 		}
 
-		$query_where_keyword_ .= " {$field_} LIKE '".mysql_real_escape_string($keyword_)."%'  ";
+		$query_where_keyword_ .= " {$field_} LIKE '".pb_database_escape_string($keyword_)."%'  ";
 		$keyword_first_ = false;
 	}
 
@@ -49,15 +49,15 @@ function pb_query_in_fields($data_, $column_name_, $empty_replace_ = "1", $is_st
 	}
 
 	if(count($data_) == 1){
-		return " {$column_name_} = {$cover_char_}".mysql_real_escape_string($data_[0])."{$cover_char_} ";
+		return " {$column_name_} = {$cover_char_}".pb_database_escape_string($data_[0])."{$cover_char_} ";
 	}
 
 	for($index_=1;$index_ < count($data_); ++$index_){
-		$query_ .= ", {$cover_char_}".mysql_real_escape_string($data_[$index_])."{$cover_char_} ";
+		$query_ .= ", {$cover_char_}".pb_database_escape_string($data_[$index_])."{$cover_char_} ";
 	}
 
 	if(count($data_) > 0){
-		return " {$column_name_} IN ( {$cover_char_}".mysql_real_escape_string($data_[0])."{$cover_char_} ".$query_.") ";
+		return " {$column_name_} IN ( {$cover_char_}".pb_database_escape_string($data_[0])."{$cover_char_} ".$query_.") ";
 	}else return " {$empty_replace_} ";
 }
 

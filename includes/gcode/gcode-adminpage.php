@@ -149,8 +149,8 @@ function _pb_ajax_admin_gcode_dtl_load(){
         ,use_yn
         ,sort_char
 		FROM gcode_dtl
-		WHERE code_id = '".mysql_real_escape_string($code_id_)."'
-		AND code_did = '".mysql_real_escape_string($code_did_)."'
+		WHERE code_id = '".pb_database_escape_string($code_id_)."'
+		AND code_did = '".pb_database_escape_string($code_did_)."'
 	");
 	
 	echo json_encode(array(

@@ -44,13 +44,13 @@ function pb_authority_list($conditions_ = array()){
 	WHERE 1 ";
 
 	if(isset($conditions_['id']) && strlen($conditions_['id'])){
-		$query_ .= " AND auth.id = '".mysql_real_escape_string($conditions_['id'])."' ";
+		$query_ .= " AND auth.id = '".pb_database_escape_string($conditions_['id'])."' ";
 	}
 	if(isset($conditions_['slug']) && strlen($conditions_['slug'])){
-		$query_ .= " AND auth.slug = '".mysql_real_escape_string($conditions_['slug'])."' ";
+		$query_ .= " AND auth.slug = '".pb_database_escape_string($conditions_['slug'])."' ";
 	}
 	if(isset($conditions_['auth_name']) && strlen($conditions_['auth_name'])){
-		$query_ .= " AND auth.auth_name = '".mysql_real_escape_string($conditions_['auth_name'])."' ";
+		$query_ .= " AND auth.auth_name = '".pb_database_escape_string($conditions_['auth_name'])."' ";
 	}
 
 	$query_ .= ' '.pb_hook_apply_filters('pb_authority_list_where',"",$conditions_)." ";
@@ -180,16 +180,16 @@ function pb_authority_task_list($conditions_ = array()){
 	WHERE 1 ";
 
 	if(isset($conditions_['id']) && strlen($conditions_['id'])){
-		$query_ .= " AND auth_task.id = '".mysql_real_escape_string($conditions_['id'])."' ";
+		$query_ .= " AND auth_task.id = '".pb_database_escape_string($conditions_['id'])."' ";
 	}
 	if(isset($conditions_['slug']) && strlen($conditions_['slug'])){
-		$query_ .= " AND auth_task.slug = '".mysql_real_escape_string($conditions_['slug'])."' ";
+		$query_ .= " AND auth_task.slug = '".pb_database_escape_string($conditions_['slug'])."' ";
 	}
 	if(isset($conditions_['auth_slug']) && strlen($conditions_['auth_slug'])){
-		$query_ .= " AND auth.slug = '".mysql_real_escape_string($conditions_['auth_slug'])."' ";
+		$query_ .= " AND auth.slug = '".pb_database_escape_string($conditions_['auth_slug'])."' ";
 	}
 	if(isset($conditions_['auth_id']) && strlen($conditions_['auth_id'])){
-		$query_ .= " AND auth_task.auth_id = '".mysql_real_escape_string($conditions_['auth_id'])."' ";
+		$query_ .= " AND auth_task.auth_id = '".pb_database_escape_string($conditions_['auth_id'])."' ";
 	}
 
 	$query_ .= ' '.pb_hook_apply_filters('pb_authority_task_list_where',"",$conditions_)." ";
