@@ -65,7 +65,6 @@ you can make a theme that you want, and just put your theme you made into 'theme
 	Bootstrap 3.x : https://getbootstrap.com 
 	bootstrap-datetimepicker : https://github.com/Eonasdan/bootstrap-datetimepicker
 	bootstrap-select : https://developer.snapappointments.com/bootstrap-select
-	bootstrap-select : https://developer.snapappointments.com/bootstrap-select
 	jsencrypt : https://github.com/travist/jsencrypt
 	momentjs : https://momentjs.com
 	summernote : https://github.com/summernote/summernote
@@ -73,6 +72,9 @@ you can make a theme that you want, and just put your theme you made into 'theme
 ### Backend
 	blueimp UploadHandler : https://github.com/blueimp/jQuery-File-Upload
 	phpmailer : https://github.com/PHPMailer/PHPMailer
+
+### Font
+	NotoSansKR Webfont(Converted by theeluwin) : https://github.com/theeluwin/NotoSansKR-Hestia
 
 ## TODO
 	1. Write API documentation and manuals.
