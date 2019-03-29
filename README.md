@@ -11,8 +11,7 @@ PHP Framework for simple website creation.
 PBPress need to initialize frontend library that based by NPM Gruntjs.
 PBPress는 NPM Gruntjs 기반으로 이루어진 프론트엔드 라이브러리를 초기화해야 합니다. 
     
-    > npm init
-    > npm install --save-dev
+    > npm install
     
 or just use pre-compiled files.(PBPress.v.x.x.x.zip).
 또는 컴파일된 파일을 사용하셔도 됩니다. (PBPress.v.x.x.x.zip).
