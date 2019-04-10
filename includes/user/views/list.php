@@ -1,6 +1,8 @@
 <?php 	
 
 	$user_listable_ = new PB_user_list_table("pb-user-listtable", "pb-user-listtable");
+
+	$keyword_ = isset($_GET['keyword']) ? $_GET['keyword'] : null;
 ?>
 
 <h3>사용자내역</h3>
@@ -12,7 +14,7 @@
 	<div class="right-frame">
 		<input type="hidden" name="page_index" value="0">
 		<div class="input-group">
-			<input type="text" class="form-control" placeholder="통합검색" name="keyword" >
+			<input type="text" class="form-control" placeholder="통합검색" name="keyword" value="<?=$keyword_?>">
 			<span class="input-group-btn">
 				<button type="submit" class="btn btn-default" type="button">검색하기</button>
 			</span>

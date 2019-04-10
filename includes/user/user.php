@@ -52,6 +52,15 @@ function pb_user_list($conditions_ = array()){
 		$query_ .= " AND users.status = '".pb_database_escape_string($conditions_['status'])."' ";
 	}
 
+	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
+		$query_ .= " AND ".pb_query_keyword_search(array(
+			'users.user_login',
+			'users.user_email',
+			'users.user_name',
+		), $conditions_['keyword'])." ";
+	}
+
+
 	$query_ .= ' '.pb_hook_apply_filters('pb_user_list_where',"",$conditions_)." ";
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
@@ -68,7 +77,7 @@ function pb_user_list($conditions_ = array()){
 	if(isset($conditions_['limit'])){
         $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
     }
-
+    
 	return pb_hook_apply_filters('pb_user_list', $pbdb->select($query_));
 }
 
