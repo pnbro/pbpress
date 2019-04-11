@@ -37,12 +37,23 @@ function pb_current_theme_url(){
 	return PB_DOCUMENT_URL."themes/".pb_current_theme()."/";	
 }
 
-function pb_theme_header(){
-	include(PB_DOCUMENT_PATH."themes/".pb_current_theme()."/header.php");
+function pb_theme_header($header_name_ = null){
+	if(strlen($header_name_)){
+		$header_name_ = "header-".$header_name_;
+	}else{
+		$header_name_ = "header";
+	}
+
+	include(PB_DOCUMENT_PATH."themes/".pb_current_theme()."/{$header_name_}.php");
 }
 
-function pb_theme_footer(){
-	include(PB_DOCUMENT_PATH."themes/".pb_current_theme()."/footer.php");	
+function pb_theme_footer($footer_name_ = null){
+	if(strlen($footer_name_)){
+		$footer_name_ = "footer-".$footer_name_;
+	}else{
+		$footer_name_ = "footer";
+	}
+	include(PB_DOCUMENT_PATH."themes/".pb_current_theme()."/{$footer_name_}.php");	
 }
 
 function pb_theme_install_tables(){
