@@ -143,6 +143,7 @@ class PBDB{
 		$query_ = str_replace( "'%s'", '%s', $query_);
 		$query_ = str_replace( '"%s"', '%s', $query_);
 		$query_ = preg_replace( '/(?<!%)%s/', "'%s'", $query_);
+		$query_ = str_replace( "##null##", '%s', $query_);
 
 		return vsprintf($query_, $data_);
 	}

@@ -25,8 +25,14 @@ function pb_format_mapping($map_, $data_){
 	$converted_format_ = array();
 	foreach($data_ as $key_ => $value_){
 		if(isset($map_[$key_])){
-			$converted_data_[$key_] = $value_;
-			$converted_format_[] = $map_[$key_];
+			
+			if($value_ !== null){
+				$converted_data_[$key_] = $value_;
+				$converted_format_[] = $map_[$key_];
+			}else{
+				$converted_data_[$key_] = "NULL";
+				$converted_format_[] = "##null##";
+			}
 		}
 	}
 	
