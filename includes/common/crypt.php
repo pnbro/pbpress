@@ -96,7 +96,7 @@ function _pb_crypt_load_scripts(){
 
 	<?php
 }
-pb_hook_add_action("pb_header","_pb_crypt_load_scripts");
+pb_hook_add_action("pb_head","_pb_crypt_load_scripts");
 
 function _pb_crypt_decrypt_hook($params_, $add_){
 	if(!isset($add_) || count($add_) <= 0) return $params_;
