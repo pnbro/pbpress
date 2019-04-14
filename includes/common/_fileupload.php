@@ -12,6 +12,11 @@ if(!pb_hook_apply_filters('pb_fileupload_before', true)){
 	pb_end();
 }
 
+//prevent injection
+if(!file_exists(PB_DOCUMENT_PATH."uploads/.htaccess")){
+	_pb_install_rewrite_for_upload_directory();
+}
+
 include_once(PB_DOCUMENT_PATH."includes/common/lib/UploadHandler.php");
 
 $upload_dir_ = (isset($_GET['upload_dir']) && strlen($_GET['upload_dir'])) ? $_GET['upload_dir'] : "";

@@ -20,12 +20,7 @@ function pb_install_rewrite(){
 	}
 
 
-	fwrite($rewrite_file_, "RewriteEngine On\n
-RewriteBase ".PB_REWRITE_BASE."\n
-RewriteRule ^index\.php$ - [L]\n
-RewriteCond %{REQUEST_FILENAME} !-f\n
-RewriteCond %{REQUEST_FILENAME} !-d\n
-RewriteRule . ".PB_REWRITE_BASE."index.php [L]");
+	fwrite($rewrite_file_, "RewriteEngine On\nRewriteBase ".PB_REWRITE_BASE."\nRewriteRule ^index\.php$ - [L]\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . ".PB_REWRITE_BASE."index.php [L]");
 	fclose($rewrite_file_);
 
 	return true;

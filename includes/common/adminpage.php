@@ -111,12 +111,7 @@ function pb_install_admin_rewrite(){
 	}
 
 
-	fwrite($rewrite_file_, "RewriteEngine On\n
-RewriteBase ".PB_ADMINPAGE_REWRITE_BASE."\n
-RewriteRule ^index\.php$ - [L]\n
-RewriteCond %{REQUEST_FILENAME} !-f\n
-RewriteCond %{REQUEST_FILENAME} !-d\n
-RewriteRule . ".$rewrite_base_."admin/index.php [L]");
+	fwrite($rewrite_file_, "RewriteEngine On\nRewriteBase ".PB_ADMINPAGE_REWRITE_BASE."\nRewriteRule ^index\.php$ - [L]\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . ".$rewrite_base_."admin/index.php [L]");
 	fclose($rewrite_file_);
 	return true;
 }
