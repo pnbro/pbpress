@@ -243,7 +243,7 @@ function pb_current_user(){
 }
 function pb_current_user_id(){
 	$user_data_ = pb_current_user();
-	if(!isset($user_data_)) return null;
+	if(!isset($user_data_)) return -1;
 
 	return $user_data_['id'];
 }
