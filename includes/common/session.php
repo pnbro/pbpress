@@ -47,4 +47,18 @@ function pb_session_verify_instance_token($name_, $token_text_){
     return $bool_;
 }
 
+
+
+define("PB_COOKIE_DAY", 86400);
+
+function pb_cookie_put($key_, $value_, $expire_ = 7, $path_ = "/"){
+    return setcookie($key_, $value_, (time() + (PB_COOKIE_DAY * $expire_)), $path_);
+}
+function pb_cookie_get($key_){
+    return (isset($_COOKIE[$key_]) ? $_COOKIE[$key_] : null);
+}
+function pb_cookie_remove($key_, $path_ = "/"){
+    return setcookie($key_, '', -1, $path_);
+}
+
 ?>
