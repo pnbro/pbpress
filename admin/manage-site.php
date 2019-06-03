@@ -45,7 +45,7 @@
 							<div class="clearfix"></div>
 						</div>
 
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label for="pb-manage-site-form-site_theme">사이트테마</label>
 							<select class="form-control" name="site_theme" required data-error="테마를 선택하세요.">
 								<option value="">-테마선택-</option>
@@ -56,7 +56,7 @@
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>
 						</div>
-
+ -->
 						<div class="form-group">
 							<label for="pb-manage-site-form-site_theme">테이블 재설치</label>
 							<div class="row">

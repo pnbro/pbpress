@@ -18,6 +18,7 @@ class PBListTable{
 
 	private $current_row = -1;
 	private $display_row_number = -1;
+	private $display_r_row_number = -1;
 
 	function global_id(){
 		return $this->global_id;
@@ -29,6 +30,9 @@ class PBListTable{
 
 	function display_row_number(){
 		return $this->display_row_number;
+	}
+	function display_reverse_row_number(){
+		return $this->display_r_row_number;
 	}
 	function set_ajax($bool_){
 		$this->ajax = $bool_;
@@ -117,6 +121,7 @@ class PBListTable{
 		
 		$this->current_row = 0;
 		$this->display_row_number = ($is_first_ ? 0 : ($args_["page_index"] * $args_["per_page"])) + 1;
+		$this->display_r_row_number = ($is_first_ ? 0 : ($args_["total_count"] - ($args_["page_index"] * $args_["per_page"])) );
 		foreach($items_ as $row_index_ => $row_data_){
 			$tr_attributes_ = $this->row_attributes($row_data_, $row_index_);
 			$html_ .= $this->before_row($row_data_, $row_index_);
@@ -133,6 +138,7 @@ class PBListTable{
 			$html_ .= '</tr>'.$this->after_row($row_data_, $row_index_);
 			$this->current_row += 1;
 			$this->display_row_number += 1;
+			$this->display_r_row_number -= 1;
 		}
 
 		if($is_first_){

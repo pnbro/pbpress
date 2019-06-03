@@ -8,7 +8,7 @@ global $_pb_hook_action_map, $_pb_hook_filter_map;
 
 $_pb_hook_action_map = array();
 $_pb_hook_filter_map = array();
-
+/*
 function __pb_hook_sort_func($a_, $b_){
 	return ($a_['priority'] < $b_['priority'] ? -1 : 1);
 }
@@ -19,18 +19,28 @@ function _pb_hook_sort_map(&$map_, $key_name_){
 	$data_list_ = &$map_[$key_name_];
 	usort($data_list_, "__pb_hook_sort_func");
 }
-
+*/
 function pb_hook_add_action($action_name_, $func_, $priority_ = 10){
 	global $_pb_hook_action_map;
 
 	if(!isset($_pb_hook_action_map[$action_name_])) $_pb_hook_action_map[$action_name_] = array();
 
-	$_pb_hook_action_map[$action_name_][] = array(
-		'func' => $func_,
-		'priority' => $func_,
-	);
 
-	_pb_hook_sort_map($_pb_hook_action_map, $action_name_);
+	$map_count_ = count($_pb_hook_action_map[$action_name_]);
+	$insert_index_ = $map_count_;
+	for($row_index_=0;$row_index_<$map_count_;++$row_index_){
+		$target_item_ = $_pb_hook_action_map[$action_name_][$row_index_];
+
+		if($target_item_['priority'] > $priority_){
+			$insert_index_ = $row_index_;
+			break;
+		}
+	}
+
+	array_splice($_pb_hook_action_map[$action_name_], $insert_index_, 0, array(array(
+		'func' => $func_,
+		'priority' => $priority_,
+	)));
 }
 function pb_hook_do_action($action_name_){
 	global $_pb_hook_action_map;
@@ -50,12 +60,21 @@ function pb_hook_add_filter($fitler_name_, $func_, $priority_ = 10){
 
 	if(!isset($_pb_hook_filter_map[$fitler_name_])) $_pb_hook_filter_map[$fitler_name_] = array();
 
-	$_pb_hook_filter_map[$fitler_name_][] = array(
+	$map_count_ = count($_pb_hook_filter_map[$fitler_name_]);
+	$insert_index_ = $map_count_;
+	for($row_index_=0;$row_index_<$map_count_;++$row_index_){
+		$target_item_ = $_pb_hook_filter_map[$fitler_name_][$row_index_];
+
+		if($target_item_['priority'] > $priority_){
+			$insert_index_ = $row_index_;
+			break;
+		}
+	}
+
+	array_splice($_pb_hook_filter_map[$fitler_name_], $insert_index_, 0, array(array(
 		'func' => $func_,
 		'priority' => $priority_,
-	);
-
-	_pb_hook_sort_map($_pb_hook_filter_map, $fitler_name_);
+	)));
 }
 function pb_hook_apply_filters($fitler_name_){
 	global $_pb_hook_filter_map;
@@ -73,6 +92,5 @@ function pb_hook_apply_filters($fitler_name_){
 
 	return $args_[0];
 }
-
 	
 ?>

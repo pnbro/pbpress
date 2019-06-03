@@ -38,20 +38,11 @@ if(!pb_session_verify_instance_token("pbpress_manage-site", $settings_data_['_re
 
 $site_name_ = $settings_data_['site_name'];
 $site_desc_ = $settings_data_['site_desc'];
-$site_theme_ = $settings_data_['site_theme'];
 
 pb_option_update("site_name", $site_name_);
 pb_option_update("site_desc", $site_desc_);
 
 pb_hook_do_action('pb-admin-update-site-settings', $settings_data_);
-
-$before_theme_ = pb_current_theme();
-
-if($before_theme_ !== $site_theme_){
-	pb_switch_theme($site_theme_);	
-	global $pbdb;
-	pb_theme_install_tables();
-}
 
 echo json_encode(array(
 	'success' => true,

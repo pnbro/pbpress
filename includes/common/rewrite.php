@@ -27,7 +27,37 @@ function pb_install_rewrite(){
 }
 
 function pb_rewrite_list(){
-	return pb_hook_apply_filters("pb_rewrite_list", array());
+	global $_pb_rewrite_list;
+
+	if(!isset($_pb_rewrite_list)){
+		$_pb_rewrite_list = pb_hook_apply_filters("pb_rewrite_list", array());
+	}
+
+	return $_pb_rewrite_list;
+}
+function pb_rewrite_data($key_){
+	global $_pb_rewrite_list;
+
+	if(!isset($_pb_rewrite_list)){
+		$_pb_rewrite_list = pb_rewrite_list();
+	}
+	return $_pb_rewrite_list[$key_];
+}
+function pb_rewrite_register($key_, $data_){
+	global $_pb_rewrite_list;
+
+	if(!isset($_pb_rewrite_list)){
+		$_pb_rewrite_list = pb_rewrite_list();
+	}
+	$_pb_rewrite_list[$key_] = $data_;
+}
+function pb_rewrite_unregister($key_){
+	global $_pb_rewrite_list;
+
+	if(!isset($_pb_rewrite_list)){
+		$_pb_rewrite_list = pb_rewrite_list();
+	}
+	unset($_pb_rewrite_list[$key_]);
 }
 
 function pb_rewrite_path(){

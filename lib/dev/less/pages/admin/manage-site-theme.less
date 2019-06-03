@@ -1,0 +1,95 @@
+@import (reference) "../../pb-admin.less";
+
+.manage-site-theme-panel{
+
+	.panel-body{
+		padding: 0px;
+	}
+
+	.theme-slider{
+		position: relative;
+		display: block;
+		overflow: hidden;
+		overflow-x: auto;
+		-webkit-overflow-scrolling : touch;
+		width: 100%;
+		white-space: nowrap; 
+		padding: 20px;
+
+		> .theme-item{
+			position: relative;
+			display: inline-block;
+			padding: 5px;
+			max-width: 270px;
+			width: 100%;
+			white-space: nowrap; 
+			// float: left;
+
+			> .active-icon{
+				position: absolute;
+				display: none;
+				color: @brand-primary;
+				right: -5px;
+				top: -5px;
+				z-index: 9;
+				font-size: 40px;
+			}
+			
+			> .wrap{
+				position: relative;
+				display: block;
+				border: 1px solid #dadada;
+				background: white;
+				border-radius: 4px;
+				overflow: hidden;
+				
+
+				> .theme-screenshot{
+					position: relative;
+					display: block;
+					padding-top: 75%;
+					background-size: cover;
+					background-position: center;
+					background-repeat: no-repeat;
+					border-bottom: 1px solid #dadada;
+				}
+
+				> .theme-info{
+					position: relative;
+					display: block;
+					padding: 5px 10px;
+
+					> .name{
+						font-weight: bold;
+						font-size: 15px;
+						color: @gray-base;
+					}
+
+					> .desc{
+						color: @gray-dark;	
+					}
+
+					> .author{
+						color: @gray-light;
+						font-weight: lighter;
+					}
+				}
+				
+			}
+
+			&:hover > .wrap{
+				border-color: @gray-light;
+			}
+
+			&.active > .wrap{
+				border: 1px solid @brand-primary;
+			}
+
+			&.active{
+				> .active-icon{
+					display: inline-block;
+				}
+			}
+		}
+	}
+}
