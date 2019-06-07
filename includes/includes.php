@@ -15,6 +15,7 @@ include(PB_DOCUMENT_PATH . "includes/common/ajax.php");
 include(PB_DOCUMENT_PATH . "includes/common/fileupload.php");
 include(PB_DOCUMENT_PATH . "includes/common/theme.php");
 include(PB_DOCUMENT_PATH . "includes/common/mail.php");
+include(PB_DOCUMENT_PATH . "includes/common/multilingual.php");
 
 include(PB_DOCUMENT_PATH . "includes/common/listtable.php");
 include(PB_DOCUMENT_PATH . "includes/common/adminpage.php");

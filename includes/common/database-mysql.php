@@ -3,6 +3,8 @@
 class PBDatabase_connection_mysql extends PBDatabase_connection{
 
 	private $_connection = null;
+	private $_last_error_no = 0;
+	private $_last_error_message = null;
 
 	function __construct(){
 		parent::__construct("mysql");
@@ -26,10 +28,19 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 	}
 
 	public function query($query_){
-		return mysql_query($query_, $this->_connection);
+		$result_ =  mysql_query($query_, $this->_connection);
+
+		$this->_last_error_no = mysql_errno($this->_connection);
+		$this->_last_error_message = mysql_error($this->_connection);
+
+		return $result_;
 	}
 	public function inserted_id(){
 		return mysql_insert_id($this->_connection);
+	}
+	public function last_error(){
+		if(!strlen($this->_last_error_no)) return false;
+		return new PBError($this->_last_error_no, 'MYSQL ERROR', $this->_last_error_message);	
 	}
 
 	public function num_rows($resource_){
@@ -51,6 +62,10 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 		}
 
 		return mysql_fetch_array($resource_, $option_);
+	}
+
+	public function autocommit($bool_){
+		die("MYSQL autocommit not supported");
 	}
 
 	public function commit(){

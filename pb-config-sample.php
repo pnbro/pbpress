@@ -14,4 +14,7 @@ define("PB_CRYPT_PASSWORD", "~W.7bNa[~$+aeP>u");
 // define("PB_CRYPT_ALGORITHM", "");
 // define("PB_CRYPT_BITS", "");
 
+define("PB_MULTILINGUAL_THEME", true);
+define("PB_DEFAULT_LOCALE", 'ko_KR');
+
 ?>

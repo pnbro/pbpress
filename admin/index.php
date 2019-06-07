@@ -67,7 +67,7 @@ $current_adminpage_path_ = call_user_func_array($rewrite_handler_, array(pb_admi
 
 		?>
 	</div>
-	<div class="copyrights">© 2019 Paul&Bro Company All Rights Reserved.</div>
+	<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?></div>
 	
 	<?php pb_admin_foot(); ?>
 </body>

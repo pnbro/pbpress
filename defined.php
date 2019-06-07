@@ -1,5 +1,7 @@
 <?php
 
+define('PB_VERSION', '0.7.0');
+
 //check exists config file
 if(!file_exists(dirname( __FILE__ )."/pb-config.php")){
 	die("config file not found");

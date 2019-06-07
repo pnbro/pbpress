@@ -21,6 +21,9 @@ class PBConfig{
 	public $crypt_algorithm = "sha256";
 	public $crypt_bits = 2048;
 
+	private $is_multilingual_theme = false;
+	private $default_locale = "ko_KR";
+
 	function __construct(){
 		$this->devmode = (defined("PB_DEV") && PB_DEV === true);
 
@@ -41,10 +44,20 @@ class PBConfig{
 		$this->crypt_password = (defined("PB_CRYPT_PASSWORD")) ? PB_CRYPT_PASSWORD : null;
 		$this->crypt_algorithm = (defined("PB_CRYPT_ALGORITHM")) ? PB_CRYPT_ALGORITHM : "sha256";
 		$this->crypt_bits = (defined("PB_CRYPT_BITS")) ? PB_CRYPT_BITS : 2048;
+
+		$this->is_multilingual_theme = (defined("PB_MULTILINGUAL_THEME")) ? PB_MULTILINGUAL_THEME : false;
+		$this->default_locale = (defined("PB_DEFAULT_LOCALE")) ? PB_DEFAULT_LOCALE : "ko_KR";
 	}
 
 	public function is_devmode(){
 		return $this->devmode;
+	}
+
+	public function is_multilingual_theme(){
+		return $this->is_multilingual_theme;
+	}
+	public function default_locale(){
+		return $this->default_locale;
 	}
 }
 

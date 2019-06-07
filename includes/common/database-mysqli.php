@@ -3,6 +3,8 @@
 class PBDatabase_connection_mysqli extends PBDatabase_connection{
 
 	private $_connection = null;
+	private $_last_error_no = 0;
+	private $_last_error_message = null;
 
 	function __construct(){
 		parent::__construct("mysqli");
@@ -25,10 +27,19 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 	}
 
 	public function query($query_){
-		return mysqli_query($this->_connection, $query_);
+		$result_ =  mysqli_query($this->_connection, $query_);
+
+		$this->_last_error_no = mysqli_errno($this->_connection);
+		$this->_last_error_message = mysqli_error($this->_connection);
+
+		return $result_;
 	}
 	public  function inserted_id(){
 		return mysqli_insert_id($this->_connection);
+	}
+	public function last_error(){
+		if($this->_last_error_no == 0) return false;
+		return new PBError($this->_last_error_no, 'MYSQLi ERROR',$this->_last_error_message);	
 	}
 
 	public function num_rows($resource_){
@@ -51,6 +62,9 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 		return mysqli_fetch_array($resource_, $option_);
 	}
 
+	public function autocommit($bool_){
+		mysqli_autocommit($this->_connection, $bool_);
+	}
 
 	public function commit(){
 		mysqli_query($this->_connection, "commit");

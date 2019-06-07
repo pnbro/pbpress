@@ -25,9 +25,12 @@ abstract class PBDatabase_connection{
 	abstract protected function connect();
 	abstract protected function query($query_);
 	abstract protected function inserted_id();
+	abstract protected function last_error();
 
 	abstract protected function num_rows($resource_);
 	abstract protected function fetch_array($resource_);
+
+	abstract protected function autocommit($bool_);
 
 	abstract protected function commit();
 	abstract protected function rollback();
@@ -304,6 +307,16 @@ class PBDB{
 		return $pb_db_connection->inserted_id();
 	}
 
+	function last_error(){
+		global $pb_db_connection;
+		return $pb_db_connection->last_error();	
+	}
+
+	function autocommit($bool_){
+		global $pb_db_connection;
+		$pb_db_connection->autocommit($bool_);
+	}
+
 	function commit(){
 		global $pb_db_connection;
 		$pb_db_connection->commit();
@@ -341,12 +354,8 @@ class PBDB{
 
 	function exists_table($table_name_){
 		global $pbdb,$pb_config, $pb_db_connection;
-		$query_ = "SELECT COUNT(*) CNT 
-			FROM information_schema.tables
-			WHERE table_schema = '".$pb_db_connection->escape_string($pb_config->db_name)."' 
-			AND table_name = '".$pb_db_connection->escape_string($table_name_)."' ";
-
-		return ($pbdb->get_var($query_) > 0);
+		$check_ = $pbdb->query("SELECT 1 FROM {$table_name_} LIMIT 0, 1");
+		return isset($check_);
 	}
 }
 

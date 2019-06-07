@@ -22,7 +22,7 @@ function pb_option_list($conditions_ = array()){
 
 			".pb_hook_apply_filters('pb_option_list_fields', "", $conditions_)."
 		
-	FROM OPTIONS
+	FROM options
 
 	".pb_hook_apply_filters('pb_option_list_join', "", $conditions_)."
 
