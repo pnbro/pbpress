@@ -6,24 +6,35 @@
 		padding: 0px;
 	}
 
-	.theme-slider{
+	.theme-list{
 		position: relative;
 		display: block;
-		overflow: hidden;
-		overflow-x: auto;
-		-webkit-overflow-scrolling : touch;
 		width: 100%;
-		white-space: nowrap; 
+		
 		padding: 20px;
+
+		@media screen and (max-width: @screen-xs-max){
+			overflow: hidden;
+			overflow-x: auto;
+			-webkit-overflow-scrolling : touch;
+			white-space: nowrap; 	
+		}
 
 		> .theme-item{
 			position: relative;
-			display: inline-block;
+			display: block;
+			// table-layout: fixed;
 			padding: 5px;
-			max-width: 270px;
+			
 			width: 100%;
-			white-space: nowrap; 
-			// float: left;
+			
+
+			@media screen and (max-width: @screen-xs-max){
+				max-width: 270px;
+				white-space: nowrap; 
+				display: inline-block;
+				// float: left;		
+			}
 
 			> .active-icon{
 				position: absolute;
@@ -37,27 +48,58 @@
 			
 			> .wrap{
 				position: relative;
-				display: block;
+				display: table;
+				table-layout: fixed;
+				width: 100%;
 				border: 1px solid #dadada;
 				background: white;
 				border-radius: 4px;
 				overflow: hidden;
-				
 
-				> .theme-screenshot{
-					position: relative;
+				@media screen and (max-width: @screen-xs-max){
 					display: block;
-					padding-top: 75%;
-					background-size: cover;
-					background-position: center;
-					background-repeat: no-repeat;
-					border-bottom: 1px solid #dadada;
 				}
 
-				> .theme-info{
+				> .col-theme-screenshot,
+				> .col-theme-info{
 					position: relative;
-					display: block;
-					padding: 5px 10px;
+					display: table-cell;
+					vertical-align: middle;
+
+					@media screen and (max-width: @screen-xs-max){
+						display: block;
+					}
+
+				}
+				
+
+				> .col-theme-screenshot{
+					width: 150px;
+					border-right: 1px solid #dadada;
+
+					@media screen and (max-width: @screen-xs-max){
+						width: 100%;
+						border-left: none;
+						border-bottom: 1px solid #dadada;
+					}
+					
+					> .theme-screenshot{
+						padding-top: 75%;
+						background-size: cover;
+						background-position: center;
+						background-repeat: no-repeat;
+						
+					}
+				}
+
+				> .col-theme-info{
+					position: relative;
+					// display: block;
+					padding: 10px 10px 10px 20px;
+
+					@media screen and (max-width: @screen-xs-max){
+						padding: 5px 10px;
+					}
 
 					> .name{
 						font-weight: bold;

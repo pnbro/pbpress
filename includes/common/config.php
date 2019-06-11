@@ -7,7 +7,6 @@ if(!defined('PB_DOCUMENT_PATH')){
 class PBConfig{
 
 	private $devmode = false;
-
 	public $charset = "utf8";
 	
 	public $db_connection_type = "mysqli";
@@ -23,6 +22,8 @@ class PBConfig{
 
 	private $is_multilingual_theme = false;
 	private $default_locale = "ko_KR";
+
+	private $use_https = false;
 
 	function __construct(){
 		$this->devmode = (defined("PB_DEV") && PB_DEV === true);
@@ -47,6 +48,9 @@ class PBConfig{
 
 		$this->is_multilingual_theme = (defined("PB_MULTILINGUAL_THEME")) ? PB_MULTILINGUAL_THEME : false;
 		$this->default_locale = (defined("PB_DEFAULT_LOCALE")) ? PB_DEFAULT_LOCALE : "ko_KR";
+
+		$this->use_https = (defined("PB_HTTPS")) ? PB_HTTPS : false;
+		
 	}
 
 	public function is_devmode(){
@@ -56,13 +60,17 @@ class PBConfig{
 	public function is_multilingual_theme(){
 		return $this->is_multilingual_theme;
 	}
+
 	public function default_locale(){
 		return $this->default_locale;
+	}
+
+	public function use_https(){
+		return $this->use_https;
 	}
 }
 
 global $pb_config;
 $pb_config = new PBConfig();
-
 	
 ?>

@@ -1,12 +1,15 @@
 <?php
 
 
-function pb_mail_send($to_, $subject_, $body_, $attachments_ = array()){
+function pb_mail_send($to_, $subject_, $body_, $attachments_ = array(), $options_ = array()){
 	include_once(PB_DOCUMENT_PATH."includes/common/lib/phpmailer/class.phpmailer.php");
 	include_once(PB_DOCUMENT_PATH."includes/common/lib/phpmailer/class.smtp.php");
 
-	$mail_sender_ = pb_option_value("mail_sender");
-	if(!strlen($mail_sender_)){
+	if(!isset($options_['from'])){
+		$options_['from'] = pb_option_value("mail_sender");	
+	}
+
+	if(!strlen($options_['from'])){
 		return new PBError(-1, "SMTP정보없음", "SMT정보가 없습니다.");
 	}
 	
@@ -32,14 +35,46 @@ function pb_mail_send($to_, $subject_, $body_, $attachments_ = array()){
 	$phpmailer_->SMTPSecure = $mail_smtp_secure_;
 	$phpmailer_->Port = $mail_smtp_port_;
 
-	$phpmailer_->setFrom($mail_sender_);
+	$phpmailer_->setFrom($options_['from']);
 	$phpmailer_->addAddress($to_);
 
 	foreach($attachments_ as $file_path_){
 		$phpmailer_->addAttachment($file_path_);
 	}
 
-	$phpmailer_->isHTML(true);
+	if(isset($options_['cc'])){
+		if(gettype($options_['cc']) !== "array"){
+			$options_['cc'] = array($options_['cc']);
+		}
+
+		foreach($options_['cc'] as $cc_){
+			$phpmailer_->addCC($cc_);
+		}
+	}
+
+	if(isset($options_['bcc'])){
+		if(gettype($options_['bcc']) !== "array"){
+			$options_['bcc'] = array($options_['bcc']);
+		}
+
+		foreach($options_['bcc'] as $bcc_){
+			$phpmailer_->addBCC($bcc_);
+		}
+	}
+
+	if(isset($options_['replyto'])){
+		if(gettype($options_['replyto']) !== "array"){
+			$options_['replyto'] = array($options_['replyto']);
+		}
+
+		foreach($options_['replyto'] as $replyto_){
+			$phpmailer_->addReplyTo($replyto_);
+		}
+	}
+
+	$options_['is_html'] = isset($options_['is_html']) ? $options_['is_html'] : true;
+
+	$phpmailer_->isHTML($options_['is_html']);
 	$phpmailer_->Subject = $subject_;
 	$phpmailer_->Body = $body_;
 
@@ -52,7 +87,7 @@ function pb_mail_send($to_, $subject_, $body_, $attachments_ = array()){
 
 	return true;
 }
-function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ = array()){
+function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ = array(), $options_ = array()){
 	$mail_template_ = pb_option_value('mail_template', "{content}");
 
 	$mail_body_ = $mail_template_;
@@ -60,7 +95,7 @@ function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ 
 		$mail_body_ = str_replace("{".$key_."}",$value_,$mail_body_);
 	}
 
-	return pb_mail_send($to_, $subject_, $mail_body_, $attachments_);
+	return pb_mail_send($to_, $subject_, $mail_body_, $attachments_, $options_);
 }
 
 function _pb_mail_hook_register_manage_site_menu_list($results_){

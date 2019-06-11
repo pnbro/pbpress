@@ -8,7 +8,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 require(PB_DOCUMENT_PATH . 'includes/includes.php');
 
 //check install pbress
-global $pbdb;
+global $pbdb, $pb_config;
 
 if(!$pbdb->exists_table("options")){
 	pb_redirect(PB_DOCUMENT_URL."admin/install.php");
@@ -24,18 +24,31 @@ if(!strlen($timezone_)){
 }
 date_default_timezone_set($timezone_);
 
+
+//check rewrite rule
 if(!pb_exists_rewrite()){
 	pb_install_rewrite();
 	header('Location: '.pb_home_url());
 	pb_hook_do_action('pb_ended');
 	exit;
 }
+
+//check admin rewrite rule
 if(!pb_exists_admin_rewrite()){
 	pb_install_admin_rewrite();
 	header('Location: '.pb_admin_url());
 	pb_hook_do_action('pb_ended');
 	exit;
 }
+
+//check https config
+if((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") && $pb_config->use_https()){
+	$https_location_ = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	header('HTTP/1.1 301 Moved Permanently');
+	header('Location: ' . $https_location_);
+	pb_hook_do_action('pb_ended');
+	exit;
+}	
 
 header("Content-Type: text/html; CharSet=utf-8");
 

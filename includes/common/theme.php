@@ -122,7 +122,7 @@ function _pb_theme_hook_render_manage_site($menu_data_){
 			<input type="hidden" name="before_theme" value="<?=$site_theme_?>">
 			<input type="hidden" name="theme" value="<?=$site_theme_?>">
 
-			<div class="theme-slider" id="pb-manage-site-theme-slider">
+			<div class="theme-list" id="pb-manage-site-theme-list">
 
 				<?php foreach($theme_list_ as $theme_key_ => $theme_data_){
 
@@ -136,8 +136,10 @@ function _pb_theme_hook_render_manage_site($menu_data_){
 					<a class="theme-item <?=$theme_key_ === $site_theme_ ? "active" : ""?>" href="javascript:manage_site_change_theme('<?=$theme_key_?>');" data-theme-item="<?=$theme_key_?>">
 						<i class="active-icon material-icons">check</i>
 						<div class="wrap">
-							<div class="theme-screenshot" style="background-image:url('<?=$theme_screen_url_?>')"></div>
-							<div class="theme-info">
+							<div class="col-theme-screenshot">
+								<div class="theme-screenshot" style="background-image:url('<?=$theme_screen_url_?>')"></div>
+							</div>
+							<div class="col-theme-info">
 								<div class="name"><?=$theme_data_['name']?></div>
 								<div class="desc"><?=$theme_data_['desc']?></div>
 								<div class="author"><?=isset($theme_data_['author']) ? "by ".$theme_data_['author'] : "Unknown"?></div>

@@ -53,6 +53,7 @@ class PBListTable{
 		$listtable_maps_[$global_id_] = serialize($this);
 		pb_session_put(PB_LISTTABLE_MAPS, $listtable_maps_);
 		pb_hook_add_action('pb_admin_foot', array($this, "_hook_for_initialize"));
+		pb_hook_add_action('pb_foot', array($this, "_hook_for_initialize"));
 	}
 
 	function offset($page_index_, $per_page_){

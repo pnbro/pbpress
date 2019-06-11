@@ -4,10 +4,12 @@ include(dirname( __FILE__ ) . "/includes.php");
 
 $redirect_url_ = (isset($_GET["redirect_url"]) && strlen($_GET["redirect_url"])) ? $_GET["redirect_url"] : pb_admin_url();
 
+$admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', "PBPress 로그인");
+
 ?><!DOCTYPE html>
 <html>
 <head>
-	<title>PBPress 관리자 로그인</title>
+	<title><?=$admin_login_title_?></title>
 
 	<meta charset="utf8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,12 +25,12 @@ $redirect_url_ = (isset($_GET["redirect_url"]) && strlen($_GET["redirect_url"]))
 	<div class="container">
 	
 		<div class="pb-logo-frame">
-			<img src="<?=PB_LIBRARY_URL?>img/symbol.jpg" class="logo">
+			<img src="<?=pb_hook_apply_filters('adminpage_login_logo_image', PB_LIBRARY_URL."img/symbol.jpg")?>" class="logo">
 		</div>
 
 		<div class="login-form-panel panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title">PBPress 로그인</h3>
+				<h3 class="panel-title"><?=$admin_login_title_?></h3>
 			</div>
 			<div class="panel-body">
 				<form id="pb-login-form" method="POST">
@@ -85,7 +87,7 @@ $redirect_url_ = (isset($_GET["redirect_url"]) && strlen($_GET["redirect_url"]))
 		</div></div>
 	</div>
 
-	<div class="copyrights">© 2019 Paul&Bro Company All Rights Reserved.</div>
+	<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?></div>
 
 	<?php pb_admin_foot(); ?>
 	<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/login.js"></script>
