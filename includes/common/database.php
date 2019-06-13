@@ -79,8 +79,18 @@ class PBDB{
 	private $_last_query = null;
 
 	function query($query_){
-		global $pb_db_connection;
-		return $pb_db_connection->query($query_);
+		global $pb_config, $pb_db_connection;
+		$result_ = $pb_db_connection->query($query_);
+
+		if($pb_config->is_show_database_error()){
+			$last_error_ = $this->last_error();
+
+			if(pb_is_error($last_error_)){
+				echo "[".$last_error_->error_code()."] ".$last_error_->error_message();
+			}
+		}
+
+		return $result_;
 	}
 
 	function last_query(){
@@ -91,7 +101,7 @@ class PBDB{
 	function select($query_){
 		global $pb_db_connection;
 
-		$resources_ = $pb_db_connection->query($query_);
+		$resources_ = $this->query($query_);
 		$this->_last_query = $query_;
 
 		if(!isset($resources_)) return null;
@@ -114,7 +124,7 @@ class PBDB{
 	function get_first_row($query_){
 		global $pb_db_connection;
 
-		$resources_ = $pb_db_connection->query($query_);
+		$resources_ = $this->query($query_);
 		$this->_last_query = $query_;
 
 		if(!isset($resources_)) return null;
@@ -129,7 +139,7 @@ class PBDB{
 	function get_var($query_){
 		global $pb_db_connection;
 
-		$resources_ = $pb_db_connection->query($query_);
+		$resources_ = $this->query($query_);
 		$this->_last_query = $query_;
 
 		if(!isset($resources_)) return null;
@@ -189,7 +199,7 @@ class PBDB{
 
 		$insert_query_ = $this->prepare($insert_query_, $field_maps_);
 
-		$result_ = $pb_db_connection->query($insert_query_);
+		$result_ = $this->query($insert_query_);
 		$this->_last_query = $insert_query_;
 
 		if(!$result_){
@@ -257,7 +267,7 @@ class PBDB{
 
 		
 
-		$result_ = $pb_db_connection->query($update_query_);
+		$result_ = $this->query($update_query_);
 		$this->_last_query = $update_query_;
 
 		if(!$result_){
@@ -297,7 +307,7 @@ class PBDB{
 
 		$delete_query_ = $this->prepare($delete_query_, $field_maps_);
 
-		$result_ = $pb_db_connection->query($delete_query_, $pb_db_connection);
+		$result_ = $this->query($delete_query_, $pb_db_connection);
 		$this->_last_query = $delete_query_;
 
 		return $result_;
@@ -331,7 +341,7 @@ class PBDB{
 		$query_list_ = pb_hook_apply_filters("pb_install_tables", array());
 
 		foreach($query_list_ as $query_){
-			$pb_db_connection->query($query_);
+			$this->query($query_);
 		}
 
 		pb_hook_do_action("pb_installed_tables");

@@ -38,7 +38,7 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 		return mysqli_insert_id($this->_connection);
 	}
 	public function last_error(){
-		if($this->_last_error_no == 0) return false;
+		if($this->_last_error_no === 0) return false;
 		return new PBError($this->_last_error_no, 'MYSQLi ERROR',$this->_last_error_message);	
 	}
 

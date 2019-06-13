@@ -39,7 +39,7 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 		return mysql_insert_id($this->_connection);
 	}
 	public function last_error(){
-		if(!strlen($this->_last_error_no)) return false;
+		if($this->_last_error_no === 0) return false;
 		return new PBError($this->_last_error_no, 'MYSQL ERROR', $this->_last_error_message);	
 	}
 

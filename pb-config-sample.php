@@ -1,6 +1,7 @@
 <?php
 
 // define('PB_DEV', true);
+// define('PB_SHOW_DATABASE_ERROR', PB_DEV);
 
 // define('PB_DB_CONNECTION_TYPE', 'mysqli'); //mysql, mysqli
 

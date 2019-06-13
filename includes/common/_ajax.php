@@ -8,6 +8,18 @@ global $pb_config;
 
 header("Content-Type:application/json; charset=".$pb_config->charset);
 
+set_error_handler('_pb_exceptions_ajax_error_handler');
+
+function _pb_exceptions_ajax_error_handler($severity_, $message_, $filename_, $lineno_){
+	if(error_reporting() == 0){
+		return;
+	}
+	global $pb_config;
+	header("Content-Type: text/html; CharSet=".$pb_config->charset);
+	pb_redirect_error(500, "[".$filename_.", line : ".$lineno_."]".$message_, "AJAX ERROR");
+	pb_end();
+}
+
 $rewrite_slug_ = pb_current_slug();
 $rewrite_path_ = pb_rewrite_path();
 

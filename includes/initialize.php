@@ -50,6 +50,6 @@ if((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") && $pb_config->use_
 	exit;
 }	
 
-header("Content-Type: text/html; CharSet=utf-8");
+header("Content-Type: text/html; CharSet=".$pb_config->charset);
 
 ?>

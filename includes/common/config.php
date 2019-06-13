@@ -7,6 +7,8 @@ if(!defined('PB_DOCUMENT_PATH')){
 class PBConfig{
 
 	private $devmode = false;
+	private $show_database_error = false;
+
 	public $charset = "utf8";
 	
 	public $db_connection_type = "mysqli";
@@ -33,6 +35,8 @@ class PBConfig{
 			ini_set("display_errors", 1);
 		}
 
+		$this->show_database_error = (defined("PB_SHOW_DATABASE_ERROR") ? PB_SHOW_DATABASE_ERROR === true : PB_DEV);
+
 		$this->charset = (defined("PB_CHARSET")) ? PB_CHARSET : "utf8";
 
 		$this->db_connection_type = (defined("PB_DB_CONNECTION_TYPE")) ?  PB_DB_CONNECTION_TYPE : "mysqli";
@@ -55,6 +59,9 @@ class PBConfig{
 
 	public function is_devmode(){
 		return $this->devmode;
+	}
+	public function is_show_database_error(){
+		return $this->show_database_error;
 	}
 
 	public function is_multilingual_theme(){
