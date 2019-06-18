@@ -18,8 +18,8 @@ function _pb_user_authority_install_table($args_){
 		`mod_date` datetime DEFAULT NULL COMMENT '수정일자',
 
 		PRIMARY KEY (`id`),
-		CONSTRAINT `users_auth_fk1` FOREIGN KEY (`user_id`) REFERENCES `USERS` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-		CONSTRAINT `users_auth_fk2` FOREIGN KEY (`auth_id`) REFERENCES `AUTH` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+		CONSTRAINT `users_auth_fk1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+		CONSTRAINT `users_auth_fk2` FOREIGN KEY (`auth_id`) REFERENCES `auth` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 	) ENGINE=InnoDB COMMENT='사용자권한';";
 
 	return $args_;

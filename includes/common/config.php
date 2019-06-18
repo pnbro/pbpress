@@ -35,7 +35,7 @@ class PBConfig{
 			ini_set("display_errors", 1);
 		}
 
-		$this->show_database_error = (defined("PB_SHOW_DATABASE_ERROR") ? PB_SHOW_DATABASE_ERROR === true : PB_DEV);
+		$this->show_database_error = (defined("PB_SHOW_DATABASE_ERROR") ? PB_SHOW_DATABASE_ERROR === true : $this->devmode);
 
 		$this->charset = (defined("PB_CHARSET")) ? PB_CHARSET : "utf8";
 

@@ -3,7 +3,7 @@
 	include(dirname( __FILE__ ) . "/includes.php");
 
 	global $pbdb;
-	if($pbdb->exists_table("OPTIONS")){
+	if($pbdb->exists_table("options")){
 		echo "PBPress already installed.";
 		exit;
 	}

@@ -80,14 +80,11 @@ class PBDB{
 
 	function query($query_){
 		global $pb_config, $pb_db_connection;
-		$result_ = $pb_db_connection->query($query_);
+		$result_ = pb_hook_apply_filters("pb_database_query",$pb_db_connection->query($query_));
+		$last_error_ = $this->last_error();
 
-		if($pb_config->is_show_database_error()){
-			$last_error_ = $this->last_error();
-
-			if(pb_is_error($last_error_)){
-				echo "[".$last_error_->error_code()."] ".$last_error_->error_message();
-			}
+		if(pb_is_error($last_error_)){
+			pb_hook_do_action('pb_database_error_occurred', $last_error_);
 		}
 
 		return $result_;
@@ -350,22 +347,15 @@ class PBDB{
 	}
 
 	function exists_column($table_name_, $column_name_){
-		global $pbdb,$pb_config, $pb_db_connection;
-
-		$query_ = "SELECT count(*) CNT 
-			FROM information_schema.COLUMNS 
-			WHERE 
-			    TABLE_SCHEMA = '".$pb_config->db_name."'
-			AND TABLE_NAME = '".$pb_db_connection->escape_string($table_name_)."' 
-			AND COLUMN_NAME = '".$pb_db_connection->escape_string($column_name_)."' ";
-
-		return ($pbdb->get_var($query_) > 0);
+		global $pb_db_connection;
+		$check_ = $pb_db_connection->query("SELECT {$column_name_} FROM {$table_name_} LIMIT 0, 1");
+		return ($check_ !== false);
 	}
 
 	function exists_table($table_name_){
-		global $pbdb,$pb_config, $pb_db_connection;
-		$check_ = $pbdb->query("SELECT 1 FROM {$table_name_} LIMIT 0, 1");
-		return isset($check_);
+		global $pb_db_connection;
+		$check_ = $pb_db_connection->query("SELECT 1 FROM {$table_name_} LIMIT 0, 1");
+		return ($check_ !== false);
 	}
 }
 
@@ -378,5 +368,12 @@ function _pb_database_close_hook(){
 	$pb_db_connection->close_connection();
 }
 pb_hook_add_action('pb_ended', "_pb_database_close_hook");
+
+if($pb_config->is_show_database_error()){
+	function _pb_database_hook_print_error($last_error_){
+		echo "[".$last_error_->error_code()."] ".$last_error_->error_message();
+	}
+	pb_hook_add_action('pb_database_error_occurred','_pb_database_hook_print_error');
+}
 	
 ?>

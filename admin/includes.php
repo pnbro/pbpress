@@ -2,9 +2,9 @@
 
 require(dirname( __FILE__ ) . '/../defined.php');
 require(PB_DOCUMENT_PATH . 'includes/includes.php');
-include(PB_DOCUMENT_PATH . "admin/admin-hook.php");
+require(dirname( __FILE__ ) . '/admin-hook.php');
 
-header("Content-Type: text/html; CharSet=utf-8");
+global $pb_config;
 
 function pb_admin_head(){
 

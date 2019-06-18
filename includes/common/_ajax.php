@@ -15,8 +15,11 @@ function _pb_exceptions_ajax_error_handler($severity_, $message_, $filename_, $l
 		return;
 	}
 	global $pb_config;
-	header("Content-Type: text/html; CharSet=".$pb_config->charset);
-	pb_redirect_error(500, "[".$filename_.", line : ".$lineno_."]".$message_, "AJAX ERROR");
+	header("Content-Type:application/json; charset=".$pb_config->charset);
+	echo json_encode(array(
+		'success' => false,
+		'error_message' => "[".$filename_.", line : ".$lineno_."]".$message_, "AJAX ERROR",
+	));
 	pb_end();
 }
 

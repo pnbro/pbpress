@@ -2,36 +2,6 @@
 	
 include(dirname( __FILE__ ) . "/includes.php");
 
-//check install pbress
-global $pbdb;
-
-if(!$pbdb->exists_table("OPTIONS")){
-	pb_redirect(PB_DOCUMENT_URL."admin/install.php");
-	pb_hook_do_action('pb_ended');
-	exit;
-}
-
-//set timzone
-$timezone_ = pb_option_value("timezone");
-if(!strlen($timezone_)){
-	$timezone_ = @date_default_timezone_get();
-	$timezone_ = strlen($timezone_) ? $timezone_ : "Asia/Seoul";
-}
-date_default_timezone_set($timezone_);
-
-//check https config
-if((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") && $pb_config->use_https()){
-	$https_location_ = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-	header('HTTP/1.1 301 Moved Permanently');
-	header('Location: ' . $https_location_);
-	pb_hook_do_action('pb_ended');
-	exit;
-}	
-
-if(!pb_exists_admin_rewrite()){
-	pb_install_admin_rewrite();
-}
-
 if(!pb_is_user_logged_in()){
 	pb_redirect(pb_admin_login_url(pb_admin_url()));
 	pb_admin_end();

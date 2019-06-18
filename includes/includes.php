@@ -24,11 +24,4 @@ include(PB_DOCUMENT_PATH . "includes/gcode/gcode.php");
 include(PB_DOCUMENT_PATH . "includes/authority/authority.php");
 include(PB_DOCUMENT_PATH . "includes/user/user.php");
 
-$current_theme_path_ = pb_current_theme_path();
-
-if(file_exists($current_theme_path_."functions.php")){
-	include($current_theme_path_."functions.php");
-}
-
-
 ?>

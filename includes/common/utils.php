@@ -13,7 +13,7 @@ define('PB_RANDOM_STRING_LOWER', "abcdefghijklmnopqrstuvwxyz");
 define('PB_RANDOM_STRING_UPPER', "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 function pb_random_string($length_ = 20, $characters_ = PB_RANDOM_STRING_ALL){
-	$characters_length_ = mb_strlen($characters_, 'UTF-8');
+	$characters_length_ = iconv_strlen($characters_, 'UTF-8');
 	$random_string_ = "";
 	for($i_ = 0; $i_ < $length_; $i_++){
 		$random_string_ .= mb_substr($characters_, rand(0, $characters_length_ - 1), 1, 'UTF-8');
@@ -29,7 +29,7 @@ function pb_append_url($base_url_, $path_){
 		$path_ = substr($path_, 1);
 	}
 
-	if((strrpos($base_url_, "/") + 1) >= mb_strlen($base_url_)){
+	if((strrpos($base_url_, "/") + 1) >= iconv_strlen($base_url_)){
 		$base_url_ .= $path_;
 	}else{
 		$base_url_ .= "/".$path_;

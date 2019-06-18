@@ -16,6 +16,12 @@ if(!$pbdb->exists_table("options")){
 	exit;
 }
 
+$current_theme_path_ = pb_current_theme_path();
+
+if(file_exists($current_theme_path_."functions.php")){
+	include($current_theme_path_."functions.php");
+}
+
 //set timzone
 $timezone_ = pb_option_value("timezone");
 if(!strlen($timezone_)){
