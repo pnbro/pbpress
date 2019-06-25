@@ -4,7 +4,15 @@ require(dirname( __FILE__ ) . '/../defined.php');
 require(PB_DOCUMENT_PATH . 'includes/includes.php');
 require(dirname( __FILE__ ) . '/admin-hook.php');
 
-global $pb_config;
+global $pbdb, $pb_config;
+
+if($pbdb->exists_table("options")){
+	$current_theme_path_ = pb_current_theme_path();
+
+	if(file_exists($current_theme_path_."functions.php")){
+		include($current_theme_path_."functions.php");
+	}
+}
 
 function pb_admin_head(){
 

@@ -75,7 +75,6 @@ global $pbdb;
 
 class PBDB{
 
-	private $_last_select_row_count = 0;
 	private $_last_query = null;
 
 	function query($query_){
@@ -103,19 +102,12 @@ class PBDB{
 
 		if(!isset($resources_)) return null;
 
-		$this->_last_select_row_count = $pb_db_connection->num_rows($resources_); 
-		if(!$this->_last_select_row_count || $this->_last_select_row_count == 0) return array();
-
     	$results_ = array();
     	while($row_data_ = $pb_db_connection->fetch_array($resources_, PB_MYSQL_ASSOC)){
 			$results_[] = $row_data_;
     	}
 
 		return $results_;
-	}
-
-	function last_select_row_count(){
-		return $this->_last_select_row_count;
 	}
 
 	function get_first_row($query_){
