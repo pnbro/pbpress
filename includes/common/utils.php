@@ -105,5 +105,16 @@ function pb_alphabet_sequence($length_, $sequence_){
 
 	return str_pad($result_, $digit_, "a", STR_PAD_LEFT);
 }
+
+function pb_slugify($slug_){
+	$search_ = array('Ș', 'Ț', 'ş', 'ţ', 'Ş', 'Ţ', 'ș', 'ț', 'î', 'â', 'ă', 'Î', 'Â', 'Ă', 'ë', 'Ë');
+	$replace_ = array('s', 't', 's', 't', 's', 't', 's', 't', 'i', 'a', 'a', 'i', 'a', 'a', 'e', 'E');
+	$slug_ = str_ireplace($search_, $replace_, strtolower(trim($slug_)));
+
+	$slug_ = str_replace(' ', '-', $slug_);
+	$slug_ = preg_replace('/\-{2,}/', '-', $slug_);
+	$slug_ = preg_replace("/[ #\&\+%@=\/\\\:;,\.'\"\^`~|\!\?\*$#<>()\[\]\{\}]/i", "", $slug_);
+	return $slug_;
+}
 	
 ?>

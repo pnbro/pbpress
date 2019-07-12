@@ -1,6 +1,6 @@
 {
-    "name": "PBPress",
-  "version": "0.2.9",
+  "name": "PBPress",
+  "version": "0.11.1",
   "description": "PBPress for PHP Frameworks",
   "main": "Gruntfile.js",
   "dependencies": {
@@ -17,10 +17,8 @@
     "grunt-contrib-concat": "^1.0.0",
     "grunt-contrib-less": "^1.4.0"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "scripts": {},
   "author": "Paul & Bro Company",
-  "license": "ISC",
+  "license": "MIT",
   "homepage": "pnbro.com"
 }

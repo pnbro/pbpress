@@ -23,5 +23,6 @@ include(PB_DOCUMENT_PATH . "includes/common/adminpage.php");
 include(PB_DOCUMENT_PATH . "includes/gcode/gcode.php");
 include(PB_DOCUMENT_PATH . "includes/authority/authority.php");
 include(PB_DOCUMENT_PATH . "includes/user/user.php");
+include(PB_DOCUMENT_PATH . "includes/page/page.php");
 
 ?>

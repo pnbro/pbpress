@@ -94,7 +94,7 @@ function pb_option_update($option_name_, $option_value_){
 	$before_value_ = pb_option_value($option_name_);
 	$option_value_ = serialize($option_value_);
 
-	if(strlen($before_value_)){
+	if($before_value_ !== null){
 		$update_data_ = array(
 			'option_value' => $option_value_,
 			'mod_date' => pb_current_time(),

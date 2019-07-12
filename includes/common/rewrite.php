@@ -41,7 +41,7 @@ function pb_rewrite_data($key_){
 	if(!isset($_pb_rewrite_list)){
 		$_pb_rewrite_list = pb_rewrite_list();
 	}
-	return $_pb_rewrite_list[$key_];
+	return isset($_pb_rewrite_list[$key_]) ? $_pb_rewrite_list[$key_] : null;
 }
 function pb_rewrite_register($key_, $data_){
 	global $_pb_rewrite_list;

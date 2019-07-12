@@ -88,7 +88,30 @@ function pb_mail_send($to_, $subject_, $body_, $attachments_ = array(), $options
 	return true;
 }
 function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ = array(), $options_ = array()){
-	$mail_template_ = pb_option_value('mail_template', "{content}");
+	$mail_template_upload_path_ = pb_option_value('mail_template_upload', "");
+
+	if(strlen($mail_template_upload_path_)){
+		$mail_template_upload_path_ = PB_DOCUMENT_PATH."uploads/".$mail_template_upload_path_;
+
+		global $_pb_last_mail_template_path, $_pb_last_mail_template_file_content;
+
+		if($_pb_last_mail_template_path === $mail_template_upload_path_){
+			$mail_template_ = $_pb_last_mail_template_file_content;
+		}else{
+			if(file_exists($mail_template_upload_path_)){
+
+				$_pb_last_mail_template_path = $mail_template_upload_path_;
+				$_pb_last_mail_template_file_content = file_get_contents($mail_template_upload_path_);
+				
+				$mail_template_ = $_pb_last_mail_template_file_content;
+				
+			}else{
+				$mail_template_ = pb_option_value('mail_template', "{content}");
+			}
+		}
+	}else{
+		$mail_template_ = pb_option_value('mail_template', "{content}");
+	}	
 
 	$mail_body_ = $mail_template_;
 	foreach($data_ as $key_ => $value_){
@@ -97,6 +120,7 @@ function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ 
 
 	return pb_mail_send($to_, $subject_, $mail_body_, $attachments_, $options_);
 }
+
 
 function _pb_mail_hook_register_manage_site_menu_list($results_){
 	$results_['mail'] = array(
@@ -212,6 +236,19 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
+				<div class="form-group">
+					<label>메일서식업로드<br/><small class="help-block">*메일서식을 업로드 시, 위 메일서식을 대체합니다.</small></label>
+
+					<input type="text" name="mail_template_upload" value="<?=pb_option_value("mail_template_upload", "")?>" class="hidden" id="pb-manage-site-form-mail_template_upload_r_name" >
+					
+					<div class="help-block with-errors"></div>
+					<div class="clearfix"></div>
+
+					<script type="text/javascript">
+					jQuery(document).ready(function(){$("#pb-manage-site-form-mail_template_upload_r_name").pb_file_input();});
+					</script>
+
+				</div>
 
 				<script type="text/javascript">
 					jQuery(document).ready(function(){
@@ -249,6 +286,8 @@ function _pb_mail_hook_update_site_settings($settings_data_){
 	pb_option_update("mail_smtp_secure", $settings_data_['mail_smtp_secure']);
 
 	pb_option_update("mail_template", $settings_data_['mail_template']);
+	pb_option_update("mail_template_upload", $settings_data_['mail_template_upload']);
+	
 }
 pb_hook_add_action('pb-admin-update-site-settings', "_pb_mail_hook_update_site_settings");
 

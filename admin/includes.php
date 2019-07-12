@@ -14,6 +14,15 @@ if($pbdb->exists_table("options")){
 	}
 }
 
+//check https config
+if((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") && $pb_config->use_https()){
+	$https_location_ = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+	header('HTTP/1.1 301 Moved Permanently');
+	header('Location: ' . $https_location_);
+	pb_hook_do_action('pb_ended');
+	exit;
+}
+
 function pb_admin_head(){
 
 	$pbvar_ = pb_hook_apply_filters('pb-admin-head-pbvar', array());
