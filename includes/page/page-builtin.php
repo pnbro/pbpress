@@ -32,7 +32,7 @@ define('PB_PAGE_STATUS_WRITING', '00001');
 define('PB_PAGE_STATUS_PUBLISHED', '00003');
 define('PB_PAGE_STATUS_UNPUBLISHED', '00009');
 
-function pb_campus_payment_initialize_gcode_list($gcode_list_){
+function pb_page_initialize_gcode_list($gcode_list_){
 
 	$gcode_list_['PAG01'] = array(
 		'name' => '페이지등록상태',
@@ -45,6 +45,20 @@ function pb_campus_payment_initialize_gcode_list($gcode_list_){
 
 	return $gcode_list_;
 }
-pb_hook_add_filter("pb_intialize_gcode_list", "pb_campus_payment_initialize_gcode_list");
+pb_hook_add_filter("pb_intialize_gcode_list", "pb_page_initialize_gcode_list");
+
+function _pb_rewrite_unique_slug_for_page($result_, $original_slug_, $retry_count_ = 0, $extra_data_){
+	$check_data_ = pb_page_by_slug($result_);
+	
+	if(!isset($check_data_)){
+		return $result_;
+	}
+
+	$excluded_page_id_ = isset($extra_data_['excluded_page_id']) ? $extra_data_['excluded_page_id'] : null;
+	if(strlen($excluded_page_id_) && $check_data_['id'] === $excluded_page_id_) return $result_;
+
+	return pb_rewrite_unique_slug($original_slug_, ++$retry_count_, $extra_data_);
+}
+pb_hook_add_filter("pb_rewrite_unique_slug", "_pb_rewrite_unique_slug_for_page");
 
 ?>

@@ -34,6 +34,16 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/defaults/bootstrap.js',
           'lib/dev/concat-lib/src/defaults/jsencrypt.js',
           'lib/dev/concat-lib/src/defaults/summernote.js',
+
+          'lib/dev/concat-lib/src/defaults/codemirror.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/mode/javascript.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/mode/css.js',
+
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/matchbrackets.js',
+          // 'lib/dev/concat-lib/src/defaults/codemirror-addons/comment.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/continuecomment.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/closebrackets.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/active-line.js',
           
           'lib/dev/concat-lib/src/bootstrap/bootstrap-validator.js',
           'lib/dev/concat-lib/src/bootstrap/bootstrap-select.js',
@@ -62,7 +72,6 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/jquery-default-plugins/jquery.ui.js',
 
           'lib/dev/concat-lib/src/jquery-default-plugins/jquery.iframe-transport.js',
-          
 
           'lib/dev/concat-lib/src/jquery-default-plugins/jquery.fileupload/jquery.fileupload.js',
           'lib/dev/concat-lib/src/jquery-default-plugins/jquery.fileupload/jquery.fileupload-process.js',
@@ -98,6 +107,8 @@ module.exports = function (grunt) {
 
           'lib/dev/concat-lib/src/pb/modules/pb.summernote.js',
           'lib/dev/concat-lib/src/pb/modules/pb.summernote-image-uploader.js',
+
+          'lib/dev/concat-lib/src/pb/modules/pb.editors.js',
           
           'lib/dev/concat-lib/src/pb/pb.admin.js',
 
@@ -145,6 +156,15 @@ module.exports = function (grunt) {
           cwd: 'lib/dev/less/pages',
           src: ['**/*.less'],
           dest: 'lib/dev/css/pages/',
+          rename : function(dest, src){
+            return dest + src.replace('.less','.css');
+          }
+        },
+        {
+          expand: true,
+          cwd: 'lib/dev/less/page-builder',
+          src: ['**/*.less'],
+          dest: 'lib/dev/css/page-builder/',
           rename : function(dest, src){
             return dest + src.replace('.less','.css');
           }

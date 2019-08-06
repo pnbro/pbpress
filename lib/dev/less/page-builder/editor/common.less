@@ -1,0 +1,57 @@
+@import (reference) "../../pb-admin.less";
+
+.pb-page-builder-make-columns(){
+ 
+	.pb-page-builder-make-colum(@index) when (@index <= 12) { // terminal
+		@item: ~".edit-col-@{index}";
+
+		@{item} {
+			position: relative;
+			display: block;
+			float: left;
+			width: percentage((@index / 12));
+		}
+		.pb-page-builder-make-colum(@index + 1);
+	}
+
+	.pb-page-builder-make-colum-xs(@index) when (@index <= 12) { // terminal
+		@item: ~".edit-col-@{index}";
+
+		@{item} {
+			position: relative;
+			display: block;
+			float: auto;
+			width: 100%;
+		}
+		.pb-page-builder-make-colum-xs(@index + 1);
+	}
+
+
+
+	.pb-page-builder-make-colum(1); // kickstart it
+	
+	@media screen and (max-width: @screen-xs-max){
+		.pb-page-builder-make-colum-xs(1); // kickstart it			
+	}
+}
+
+.pb-page-builder .element-content-list{
+	.element-content-item.pb-page-builder-row-element{
+	
+		.children-frame{
+			.clearfix();
+			.pb-page-builder-make-columns();
+
+			.element-content-item-placeholder{
+				display: block;
+				float: left;
+				// border-radius: 10px;
+			}
+		}
+	}
+
+	.element-content-item.pb-page-builder-column-element{
+		
+	}	
+}
+

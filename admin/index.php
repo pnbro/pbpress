@@ -25,12 +25,14 @@ $current_adminpage_slug_ = strlen($current_adminpage_slug_) ? $current_adminpage
 $rewrite_handler_ = isset($current_adminpage_["rewrite_handler"]) ? $current_adminpage_["rewrite_handler"] : "pb_adminpage_rewrite_common_handler";
 $current_adminpage_path_ = call_user_func_array($rewrite_handler_, array(pb_adminpage_rewrite_path(), $current_adminpage_));
 
+global $pb_config;
+
 ?><!DOCTYPE html>
 <html>
 <head>
-	<title>PBPress 관리자페이지</title>
+	<title><?=pb_hook_apply_filters('pb-adminpage-title', "PBPress 관리자페이지")?></title>
 
-	<meta charset="utf8">
+	<meta charset="<?=$pb_config->charset?>">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<meta name="format-detection" content="telephone=no">

@@ -116,5 +116,32 @@ function pb_rewrite_common_handler($rewrite_path_, $page_data_){
 	return $page_data_['page'];
 }
 
+function pb_rewrite_unique_slug($slug_, $retry_count_ = 0, $extra_data_ = array()){
+	$temp_slug_ = $slug_;
+	if($retry_count_ > 0){
+		$temp_slug_ .= "_".$retry_count_;
+	}
+
+	$check_data2_ = pb_rewrite_data($temp_slug_);
+	if(!isset($check_data2_)){
+		return pb_hook_apply_filters("pb_rewrite_unique_slug", $temp_slug_, $slug_, $retry_count_, $extra_data_);
+	}
+
+	return pb_rewrite_unique_slug($slug_, ++$retry_count_, $extra_data_);
+}
+function _pb_rewrite_unique_slug_for_reserved($result_, $original_slug_, $retry_count_ = 0, $extra_data_){
+	global $_pb_rewrite_reserved;
+
+	if(!isset($_pb_rewrite_reserved)){
+		$_pb_rewrite_reserved = pb_hook_apply_filters("pb_reserved_slug", array("admin", "includes", "lib", "themes", "uploads"));
+	}
+
+	if(!in_array($result_, $_pb_rewrite_reserved)){
+		return $result_;
+	}
+
+	return pb_rewrite_unique_slug($original_slug_, ++$retry_count_, $extra_data_);
+}
+pb_hook_add_filter("pb_rewrite_unique_slug", "_pb_rewrite_unique_slug_for_reserved");
 
 ?>

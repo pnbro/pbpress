@@ -61,15 +61,13 @@ function pb_adminpage_tree($apply_authority_ = true){
 
 			if($apply_authority_ && isset($data_['authority_task'])){
 				if(!pb_user_has_authority_task($current_user_id_, $data_['authority_task'])){
-					print_r($data_['authority_task']);
-					die();
 					continue;
 				}
 			}
 
 
 			$pb_adminpage_tree[$slug_] = $data_;
-			$pb_adminpage_tree["active"] = ($current_adminpage_slug_ === $slug_);
+			$pb_adminpage_tree[$slug_]["active"] = ($current_adminpage_slug_ === $slug_);
 
 			continue;
 		}

@@ -48,6 +48,9 @@ function _pb_page_rewrite_handler_for_adminpage($rewrite_path_){
 			return new PBError(503, "잘못된 접근", "존재하지 않는 페이지입니다.");
 		}
 
+		global $pbpage_meta_map;
+		$pbpage_meta_map = pb_page_meta_map($pbpage['id']);
+
 		return PB_DOCUMENT_PATH."includes/page/views/edit.php";
 	}
 
@@ -102,7 +105,6 @@ function _pb_page_ajax_edit(){
 	}
 
 	$page_id_ = null;
-
 	$page_data_['page_html'] = stripslashes($page_data_['page_html']);
 
 	if(!strlen($page_data_['id'])){
@@ -129,6 +131,10 @@ function _pb_page_ajax_edit(){
 			));
 			pb_end();
 		}
+	}
+
+	if(isset($page_data_['actived_editor_id'])){
+		pb_page_meta_update($page_id_, "actived_editor_id", $page_data_['actived_editor_id']);	
 	}
 
 	echo json_encode(array(

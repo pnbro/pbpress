@@ -144,21 +144,8 @@ function pb_page_delete($id_){
 	return $result_;
 }
 
-function pb_page_rewrite_slug($slug_, $excluded_page_id_ = null, $retry_count_ = 0){
-	$temp_slug_ = $slug_;
-	if($retry_count_ > 0){
-		$temp_slug_ .= "_".$retry_count_;
-	}
-
-	$check_data1_ = pb_page_by_slug($temp_slug_);
-	$check_data2_ = pb_rewrite_data($temp_slug_);
-	if(!isset($check_data1_) && !isset($check_data2_)){
-		return $temp_slug_;
-	}
-
-	if(strlen($excluded_page_id_) && $check_data1_['id'] === $excluded_page_id_) return $temp_slug_;
-
-	return pb_page_rewrite_slug($slug_, $excluded_page_id_, ++$retry_count_);
+function pb_page_rewrite_slug($slug_, $excluded_page_id_ = null){
+	return pb_rewrite_unique_slug($slug_, 0, array("excluded_page_id" => $excluded_page_id_));
 }
 
 function pb_page_write($data_){

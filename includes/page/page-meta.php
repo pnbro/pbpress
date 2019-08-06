@@ -66,7 +66,7 @@ function pb_page_meta_data($id_){
 	return null;
 }
 function pb_page_meta_data_by($page_id_, $meta_name_){
-	$data_ = pb_page_meta_list(array("page_id" => $id_, "meta_name" => $meta_name_));
+	$data_ = pb_page_meta_list(array("page_id" => $page_id_, "meta_name" => $meta_name_));
 	if(count($data_) > 0) return $data_[0];
 	return null;
 }
@@ -114,7 +114,7 @@ function pb_page_meta_update($page_id_, $meta_name_, $meta_value_, $unique_ = tr
 
 	$meta_data_ = pb_page_meta_data_by($page_id_, $meta_name_);
 
-	if($unique_ || !isset($meta_data_)){
+	if(!$unique_ || !isset($meta_data_)){
 		return $pbdb->insert("pages_meta", array(
 			'page_id' => $page_id_,
 			'meta_name' => $meta_name_,

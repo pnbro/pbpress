@@ -9,7 +9,7 @@ class PBConfig{
 	private $devmode = false;
 	private $show_database_error = false;
 
-	public $charset = "utf8";
+	public $charset = "UTF-8";
 	
 	public $db_connection_type = "mysqli";
 	public $db_host = "";
@@ -37,7 +37,7 @@ class PBConfig{
 
 		$this->show_database_error = (defined("PB_SHOW_DATABASE_ERROR") ? PB_SHOW_DATABASE_ERROR === true : $this->devmode);
 
-		$this->charset = (defined("PB_CHARSET")) ? PB_CHARSET : "utf8";
+		$this->charset = (defined("PB_CHARSET")) ? PB_CHARSET : "UTF-8";
 
 		$this->db_connection_type = (defined("PB_DB_CONNECTION_TYPE")) ?  PB_DB_CONNECTION_TYPE : "mysqli";
 		$this->db_host = (defined("PB_DB_HOST")) ?  PB_DB_HOST : null;
