@@ -4,12 +4,23 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "0.0.1");
+define('PB_PAGE_BUILDER_VERSION', "0.1.1");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "0.0.1");
-define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', "0.0.1");
+define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', "0.1.1");
 
 function _pb_page_builder_recursive_parse_inner($element_){
-	$element_name_ = $element_->getName();
+	$element_map_ = pb_page_builder_elements();
+	global $pb_page_builder_element_classes;
+
+	$tmp_element_attributes_ = $element_->attributes();
+	$element_name_ = null;
+
+	foreach($tmp_element_attributes_ as $key_ => $value_){
+		if($key_ === "name"){
+			$element_name_ = (string)$value_;
+		}
+	}
+
 	$tmp_element_properties_ = $element_->property;
 	$element_properties_ = array();
 
@@ -17,19 +28,27 @@ function _pb_page_builder_recursive_parse_inner($element_){
 		$element_properties_[(string)$value_->attributes()->name] = (string)$value_;
 	}
 
-	$inner_elements_ = array();
+	if(isset($element_map_[$element_name_]['loadable']) && $element_map_[$element_name_]['loadable']){
+		$inner_elements_ = array();
 
-	if(count($element_->elementContent) > 0){
-		foreach($element_->elementContent->element as $inner_element_){
-			$inner_elements_[] = _pb_page_builder_recursive_parse_inner($inner_element_);
-		}	
+		if(count($element_->elementcontent) > 0){
+			foreach($element_->elementcontent->element as $inner_element_){
+				$inner_elements_[] = _pb_page_builder_recursive_parse_inner($inner_element_);
+			}	
+		}
+
+		return array(
+			'name' => $element_name_,
+			'properties' => $element_properties_,
+			'elementcontent' => $inner_elements_,
+		);
+	}else{
+		return array(
+			'name' => $element_name_,
+			'properties' => $element_properties_,
+			'elementcontent' => (string)$element_->elementcontent,
+		);
 	}
-
-	return array(
-		'name' => $element_name_,
-		'properties' => $element_properties_,
-		'inner' => $inner_elements_,
-	);
 }
 
 function pb_page_builder_parse_xml($xml_string_){
@@ -49,7 +68,7 @@ function pb_page_builder_parse_xml($xml_string_){
 		return new PBError(-3, "문서 버젼이 현재버젼의  PBPageBuilder와 호환되지 않습니다", "문서호환성오류");	
 	}
 
-	if(!isset($xml_instance_->settings) || !isset($xml_instance_->pageContent)){
+	if(!isset($xml_instance_->settings) || !isset($xml_instance_->pagecontent)){
 		return new PBError(-6, "필수노드가 누락되었습니다.", "문서형식오류");		
 	}
 
@@ -64,13 +83,33 @@ function pb_page_builder_parse_xml($xml_string_){
 
 	$page_contents_ = array();
 
-	foreach($xml_instance_->pageContent->element as $element_){
+	foreach($xml_instance_->pagecontent->element as $element_){
 		$page_contents_[] = _pb_page_builder_recursive_parse_inner($element_);
 	}
 
-	$results_['page-content'] = $page_contents_;
+	$results_['elementcontent'] = $page_contents_;
 
 	return $results_;
+}
+
+function pb_page_builder_render($builder_data_){
+	$settings_ = $builder_data_['settings'];
+	$page_contents_ = $builder_data_['elementcontent'];
+
+	$element_map_ = pb_page_builder_elements();
+	global $pb_page_builder_element_classes;
+
+	?>
+<style type="text/css"><?=$settings_['style']?></style>
+
+<?php foreach($page_contents_ as $element_data_){
+	$element_class_ = $pb_page_builder_element_classes[$element_data_['name']];
+	call_user_func_array(array($element_class_, "render"), array($element_data_));
+} ?>
+
+<script type="text/javascript"><?=$settings_['script']?></script>
+
+	<?php
 }
 
 function pb_page_builder($content_ = null, $data_ = array()){
@@ -78,48 +117,10 @@ function pb_page_builder($content_ = null, $data_ = array()){
 
 	$builder_id_ = isset($data_['id']) ? $data_['id'] : "pb-page-builder-".pb_random_string(5);
 
-	if(!$pb_page_builder_admin_initialized){ ?>
+	if(!$pb_page_builder_admin_initialized){ 
 
-
-<script type="text/html">
-	
-<!-- <pbpagebuilder version="0.0.1">
-	<settings>
-		<style>
-body{
-padding: 20px;
-}
-		</style>
-		<script>
-function helloworld(){
-alert("helloworld");
-}
-		</script>
-	</settings>
-	<pageContent>
-		<element name="container">
-			<property name="id">sampledata</property>
-			<property name="class">sdfsdfssdf</property>
-			<property name="container_type">container</property>
-			<elementContent>
-				<element name="container">
-					<property name="id">sampledata</property>
-					<property name="class">sdfsdfssdf</property>
-					<property name="container_type">container</property>
-					<elementContent>
-						<element name="container">
-							<property name="id">sampledata</property>
-							<property name="class">sdfsdfssdf</property>
-							<property name="container_type">container</property>
-						</element>
-					</elementContent>
-				</element>
-			</elementContent>
-		</element>
-	</pageContent>
-</pbpagebuilder>
- -->
-</script>
+		$element_map_ = pb_page_builder_elements();
+	?>
 <script type="text/javascript">
 jQuery(function($){
 
@@ -128,6 +129,7 @@ jQuery(function($){
 	**/
 
 	window.pb_page_builder_version = "<?=PB_PAGE_BUILDER_VERSION?>";
+	window.pbpage_builder_element_map = <?=json_encode($element_map_)?>;
 
 	var pb_page_builder_page_settings_modal = function(target_, options_){
 		this._target = $(target_);
@@ -213,20 +215,23 @@ jQuery(function($){
 		PB PAGE BUILDER - ELEMENT
 	**/
 
-	var pb_page_builder_element = window.pb_page_builder_element = function(target_, page_builder_, key_, data_, defaults_){
+	var pb_page_builder_element = window.pb_page_builder_element = function(target_, page_builder_, key_, defaults_){
 		this._target = target_;
 		this._key = key_;
-		this._data = data_;
 		this._target.data("pb-page-builder-element", this);
 		this._page_builder = page_builder_;
 		this._element_data = $.extend({}, defaults_);
+		this._content = null;
 
-		var is_loadable_ = data_['loadable'] ? data_['loadable'] : false;
+		var is_loadable_ = window.pbpage_builder_element_map[key_]['loadable'] ? window.pbpage_builder_element_map[key_]['loadable'] : false;
+
+		this._target.toggleClass("content" , !is_loadable_);
+		this._target.toggleClass("loadable" , is_loadable_);
 
 		var element_html_ = '<div class="wrap"> \
 			<div class="col-action"> \
 				<div class="element-info-frame"> \
-					<div class="element-name" data-element-name>'+data_['name']+'</div> \
+					<div class="element-name" data-element-name>'+window.pbpage_builder_element_map[key_]['name']+'</div> \
 				</div> \
 				<div class="action-frame"> \
 					<a href="" data-handle-btn class="action-btn handle-btn"> \
@@ -257,7 +262,7 @@ jQuery(function($){
 
 		this._element_name_el = this._target.find("[data-element-name]");
 		this._preview_frame_el = this._target.find("[data-preview-frame]");
-		this._children_frame_el = this._target.find("[data-children-frame]");
+		this._children_frame_el = this._target.find("> .wrap > .col-content > [data-children-frame]");
 
 		this._handle_btn = this._target.find("[data-handle-btn]");
 		this._edit_btn = this._target.find("[data-edit-btn]");
@@ -288,12 +293,12 @@ jQuery(function($){
 		this._add_element_btns = this._target.find("[data-add-element-btn]");
 		this._add_element_btns.click($.proxy(function(event_){
 			var target_btn_ = $(event_.currentTarget);
-			var add_method_ = target_btn_.attr("data-add-element-btn") === "append" ? this.append_child : this.prepend_child;
+			var add_method_ = target_btn_.attr("data-add-element-btn") === "append" ? this.append_element : this.prepend_element;
 
 			window._pbpagebuilder_element_picker_modal_module.pick({
 				parent : this._key
 			},$.proxy(function(element_id_, element_data_){
-				this['add_method'].apply(this['module'], [element_id_, element_data_]);
+				this['add_method'].apply(this['module'], [element_id_]);
 			}, {
 				module : this,
 				add_method : add_method_,
@@ -314,6 +319,7 @@ jQuery(function($){
 				content : "해당 요소를 삭제하시겠습니까?",
 				button1 : "삭제하기",
 			}, $.proxy(function(c_){
+				if(!c_) return;
 				this.delete();
 			}, this));
 			return false;
@@ -324,7 +330,7 @@ jQuery(function($){
 			helper: "clone",
 			placeholder: "element-content-item-placeholder",
 			handle : "[data-handle-btn]",
-			connectWith : "[data-children-frame]",
+			connectWith : "[data-children-frame]:not([data-disconnected])",
 			stop : $.proxy(function(){
 				this._check_children();
 			},this),
@@ -333,69 +339,136 @@ jQuery(function($){
 			},
 			over : $.proxy(function(event_, ui_){
 				var element_item_ = ui_.item.pb_page_builder_element();
-
 				var parent_key_ = this._key;
-				var parent_exp_ = element_item_._data['parent'] ? element_item_._data['parent'] : ["*"];
+
+				var parent_exp_ = window.pbpage_builder_element_map[element_item_._key]['parent'] ? window.pbpage_builder_element_map[element_item_._key]['parent'] : ["*"];
 				var can_over_ = (parent_exp_.indexOf(parent_key_) >= 0 || parent_exp_.indexOf("*") >=0) && (parent_exp_.indexOf("!"+parent_key_) < 0);
 
 				var children_key_ = element_item_._key;
-				var children_exp_ = this._data['children'] ? this._data['children'] : ["*"];
+				var children_exp_ = window.pbpage_builder_element_map[this._key]['children'] ? window.pbpage_builder_element_map[this._key]['children'] : ["*"];
 
 				can_over_ = can_over_ && (children_exp_.indexOf(children_key_) >= 0 || children_exp_.indexOf("*") >= 0) && (children_exp_.indexOf("!"+children_key_) < 0);
 
 				ui_.placeholder.toggleClass("hidden", !can_over_);
-
-				console.log("element over");
-
 			}, this),
 			receive : $.proxy(function(event_, ui_){
-				console.log("element receive");
 				var element_item_ = ui_.item.pb_page_builder_element();
-				
 				var parent_key_ = this._key;
-				var parent_exp_ = element_item_._data['parent'] ? element_item_._data['parent'] : ["*"];
+
+				var parent_exp_ = window.pbpage_builder_element_map[element_item_._key]['parent'] ? window.pbpage_builder_element_map[element_item_._key]['parent'] : ["*"];
 				var can_over_ = (parent_exp_.indexOf(parent_key_) >= 0 || parent_exp_.indexOf("*") >=0) && (parent_exp_.indexOf("!"+parent_key_) < 0);
 
 				var children_key_ = element_item_._key;
-				var children_exp_ = this._data['children'] ? this._data['children'] : ["*"];
+				var children_exp_ = window.pbpage_builder_element_map[this._key]['children'] ? window.pbpage_builder_element_map[this._key]['children'] : ["*"];
 
 				can_over_ = can_over_ && (children_exp_.indexOf(children_key_) >= 0 || children_exp_.indexOf("*") >=0) && (children_exp_.indexOf("!"+children_key_) < 0);
 
-				console.log(can_over_);
-
 				if(!can_over_) $(ui_.sender).sortable('cancel');
+				this._check_children();
 			}, this)
 		});
 
 		this._check_children();
+		this._update_preview();
 	}
 
-	pb_page_builder_element.prototype.prepend_child = function(key_, data_, defaults_){
+	pb_page_builder_element.prototype.prepend_element = function(key_, defaults_){
 		var child_item_ = $("<div></div>");
 		this._children_frame_el.prepend(child_item_);
-		var element_class_ = data_['edit_element_class'] ? data_['edit_element_class'] : "pb_page_builder_element";
-		var element_instance_ = child_item_[element_class_].apply(child_item_, [this._page_builder, key_, data_, defaults_]);
+		var element_class_ = window.pbpage_builder_element_map[key_]['edit_element_class'] ? window.pbpage_builder_element_map[key_]['edit_element_class'] : "pb_page_builder_element";
+		var element_instance_ = child_item_[element_class_].apply(child_item_, [this._page_builder, key_, defaults_]);
 		element_instance_.edit();
 		this._check_children();
+		return child_item_;
 	}
-	pb_page_builder_element.prototype.append_child = function(key_, data_, defaults_){
+	pb_page_builder_element.prototype.append_element = function(key_, defaults_){
 		var child_item_ = $("<div></div>");
 		this._children_frame_el.append(child_item_);
-		var element_class_ = data_['edit_element_class'] ? data_['edit_element_class'] : "pb_page_builder_element";
-		var element_instance_ = child_item_[element_class_].apply(child_item_, [this._page_builder, key_, data_, defaults_]);
+		var element_class_ = window.pbpage_builder_element_map[key_]['edit_element_class'] ? window.pbpage_builder_element_map[key_]['edit_element_class'] : "pb_page_builder_element";
+		var element_instance_ = child_item_[element_class_].apply(child_item_, [this._page_builder, key_, defaults_]);
 		element_instance_.edit();
 		this._check_children();
+		return child_item_;
+	}
+	pb_page_builder_element.prototype.content = function(content_){
+		if(content_ !== undefined){
+			this._content = content_;
+		}
+		return this._content;
 	}
 
-	pb_page_builder_element.prototype.to_json = function(){
+	pb_page_builder_element.prototype.to_xml = function(document_){
+		var is_loadable_ = window.pbpage_builder_element_map[this._key]['loadable'] ? window.pbpage_builder_element_map[this._key]['loadable'] : false;
 
-	}
-	pb_page_builder_element.prototype.apply_json = function(){
 
+		var element_node_ = document_.createElement("element");
+			element_node_.setAttribute("name", this._key);
+
+		$.each(this._element_data, function(key_, value_){
+			var property_node_ = document_.createElement("property");
+
+			property_node_.setAttribute("name", key_);
+			property_node_.appendChild(document.createTextNode(value_));
+			element_node_.appendChild(property_node_);
+		});
+
+		var element_content_node_ = document_.createElement("elementcontent");
+
+		this._children_frame_el.children(".element-content-item").each(function(){
+			var child_node_ = $(this).pb_page_builder_element().to_xml(document_);
+			element_content_node_.appendChild(child_node_);
+		});
+
+		element_node_.appendChild(element_content_node_);
+
+		if(!is_loadable_){
+			var content_ = this.content();
+			element_content_node_.appendChild(document.createTextNode((content_ ? content_ : "")));
+		}
+
+		return element_node_;
 	}
+	pb_page_builder_element.prototype.apply_xml = function(xml_node_){
+		var defaults_ = {};
+
+		var property_nodes_ = pb_page_builder._child_node_by_name(xml_node_, "property", true);
+
+		$.each(property_nodes_, function(){
+			defaults_[this.getAttribute("name")] = this.textContent;
+		});
+
+		this._element_data = defaults_;
+		var element_content_node_ = pb_page_builder._child_node_by_name(xml_node_, "elementcontent");
+
+		if(window.pbpage_builder_element_map[this._key]['loadable']){
+
+			var element_items_ = pb_page_builder._child_node_by_name(element_content_node_, "element", true);
+
+			this._children_frame_el.children(".element-content-item").remove();
+
+			for(var child_index_ = 0; child_index_<element_items_.length; ++child_index_){
+				var child_node_ = element_items_[child_index_];
+				var element_id_ = child_node_.getAttribute("name");
+
+				var child_item_ = $("<div></div>");
+				this._children_frame_el.append(child_item_);
+				var element_class_ = window.pbpage_builder_element_map[element_id_]['edit_element_class'] ? window.pbpage_builder_element_map[element_id_]['edit_element_class'] : "pb_page_builder_element";
+				var element_instance_ = child_item_[element_class_].apply(child_item_, [this._page_builder, element_id_]);
+				element_instance_.apply_xml(child_node_);
+			}
+
+			this._check_children();
+		}else{
+			this.content(element_content_node_.textContent);
+		}
+
+		this._update_preview();
+	}
+
 	pb_page_builder_element.prototype.edit = function(){
-		window._pbpagebuilder_element_edit_modal_module.edit(this._key, this._element_data, $.proxy(function(results_){
+		window._pbpagebuilder_element_edit_modal_module.edit(this._key, this._element_data, this.content(), $.proxy(function(results_, content_){
 			this._element_data = results_;
+			this._content = content_;
 			this._update_preview();
 		}, this));
 	}
@@ -431,15 +504,15 @@ jQuery(function($){
 		}
 
 		if(pb_page_builder_element_edit_library[this._key]){
-			preview_html_ += pb_page_builder_element_edit_library[this._key]['preview'].apply(this, [this._element_data]);
+			preview_html_ += pb_page_builder_element_edit_library[this._key]['preview'].apply(this, [this._element_data, this.content()]);
 		}
 		this._preview_frame_el.html(preview_html_);
 	}
 
-	$.fn.pb_page_builder_element = function(page_builder_, key_, data_, defaults_){
+	$.fn.pb_page_builder_element = function(page_builder_, key_, defaults_){
 		var module_ = this.data("pb-page-builder-element");
 		if(module_) return module_;
-		return new pb_page_builder_element(this, page_builder_, key_, data_, defaults_);
+		return new pb_page_builder_element(this, page_builder_, key_, defaults_);
 	}
 
 	/***
@@ -573,7 +646,12 @@ jQuery(function($){
 
 		this._edit_form = this._target.find("#pb-page-builder-element-edit-modal-form");
 		this._edit_form.submit_handler($.proxy(function(){
-			this._callback.apply(this, [this._edit_form.serialize_object()]);
+			var edit_data_ = this._edit_form.serialize_object();
+			var content_ = edit_data_['content'] ? edit_data_['content'] : null;
+
+			delete edit_data_['content'];
+
+			this._callback.apply(this, [edit_data_, content_]);
 			this._target.modal("hide");
 		}, this));
 	}
@@ -582,7 +660,7 @@ jQuery(function($){
 		return this._target;
 	};
 	
-	pb_page_builder_element_edit_modal.prototype.edit = function(element_id_, defaults_, callback_){
+	pb_page_builder_element_edit_modal.prototype.edit = function(element_id_, defaults_, content_, callback_){
 		this._callback = callback_ || $.noop;
 		this._modal_body_el.html('<div class="loading-frame"> \
 				<div class="pb-loading-indicator loading-indicator"></div> \
@@ -591,7 +669,8 @@ jQuery(function($){
 
 		PB.post("page-builder-load-edit-form", {
 			element_id : element_id_,
-			element_data : defaults_
+			element_data : defaults_,
+			content : content_
 		}, $.proxy(function(result_, response_json_){
 			if(!result_ || response_json_.success !== true){
 				PB.alert({
@@ -644,7 +723,13 @@ jQuery(function($){
 			return false;
 		}, this));
 
-		this._page_element_content_list_el = this._target.find("[data-children-frame][data-page-element-item='document']");
+		this._fullscreen_btn = $("[data-fullscreen-btn]");
+		this._fullscreen_btn.click($.proxy(function(){
+			this._target.toggleClass("fullscreen");
+			return false;
+		}, this));
+
+		this._page_element_content_list_el = this._target.children("[data-children-frame]");
 		this._target.data("pb-page-builder", this);
 
 
@@ -658,7 +743,7 @@ jQuery(function($){
 			placeholder: "element-content-item-placeholder",
 			helper: "clone",
 			handle : "[data-handle-btn]",
-			connectWith : "[data-children-frame]",
+			connectWith : "[data-children-frame]:not([data-disconnected])",
 			stop : $.proxy(function(){
 				this._check_children();
 			},this),
@@ -669,7 +754,7 @@ jQuery(function($){
 				var element_item_ = ui_.item.pb_page_builder_element();
 
 				var parent_key_ = "document";
-				var parent_exp_ = element_item_._data['parent'] ? element_item_._data['parent'] : ["*"];
+				var parent_exp_ = window.pbpage_builder_element_map[element_item_._key]['parent'] ? window.pbpage_builder_element_map[element_item_._key]['parent'] : ["*"];
 				var can_over_ = (parent_exp_.indexOf(parent_key_) >= 0 || parent_exp_.indexOf("*") >=0) && (parent_exp_.indexOf("!"+parent_key_) < 0);
 
 				var children_key_ = element_item_._key;
@@ -679,15 +764,12 @@ jQuery(function($){
 
 				ui_.placeholder.toggleClass("hidden", !can_over_);
 
-				console.log("document over");
-
 			}, this),
 			receive : $.proxy(function(event_, ui_){
-				console.log("document receive");
 				var element_item_ = ui_.item.pb_page_builder_element();
 				
 				var parent_key_ = "document";
-				var parent_exp_ = element_item_._data['parent'] ? element_item_._data['parent'] : ["*"];
+				var parent_exp_ = window.pbpage_builder_element_map[element_item_._key]['parent'] ? window.pbpage_builder_element_map[element_item_._key]['parent'] : ["*"];
 				var can_over_ = (parent_exp_.indexOf(parent_key_) >= 0 || parent_exp_.indexOf("*") >=0) && (parent_exp_.indexOf("!"+parent_key_) < 0);
 
 				var children_key_ = element_item_._key;
@@ -696,6 +778,7 @@ jQuery(function($){
 				can_over_ = can_over_ && (children_exp_.indexOf(children_key_) >= 0 || children_exp_.indexOf("*") >=0) && (children_exp_.indexOf("!"+children_key_) < 0);
 
 				if(!can_over_) $(ui_.sender).sortable('cancel');
+				this._check_children();
 			}, this)
 		});
 
@@ -712,33 +795,37 @@ jQuery(function($){
 			script : this._script,
 		}, $.proxy(function(results_){
 			this._style = results_['style'];
-			this._script = results_['style'];
+			this._script = results_['script'];
 			this._update_page_settings_btn();
 		},this));
 	}
 
 	pb_page_builder.prototype._update_page_settings_btn = function(){
 		var has_data_ = (this._style && this._style !== "") || (this._script && this._script !== "");
+		has_data_ = has_data_ === true;
 		this._page_settings_btn.toggleClass("has-data", has_data_);
 	}
 	
-	pb_page_builder.prototype.prepend_element = function(element_id_, element_data_, defaults_){
+	pb_page_builder.prototype.prepend_element = function(element_id_, defaults_){
 		var element_content_item_el_ = $("<div>");
 		this._page_element_content_list_el.prepend(element_content_item_el_);
 
-		var element_class_ = element_data_['edit_element_class'] ? element_data_['edit_element_class'] : "pb_page_builder_element";
-		var element_instance_ = element_content_item_el_[element_class_].apply(element_content_item_el_, [this, element_id_, element_data_, defaults_]);
+		var element_class_ = window.pbpage_builder_element_map[element_id_]['edit_element_class'] ? window.pbpage_builder_element_map[element_id_]['edit_element_class'] : "pb_page_builder_element";
+		var element_instance_ = element_content_item_el_[element_class_].apply(element_content_item_el_, [this, element_id_, defaults_]);
 		element_instance_.edit();
 		this._check_children();
+
+		return element_content_item_el_
 	}
-	pb_page_builder.prototype.append_element = function(element_id_, element_data_, defaults_){
+	pb_page_builder.prototype.append_element = function(element_id_, defaults_){
 		var element_content_item_el_ = $("<div>");
 		this._page_element_content_list_el.append(element_content_item_el_);
-		var element_class_ = element_data_['edit_element_class'] ? element_data_['edit_element_class'] : "pb_page_builder_element";
-		console.log(element_class_);
-		var element_instance_ = element_content_item_el_[element_class_].apply(element_content_item_el_, [this, element_id_, element_data_, defaults_]);
+		var element_class_ = window.pbpage_builder_element_map[element_id_]['edit_element_class'] ? window.pbpage_builder_element_map[element_id_]['edit_element_class'] : "pb_page_builder_element";
+		var element_instance_ = element_content_item_el_[element_class_].apply(element_content_item_el_, [this, element_id_, defaults_]);
 		element_instance_.edit();
 		this._check_children();
+
+		return element_content_item_el_;
 	}
 
 
@@ -752,7 +839,7 @@ jQuery(function($){
 		window._pbpagebuilder_element_picker_modal_module.pick({
 			parent : options_['parent']
 		},$.proxy(function(element_id_, element_data_){
-			this['add_method'].apply(this['module'], [element_id_, element_data_]);
+			this['add_method'].apply(this['module'], [element_id_]);
 		}, {
 			module : this,
 			add_method : add_method_ === "prepend" ? this.prepend_element : this.append_element,
@@ -762,6 +849,7 @@ jQuery(function($){
 	pb_page_builder.prototype._check_children = function(){
 		var empty_ = (this._page_element_content_list_el.find(".element-content-item").length <= 0);
 		if(empty_){
+			this._page_element_content_list_el.find(".empty-state-text").remove();
 			this._page_element_content_list_el.append(
 				'<div class="empty-state-text"> \
 					<a href="" data-element-add-element-btn class="add-element-btn"><i class="icon material-icons">add_circle</i>요소추가</a> 하여 페이지를 만들어 보세요! \
@@ -784,10 +872,105 @@ jQuery(function($){
 	};
 
 	pb_page_builder.prototype.to_xml = function(){
+		var document_ = document.implementation.createDocument("", "", null);
+		var root_node_ = document_.createElement("pbpagebuilder");
+			root_node_.setAttribute("version", window.pb_page_builder_version);
+
+		var settings_node_ = document_.createElement("settings");
+		var settings_style_node_ = document_.createElement("style");
+		var settings_script_node_ = document_.createElement("script");
+
+		settings_style_node_.appendChild(document.createTextNode(this._style));
+		settings_script_node_.appendChild(document.createTextNode(this._script));
+
+		settings_node_.appendChild(settings_style_node_);
+		settings_node_.appendChild(settings_script_node_);
+		root_node_.appendChild(settings_node_);
+
+		var content_node_ = document_.createElement("pagecontent");
+
+		this._page_element_content_list_el.children(".element-content-item").each(function(){
+			var element_node_ = $(this).pb_page_builder_element().to_xml(document_);
+			content_node_.appendChild(element_node_);
+		});
+
+		root_node_.appendChild(content_node_);
+		document_.appendChild(root_node_);
+
+		if(XMLSerializer){
+			return (new XMLSerializer()).serializeToString(document_);	
+		}
+
+		if(window.ActiveXObject){ //IE
+			return document_.xml;
+		}
+
+		return "not supported";
 		
 	};
+
+	pb_page_builder._child_node_by_name = function(parent_, name_, to_array_){
+		to_array_ = (to_array_ === true);
+		var results_ = [];
+		for(var child_index_= 0; child_index_<parent_.childNodes.length;++child_index_){
+			var child_node_ = parent_.childNodes[child_index_];
+
+			if(child_node_.nodeType === 1 && child_node_.nodeName === name_){
+				results_.push(child_node_);
+			}
+		}
+
+		if(results_.length > 1 || to_array_) return results_;
+		return results_[0];
+	}
 	pb_page_builder.prototype.apply_xml = function(xml_string_){
-		
+		var document_ = null;
+		if(window.DOMParser){
+			document_ = new window.DOMParser().parseFromString(xml_string_, "text/xml");
+		}else if(window.ActiveXObject && new window.ActiveXObject("Microsoft.XMLDOM")){
+			document_ = new window.ActiveXObject("Microsoft.XMLDOM");
+	        document_.async = "false";
+	        document_.loadXML(xml_string_);	
+		}else{
+			PB.alert({
+				title : "호환성오류",
+				content : "XML Parsing을 지원하지 않는 브라우져입니다. 신형브라우져로 다시 시도하여 주세요.",
+			});
+			return;
+		}
+
+		var root_children_ = document_.documentElement;
+
+		var settings_node_ = pb_page_builder._child_node_by_name(root_children_, "settings");
+		var pagecontent_node_ = pb_page_builder._child_node_by_name(root_children_, "pagecontent");
+
+		if(!settings_node_ || !pagecontent_node_){
+			console.error("올바른 형식의 문서가 아닙니다.");
+			return;
+		}
+
+		var settings_style_node_ = pb_page_builder._child_node_by_name(settings_node_, "style");
+		var settings_script_node_ = pb_page_builder._child_node_by_name(settings_node_, "script");
+
+		this._style = settings_style_node_.textContent || "";
+		this._script = settings_script_node_.textContent || "";
+		this._update_page_settings_btn();
+
+		this._page_element_content_list_el.children(".element-content-item").remove();
+
+		for(var child_index_ = 0; child_index_<pagecontent_node_.childNodes.length; ++child_index_){
+			var child_node_ = pagecontent_node_.childNodes[child_index_];
+			var element_id_ = child_node_.getAttribute("name");
+
+			var child_item_ = $("<div></div>");
+			this._page_element_content_list_el.append(child_item_);
+			var element_class_ = window.pbpage_builder_element_map[element_id_]['edit_element_class'] ? window.pbpage_builder_element_map[element_id_]['edit_element_class'] : "pb_page_builder_element";
+			var element_instance_ = child_item_[element_class_].apply(child_item_, [this, element_id_]);
+			element_instance_.apply_xml(child_node_);
+		}
+
+		this._check_children();
+
 	};
 
 	$.fn.pb_page_builder = function(options_){
@@ -810,72 +993,6 @@ jQuery(function($){
 	}
 });
 </script>
-<div class="pb-page-builder-element-edit-modal modal fade" tabindex="-1" role="dialog" id="pb-page-builder-element-edit-modal"><div class="modal-dialog" role="document"><form id="pb-page-builder-element-edit-modal-form" method="POST">
-	
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title">요소수정</h4>
-		</div>
-		<div class="modal-body">
-			
-		</div>
-		<div class="modal-footer">
-			<a href="" class="btn btn-default" data-dismiss="modal">취소</a>
-			<button type="submit" class="btn btn-primary">변경사항 저장</button>
-		</div>
-	</div>
-</form></div></div>
-<div class="pb-page-builder-element-picker-modal modal fade" tabindex="-1" role="dialog" id="pb-page-builder-element-picker-modal"><div class="modal-dialog" role="document">
-	
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title">요소추가</h4>
-		</div>
-		<div class="modal-body">
-			<form id="pb-page-builder-element-picker-cond-form" class="form-inline text-right" data-element-search-form>
-				<input type="hidden" name="parent">
-				<div class="input-group input-lg">
-					<input type="text" class="form-control search-input" placeholder="요소 검색..." name="keyword">
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="submit">검색</button>
-					</span>
-				</div>
-			</form>
-			<div class="loading-frame">
-				<div class="pb-loading-indicator loading-indicator"></div>
-			</div>
-			<div class="element-list" data-element-list></div>
-		</div>
-	</div>
-</div></div>
-<div class="pb-page-builder-page-settings-modal modal fade" tabindex="-1" role="dialog" id="pb-page-builder-page-settings-modal"><div class="modal-dialog" role="document">
-	
-	<div class="modal-content"><form id="pb-page-builder-page-settings-modal-form" method="POST">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title">페이지설정</h4>
-		</div>
-		<div class="modal-body">
-
-			<div class="form-group">
-				<label>공통 StyleSheet</label>
-				<textarea data-style-sheet-editor></textarea>
-			</div>
-
-			<div class="form-group">
-				<label>공통 JavaScript</label>
-				<textarea data-javascript-editor></textarea>
-			</div>
-			
-		</div>
-		<div class="modal-footer">
-			<a href="" class="btn btn-default" data-dismiss="modal">취소</a>
-			<button type="submit" class="btn btn-primary">변경사항저장</button>
-		</div>
-	</form></div>
-</div></div>
 
 <?php
 		pb_hook_do_action('pb_page_builder_admin_initialize');
@@ -892,6 +1009,10 @@ jQuery(function($){
 		<div class="col-right">
 			<a href="" data-element-add-element-btn class="btn btn-default add-element-btn"><i class="icon material-icons">add_circle</i>요소추가</a>
 			<a href="" data-element-setting-btn class="icon-link page-settings-btn"><i class="icon material-icons">settings</i></a>
+			<a href="" data-fullscreen-btn class="icon-link fullscreen-btn">
+				<i class="icon material-icons on">fullscreen</i>
+				<i class="icon material-icons off">fullscreen_exit</i>
+			</a>
 
 		</div>
 	</div></div>
@@ -901,17 +1022,20 @@ jQuery(function($){
 		<a data-add-element-btn="append" class="add-element-btn append" href=""><i class="material-icons icon">add_box</i> 요소추가</a>
 	</div>
 
-
+	<div class="copyrights">© 2019 Paul&Bro Company All Rights Reserved. v<?=PB_PAGE_BUILDER_VERSION?></div>
 
 </div>
+<script type="text/xmldata" id="<?=$builder_id_?>-defaults"><?=htmlentities($content_)?></script>
 
 <script type="text/javascript">
 jQuery(document).ready(function(){
 	window._pbpagebuilder_page_settings_modal_module = $("#pb-page-builder-page-settings-modal").pb_page_builder_page_settings_modal();
 	window._pbpagebuilder_element_picker_modal_module = $("#pb-page-builder-element-picker-modal").pb_page_builder_element_picker_modal();
 	window._pbpagebuilder_element_edit_modal_module = $("#pb-page-builder-element-edit-modal").pb_page_builder_element_edit_modal();
-	$("#<?=$builder_id_?>").pb_page_builder({
-	});
+	var page_builder_ = $("#<?=$builder_id_?>").pb_page_builder();
+
+	var default_content_ = $('<textarea />').html($("#<?=$builder_id_?>-defaults").html()).text();
+	page_builder_.apply_xml(default_content_);
 });
 </script>
 
@@ -920,6 +1044,7 @@ jQuery(document).ready(function(){
 
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-element.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-ajax.php');
-include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-devmenu.php');
+include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-builtin.php');
+// include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-devmenu.php');
 
 ?>

@@ -6,19 +6,19 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 function _pb_page_register_adminpage($results_){
 
-	$results_['page'] = array(
+	/*$results_['page'] = array(
 		'name' => '페이지관리',
 		'type' => 'directory',
 		'sort' => 5,
-	);
+	);*/
 	$results_['manage-page'] = array(
 		'name' => '페이지관리',
 		'type' => 'menu',
-		'directory' => 'page',
+		// 'directory' => 'page',
 		'rewrite_handler' => "_pb_page_rewrite_handler_for_adminpage",
 		'authority_task' => 'manage_page',
 		'subpath' => null,
-		'sort' => 1,
+		'sort' => 5,
 	);
 	return $results_;
 }

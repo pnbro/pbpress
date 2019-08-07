@@ -10,17 +10,18 @@ class PBPageBuilderElement_container extends PBPageBuilderElement{
 		$this->add_edit_form("common", array($this, "render_admin_form"));
 	}
 
-	public function render($content_ = null, $element_data_ = array()){
+	public function render($data_ = array()){
+		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
-		$container_type_ = isset($element_data_['container_type']) ? $element_data_['container_type'] : "container";
+		$container_type_ = isset($element_data_['container_type']) ? $element_data_['container_type'] : "box";
 
 		?>
-		<div class="<?=$container_type_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?> data-element-id="<?=$this->element_id?>"><?=pb_page_builder_element_parse($content_)?></div>
+		<div class="pb-container <?=$container_type_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
 		<?php
 		
 	}
-	function render_admin_form($element_data_ = array()){
+	function render_admin_form($element_data_ = array(), $content_ = null){
 
 		$container_type_ = isset($element_data_['container_type']) ? $element_data_['container_type'] : "container";
 
@@ -29,8 +30,8 @@ class PBPageBuilderElement_container extends PBPageBuilderElement{
 		<div class="form-group">
 			<label>컨테이너 스타일</label>
 			<select class="form-control" name="container_type">
-				<option value="container" <?=pb_selected($container_type_, "container")?> >박스스타일</option>
-				<option value="container-fluid" <?=pb_selected($container_type_, "container-fluid")?> >꽉채움</option>
+				<option value="box" <?=pb_selected($container_type_, "box")?> >박스스타일</option>
+				<option value="full" <?=pb_selected($container_type_, "full")?> >꽉채움</option>
 			</select>
 		</div>
 

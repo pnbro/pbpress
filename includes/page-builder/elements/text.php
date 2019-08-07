@@ -10,21 +10,32 @@ class PBPageBuilderElement_text extends PBPageBuilderElement{
 		$this->add_edit_form("common", array($this, "render_admin_form"));
 	}
 
-	public function render($content_ = null, $element_data_ = array()){
+	public function render($data_ = array()){
+		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
-		$container_type_ = isset($element_data_['container_type']) ? $element_data_['container_type'] : "container";
 
 		?>
-		<div class="bt-row <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=pb_page_builder_element_parse($content_)?></div>
+		<div class="text <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
 		<?php
 	}
 
-	function render_admin_form($element_data_ = array()){
-
-		$temp_form_id_ = "columns-input-".pb_random_string(5);
+	function render_admin_form($element_data_ = array(), $content_ = null){
+		$temp_form_id_ = "text-input-".pb_random_string(5);
 
 		?>
+
+		<div class="form-group">
+			<label>텍스트에디터</label>
+			<textarea id="<?=$temp_form_id_?>" name="content"><?=stripslashes($content_)?></textarea>
+			<div class="clearfix"></div>
+		</div>
+		<script type="text/javascript">
+			jQuery(document).ready(function(){
+				$("#<?=$temp_form_id_?>").init_summernote_for_pb();
+			});
+		</script>
+
 
 		<?php
 	}
@@ -37,7 +48,6 @@ pb_page_builder_add_element("text", array(
 	'element_object' => "PBPageBuilderElement_text",
 	'edit_categories' => array("common"),
 	'loadable' => false,
-	'children' => array("*"),
 	'category' => "기본",
 ));
 

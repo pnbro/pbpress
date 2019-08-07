@@ -60,6 +60,7 @@ pb_add_ajax('page-builder-load-element', '_pb_page_builder_ajax_load_elements');
 function _pb_page_builder_ajax_load_edit_element_form(){
 	$element_id_ = isset($_POST['element_id']) ? $_POST['element_id'] : null;
 	$defaults_ = isset($_POST['element_data']) ? $_POST['element_data'] : null;
+	$content_ = isset($_POST['content']) ? $_POST['content'] : null;
 	
 	$temp_page_builder_elements_ = pb_page_builder_elements();
 	$element_data_ = $temp_page_builder_elements_[$element_id_];
@@ -109,11 +110,11 @@ function _pb_page_builder_ajax_load_edit_element_form(){
 					</div>
 					<div class="panel-body">
 					<?php foreach($edit_category_functions_[$category_data_['key']] as $func_){
-						call_user_func_array($func_, array($defaults_));
+						call_user_func_array($func_, array($defaults_, $content_));
 					} ?>
 
 					<?php foreach($element_edit_forms_ as $func_){
-						call_user_func_array($func_, array($defaults_));
+						call_user_func_array($func_, array($defaults_, $content_));
 					} ?>
 					</div>
 				</div>

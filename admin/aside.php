@@ -29,8 +29,8 @@
 					</ul>
 				</li>
 				<?php }else{ ?>
-					<li>
-						<a href="<?=pb_admin_url("pages/{$slug_}")?>"><?=$menu_data_['name']?></a>
+					<li class="<?=$menu_data_['active'] ? "active" : ""?>">
+						<a href="<?=pb_admin_url("{$slug_}")?>"><?=$menu_data_['name']?></a>
 					</li>
 				<?php } ?>
 			

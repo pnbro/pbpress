@@ -17,3 +17,4 @@
 	<script src="<?=pb_current_theme_url()?>js/grayscale.min.js"></script>
 
 </body>
+</html>
