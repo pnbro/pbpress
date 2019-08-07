@@ -1,3 +1,5 @@
+@import (reference) "../../pb-admin.less";
+
 .pb-page-builder-page-settings-modal{
 	> .modal-dialog{
 		max-width: 768px;
@@ -30,6 +32,8 @@
 		}
 	}
 }
+
+
 
 .pb-page-builder-element-picker-modal{
 
@@ -287,29 +291,7 @@
 		}
 	}
 
-	&.fullscreen{
-		position: fixed;
-		z-index: @zindex-navbar-fixed + 1;
-		left: 0px;
-		top: 0px;
-		width: 100%;
-		height: 100%;
-		overflow: auto;
-		-webkit-overflow-scrolling: touch;
-
-		.page-builder-navbar > .wrap > .col-right{
-
-			a.fullscreen-btn{
-				> .on{
-					display: none;
-				}
-				> .off{
-					display: block;
-				}
-			}
-
-		}
-	}
+	
 
 
 
@@ -631,5 +613,35 @@
 		color: @gray-light;
 		padding: 10px;
 		text-align: right;
+	}
+}
+
+body{
+	&.pb-page-builder-fullscreen{
+		position: relative;
+		overflow: hidden;
+		.pb-page-builder{
+			position: fixed;
+			z-index: @zindex-navbar-fixed + 1;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			-webkit-overflow-scrolling: touch;
+
+			.page-builder-navbar > .wrap > .col-right{
+
+				a.fullscreen-btn{
+					> .on{
+						display: none;
+					}
+					> .off{
+						display: block;
+					}
+				}
+
+			}
+		}
 	}
 }

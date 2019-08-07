@@ -25,6 +25,7 @@ include(PB_DOCUMENT_PATH . "includes/gcode/gcode.php");
 include(PB_DOCUMENT_PATH . "includes/authority/authority.php");
 include(PB_DOCUMENT_PATH . "includes/user/user.php");
 include(PB_DOCUMENT_PATH . "includes/page/page.php");
+include(PB_DOCUMENT_PATH . "includes/menu/menu.php");
 
 if(class_exists("SimpleXMLElement")){
 	include(PB_DOCUMENT_PATH . "includes/page-builder/page-builder.php");	

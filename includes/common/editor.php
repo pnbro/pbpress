@@ -24,7 +24,6 @@ function pb_editor($name_, $content_ = null, $data_ = array()){
 		$pb_editor_script_loaded = true;
 	}
 
-
 	$editor_id_ = isset($data_['id']) ? $data_['id'] : "pb-editor-".pb_random_string(5, PB_RANDOM_STRING_NUMLOWER);
 	$editor_ = isset($data_['editor']) && strlen($data_['editor']) ? $data_['editor'] : "editor";
 	$script_options_ = array();
