@@ -73,7 +73,7 @@ if(function_exists("pb_page_builder")){
 		pb_page_builder_render($temp_);
 		return ob_get_clean();
 	}
-	pb_hook_add_filter('pb_page_html', "_pb_page_render_page_html_for_page_builder");	
+	pb_hook_add_filter('pb_page_html', "_pb_page_render_page_html_for_page_builder");
 }
 
 ?>

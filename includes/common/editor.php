@@ -9,13 +9,14 @@ function pb_editor_list(){
 }
 
 function pb_editor($name_, $content_ = null, $data_ = array()){
-	$editor_list_ = pb_editor_list();
+	$base_editor_list_ = pb_editor_list();
+	$editor_list_ = array();
 
 	global $pb_editor_script_loaded;
 
 	if(!$pb_editor_script_loaded){
 
-		foreach($editor_list_ as $key_ => $editor_data_){
+		foreach($base_editor_list_ as $key_ => $editor_data_){
 			if(isset($editor_data_['library'])){
 				call_user_func($editor_data_['library']);
 			}
@@ -24,8 +25,22 @@ function pb_editor($name_, $content_ = null, $data_ = array()){
 		$pb_editor_script_loaded = true;
 	}
 
+	if(isset($data_['editors'])){
+		foreach($data_['editors'] as $editor_id_){
+			$editor_list_[$editor_id_] = $base_editor_list_[$editor_id_];
+		}
+	}else{
+		$editor_list_ = $base_editor_list_;
+	}
+
+	$first_editor_id_ = null;
+	foreach($editor_list_ as $key_ => $editor_data_){
+		$first_editor_id_ = $key_;
+		break;
+	}
+
 	$editor_id_ = isset($data_['id']) ? $data_['id'] : "pb-editor-".pb_random_string(5, PB_RANDOM_STRING_NUMLOWER);
-	$editor_ = isset($data_['editor']) && strlen($data_['editor']) ? $data_['editor'] : "editor";
+	$editor_ = isset($data_['editor']) && strlen($data_['editor']) ? $data_['editor'] : $first_editor_id_;
 	$script_options_ = array();
 
 	$script_options_['input'] = "#{$editor_id_}-input";
