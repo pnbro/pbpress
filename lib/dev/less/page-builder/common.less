@@ -4,11 +4,10 @@
 //copy from bootstrap
 
 
-.pb-container-fixed(@gutter: @grid-gutter-width) {
+
+.pb-container-fixed() {
   margin-right: auto;
   margin-left: auto;
-  padding-left:  floor((@gutter / 2));
-  padding-right: ceil((@gutter / 2));
   &:extend(.clearfix all);
 }
 
@@ -238,6 +237,16 @@
 
 .pb-row {
   .pb-make-row();
+  &.valign-bottom > div{
+    display: inline-block;
+    float: none;
+    vertical-align: bottom;
+  }
+  &.valign-middle > div{
+    display: inline-block;
+    float: none;
+    vertical-align: middle;
+  }
 }
 
 
@@ -281,4 +290,9 @@
 
 @media (min-width: @screen-lg-min) {
   .pb-make-grid(lg);
+}
+
+
+.pb-image{
+  max-width: 100%;
 }

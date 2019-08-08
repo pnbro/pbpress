@@ -14,18 +14,19 @@ class PBPageBuilderElement_row extends PBPageBuilderElement{
 		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
-		$container_type_ = isset($element_data_['container_type']) ? $element_data_['container_type'] : "container";
+		$valign_ = isset($element_data_['valign']) ? $element_data_['valign'] : "top";
 
 		?>
-		<div class="pb-row <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
+		<div class="pb-row valign-<?=$valign_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
 		<?php
 	}
 
 	function render_admin_form($element_data_ = array(), $content_ = null){
-
-		$columns_ = isset($element_data_['columns']) ? $element_data_['columns'] : "12";
 		$temp_form_id_ = "columns-input-".pb_random_string(5);
 
+		$columns_ = isset($element_data_['columns']) ? $element_data_['columns'] : "12";
+		$valign_ = isset($element_data_['valign']) ? $element_data_['valign'] : "top";
+		
 		?>
 
 		<div class="form-group">
@@ -39,6 +40,15 @@ class PBPageBuilderElement_row extends PBPageBuilderElement{
 				<a href="javascript:_pb_update_row_column('#<?=$temp_form_id_?>', '12')" class="badge">12</a>
 			</div>
 		</div>
+		<div class="form-group">
+			<label>수직정렬</label>
+			<select class="form-control" name="valign">
+				<option value="top" <?=pb_selected($valign_, "top")?>>위로</option>
+				<option value="middle" <?=pb_selected($valign_, "middle")?>>중간으로</option>
+				<option value="bottom" <?=pb_selected($valign_, "bottom")?>>아래로</option>
+			</select>
+		</div>
+
 		<script type="text/javascript">
 			function _pb_update_row_column(id_, columns_){
 				$(id_).val(columns_);
@@ -64,9 +74,7 @@ class PBPageBuilderElement_column extends PBPageBuilderElement{
 		$column_width_sm_ = isset($element_data_['column_width_sm']) ? $element_data_['column_width_sm'] : $column_width_md_;
 		$column_width_xs_ = isset($element_data_['column_width_xs']) ? $element_data_['column_width_xs'] : "12";
 		
-		?>
-		<div class="pb-col-lg-<?=$column_width_?> pb-col-md-<?=$column_width_md_?> pb-col-sm-<?=$column_width_sm_?> pb-col-sm-<?=$column_width_sm_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
-		<?php
+		?><div class="pb-col-lg-<?=$column_width_?> pb-col-md-<?=$column_width_md_?> pb-col-sm-<?=$column_width_sm_?> pb-col-sm-<?=$column_width_sm_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div><?php
 	}
 
 	function render_admin_form($element_data_ = array(), $content_ = null){

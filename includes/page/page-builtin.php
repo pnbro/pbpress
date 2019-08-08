@@ -61,17 +61,19 @@ function _pb_rewrite_unique_slug_for_page($result_, $original_slug_, $retry_coun
 }
 pb_hook_add_filter("pb_rewrite_unique_slug", "_pb_rewrite_unique_slug_for_page");
 
-function _pb_page_render_page_html_for_page_builder($page_html_, $page_data_){
-	$temp_ = @pb_page_builder_parse_xml($page_html_);
+if(function_exists("pb_page_builder")){
+	function _pb_page_render_page_html_for_page_builder($page_html_, $page_data_){
+		$temp_ = @pb_page_builder_parse_xml($page_html_);
 
-	if(!$temp_ || pb_is_error($temp_)){
-		return $page_html_;
+		if(!$temp_ || pb_is_error($temp_)){
+			return $page_html_;
+		}
+		
+		ob_start();
+		pb_page_builder_render($temp_);
+		return ob_get_clean();
 	}
-	
-	ob_start();
-	pb_page_builder_render($temp_);
-	return ob_get_clean();
+	pb_hook_add_filter('pb_page_html', "_pb_page_render_page_html_for_page_builder");	
 }
-pb_hook_add_filter('pb_page_html', "_pb_page_render_page_html_for_page_builder");
 
 ?>
