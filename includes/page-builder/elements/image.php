@@ -14,6 +14,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
+		$unique_class_name_ = isset($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : null;
 		$src_ = isset($element_data_['src']) ? $element_data_['src'] : null;
 
 		$width_ = isset($element_data_['width']) ? $element_data_['width'] : "auto";
@@ -21,7 +22,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 		$min_width_ = isset($element_data_['max_width']) ? $element_data_['max_width'] : null;
 
 		?>
-		<img class="pb-image <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?> src="<?=pb_home_url("uploads/".$src_)?>">
+		<img class="pb-image <?=$class_?> <?=$unique_class_name_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?> src="<?=pb_home_url("uploads/".$src_)?>">
 		<?php
 	}
 

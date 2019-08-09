@@ -48,6 +48,7 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/bootstrap/bootstrap-validator.js',
           'lib/dev/concat-lib/src/bootstrap/bootstrap-select.js',
           'lib/dev/concat-lib/src/bootstrap/bootstrap-datetimepicker.js',
+          'lib/dev/concat-lib/src/bootstrap/bootstrap-colorpicker.js',
 
         ],
         dest: 'lib/dev/concat-lib/dist/defaults-admin.js'

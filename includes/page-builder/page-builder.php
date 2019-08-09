@@ -100,14 +100,14 @@ function pb_page_builder_render($builder_data_){
 	global $pb_page_builder_element_classes;
 
 	?>
-<style type="text/css"><?=$settings_['style']?></style>
+<style type="text/css"><?=pb_hook_apply_filters('pb_page_builder_global_style',$settings_['style'], $builder_data_)?></style>
 
 <?php foreach($page_contents_ as $element_data_){
 	$element_class_ = $pb_page_builder_element_classes[$element_data_['name']];
 	call_user_func_array(array($element_class_, "render"), array($element_data_));
 } ?>
 
-<script type="text/javascript"><?=$settings_['script']?></script>
+<script type="text/javascript"><?=pb_hook_apply_filters('pb_page_builder_global_script',$settings_['script'], $builder_data_)?></script>
 
 	<?php
 }
@@ -179,6 +179,6 @@ jQuery(document).ready(function(){
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-element.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-ajax.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-builtin.php');
-// include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-devmenu.php');
+include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-devmenu.php');
 
 ?>

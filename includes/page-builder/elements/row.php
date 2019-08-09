@@ -14,10 +14,11 @@ class PBPageBuilderElement_row extends PBPageBuilderElement{
 		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
+		$unique_class_name_ = isset($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : null;
 		$valign_ = isset($element_data_['valign']) ? $element_data_['valign'] : "top";
 
 		?>
-		<div class="pb-row valign-<?=$valign_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
+		<div class="pb-row valign-<?=$valign_?> <?=$class_?> <?=$unique_class_name_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
 		<?php
 	}
 
@@ -69,12 +70,13 @@ class PBPageBuilderElement_column extends PBPageBuilderElement{
 		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
+		$unique_class_name_ = isset($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : null;
 		$column_width_ = isset($element_data_['column_width']) ? $element_data_['column_width'] : "12";
 		$column_width_md_ = isset($element_data_['column_width_md']) ? $element_data_['column_width_md'] : $column_width_;
 		$column_width_sm_ = isset($element_data_['column_width_sm']) ? $element_data_['column_width_sm'] : $column_width_md_;
 		$column_width_xs_ = isset($element_data_['column_width_xs']) ? $element_data_['column_width_xs'] : "12";
 		
-		?><div class="pb-col-lg-<?=$column_width_?> pb-col-md-<?=$column_width_md_?> pb-col-sm-<?=$column_width_sm_?> pb-col-sm-<?=$column_width_sm_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div><?php
+		?><div class="pb-col-lg-<?=$column_width_?> <?=$unique_class_name_?> pb-col-md-<?=$column_width_md_?> pb-col-sm-<?=$column_width_sm_?> pb-col-sm-<?=$column_width_sm_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div><?php
 	}
 
 	function render_admin_form($element_data_ = array(), $content_ = null){
@@ -137,7 +139,7 @@ pb_page_builder_add_element("row", array(
 	'desc' => "기본적인 행 요소",
 	'icon' => PB_LIBRARY_URL."img/page-builder/row.jpg",
 	'element_object' => "PBPageBuilderElement_row",
-	'edit_categories' => array("common"),
+	'edit_categories' => array("common", "styles"),
 	'edit_element_class' => "pb_page_builder_row_element",
 	'loadable' => true,
 	'children' => array("column"),
@@ -148,7 +150,7 @@ pb_page_builder_add_element("column", array(
 	'name' => "컬럼",
 	'icon' => PB_LIBRARY_URL."img/page-builder/row.jpg",
 	'element_object' => "PBPageBuilderElement_column",
-	'edit_categories' => array("common"),
+	'edit_categories' => array("common", "styles"),
 	'edit_element_class' => "pb_page_builder_column_element",
 	'loadable' => true,
 	'children' => array("*", "!container"),

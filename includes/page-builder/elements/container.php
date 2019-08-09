@@ -15,9 +15,10 @@ class PBPageBuilderElement_container extends PBPageBuilderElement{
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
 		$container_type_ = isset($element_data_['container_type']) ? $element_data_['container_type'] : "box";
+		$unique_class_name_ = isset($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : null;
 
 		?>
-		<div class="pb-container <?=$container_type_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
+		<div class="pb-container <?=$container_type_?> <?=$class_?> <?=$unique_class_name_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
 		<?php
 		
 	}

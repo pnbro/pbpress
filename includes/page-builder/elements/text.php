@@ -14,9 +14,10 @@ class PBPageBuilderElement_text extends PBPageBuilderElement{
 		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
+		$unique_class_name_ = isset($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : null;
 
 		?>
-		<div class="text <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
+		<div class="text <?=$class_?> <?=$unique_class_name_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
 		<?php
 	}
 
