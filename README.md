@@ -33,10 +33,17 @@ access project on browser.
 
 * * *
 you can see install screen. and complete a installation!
-인스톨 화면을 볼 수 있습니다. 인스톨을 완료하세요!
+설치화면을 볼 수 있습니다. 설치를 완료하세요!
 	
 ![install](https://i.imgur.com/cnfyMC7.png)
 * * *
+
+## Access Adminpage
+You can access to the adminpage through the url below.
+아래 URL을 통하여 관리자페이지를 접속할 수 있습니다.
+
+	http://{project_url}/admin
+
 
 ## Build Frontend library
 You have to compile, when resoure files like js,less changed.
@@ -82,3 +89,4 @@ you can make a theme that you want, and just put your theme you made into 'theme
 	2. Developing plugin features?
 	3. Adding Page Builders -> alpha version added.
 	4. Developing multi languages features -> alpha version added.
+	5. menu editor
