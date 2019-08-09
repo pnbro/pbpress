@@ -68,6 +68,7 @@ you can make a theme that you want, and just put your theme you made into 'theme
 	jsencrypt : https://github.com/travist/jsencrypt
 	momentjs : https://momentjs.com
 	summernote : https://github.com/summernote/summernote
+	colorpicker : https://farbelous.io/bootstrap-colorpicker/v2/
 
 ### Backend
 	blueimp UploadHandler : https://github.com/blueimp/jQuery-File-Upload
@@ -79,5 +80,5 @@ you can make a theme that you want, and just put your theme you made into 'theme
 ## TODO
 	1. Write API documentation and manuals.
 	2. Developing plugin features?
-	3. Adding Page Builders?
-	4. Developing multi languages features?
+	3. Adding Page Builders -> alpha version added.
+	4. Developing multi languages features -> alpha version added.
