@@ -76,6 +76,7 @@ you can make a theme that you want, and just put your theme you made into 'theme
 	momentjs : https://momentjs.com
 	summernote : https://github.com/summernote/summernote
 	colorpicker : https://farbelous.io/bootstrap-colorpicker/v2/
+	sortablejs : https://sortablejs.github.io/Sortable/
 
 ### Backend
 	blueimp UploadHandler : https://github.com/blueimp/jQuery-File-Upload

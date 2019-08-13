@@ -193,11 +193,13 @@ class PB_authority_task_list_table extends PBListTable{
 		$auth_id_ = isset($_GET["master_id"]) ? $_GET["master_id"] : null;
 		$row_index_ = $this->current_row();
 
+		$authority_task_types_ = pb_authority_task_types();
+		
 
 		switch($column_name_){
 		
 			case "task_name" :
-				return $item_["name"];
+				return isset($authority_task_types_[$item_["slug"]]) ? $authority_task_types_[$item_["slug"]]['name'] : "-";
 			case "slug" :
 				return $item_["slug"];
 

@@ -5,14 +5,18 @@ if(!defined('PB_DOCUMENT_PATH')){
 }
 
 function pb_authority_task_types(){
-	return pb_hook_apply_filters("pb_authority_task_types", array(
-		'access_adminpage' => array(
-			'name' => '관리자페이지접근',
-		),
-		'manage_site' => array(
-			'name' => '사이트관리',
-		),
-	));
+	global $_pb_authority_task_types;
+	if(!isset($_pb_authority_task_types)){
+		$_pb_authority_task_types = pb_hook_apply_filters("pb_authority_task_types", array(
+			'access_adminpage' => array(
+				'name' => '관리자페이지접근',
+			),
+			'manage_site' => array(
+				'name' => '사이트관리',
+			),
+		));
+	}
+	return $_pb_authority_task_types;
 }
 
 function pb_authority_list($conditions_ = array()){
@@ -154,7 +158,6 @@ function pb_authority_task_list($conditions_ = array()){
 				,auth.auth_name auth_name
 
 				,auth_task.slug slug
-				,auth_task.task_name task_name
 
 				,auth_task.auth_id auth_id
 				
@@ -229,7 +232,6 @@ function _pb_authority_task_parse_fields($data_){
 
 		'auth_id' => '%d',
 		'slug' => '%s',
-		'task_name' => '%s',
 		'reg_date' => '%s',
 		'mod_date' => '%s',
 
@@ -286,11 +288,12 @@ function pb_authority_task_delete($id_){
 
 
 function pb_authority_map($auth_id_){
+	$authority_task_types_ = pb_authority_task_types();
 	$temp_task_list_ = pb_authority_task_list(array("auth_id" => $auth_id_));
 	$task_list_ = array();
 	foreach($temp_task_list_ as $task_data_){
 		$task_list_[$task_data_['slug']] = array(
-			'name' => $task_data_['task_name'],
+			'name' => isset($authority_task_types_[$task_data_['slug']]) ? $authority_task_types_[$task_data_['slug']]['name'] : null,
 		);
 	}
 	return $task_list_;

@@ -27,7 +27,6 @@ function _pb_authority_install_table($args_){
 		
 		`auth_id` BIGINT(11) NOT NULL COMMENT '슬러그',
 		`slug` varchar(100) NOT NULL COMMENT '슬러그',
-		`task_name` varchar(50) NOT NULL COMMENT '작업명',
 		
 		`reg_date` datetime DEFAULT NULL COMMENT '등록일자',
 		`mod_date` datetime DEFAULT NULL COMMENT '수정일자',
@@ -56,7 +55,6 @@ function _pb_authority_insert_defaults(){
 		pb_authority_task_add(array(
 			'auth_id' => $auth_id_,
 			'slug' => $task_slug_,
-			'task_name' => $task_data_['name'],
 		));
 	}
 }
@@ -80,7 +78,6 @@ function _pb_authority_register_task(){
 	pb_authority_task_add(array(
 		'auth_id' => $auth_data_['id'],
 		'slug' => "manage_authority",
-		'task_name' => "권한관리",
 		'reg_date' => pb_current_time(),
 	));
 }

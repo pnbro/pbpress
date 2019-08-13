@@ -113,7 +113,7 @@ function pb_page_builder_render($builder_data_){
 }
 
 function pb_page_builder($content_ = null, $data_ = array()){
-	global $pb_page_builder_admin_initialized;
+	global $pb_config, $pb_page_builder_admin_initialized;
 
 	$builder_id_ = isset($data_['id']) ? $data_['id'] : "pb-page-builder-".pb_random_string(5);
 
@@ -159,7 +159,7 @@ window.pbpage_builder_element_map = <?=json_encode($element_map_)?>;
 	<div class="copyrights">© 2019 Paul&Bro Company All Rights Reserved. v<?=PB_PAGE_BUILDER_VERSION?></div>
 
 </div>
-<script type="text/xmldata" id="<?=$builder_id_?>-defaults"><?=htmlentities($content_)?></script>
+<script type="text/xmldata" id="<?=$builder_id_?>-defaults"><?=htmlentities($content_, null, $pb_config->charset)?></script>
 
 <script type="text/javascript">
 jQuery(document).ready(function(){
@@ -179,6 +179,5 @@ jQuery(document).ready(function(){
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-element.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-ajax.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-builtin.php');
-include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-devmenu.php');
 
 ?>

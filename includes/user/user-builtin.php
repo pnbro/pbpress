@@ -47,7 +47,6 @@ function _pb_user_installed_tables(){
 	pb_authority_task_add(array(
 		'auth_id' => $auth_data_['id'],
 		'slug' => "manage_user",
-		'task_name' => "사용자관리",
 		'reg_date' => pb_current_time(),
 	));
 

@@ -12,7 +12,7 @@ function pb_editor($name_, $content_ = null, $data_ = array()){
 	$base_editor_list_ = pb_editor_list();
 	$editor_list_ = array();
 
-	global $pb_editor_script_loaded;
+	global $pb_config,$pb_editor_script_loaded;
 
 	if(!$pb_editor_script_loaded){
 
@@ -50,7 +50,7 @@ function pb_editor($name_, $content_ = null, $data_ = array()){
 	$data_['id'] = $editor_id_;
 
 	?>
-	<input type="hidden" name="<?=$name_?>" value="<?=htmlentities($content_)?>" id="<?=$editor_id_?>-input">
+	<input type="hidden" name="<?=$name_?>" value="<?=htmlentities($content_, null, $pb_config->charset)?>" id="<?=$editor_id_?>-input">
 	<div id="<?=$editor_id_?>" class="pb-editor">
 		<ul class="nav nav-tabs tab-right" role="tablist">
 			<?php foreach($editor_list_ as $key_ => $editor_data_){ ?>

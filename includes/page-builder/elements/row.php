@@ -142,6 +142,7 @@ pb_page_builder_add_element("row", array(
 	'edit_categories' => array("common", "styles"),
 	'edit_element_class' => "pb_page_builder_row_element",
 	'loadable' => true,
+	'parent' => array("*", "!row"),
 	'children' => array("column"),
 	'category' => "기본",
 ));
@@ -155,6 +156,7 @@ pb_page_builder_add_element("column", array(
 	'loadable' => true,
 	'children' => array("*", "!container"),
 	'parent' => array("row"),
+	'only_in_parent' => true,
 	'category' => "기본",
 ));
 

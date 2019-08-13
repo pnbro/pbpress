@@ -34,6 +34,8 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/defaults/bootstrap.js',
           'lib/dev/concat-lib/src/defaults/jsencrypt.js',
           'lib/dev/concat-lib/src/defaults/summernote.js',
+          'lib/dev/concat-lib/src/defaults/sortable.js',
+          'lib/dev/concat-lib/src/defaults/sortable-jquery.js',
 
           'lib/dev/concat-lib/src/defaults/codemirror.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/mode/javascript.js',

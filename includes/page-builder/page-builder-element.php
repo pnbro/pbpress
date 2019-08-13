@@ -243,7 +243,7 @@ function pb_page_builder_element_make_styles($element_data_ = array()){
 	$data_['padding-right'] = isset($element_data_['padding_right']) ? $element_data_['padding_right'] : null;
 	
 	$data_['background-color'] = isset($element_data_['background_color']) ? $element_data_['background_color'] : null;
-	$data_['background-image'] = isset($element_data_['background_image']) ? "url(".pb_home_url("uploads/".$element_data_['background_image']).")" : null;
+	$data_['background-image'] = isset($element_data_['background_image']) && strlen($element_data_['background_image']) ? "url(".pb_home_url("uploads/".$element_data_['background_image']).")" : null;
 	$data_['background-size'] = isset($element_data_['background_size']) ? $element_data_['background_size'] : null;
 	$data_['background-position'] = isset($element_data_['background_position']) ? $element_data_['background_position'] : null;
 
@@ -251,25 +251,24 @@ function pb_page_builder_element_make_styles($element_data_ = array()){
 
 	ob_start();
 
-	?>
-	.<?=$class_name_?>{
-	<?php foreach($data_ as $key_ => $value_){
-		if(!$value_ || $value_ === "") continue;
-		?><?=$key_?>:<?=$value_?>;
-	<?php } ?>
-}
-	<?php
+	?> .<?=$class_name_?>{
+<?php foreach($data_ as $key_ => $value_){
+	if(!$value_ || $value_ === "") continue;
+	?>	<?=$key_?>:<?=$value_?>;
+<?php } ?>
+} <?php
 
 	return ob_get_clean();
 }
 
 function _pb_page_builder_element_recv_render_style($element_data_){
+	$element_map_ = pb_page_builder_elements();
 	$style_sheet_ = pb_page_builder_element_make_styles($element_data_['properties']);
 
 	if(isset($element_map_[$element_data_['name']]['loadable']) && $element_map_[$element_data_['name']]['loadable']){
 		$page_contents_ = $element_data_['elementcontent'];
-		foreach($page_contents_ as $element_data_){
-			$style_sheet_ .= _pb_page_builder_element_recv_render_style($element_data_);
+		foreach($page_contents_ as $child_data_){
+			$style_sheet_ .= _pb_page_builder_element_recv_render_style($child_data_);
 		}
 	}
 
@@ -284,7 +283,7 @@ function _pb_page_builder_element_render_styles($results_, $builder_data_){
 }
 pb_hook_add_filter('pb_page_builder_global_style', '_pb_page_builder_element_render_styles');
 
-include(PB_DOCUMENT_PATH . 'includes/page-builder/class.PBPageBuilderElement.php');
+include(PB_DOCUMENT_PATH . 'includes/page-builder/class.page-builder-element.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/elements/common.php');
 
 ?>

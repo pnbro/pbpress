@@ -76,7 +76,6 @@ function _pb_page_installed_tables(){
 	pb_authority_task_add(array(
 		'auth_id' => $auth_data_['id'],
 		'slug' => "manage_page",
-		'task_name' => "페이지관리",
 		'reg_date' => pb_current_time(),
 	));
 

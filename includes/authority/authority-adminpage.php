@@ -155,7 +155,6 @@ function _pb_ajax_admin_authority_task_update(){
 
 		pb_authority_task_add(array(
 			'auth_id' => $auth_id_,
-			'task_name' => $task_types_[$slug_]['name'],
 			'slug' => $slug_,
 			'REG_DATE' => pb_current_time(),
 		));

@@ -16,8 +16,7 @@
 			display: block;
 			padding: 40px 0px;
 			text-align: center;
-			display: none;
-
+			
 			> .loading-indicator{
 				display: inline-block;
 				width: 100px;
@@ -311,14 +310,7 @@
 			}					
 		}
 
-		.element-content-item-placeholder{
-			display: block;
-			height: 100px;
-			min-width: 50px;
-			border: 2px dashed fade(@brand-primary,50%);
-			background-color: fade(@gray-lighter, 50%);
-			// border-radius: 10px;
-		}
+		
 
 		> .add-element-btn{
 			position: absolute;
@@ -386,7 +378,9 @@
 				}
 			}
 
-
+			&.placeholder{
+				opacity: 0.3 !important;
+			}
 
 			> .wrap{
 				// display: table;
@@ -561,7 +555,7 @@
 				
 			}
 
-			&.hover > .wrap{
+			&.hover:not(.placeholder) > .wrap{
 				background-color: #e9f0f3;
 				border-color: #9cbcca;
 				box-shadow: 0px 2px 3px rgba(0,0,0,0.1);
@@ -607,7 +601,7 @@
 		}
 		
 	}
-
+	
 	.copyrights{
 		font-size: 10px;
 		color: @gray-light;

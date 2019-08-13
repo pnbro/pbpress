@@ -45,18 +45,6 @@
 							<div class="clearfix"></div>
 						</div>
 
-						<!-- <div class="form-group">
-							<label for="pb-manage-site-form-site_theme">사이트테마</label>
-							<select class="form-control" name="site_theme" required data-error="테마를 선택하세요.">
-								<option value="">-테마선택-</option>
-								<?php foreach(pb_theme_list() as $theme_key_ => $theme_data_){ ?>
-									<option value="<?=$theme_key_?>" <?=pb_selected(pb_current_theme(), $theme_key_)?>><?=$theme_data_['name']?></option>
-								<?php } ?>
-							</select>
-							<div class="help-block with-errors"></div>
-							<div class="clearfix"></div>
-						</div>
- -->
 						<div class="form-group">
 							<label for="pb-manage-site-form-site_theme">테이블 재설치</label>
 							<div class="row">

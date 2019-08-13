@@ -340,13 +340,13 @@ class PBDB{
 
 	function exists_column($table_name_, $column_name_){
 		global $pb_db_connection;
-		$check_ = $pb_db_connection->query("SELECT {$column_name_} FROM {$table_name_} LIMIT 0, 1");
+		$check_ = @$pb_db_connection->query("SELECT {$column_name_} FROM {$table_name_} LIMIT 0, 1");
 		return ($check_ !== false);
 	}
 
 	function exists_table($table_name_){
 		global $pb_db_connection;
-		$check_ = $pb_db_connection->query("SELECT 1 FROM {$table_name_} LIMIT 0, 1");
+		$check_ = @$pb_db_connection->query("SELECT 1 FROM {$table_name_} LIMIT 0, 1");
 		return ($check_ !== false);
 	}
 }
