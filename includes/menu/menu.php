@@ -544,6 +544,18 @@ function _pb_menu_check_active_hook_for_slug($result_, $parent_item_, $item_){
 }
 pb_hook_add_filter('pb_menu_tree_check_active', '_pb_menu_check_active_hook_for_slug');
 
+function pb_menu_render($data_ = array()){
+	$menu_id_ = isset($data_['id']) ? $data_['id'] : null;
+	$walker_ = isset($data_['walker']) ? $data_['walker'] : 'PBMenuWalkerDefault';
+	$walker_ = class_exists($walker_) ? $walker_ : "PBMenuWalkerDefault";
+
+	$menu_data_ = pb_menu($menu_id_);
+	$menu_tree_ = pb_menu_tree($menu_data_);
+
+	$walker_instance_ = new $walker_($menu_data_, $menu_tree_);
+	$walker_instance_->render();
+}
+
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-item.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-item-meta.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-builtin.php');
