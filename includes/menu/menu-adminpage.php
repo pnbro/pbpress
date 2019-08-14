@@ -60,7 +60,7 @@ function _pb_ajax_menu_editor_load_edit_form(){
 
 	$menu_categories_ = pb_menu_categories();
 	$menu_categories_ = isset($menu_categories_[$category_]) ? $menu_categories_[$category_] : $menu_categories_['common'];
-	$edit_categories_ = gettype($menu_categories_) === "string" ? array() : $menu_categories_['edit_categories'];
+	$edit_categories_ = gettype($menu_categories_) === "string" ? array("common") : $menu_categories_['edit_categories'];
 
 	$menu_category_edit_form_ = pb_menu_category_edit_forms();
 

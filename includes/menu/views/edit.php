@@ -138,7 +138,7 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 							foreach($menu_categories_ as $category_ => $data_){
 
 								$title_ = null;
-								$render_func_ = "_pb_menu_category_list_default_render";
+								$render_func_ = "_pb_menu_category_list_common_render";
 
 								if(gettype($data_) === "string") $title_ = $data_;
 								else{

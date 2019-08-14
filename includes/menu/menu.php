@@ -150,11 +150,19 @@ function pb_menu_categories(){
 
 	if(!isset($_pb_menu_categories)){
 		$_pb_menu_categories = pb_hook_apply_filters('pb_menu_categories', array(
-			'common' => '기본',
-			'page' => '페이지',
+			'common' => array(
+				'title' => '기본',
+				'render' => '_pb_menu_category_list_common_render',
+				'edit_categories' => array("common"),
+			),
+			'page' => array(
+				'title' => '페이지',
+				'render' => "_pb_menu_category_list_page_render",
+				'edit_categories' => array("page"),
+			),
 			'ext-link' => array(
 				'title' => '외부링크',
-				'render' => "_pb_menu_category_list_redner_for_ext_link",
+				'render' => "_pb_menu_category_list_ext_link_render",
 				'edit_categories' => array("ext-link"),
 			),
 		));
@@ -162,14 +170,14 @@ function pb_menu_categories(){
 	return $_pb_menu_categories;
 }
 
-function _pb_menu_category_list_default_render($category_, $menu_target_list_){
+function _pb_menu_category_list_common_render($category_, $menu_target_list_){
 	?>
 	<ul class="pb-menu-target-list" data-menu-target-list>
 	<?php
 	foreach($menu_target_list_ as $menu_target_data_){ ?>
 		<li>
 			<div class="checkbox">
-				<label><input type="checkbox" value="<?=$menu_target_data_['slug']?>" data-menu-target-item="<?=$menu_target_data_['slug']?>" data-menu-target-item-title="<?=$menu_target_data_['title']?>"> <?=$menu_target_data_['title']?></label>
+				<label><input type="checkbox" value="<?=$menu_target_data_['slug']?>" data-menu-target-item data-menu-target-item-title="<?=$menu_target_data_['title']?>"> <?=$menu_target_data_['title']?></label>
 			</div>
 		</a>
 
@@ -187,21 +195,20 @@ function _pb_menu_category_list_default_render($category_, $menu_target_list_){
 	jQuery(document).ready(function(){
 		window.pb_menu_editor.register_add_handler("<?=$category_?>", function(target_form_el_){
 
-			var menu_target_items_ = target_form_el_.find(":input[data-menu-target-item]")
+			var menu_target_items_ = target_form_el_.find(":input[data-menu-target-item]:checked")
 			var add_list_ = [];
 			menu_target_items_.each(function(){
 				var target_el_ = $(this);
-				if(target_el_.prop("checked")){
-					add_list_.push({
-						item_data : {
-							id : null,
-							category : "<?=$category_?>",
-							slug : target_el_.attr("data-menu-target-item"),
-							title : target_el_.attr("data-menu-target-item-title"),
-						},
-						item_meta_data : {}
-					});
-				}
+				add_list_.push({
+					item_data : {
+						id : null,
+						category : "<?=$category_?>",
+						title : target_el_.attr("data-menu-target-item-title"),
+					},
+					item_meta_data : {
+						slug : target_el_.attr("data-menu-target-item"),
+					}
+				});
 			});
 			
 
@@ -220,11 +227,68 @@ function _pb_menu_category_list_default_render($category_, $menu_target_list_){
 	});
 	</script>
 	<?php
-
-
-	
 }
-function _pb_menu_category_list_redner_for_ext_link($category_, $menu_target_list_){
+
+function _pb_menu_category_list_page_render($category_, $menu_target_list_){
+	?>
+	<ul class="pb-menu-target-list" data-menu-target-list>
+	<?php
+	foreach($menu_target_list_ as $menu_target_data_){ ?>
+		<li>
+			<div class="checkbox">
+				<label><input type="checkbox" value="<?=$menu_target_data_['page_id']?>" data-menu-target-item data-menu-target-item-title="<?=$menu_target_data_['title']?>"> <?=$menu_target_data_['title']?></label>
+			</div>
+		</a>
+
+		</li>
+	<?php }
+
+		if(count($menu_target_list_) <= 0){ ?>
+			<li class="help-block text-center no-row">추가할 메뉴항목이 없습니다.</li>
+		<?php  }
+
+	?>
+
+	</ul>
+	<script type="text/javascript">
+	jQuery(document).ready(function(){
+		window.pb_menu_editor.register_add_handler("<?=$category_?>", function(target_form_el_){
+
+			var menu_target_items_ = target_form_el_.find(":input[data-menu-target-item]:checked")
+			var add_list_ = [];
+			menu_target_items_.each(function(){
+				var target_el_ = $(this);
+				add_list_.push({
+					item_data : {
+						id : null,
+						category : "<?=$category_?>",
+						title : target_el_.attr("data-menu-target-item-title"),
+					},
+					item_meta_data : {
+						page_id : target_el_.val(),
+					}
+				});
+			});
+			
+
+			if(add_list_.length <= 0){
+				PB.alert({
+					title : "선택확인",
+					content : "메뉴에 추가할 항목을 선택하세요",
+				});
+				return false;
+			}
+
+			menu_target_items_.prop("checked", false);
+
+			return add_list_;
+		});
+	});
+	</script>
+	<?php
+}
+
+function _pb_menu_category_list_ext_link_render($category_, $menu_target_list_){
 	?>
 
 		<div class="form-group">
@@ -261,7 +325,6 @@ jQuery(document).ready(function(){
 			item_data : {
 				id : null,
 				category : "<?=$category_?>",
-				slug : null,
 				title : ext_data_['title'],
 			},
 			item_meta_data : {
@@ -315,7 +378,7 @@ function pb_menu_target_list(){
 			} 
 
 			$_pb_menu_target_list['page'][] = array(
-				'slug' => $page_data_['slug'],
+				'page_id' => $page_data_['id'],
 				'title' => $page_data_['page_title'],
 			);
 		}
@@ -341,6 +404,26 @@ function pb_menu_category_edit_form_add($key_, $func_){
 	global $_pb_menu_category_edit_forms;
 	$_pb_menu_category_edit_forms = $pb_menu_category_edit_forms_;
 }
+
+function _pb_menu_category_edit_form_add_common($data_, $meta_data_){
+	$slug_ = isset($meta_data_['slug']) ? $meta_data_['slug'] : null;
+	?>
+
+	<input type="hidden" name="slug" value="<?=$slug_?>">
+	
+	<?php
+}
+pb_menu_category_edit_form_add("common", '_pb_menu_category_edit_form_add_common');
+
+function _pb_menu_category_edit_form_add_page($data_, $meta_data_){
+	$page_id_ = isset($meta_data_['page_id']) ? $meta_data_['page_id'] : null;
+	?>
+
+	<input type="hidden" name="page_id" value="<?=$page_id_?>">
+	
+	<?php
+}
+pb_menu_category_edit_form_add("page", '_pb_menu_category_edit_form_add_page');
 
 function _pb_menu_category_edit_form_add_ext_link($data_, $meta_data_){
 	?>
@@ -376,7 +459,16 @@ function _pb_menu_tree_recv_children($parent_id_, $menu_list_, $cache_ = true){
 			'item_data' => $menu_item_data_,
 			'item_meta_data' => pb_menu_item_meta_map($menu_item_data_['id'], $cache_),
 			'children' => _pb_menu_tree_recv_children($menu_item_data_['id'], $menu_list_, $cache_),
+			'active' => pb_hook_apply_filters('pb_menu_tree_check_active', array(false, null, $item_)),
+			'child_active' => false,
 		);
+
+		foreach($row_data_['children'] as $child_data_){
+			if($child_data_['active']){
+				$row_data_['child_active'] = true;
+				break;
+			}
+		}
 
 		$results_[] = $row_data_;
 	}
@@ -405,7 +497,16 @@ function pb_menu_tree($menu_data_, $cache_ = true){
 			'item_data' => $menu_item_data_,
 			'item_meta_data' => pb_menu_item_meta_map($menu_item_data_['id'], $cache_),
 			'children' => _pb_menu_tree_recv_children($menu_item_data_['id'], $temp_menu_list_, $cache_),
+			'active' => pb_hook_apply_filters('pb_menu_tree_check_active', array(false, null, $item_)),
+			'child_active' => false,
 		);
+
+		foreach($row_data_['children'] as $child_data_){
+			if($child_data_['active']){
+				$row_data_['child_active'] = true;
+				break;
+			}
+		}
 
 		$results_[] = $row_data_;
 	}
@@ -423,9 +524,28 @@ function pb_menu_tree_by_slug($slug_, $cache_ = true){
 	return pb_menu_tree($menu_data_);
 }
 
+function _pb_menu_check_active_hook_for_slug($result_, $parent_item_, $item_){
+	$current_slug_ = pb_current_slug();
+
+	$item_meta_data_ = $item_['item_meta_data'];
+
+	if(isset($item_meta_data_['slug'])){ //common
+		return ($item_meta_data_['slug'] === $current_slug_);
+	}
+
+	if(isset($item_meta_data_['page_id'])){ //common
+		global $pbpage;
+		return (isset($pbpage) && $pbpage['slug'] === $current_slug_);
+	}
+
+	return $result_;
+}
+pb_hook_add_filter('pb_menu_tree_check_active', '_pb_menu_check_active_hook_for_slug');
+
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-item.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-item-meta.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-builtin.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-adminpage.php');
+include(PB_DOCUMENT_PATH . 'includes/menu/class.menu-walker.php');
 
 ?>
