@@ -3,8 +3,6 @@
 require(dirname( __FILE__ ) . '/defined.php');
 require(PB_DOCUMENT_PATH . 'includes/initialize.php');
 
-$current_theme_ = pb_current_theme();
-
 pb_hook_do_action("pb_started");
 
 $current_slug_ = pb_current_slug();
@@ -28,7 +26,12 @@ if(strlen($current_slug_)){
 	}
 }
 
-include(pb_current_theme_path()."index.php");
+$index_path_ = pb_hook_apply_filters('pb_home_path', pb_current_theme_path()."index.php");
+
+if(file_exists($index_path_)){
+	include($index_path_);	
+}
+
 pb_end();
 
 ?>

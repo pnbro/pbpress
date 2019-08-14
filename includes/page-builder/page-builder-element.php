@@ -201,7 +201,7 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 				<div class="col-xs-12 col-sm-12">
 					<div class="form-group">
 						<label>배경이미지 크기</label>
-						<input type="text" name="background_size" placeholder="ID 입력" class="form-control" value="<?=$background_size_?>">
+						<input type="text" name="background_size" placeholder="크기 입력" class="form-control" value="<?=$background_size_?>">
 
 						<div class="help-block with-errors"></div>
 						<div class=""></div>
@@ -210,7 +210,7 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 				<div class="col-xs-12 col-sm-12">
 					<div class="form-group">
 						<label>배경이미지 위치</label>
-						<input type="text" name="background_position" placeholder="ID 입력" class="form-control" value="<?=$background_position_?>">
+						<input type="text" name="background_position" placeholder="위치 입력" class="form-control" value="<?=$background_position_?>">
 
 						<div class="help-block with-errors"></div>
 						<div class=""></div>

@@ -528,6 +528,7 @@ function pb_menu_tree_by_slug($slug_, $cache_ = true){
 
 function _pb_menu_check_active_hook_for_slug($result_, $parent_item_, $item_){
 	$current_slug_ = pb_current_slug();
+	$current_slug_ = urldecode($current_slug_);
 
 	$item_meta_data_ = $item_['item_meta_data'];
 
@@ -535,7 +536,7 @@ function _pb_menu_check_active_hook_for_slug($result_, $parent_item_, $item_){
 		return ($item_meta_data_['slug'] === $current_slug_);
 	}
 
-	if(isset($item_meta_data_['page_id'])){ //common
+	if(isset($item_meta_data_['page_id'])){ //page
 		global $pbpage;
 		return (isset($pbpage) && $pbpage['slug'] === $current_slug_);
 	}

@@ -189,4 +189,93 @@ function _pb_page_ajax_delete(){
 }
 pb_add_ajax('delete-page', "_pb_page_ajax_delete");
 
+function _pb_page_ajax_update_status(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
+		echo json_encode(array(
+			"success" => false,
+			"error_title" => "권한없음",
+			"error_message" => "접근권한이 없습니다.",
+		));
+		pb_end();
+	}
+
+	$page_id_ = isset($_POST['page_id']) ? $_POST['page_id'] : null;
+	$status_ = isset($_POST['status']) ? $_POST['status'] : null;
+	$page_data_ = pb_page($page_id_);
+
+	if(!strlen($page_id_) || !isset($page_data_)){
+		echo json_encode(array(
+			'success' => false,
+			'error_title' => "잘못된 요청",
+			'error_message' => "필수 요청값이 누락되었습니다.",
+		));
+		pb_end();
+	}
+
+	pb_page_update($page_id_, array(
+		'status' => $status_,
+		'mod_date' => pb_current_time(),
+	));
+
+	echo json_encode(array(
+		'success' => true,
+	));
+	pb_end();
+
+}
+pb_add_ajax('change-page-status', "_pb_page_ajax_update_status");
+
+function _pb_page_ajax_register_front_page(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
+		echo json_encode(array(
+			"success" => false,
+			"error_title" => "권한없음",
+			"error_message" => "접근권한이 없습니다.",
+		));
+		pb_end();
+	}
+
+	$page_id_ = isset($_POST['page_id']) ? $_POST['page_id'] : null;
+	$status_ = isset($_POST['status']) ? $_POST['status'] : null;
+	$page_data_ = pb_page($page_id_);
+
+	if(!strlen($page_id_) || !isset($page_data_)){
+		echo json_encode(array(
+			'success' => false,
+			'error_title' => "잘못된 요청",
+			'error_message' => "필수 요청값이 누락되었습니다.",
+		));
+		pb_end();
+	}
+
+	pb_change_front_page($page_id_);
+
+	echo json_encode(array(
+		'success' => true,
+	));
+	pb_end();
+
+}
+pb_add_ajax('register-front-page', "_pb_page_ajax_register_front_page");
+
+function _pb_page_ajax_unregister_front_page(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
+		echo json_encode(array(
+			"success" => false,
+			"error_title" => "권한없음",
+			"error_message" => "접근권한이 없습니다.",
+		));
+		pb_end();
+	}
+
+	pb_change_front_page(null);
+
+	echo json_encode(array(
+		'success' => true,
+	));
+	pb_end();
+
+}
+pb_add_ajax('unregister-front-page', "_pb_page_ajax_unregister_front_page");
+
 ?>

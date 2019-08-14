@@ -89,29 +89,42 @@ function pb_option_value($option_name_, $default_ = null, $cache_ = true){
 function pb_option_update($option_name_, $option_value_){
 	global $pbdb;
 
-	if($option_value_ === null) return;
-
 	$before_value_ = pb_option_value($option_name_);
-	$option_value_ = serialize($option_value_);
 
-	if($before_value_ !== null){
+	if($option_value_ === null){
 		$update_data_ = array(
-			'option_value' => $option_value_,
+			'option_value' => null,
 			'mod_date' => pb_current_time(),
 		);
 
 		$pbdb->update("options", $update_data_, array(
 			'option_name' => $option_name_,
 		));
-	}else{
-		$insert_data_ = array(
-			'option_name' => $option_name_,
-			'option_value' => $option_value_,
-			'reg_date' => pb_current_time(),
-		);
 
-		$pbdb->insert("options", $insert_data_);
+	}else{
+		$option_value_ = serialize($option_value_);
+
+		if($before_value_ !== null){
+			$update_data_ = array(
+				'option_value' => $option_value_,
+				'mod_date' => pb_current_time(),
+			);
+
+			$pbdb->update("options", $update_data_, array(
+				'option_name' => $option_name_,
+			));
+		}else{
+			$insert_data_ = array(
+				'option_name' => $option_name_,
+				'option_value' => $option_value_,
+				'reg_date' => pb_current_time(),
+			);
+
+			$pbdb->insert("options", $insert_data_);
+		}	
 	}
+
+	
 
 	global $_pb_option_map;
 

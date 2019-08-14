@@ -110,7 +110,6 @@ function _pb_page_parse_fields($data_){
 	)), $data_);
 }
 
-
 function pb_page_insert($raw_data_){
 	global $pbdb;
 
@@ -231,6 +230,40 @@ function pb_page_html($id_ = null){
 	if(!isset($page_data_)) return null;
 	return pb_hook_apply_filters('pb_page_html', $page_data_['page_html'], $page_data_);
 }
+
+function pb_page_url($id_ = null){
+	if(!strlen($id_)){
+		$current_page_data_ = pb_current_page();
+		if(!isset($current_page_data_)) return null;
+
+		$page_url_ = pb_home_url($current_page_data_['slug']);
+		return pb_hook_apply_filters('pb_page_url', $page_url_, $current_page_data_);
+	}
+
+	$page_data_ = pb_page($id_);
+	if(!isset($page_data_)) return null;
+	$page_url_ = pb_home_url($page_data_['slug']);
+	return pb_hook_apply_filters('pb_page_url', $page_url_, $page_data_);
+}
+
+function pb_front_page_id(){
+	return pb_option_value("pb_front_page_id");
+}
+function pb_change_front_page($page_id_){
+	pb_option_update("pb_front_page_id", $page_id_);
+}
+function pb_front_page(){
+	$front_page_id_ = pb_front_page_id();
+	if(!strlen($front_page_id_)) return null;
+	return pb_page($front_page_id_);
+}
+function _pb_page_url_hook_for_front_page($result_, $page_data_){
+	if($page_data_['id'] === pb_front_page_id()){
+		return pb_home_url();
+	}
+	return $result_;
+}
+pb_hook_add_filter('pb_page_url', '_pb_page_url_hook_for_front_page');
 
 include(PB_DOCUMENT_PATH . 'includes/page/page-builtin.php');
 include(PB_DOCUMENT_PATH . 'includes/page/page-builtin-rewrite.php');

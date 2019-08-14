@@ -54,7 +54,7 @@ pb_page_builder_add_element("image", array(
 	'desc' => "",
 	'icon' => PB_LIBRARY_URL."img/page-builder/image.jpg",
 	'element_object' => "PBPageBuilderElement_image",
-	'edit_categories' => array("common"),
+	'edit_categories' => array("common", "styles"),
 	'loadable' => false,
 	'category' => "기본",
 ));

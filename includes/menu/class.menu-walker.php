@@ -37,13 +37,13 @@ abstract class PBMenuWalker{
 
 		}
 	public function render(){
-		$this->menu_start(0);
+		$this->menu_start(1);
 
 		foreach($this->_menu_tree as $tree_data_){
 			$this->_redner_recv(null, $tree_data_, 1);
 		}
 
-		$this->menu_end(0);
+		$this->menu_end(1);
 	}
 
 	abstract function menu_start($level_);

@@ -72,6 +72,9 @@ class PB_page_list_table extends PBListTable{
 	function column_value($item_, $column_name_){
 
 		$row_index_ = $this->display_row_number();
+		$is_front_page_ = pb_front_page_id() === (string)$item_['id'];
+
+		$page_url_ = pb_page_url($item_['id']);
 
 		switch($column_name_){
 		
@@ -82,25 +85,50 @@ class PB_page_list_table extends PBListTable{
 			ob_start();
 
 			?>
-			<div class="page-title-frame"><a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>" ><?=$item_['page_title']?></a></div>
-			<div class="url-link"><a href="<?=pb_home_url($item_['slug'])?>" target="_blank"><?=pb_home_url($item_['slug'])?></a></div>
+			<div class="page-title-frame"><a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>" ><?=$item_['page_title']?></a>
+				<?php if($is_front_page_){ ?>
+					<small class="fontpage-text"> - 홈화면</small>
+				<?php } ?>
+			</div>
+			<div class="url-link"><a href="<?=$page_url_?>" target="_blank"><?=$page_url_?></a></div>
 			<div class="subaction-frame">
 				<a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>">수정</a>
-				<a href="javascript:pb_manage_page_remove('<?=$item_['id']?>');" class="text-danger">삭제</a>
-				<!-- <a href="<?=pb_home_url($item_['slug'])?>" target="_blank">페이지보기</a> -->
+				<?php if(!$is_front_page_){ ?>
+					<a href="javascript:pb_manage_page_register_front_page('<?=$item_['id']?>');" class="">홈화면 지정</a>
+				<?php }else{ ?>
+					<a href="javascript:pb_manage_page_unregister_front_page();" class="">홈화면 지정해제</a>
+				<?php } ?>
 				<?php pb_hook_do_action("pb_manage_page_listtable_subaction", $item_) ?>
+				<a href="javascript:pb_manage_page_remove('<?=$item_['id']?>');" class="text-danger">삭제</a>
+			
+				
 			</div>
 
 			<div class="xs-visiable-info">
 				<div class="subinfo"><i class="icon material-icons">access_time</i> <span class="text"><?=$item_['reg_date_ymdhi']?></span></div>
-				<div class="subinfo"><span class="text"><?=$item_['status_name']?></span></div>
+				<div class="subinfo">
+					<select class="form-control input-sm display-inline" name="status" data-page-status="<?=$item_['id']?>">
+						<?= pb_gcode_make_options(array("code_id" => "PAG01"), $item_['status']); ?>
+					</select>
+				</div>
 			</div>
 
 			<?php
 
 			return ob_get_clean();
-			case "page_title" :
 			case "status_name" :
+
+				ob_start();
+				?>
+
+				<select class="form-control input-sm" name="status" data-page-status="<?=$item_['id']?>">
+					<?= pb_gcode_make_options(array("code_id" => "PAG01"), $item_['status']); ?>
+				</select>
+
+				<?php
+
+				return ob_get_clean();
+			case "page_title" :
 			case "reg_date_ymdhi" :
 				 return $item_[$column_name_];
 

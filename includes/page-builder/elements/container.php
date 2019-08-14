@@ -45,7 +45,7 @@ pb_page_builder_add_element("container", array(
 	'desc' => "기본적인 요소 적재공간",
 	'icon' => PB_LIBRARY_URL."img/page-builder/container.jpg",
 	'element_object' => "PBPageBuilderElement_container",
-	'edit_categories' => array("common"),
+	'edit_categories' => array("common", "styles"),
 	'loadable' => true,
 	'children' => array("*", "!container"),
 	'parent' => array("*", "!column"),

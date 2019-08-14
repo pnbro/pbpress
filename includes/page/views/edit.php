@@ -14,6 +14,8 @@
 		$pbpage_meta_map = array();
 	}
 
+
+
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-page/edit.css">
 <h3><?=($is_new_ ? "페이지추가" : "페이지수정")?></h3>
@@ -26,9 +28,11 @@
 		<div class="col-content">
 			<div class="form-group">
 				<input type="text" name="page_title" placeholder="<?=pb_hook_apply_filters('pb_page_edit_form_placeholder', "페이지제목 입력")?>" value="<?=$pbpage['page_title']?>" class="form-control input-lg" required data-error="페이지제목을 입력하세요">
-				<?php if(!$is_new_){ ?>
+				<?php if(!$is_new_){
+					$page_url_ = pb_page_url($pbpage['id']);
+				?>
 					<p class="page-url-info">
-						<a href="<?=pb_home_url($pbpage['slug'])?>" target="_blank"><?=pb_home_url($pbpage['slug'])?></a>
+						<a href="<?=$page_url_?>" target="_blank"><?=$page_url_?></a>
 					</p>
 					
 				<?php }?>
