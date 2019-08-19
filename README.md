@@ -90,4 +90,4 @@ you can make a theme that you want, and just put your theme you made into 'theme
 	2. Developing plugin features?
 	3. Adding Page Builders -> alpha version added.
 	4. Developing multi languages features -> alpha version added.
-	5. menu editor
+	5. menu editor -> alpha version added.
