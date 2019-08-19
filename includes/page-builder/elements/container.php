@@ -10,7 +10,7 @@ class PBPageBuilderElement_container extends PBPageBuilderElement{
 		$this->add_edit_form("common", array($this, "render_admin_form"));
 	}
 
-	public function render($data_ = array()){
+	public function render($data_ = array(), $element_content_ = null){
 		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
@@ -18,7 +18,7 @@ class PBPageBuilderElement_container extends PBPageBuilderElement{
 		$unique_class_name_ = isset($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : null;
 
 		?>
-		<div class="pb-container <?=$container_type_?> <?=$class_?> <?=$unique_class_name_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
+		<div class="pb-container <?=$container_type_?> <?=$class_?> <?=$unique_class_name_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($element_content_)?></div>
 		<?php
 		
 	}
@@ -49,6 +49,17 @@ pb_page_builder_add_element("container", array(
 	'loadable' => true,
 	'children' => array("*", "!container"),
 	'parent' => array("*", "!column"),
+	'preview_fields' => array(
+		array(
+			'name' => 'container_type',
+			'type' => 'select',
+			'values' => array(
+				'box' => '박스스타일',
+				'full' => '꽉채움',
+			),
+			'display' => 'inline',
+		)
+	),
 	'category' => "기본",
 ));
 

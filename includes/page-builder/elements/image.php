@@ -10,7 +10,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 		$this->add_edit_form("common", array($this, "render_admin_form"));
 	}
 
-	public function render($data_ = array()){
+	public function render($data_ = array(), $element_content_ = null){
 		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
@@ -35,7 +35,6 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 		<div class="form-group">
 			<label>이미지선택</label>
 			<input type="text" name="src" value="<?=$src_?>" class="hidden" id="<?=$temp_form_id_?>" data-upload-path="/">
-
 			<div class="clearfix"></div>
 		</div>
 		<script type="text/javascript">
@@ -56,6 +55,13 @@ pb_page_builder_add_element("image", array(
 	'element_object' => "PBPageBuilderElement_image",
 	'edit_categories' => array("common", "styles"),
 	'loadable' => false,
+	'preview_fields' => array(
+		array(
+			'name' => 'src',
+			'type' => 'image',
+			'display' => 'block',
+		)
+	),
 	'category' => "기본",
 ));
 

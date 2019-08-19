@@ -10,7 +10,7 @@ class PBPageBuilderElement_row extends PBPageBuilderElement{
 		$this->add_edit_form("common", array($this, "render_admin_form"));
 	}
 
-	public function render($data_ = array()){
+	public function render($data_ = array(), $element_content_ = null){
 		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
@@ -18,7 +18,7 @@ class PBPageBuilderElement_row extends PBPageBuilderElement{
 		$valign_ = isset($element_data_['valign']) ? $element_data_['valign'] : "top";
 
 		?>
-		<div class="pb-row valign-<?=$valign_?> <?=$class_?> <?=$unique_class_name_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div>
+		<div class="pb-row valign-<?=$valign_?> <?=$class_?> <?=$unique_class_name_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($element_content_)?></div>
 		<?php
 	}
 
@@ -66,7 +66,7 @@ class PBPageBuilderElement_column extends PBPageBuilderElement{
 		$this->add_edit_form("common", array($this, "render_admin_form"));
 	}
 
-	public function render($data_ = array()){
+	public function render($data_ = array(), $element_content_ = null){
 		$element_data_ = $data_['properties'];
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
@@ -76,7 +76,7 @@ class PBPageBuilderElement_column extends PBPageBuilderElement{
 		$column_width_sm_ = isset($element_data_['column_width_sm']) ? $element_data_['column_width_sm'] : $column_width_md_;
 		$column_width_xs_ = isset($element_data_['column_width_xs']) ? $element_data_['column_width_xs'] : "12";
 		
-		?><div class="pb-col-lg-<?=$column_width_?> <?=$unique_class_name_?> pb-col-md-<?=$column_width_md_?> pb-col-sm-<?=$column_width_sm_?> pb-col-sm-<?=$column_width_sm_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($data_['elementcontent'])?></div><?php
+		?><div class="pb-col-lg-<?=$column_width_?> <?=$unique_class_name_?> pb-col-md-<?=$column_width_md_?> pb-col-sm-<?=$column_width_sm_?> pb-col-sm-<?=$column_width_sm_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($element_content_)?></div><?php
 	}
 
 	function render_admin_form($element_data_ = array(), $content_ = null){
@@ -144,6 +144,23 @@ pb_page_builder_add_element("row", array(
 	'loadable' => true,
 	'parent' => array("*", "!row"),
 	'children' => array("column"),
+	'preview_fields' => array(
+		array(
+			'name' => 'columns',
+			'type' => 'text',
+			'display' => 'inline',
+		),
+		array(
+			'name' => 'valign',
+			'type' => 'select',
+			'values' => array(
+				'top' => '수직정렬 : 위쪽',
+				'middle' => '수직정렬 : 중앙',
+				'bottom' => '수직정렬 : 아래쪽',
+			),
+			'display' => 'inline',
+		)
+	),
 	'category' => "기본",
 ));
 

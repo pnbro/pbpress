@@ -104,7 +104,7 @@ function pb_page_builder_render($builder_data_){
 
 <?php foreach($page_contents_ as $element_data_){
 	$element_class_ = $pb_page_builder_element_classes[$element_data_['name']];
-	call_user_func_array(array($element_class_, "render"), array($element_data_));
+	call_user_func_array(array($element_class_, "render"), array($element_data_, $element_data_['elementcontent']));
 } ?>
 
 <script type="text/javascript"><?=pb_hook_apply_filters('pb_page_builder_global_script',$settings_['script'], $builder_data_)?></script>
