@@ -63,7 +63,7 @@ pb_hook_add_filter("pb_rewrite_unique_slug", "_pb_rewrite_unique_slug_for_page")
 
 if(function_exists("pb_page_builder")){
 	function _pb_page_render_page_html_for_page_builder($page_html_, $page_data_){
-		$temp_ = @pb_page_builder_parse_xml($page_html_);
+		$temp_ = pb_page_builder_parse_xml($page_html_);
 
 		if(!$temp_ || pb_is_error($temp_)){
 			return $page_html_;

@@ -441,7 +441,8 @@
 									color: #b7b7b7;
 								}
 							}
-							&.edit-btn > .icon{
+							&.edit-btn > .icon,
+							&.duplicate-btn > .icon{
 								color: fade(@gray-darker,60%);
 							}
 							&.delete-btn{
@@ -452,7 +453,8 @@
 
 							@media screen and (max-width: @screen-xs-max){
 
-								&.edit-btn > .icon{
+								&.edit-btn > .icon,
+								&.duplicate-btn > .icon{
 									color: @gray-darker;
 								}
 								&.delete-btn{
@@ -519,7 +521,7 @@
 						min-height: 50px;
 
 						&.empty{
-							padding-top: 5px;
+							// padding-top: 5px;
 							> .add-element-btn.prepend{
 								display: none;
 							}					
@@ -574,7 +576,8 @@
 
 					> .action-frame{
 						> .action-btn{
-							&.edit-btn > .icon{
+							&.edit-btn > .icon,
+							&.duplicate-btn > .icon{
 								color: @gray-darker;
 							}
 							&.delete-btn{
