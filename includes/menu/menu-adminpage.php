@@ -282,6 +282,8 @@ function _pb_ajax_menu_editor_load_menu(){
 	$menu_data_ = pb_menu($menu_id_);
 	$menu_tree_ = pb_menu_tree($menu_data_);
 
+	pb_option_update("manage_menu_last_id", $menu_id_);
+
 	echo json_encode(array(
 		'success' => true,
 		'menu_data' => $menu_data_,

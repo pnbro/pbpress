@@ -206,7 +206,7 @@ function _pb_menu_category_list_common_render($category_, $menu_target_list_){
 						title : target_el_.attr("data-menu-target-item-title"),
 					},
 					item_meta_data : {
-						slug : target_el_.attr("data-menu-target-item"),
+						slug : target_el_.val(),
 					}
 				});
 			});
@@ -449,8 +449,10 @@ function _pb_menu_category_edit_form_add_ext_link($data_, $meta_data_){
 }
 pb_menu_category_edit_form_add("ext-link", '_pb_menu_category_edit_form_add_ext_link');
 
-function _pb_menu_tree_recv_children($parent_id_, $menu_list_, $cache_ = true){
+function _pb_menu_tree_recv_children($parent_id_, $menu_list_, $level_ = 1, $cache_ = true){
 	$results_ = array();
+
+	global $_pb_menu_actived_items;
 
 	foreach($menu_list_ as $menu_item_data_){
 		if($menu_item_data_['parent_id'] !== $parent_id_) continue;
@@ -458,8 +460,9 @@ function _pb_menu_tree_recv_children($parent_id_, $menu_list_, $cache_ = true){
 		$row_data_ = array(
 			'item_data' => $menu_item_data_,
 			'item_meta_data' => pb_menu_item_meta_map($menu_item_data_['id'], $cache_),
-			'children' => _pb_menu_tree_recv_children($menu_item_data_['id'], $menu_list_, $cache_),
+			'children' => _pb_menu_tree_recv_children($menu_item_data_['id'], $menu_list_, $level_ + 1, $cache_),
 			'child_active' => false,
+			'level' => $level_,
 		);
 
 		foreach($row_data_['children'] as $child_data_){
@@ -471,18 +474,27 @@ function _pb_menu_tree_recv_children($parent_id_, $menu_list_, $cache_ = true){
 
 		$row_data_['active'] = pb_hook_apply_filters('pb_menu_tree_check_active', false, null, $row_data_);
 
+		if($row_data_['active']){
+			$_pb_menu_actived_items[$menu_item_data_['menu_id']][] = $row_data_;
+		}
+	
 		$results_[] = $row_data_;
 	}
 
 	return $results_;
 }
-
 function pb_menu_tree($menu_data_, $cache_ = true){
-	global $_pb_menu_tree;
+	global $_pb_menu_tree, $_pb_menu_actived_items;
 
 	if($cache_ && isset($_pb_menu_tree[$menu_data_['id']])){
 		return $_pb_menu_tree[$menu_data_['id']];
 	}
+
+	if(!isset($_pb_menu_actived_items)){
+		$_pb_menu_actived_items = array();
+	}
+
+	$_pb_menu_actived_items[$menu_data_['id']] = array();
 
 	$results_ = array();
 
@@ -497,8 +509,9 @@ function pb_menu_tree($menu_data_, $cache_ = true){
 		$row_data_ = array(
 			'item_data' => $menu_item_data_,
 			'item_meta_data' => pb_menu_item_meta_map($menu_item_data_['id'], $cache_),
-			'children' => _pb_menu_tree_recv_children($menu_item_data_['id'], $temp_menu_list_, $cache_),
+			'children' => _pb_menu_tree_recv_children($menu_item_data_['id'], $temp_menu_list_, 2, $cache_),
 			'child_active' => false,
+			'level' => 1,
 		);
 
 		foreach($row_data_['children'] as $child_data_){
@@ -509,6 +522,10 @@ function pb_menu_tree($menu_data_, $cache_ = true){
 		}
 
 		$row_data_['active'] = pb_hook_apply_filters('pb_menu_tree_check_active', false, null, $row_data_);
+
+		if($row_data_['active']){
+			$_pb_menu_actived_items[$menu_item_data_['menu_id']][] = $row_data_;
+		}
 
 		$results_[] = $row_data_;
 	}
@@ -526,6 +543,21 @@ function pb_menu_tree_by_slug($slug_, $cache_ = true){
 	return pb_menu_tree($menu_data_);
 }
 
+function _pb_menu_tree_active_items($menu_data_){
+	$menu_tree_ = pb_menu_tree($menu_data_);
+
+	global $_pb_menu_actived_items;
+	return $_pb_menu_actived_items[$menu_data_['id']];
+}
+function pb_menu_tree_active_items($menu_id_){
+	$menu_data_ = pb_menu($menu_id_);
+	return _pb_menu_tree_active_items($menu_data_);
+}
+function pb_menu_tree_active_items_by_slug($slug_){
+	$menu_data_ = pb_menu_by_slug($slug_);
+	return _pb_menu_tree_active_items($menu_data_);
+}
+
 function _pb_menu_check_active_hook_for_slug($result_, $parent_item_, $item_){
 	$current_slug_ = pb_current_slug();
 	$current_slug_ = urldecode($current_slug_);
@@ -538,24 +570,89 @@ function _pb_menu_check_active_hook_for_slug($result_, $parent_item_, $item_){
 
 	if(isset($item_meta_data_['page_id'])){ //page
 		global $pbpage;
-		return (isset($pbpage) && $pbpage['slug'] === $current_slug_);
+		return (isset($pbpage) && $pbpage['id'] === $item_meta_data_['page_id']);
 	}
 
 	return $result_;
 }
 pb_hook_add_filter('pb_menu_tree_check_active', '_pb_menu_check_active_hook_for_slug');
 
-function pb_menu_render($data_ = array()){
-	$menu_id_ = isset($data_['id']) ? $data_['id'] : null;
-	$walker_ = isset($data_['walker']) ? $data_['walker'] : 'PBMenuWalkerDefault';
+
+
+function pb_menu_render($options_ = array()){
+	$menu_id_ = isset($options_['menu_id']) ? $options_['menu_id'] : null;
+	$menu_slug_ = isset($options_['menu_slug']) ? $options_['menu_slug'] : null;
+	$walker_ = isset($options_['walker']) ? $options_['walker'] : 'PBMenuWalkerDefault';
 	$walker_ = class_exists($walker_) ? $walker_ : "PBMenuWalkerDefault";
 
-	$menu_data_ = pb_menu($menu_id_);
-	$menu_tree_ = pb_menu_tree($menu_data_);
+	$menu_data_ = null;
+	$menu_tree_ = null;
 
-	$walker_instance_ = new $walker_($menu_data_, $menu_tree_);
+	if(strlen($menu_id_)){
+		$menu_data_ = pb_menu($menu_id_);
+		$menu_tree_ = pb_menu_tree($menu_data_);
+	}else if(strlen($menu_slug_)){
+		$menu_data_ = pb_menu_by_slug($menu_slug_);
+		$menu_tree_ = pb_menu_tree($menu_data_);
+	}else{
+		$menu_tree_ = array();
+	}
+
+	$menu_tree_ = pb_hook_apply_filters("pb_menu_tree_for_render", $menu_tree_, $options_, $menu_data_);
+
+	$walker_instance_ = new $walker_($menu_data_, $menu_tree_, $options_);
 	$walker_instance_->render();
 }
+
+function _pb_menu_tree_recv_cut_by_standard_id($menu_tree_, $std_id_){
+	foreach($menu_tree_ as $menu_data_){
+		if($menu_data_['item_data']['id'] === $std_id_){
+			return $menu_data_['children'];	
+		}
+
+		$check_data_ = _pb_menu_tree_recv_cut_by_standard_id($menu_data_['children'], $std_id_);
+		if(isset($check_data_)) return $check_data_;
+	}
+
+	return null;
+}
+
+function _pb_menu_tree_recv_cut_by_level_max($menu_data_, $level_max_){
+	if($menu_data_['level'] >= $level_max_){
+		$menu_data_['children'] = array();
+	}else{
+		foreach($menu_data_['children'] as &$child_data_){
+			$child_data_ = _pb_menu_tree_recv_cut_by_level_max($child_data_, $level_max_);
+		}
+	}
+
+
+	return $menu_data_;
+}
+function _pb_menu_tree_for_render_level_hook($menu_tree_, $options_){
+	$parent_id_ = isset($options_['parent_id']) ? $options_['parent_id'] : null;
+	$level_max_ = isset($options_['level_max']) ? $options_['level_max'] : null;
+
+	if(strlen($parent_id_)){
+		$menu_tree_ = _pb_menu_tree_recv_cut_by_standard_id($menu_tree_, $parent_id_);
+	}
+
+	if(strlen($level_max_)){
+		foreach($menu_tree_ as &$menu_data_){
+
+			if($menu_data_['level'] >= $level_max_){
+				$menu_data_['children'] = array();
+			}else{
+				$menu_data_ = _pb_menu_tree_recv_cut_by_level_max($menu_data_, $level_max_);	
+			}
+			
+		}
+	}
+
+	return $menu_tree_;
+}
+pb_hook_add_filter('pb_menu_tree_for_render', '_pb_menu_tree_for_render_level_hook');
+
 
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-item.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-item-meta.php');

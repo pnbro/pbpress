@@ -8,10 +8,13 @@ abstract class PBMenuWalker{
 
 	private $_menu_data;
 	private $_menu_tree = array();
+	private $_options = array();
 
-	function __construct($menu_data_, $menu_tree_){
+
+	function __construct($menu_data_, $menu_tree_, $options_){
 		$this->_menu_data = $menu_data_;
 		$this->_menu_tree = $menu_tree_;
+		$this->_options = $options_;
 	}
 
 	function menu_data(){
@@ -22,6 +25,7 @@ abstract class PBMenuWalker{
 	}
 
 	private function _redner_recv($parent_item_data_, $item_data_, $level_){
+		$menu_data_ = $this->menu_data();
 
 		$this->item_start($parent_item_data_,$item_data_, $level_);
 
@@ -35,7 +39,7 @@ abstract class PBMenuWalker{
 	
 		$this->item_end($parent_item_data_,$item_data_, $level_);
 
-		}
+	}
 	public function render(){
 		$this->menu_start(1);
 
@@ -83,7 +87,7 @@ class PBMenuWalkerDefault extends PBMenuWalker{
 		if($common_data_['category'] === "ext-link"){
 			$target_url_ = $item_meta_data_['ext_link_url'];
 			$open_new_window_ = isset($item_meta_data_['open_new_window']) ? $item_meta_data_['open_new_window'] === "Y" : false;
-		}else{
+		}else if($common_data_['category'] === "page"){
 			$page_data_ = pb_page($item_meta_data_['page_id']);
 
 			if(isset($page_data_)){
@@ -92,7 +96,14 @@ class PBMenuWalkerDefault extends PBMenuWalker{
 			}else{
 				$target_url_ = pb_home_url();
 			}
+		}else{
+			if(isset($item_meta_data_['slug'])){
+				$target_url_ = pb_home_url($item_meta_data_['slug']);
+			}else{
+				$target_url_ = pb_home_url();
+			}
 		}
+
 
 		?>
 		<li class=">">

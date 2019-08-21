@@ -10,6 +10,8 @@
 		$menu_categories_info_[$key_] = gettype($data_) === "string" ? $data_ : $data_['title'];
 	}
 
+	$last_menu_id_ = pb_option_value("manage_menu_last_id");
+
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-menu/edit.css">
 <script type="text/javascript">
@@ -47,9 +49,9 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<select class="form-control input-lg" name="menu_id" data-menu-selector>
-						<optgroup label="등록된 메뉴">
+						<optgroup label="등록된 메뉴" data-menu-list-option-group>
 							<?php foreach($menu_list_ as $menu_data_){ ?>
-									<option value="<?=$menu_data_['id']?>"><?=$menu_data_['title']?></option>
+									<option value="<?=$menu_data_['id']?>" <?=pb_selected($last_menu_id_,$menu_data_['id'])?>><?=$menu_data_['title']?></option>
 							<?php } ?>
 						</optgroup>
 						<optgroup label="새로운 메뉴 등록">
@@ -84,9 +86,7 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 							</div>
 						</div>
 								
-							
-	
-
+						
 						<label>메뉴항목</label>
 						<div class="menu-list-frame">
 							<div class="empty-text">우측에서 항목을 선택하여 추가하세요</div>

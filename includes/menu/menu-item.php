@@ -12,7 +12,9 @@ function pb_menu_item_list($conditions_ = array()){
 
 					 menus_item.id id
 					,menus_item.parent_id parent_id
+					
 					,menus_item.menu_id menu_id
+					,menus.slug slug
 					
 					,menus_item.category category
 					,menus_item.title title
@@ -31,6 +33,9 @@ function pb_menu_item_list($conditions_ = array()){
 					 ".pb_hook_apply_filters('pb_menu_item_list_fields', "", $conditions_)." 
 	FROM menus_item
 
+	LEFT OUTER JOIN menus
+	ON   menus.id = menus_item.menu_id
+
 	".pb_hook_apply_filters('pb_menu_item_list_join', "", $conditions_)." 
 
 	WHERE 1 
@@ -46,12 +51,18 @@ function pb_menu_item_list($conditions_ = array()){
 	if(isset($conditions_['parent_id'])){
 		$query_ .= " AND ".pb_query_in_fields($conditions_['parent_id'], "menus_item.parent_id")." ";
 	}
+	if(isset($conditions_['root_only']) && $conditions_['root_only'] == true){
+		$query_ .= " AND menus_item.parent_id IS NULL ";
+	}
 		
 	if(isset($conditions_['category'])){
 		$query_ .= " AND ".pb_query_in_fields($conditions_['category'], "menus_item.category")." ";
 	}
 	if(isset($conditions_['menu_id'])){
 		$query_ .= " AND ".pb_query_in_fields($conditions_['menu_id'], "menus_item.menu_id")." ";
+	}
+	if(isset($conditions_['menu_slug'])){
+		$query_ .= " AND ".pb_query_in_fields($conditions_['menu_slug'], "menus.slug")." ";
 	}
 
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){

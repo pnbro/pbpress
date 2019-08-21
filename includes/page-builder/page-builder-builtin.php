@@ -12,7 +12,7 @@ function _pb_page_builder_add_shared_modal_to_footer(){
 	<div class="modal-content">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title">요소수정</h4>
+			<h4 class="modal-title">항목수정</h4>
 		</div>
 		<div class="modal-body">
 			
@@ -28,7 +28,7 @@ function _pb_page_builder_add_shared_modal_to_footer(){
 	<div class="modal-content">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title">요소추가</h4>
+			<h4 class="modal-title">항목추가</h4>
 		</div>
 		<div class="modal-body">
 			<form id="pb-page-builder-element-picker-cond-form" class="form-inline text-right" data-element-search-form>

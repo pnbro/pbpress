@@ -87,7 +87,7 @@ pb_page_builder_element_add_edit_category_function('styles', 'pb_page_builder_el
 function pb_page_builder_element_edit_category_common($element_data_){
 
 	$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
-	$classes_ = isset($element_data_['classes']) ? $element_data_['classes'] : null;
+	$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
 	?>
 	<div class="form-group">
 		<label>ID</label>
@@ -99,7 +99,7 @@ function pb_page_builder_element_edit_category_common($element_data_){
 
 	<div class="form-group">
 		<label>클래스</label>
-		<input type="text" name="classes" placeholder="클래스 입력" class="form-control" value="<?=$classes_?>">
+		<input type="text" name="class" placeholder="클래스 입력" class="form-control" value="<?=$class_?>">
 
 		<div class="help-block with-errors"></div>
 		<div class=""></div>
