@@ -197,7 +197,6 @@ function _pb_ajax_menu_editor_do_update(){
 	$menu_data_ = isset($_POST['menu_data']) ? $_POST['menu_data'] : null;
 	$target_menu_ids_ = isset($_POST['target_menu_ids']) ? $_POST['target_menu_ids'] : array();
 
-
 	$menu_id_ = isset($menu_data_['menu_id']) ? $menu_data_['menu_id'] : null;
 	$menu_title_ = isset($menu_data_['menu_title']) ? $menu_data_['menu_title'] : null;
 	$menu_slug_ = isset($menu_data_['menu_slug']) ? $menu_data_['menu_slug'] : null;
@@ -256,6 +255,28 @@ function _pb_ajax_menu_editor_do_update(){
 	pb_end();
 }
 pb_add_ajax('menu-editor-do-update', "_pb_ajax_menu_editor_do_update");
+
+
+function _pb_ajax_menu_editor_do_delete(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_menu")){
+		echo json_encode(array(
+			"success" => false,
+			"error_title" => "권한없음",
+			"error_message" => "접근권한이 없습니다.",
+		));
+		pb_end();
+	}
+
+	$menu_id_ = isset($_POST['menu_id']) ? $_POST['menu_id'] : null;
+
+	pb_menu_delete($menu_id_);
+
+	echo json_encode(array(
+		'success' => true,
+	));
+	pb_end();
+}
+pb_add_ajax('menu-editor-do-delete', "_pb_ajax_menu_editor_do_delete");
 
 
 function _pb_ajax_menu_editor_load_menu(){

@@ -10,9 +10,11 @@ function pb_authority_task_types(){
 		$_pb_authority_task_types = pb_hook_apply_filters("pb_authority_task_types", array(
 			'access_adminpage' => array(
 				'name' => '관리자페이지접근',
+				'selectable' => false,
 			),
 			'manage_site' => array(
 				'name' => '사이트관리',
+				'selectable' => false,
 			),
 		));
 	}

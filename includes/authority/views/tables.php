@@ -194,12 +194,13 @@ class PB_authority_task_list_table extends PBListTable{
 		$row_index_ = $this->current_row();
 
 		$authority_task_types_ = pb_authority_task_types();
+		$authority_task_type_data_ = isset($authority_task_types_[$item_["slug"]]) ? $authority_task_types_[$item_["slug"]] : null;
 		
 
 		switch($column_name_){
 		
 			case "task_name" :
-				return isset($authority_task_types_[$item_["slug"]]) ? $authority_task_types_[$item_["slug"]]['name'] : "-";
+				return isset($authority_task_type_data_) ? $authority_task_type_data_['name'] : "-";
 			case "slug" :
 				return $item_["slug"];
 
@@ -209,8 +210,10 @@ class PB_authority_task_list_table extends PBListTable{
 				global $_cached_authority_map, $_cached_auth_data;
 
 
+				$selectable_ = isset($authority_task_type_data_['selectable']) ? $authority_task_type_data_['selectable'] : true;
+
 				$task_checked_ = isset($_cached_authority_map[$item_['slug']]);
-				$task_disabled_ = $_cached_auth_data['slug'] === PB_AUTHORITY_SLUG_ADMINISTRATOR;
+				$task_disabled_ = $_cached_auth_data['slug'] === PB_AUTHORITY_SLUG_ADMINISTRATOR && !$selectable_;
 
 			ob_start();
 
