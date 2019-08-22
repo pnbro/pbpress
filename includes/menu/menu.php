@@ -466,7 +466,7 @@ function _pb_menu_tree_recv_children($parent_id_, $menu_list_, $level_ = 1, $cac
 		);
 
 		foreach($row_data_['children'] as $child_data_){
-			if($child_data_['active']){
+			if($child_data_['active'] || $child_data_['child_active']){
 				$row_data_['child_active'] = true;
 				break;
 			}
@@ -474,7 +474,7 @@ function _pb_menu_tree_recv_children($parent_id_, $menu_list_, $level_ = 1, $cac
 
 		$row_data_['active'] = pb_hook_apply_filters('pb_menu_tree_check_active', false, null, $row_data_);
 
-		if($row_data_['active']){
+		if($row_data_['active'] || $row_data_['child_active']){
 			$_pb_menu_actived_items[$menu_item_data_['menu_id']][] = $row_data_;
 		}
 	
@@ -515,7 +515,7 @@ function pb_menu_tree($menu_data_, $cache_ = true){
 		);
 
 		foreach($row_data_['children'] as $child_data_){
-			if($child_data_['active']){
+			if($child_data_['active'] || $child_data_['child_active']){
 				$row_data_['child_active'] = true;
 				break;
 			}
@@ -523,7 +523,7 @@ function pb_menu_tree($menu_data_, $cache_ = true){
 
 		$row_data_['active'] = pb_hook_apply_filters('pb_menu_tree_check_active', false, null, $row_data_);
 
-		if($row_data_['active']){
+		if($row_data_['active'] || $row_data_['child_active']){
 			$_pb_menu_actived_items[$menu_item_data_['menu_id']][] = $row_data_;
 		}
 
@@ -626,12 +626,12 @@ function _pb_menu_tree_recv_cut_by_level_max($menu_data_, $level_max_){
 		}
 	}
 
-
 	return $menu_data_;
 }
 function _pb_menu_tree_for_render_level_hook($menu_tree_, $options_){
 	$parent_id_ = isset($options_['parent_id']) ? $options_['parent_id'] : null;
 	$level_max_ = isset($options_['level_max']) ? $options_['level_max'] : null;
+	$actived_children_only_ = isset($options_['actived_children_only']) ? $options_['actived_children_only'] : false;
 
 	if(strlen($parent_id_)){
 		$menu_tree_ = _pb_menu_tree_recv_cut_by_standard_id($menu_tree_, $parent_id_);
@@ -644,6 +644,16 @@ function _pb_menu_tree_for_render_level_hook($menu_tree_, $options_){
 				$menu_data_['children'] = array();
 			}else{
 				$menu_data_ = _pb_menu_tree_recv_cut_by_level_max($menu_data_, $level_max_);	
+			}
+			
+		}
+	}
+
+	if($actived_children_only_){
+		foreach($menu_tree_ as &$menu_data_){
+
+			if(!$menu_data_['active'] && !$menu_data_['child_active']){
+				$menu_data_['children'] = array();
 			}
 			
 		}
