@@ -628,6 +628,17 @@ function _pb_menu_tree_recv_cut_by_level_max($menu_data_, $level_max_){
 
 	return $menu_data_;
 }
+function _pb_menu_tree_recv_cut_by_actived($menu_data_){
+	if(!$menu_data_['active'] && !$menu_data_['child_active']){
+		$menu_data_['children'] = array();
+	}else{
+		foreach($menu_data_['children'] as &$child_data_){
+			$child_data_ = _pb_menu_tree_recv_cut_by_actived($child_data_);
+		}
+	}
+
+	return $menu_data_;
+}
 function _pb_menu_tree_for_render_level_hook($menu_tree_, $options_){
 	$parent_id_ = isset($options_['parent_id']) ? $options_['parent_id'] : null;
 	$level_max_ = isset($options_['level_max']) ? $options_['level_max'] : null;
@@ -654,6 +665,8 @@ function _pb_menu_tree_for_render_level_hook($menu_tree_, $options_){
 
 			if(!$menu_data_['active'] && !$menu_data_['child_active']){
 				$menu_data_['children'] = array();
+			}else{
+				$menu_data_ = _pb_menu_tree_recv_cut_by_actived($menu_data_);
 			}
 			
 		}
