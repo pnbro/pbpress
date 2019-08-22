@@ -8,7 +8,7 @@
 			'id' => null,
 			'page_title' => null,
 			'page_html' => null,
-			'status' => PB_PAGE_STATUS_WRITING,
+			'status' => PB_PAGE_STATUS_PUBLISHED,
 			'slug' => null,
 		);
 		$pbpage_meta_map = array();
