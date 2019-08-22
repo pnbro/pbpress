@@ -7,6 +7,42 @@
 		display: table;
 		table-layout: fixed;
 		width: 100%;
+		.page-title-form-group{
+			// padding-bottom: 10px;
+			margin-bottom: 20px;
+			border-bottom: 1px solid @gray-lighter;
+		}
+
+		.url-slug-group{
+			position: relative;
+			display: block;
+			.form-inline;
+			margin-top: 10px;
+
+			> .input-group{
+				display: none;
+
+				.input-group-addon, .input-group-btn{
+					width: auto;
+				}
+			}
+
+			> .page-url-info{
+				display: block;
+			}
+
+			&.only-editing,
+			&.editing{
+				> .input-group{
+					display: inline-table;
+				}
+
+				> .page-url-info{
+					display: none;
+				}
+			}
+
+		}
 
 		@media screen and (max-width: @screen-sm-max){
 			display: block;

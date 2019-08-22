@@ -26,19 +26,47 @@
 
 	<div class="page-edit-frame">
 		<div class="col-content">
-			<div class="form-group">
+			<div class="form-group page-title-form-group">
 				<input type="text" name="page_title" placeholder="<?=pb_hook_apply_filters('pb_page_edit_form_placeholder', "페이지제목 입력")?>" value="<?=$pbpage['page_title']?>" class="form-control input-lg" required data-error="페이지제목을 입력하세요">
+
+				<div class="url-slug-group <?=$is_new_ ? "only-editing" : ""?>" id="pb-page-edit-form-url-slug-group">
+					<div class="input-group input-group-sm">
+						<span class="input-group-addon"><?=pb_home_url()?></span>
+						<input type="text" name="slug" class="form-control" placeholder="URL슬러그 입력" value="<?=$pbpage['slug']?>" data-original-slug="<?=$pbpage['slug']?>">
+
+						<?php if(!$is_new_){ ?>
+						<span class="input-group-btn">
+							<button class="btn btn-primary" type="button" data-slug-edit-update-btn>수정</button>
+						</span>
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" data-slug-edit-cancel-btn>취소</button>
+						</span>
+						<?php } ?>
+					</div>	
+					<?php if(!$is_new_){
+						// $page_url_ = pb_page_url($pbpage['id']);
+					?>
+					<p class="page-url-info">
+						<a href="<?=pb_home_url($pbpage['slug'])?>" target="_blank" data-page-link>
+							<?=pb_home_url()?><strong class="slug"><?=$pbpage['slug']?></strong>
+						</a> <a href="" class="btn btn-sm btn-default" data-slug-edit-btn>수정</a>
+					</p>
+						
+					<?php } ?>
+				</div>
+
+				
+
 				<?php if(!$is_new_){
 					$page_url_ = pb_page_url($pbpage['id']);
 				?>
-					<p class="page-url-info">
-						<a href="<?=$page_url_?>" target="_blank"><?=$page_url_?></a>
-					</p>
+					
 					
 				<?php }?>
 				<div class="help-block with-errors"></div>
 				<div class="clearfix"></div>
 			</div>
+			
 
 			<?php
 				pb_hook_do_action("pb_page_edit_form_page_html_before", $pbpage);
@@ -68,13 +96,6 @@
 							<select class="form-control" name="status" required data-error="상태를 선택하세요">
 								<?=pb_gcode_make_options(array("code_id" => "PAG01"), $pbpage['status'])?>
 							</select>
-							<div class="help-block with-errors"></div>
-							<div class="clearfix"></div>
-						</div>
-
-						<div class="form-group">
-							<label>URL슬러그</label>
-							<input type="text" name="slug" class="form-control" placeholder="URL슬러그 입력" value="<?=$pbpage['slug']?>">
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>
 						</div>
@@ -114,3 +135,68 @@
 	<?php pb_hook_do_action("pb_page_edit_form_after", $pbpage) ?>
 </form>
 <script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/manage-page/edit.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		var url_slug_group_ = $("#pb-page-edit-form-url-slug-group");
+		var url_slug_input_ = url_slug_group_.find("[name='slug']");
+		$("[data-slug-edit-btn]").click(function(){
+			url_slug_group_.toggleClass("editing", true);
+			url_slug_input_.focus().select();
+			return false;
+		});
+
+		url_slug_input_.keydown(function(event_){
+			if(event_.keyCode === 13){
+				pb_page_update_slug();
+				return false;
+			}
+		});
+
+		$("[data-slug-edit-update-btn]").click(function(){
+			pb_page_update_slug();
+			return false;
+		});
+		// $(data-slug-edit-cancel-btn
+		$("[data-slug-edit-cancel-btn]").click(function(){
+			url_slug_group_.toggleClass("editing", false);
+			url_slug_input_.val(url_slug_input_.attr("data-original-slug"));
+			return false;
+		});
+	});
+
+	function pb_page_update_slug(){
+		var page_edit_form_ = $("#pb-page-edit-form");
+		var url_slug_group_ = $("#pb-page-edit-form-url-slug-group");
+		var url_slug_input_ = url_slug_group_.find("[name='slug']");
+		var page_data_ = page_edit_form_.serialize_object();
+
+		url_slug_group_.find(":input,button").prop("disabled", true);
+
+		var slug_ = url_slug_input_.val();
+
+		PB.post("update-page-slug", {
+			page_id : page_data_['id'],
+			slug : slug_
+		}, function(result_, response_json_){
+			if(!result_ || response_json_.success !== true){
+				PB.alert({
+					title : response_json_.error_title || "에러발생",
+					content : response_json_.error_message || "슬러그 수정중, 에러가 발생했습니다.",
+				});
+				return;
+			}
+
+			var updated_slug_ = response_json_.slug;
+
+			url_slug_group_.find(":input,button").prop("disabled", false);
+			url_slug_input_.attr("data-original-slug", updated_slug_);
+			url_slug_input_.val(updated_slug_);
+
+			var page_link_ = $("[data-page-link]");
+			page_link_.find(".slug").text(updated_slug_);
+			page_link_.attr("href", PBVAR['home_url']+updated_slug_);
+			url_slug_group_.toggleClass("editing", false);
+
+		});
+	}
+</script>

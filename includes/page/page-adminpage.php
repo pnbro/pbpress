@@ -189,6 +189,40 @@ function _pb_page_ajax_delete(){
 }
 pb_add_ajax('delete-page', "_pb_page_ajax_delete");
 
+function _pb_page_ajax_update_slug(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
+		echo json_encode(array(
+			"success" => false,
+			"error_title" => "권한없음",
+			"error_message" => "접근권한이 없습니다.",
+		));
+		pb_end();
+	}
+
+	$page_id_ = isset($_POST['page_id']) ? $_POST['page_id'] : null;
+	$slug_ = isset($_POST['slug']) ? $_POST['slug'] : null;
+
+	if(!strlen($page_id_)){
+		echo json_encode(array(
+			'success' => false,
+			'error_title' => "잘못된 요청",
+			'error_message' => "필수 요청값이 누락되었습니다.",
+		));
+		pb_end();
+	}
+
+	pb_page_edit($page_id_, array("slug" => $slug_));
+	$page_data_ = pb_page($page_id_);
+
+	echo json_encode(array(
+		'success' => true,
+		'slug' => $page_data_['slug'],
+	));
+	pb_end();
+
+}
+pb_add_ajax('update-page-slug', "_pb_page_ajax_update_slug");
+
 function _pb_page_ajax_update_status(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
 		echo json_encode(array(

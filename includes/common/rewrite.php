@@ -119,7 +119,7 @@ function pb_rewrite_common_handler($rewrite_path_, $page_data_){
 function pb_rewrite_unique_slug($slug_, $retry_count_ = 0, $extra_data_ = array()){
 	$temp_slug_ = $slug_;
 	if($retry_count_ > 0){
-		$temp_slug_ .= "_".$retry_count_;
+		$temp_slug_ .= "-".$retry_count_;
 	}
 
 	$check_data2_ = pb_rewrite_data($temp_slug_);
