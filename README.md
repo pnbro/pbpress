@@ -46,8 +46,8 @@ You can access to the adminpage through the url below.
 
 
 ## Build Frontend library
-You have to compile, when resoure files like js,less changed.
-js,less 같은 리소스파일이 변경될 경우, 컴파일을 해야합니다.
+You have to compile, when resoure files like js,less changed in original source.
+PBPress 원본소스에서 js,less 같은 리소스파일이 변경될 경우, 컴파일을 해야합니다.
 
     > grunt
     > grunt dist
@@ -59,7 +59,6 @@ js,less 같은 리소스파일이 변경될 경우, 컴파일을 해야합니다
 ## Adding theme
 you can make a theme that you want, and just put your theme you made into 'themes' directory. (See sample theme into themes directory)
 원하는 테마를 제작할 수 있습니다. 그리고 제작한 테마를 themes 디렉토리에 넣으면 됩니다.(themes 디렉토리에 샘플 테마를 참조)
-
 
 ## included open sources
 ### Frontend 
