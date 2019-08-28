@@ -31,7 +31,7 @@ function pb_menu_install_tables($args_){
 		`mod_date` datetime DEFAULT null COMMENT '수정일자',
 		PRIMARY KEY (`id`),
 		CONSTRAINT `menus_item_fk1` FOREIGN KEY (`menu_id`) REFERENCES `menus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-		CONSTRAINT `menus_item_fk2` FOREIGN KEY (`parent_id`) REFERENCES `menus_item` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+		CONSTRAINT `menus_item_fk2` FOREIGN KEY (`parent_id`) REFERENCES `menus_item` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
 	) ENGINE=InnoDB COMMENT='메뉴 - 항목';";
 
 	$args_[] = "CREATE TABLE IF NOT EXISTS `menus_item_meta` (
