@@ -2,6 +2,12 @@
 PHP Framework for simple website creation.
 간단한 웹사이트제작을 위한 PHP 프레임워크
 
+## Features
+* powerful backend functions
+* expandable adminpage
+* page managing (page builder)
+* menu managing (menu editor)
+
 ## Requirements
 	PHP >= 5.2.17
 	MySQL >= 5.x (innoDB)
@@ -87,6 +93,4 @@ you can make a theme that you want, and just put your theme you made into 'theme
 ## TODO
 	1. Write API documentation and manuals.
 	2. Developing plugin features?
-	3. Adding Page Builders -> alpha version added.
 	4. Developing multi languages features -> alpha version added.
-	5. menu editor -> alpha version added.
