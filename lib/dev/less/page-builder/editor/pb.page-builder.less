@@ -361,19 +361,24 @@
 			width: 100%;
 			padding: 3px;
 
-			&.content > .wrap{
+			&.content{
 				max-width: 600px;
 				margin: 0 auto;
-				background-color: #e9eef1;
 
-				> .col-action{
-					background-color: white;
-				}
+				> .wrap{
+					
+					background-color: #fafcfd;
 
-				> .col-content{
-				
-					> .preview-frame{
-						min-height: 50px;
+					> .col-action{
+						background-color: #fafcfd;
+					}
+
+					> .col-content{
+						background-color: #fafcfd;
+						> .preview-frame{
+							min-height: 50px;
+							border-bottom: none;
+						}
 					}
 				}
 			}
@@ -594,10 +599,16 @@
 			}
 
 			&.content.hover > .wrap{
-				background-color: #d2f0fd;
-				border-color: #9cbcca;
+				border-color: #9fb9c7;
+				background-color: #ecf5f9;
+
 				> .col-action{
-					background-color: white;
+					background-color: #ecf5f9;
+				}
+
+				> .col-content{
+					background-color: #ecf5f9;
+					
 				}
 			}
 
