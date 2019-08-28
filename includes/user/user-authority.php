@@ -168,7 +168,7 @@ function pb_user_has_authority($user_id_, $authority_){
 		'auth_id' => $auth_data_['id'],
 	));
 
-	return count($user_auth_data_) > 0;
+	return pb_hook_apply_filters("pb_user_has_authority", count($user_auth_data_) > 0, $user_id_, $authority_);
 }
 
 function pb_user_has_authority_task($user_id_, $authority_task_){
@@ -177,7 +177,7 @@ function pb_user_has_authority_task($user_id_, $authority_task_){
 		'auth_task_slug' => $authority_task_,
 	));
 
-	return (count($user_auth_data_) > 0);
+	return pb_hook_apply_filters("pb_user_has_authority_task", count($user_auth_data_) > 0, $user_id_, $authority_task_);
 }
 
 function pb_user_grant_authority($user_id_, $authority_){
