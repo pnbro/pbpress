@@ -98,7 +98,7 @@ function pb_menu_insert($raw_data_){
 	$format_ = $raw_data_['format'];
 
 	$insert_id_ = $pbdb->insert("menus", $data_, $format_);
-	pb_hook_do_action("pb_menu_inserted", pb_menu($insert_id_));
+	pb_hook_do_action("pb_menu_inserted", $insert_id_);
 	return $insert_id_;
 }
 
@@ -110,7 +110,7 @@ function pb_menu_update($id_, $raw_data_){
 	$format_ = $raw_data_['format'];
 
 	$result_ = $pbdb->update("menus", $data_, array("id" => $id_), $format_, array("%d"));
-	pb_hook_do_action("pb_menu_updated", pb_menu($id_));
+	pb_hook_do_action("pb_menu_updated", $id_);
 
 	return $result_;
 }
@@ -119,7 +119,7 @@ function pb_menu_delete($id_){
 	global $pbdb;
 
 	$result_ = $pbdb->delete("menus", array("id" => $id_), array("%d"));
-	pb_hook_do_action("pb_menu_deleted", pb_menu($id_));
+	pb_hook_do_action("pb_menu_deleted", $id_);
 	return $result_;
 }
 

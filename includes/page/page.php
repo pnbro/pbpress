@@ -118,7 +118,7 @@ function pb_page_insert($raw_data_){
 	$format_ = $raw_data_['format'];
 
 	$insert_id_ = $pbdb->insert("pages", $data_, $format_);
-	pb_hook_do_action("pb_page_inserted", pb_page($insert_id_));
+	pb_hook_do_action("pb_page_inserted", $insert_id_);
 	return $insert_id_;
 }
 
@@ -130,7 +130,7 @@ function pb_page_update($id_, $raw_data_){
 	$format_ = $raw_data_['format'];
 
 	$result_ = $pbdb->update("pages", $data_, array("id" => $id_), $format_, array("%d"));
-	pb_hook_do_action("pb_page_updated", pb_page($id_));
+	pb_hook_do_action("pb_page_updated", $id_);
 
 	return $result_;
 }
@@ -139,7 +139,7 @@ function pb_page_delete($id_){
 	global $pbdb;
 
 	$result_ = $pbdb->delete("pages", array("id" => $id_), array("%d"));
-	pb_hook_do_action("pb_page_deleted", pb_page($id_));
+	pb_hook_do_action("pb_page_deleted", $id_);
 	return $result_;
 }
 
@@ -167,7 +167,7 @@ function pb_page_write($data_){
 	);
 
 	$inserted_id_ = pb_page_insert($insert_data_);
-	pb_hook_do_action('pb_page_writed', pb_page($inserted_id_));
+	pb_hook_do_action('pb_page_writed', $inserted_id_);
 	return $inserted_id_;
 }
 
@@ -197,7 +197,7 @@ function pb_page_edit($id_, $data_){
 	}
 
 	pb_page_update($id_, $update_data_);
-	pb_hook_do_action('pb_page_edited', pb_page($id_));	
+	pb_hook_do_action('pb_page_edited', $id_);	
 	return $id_;
 }
 
