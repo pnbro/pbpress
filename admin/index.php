@@ -25,6 +25,8 @@ $current_adminpage_slug_ = strlen($current_adminpage_slug_) ? $current_adminpage
 $rewrite_handler_ = isset($current_adminpage_["rewrite_handler"]) ? $current_adminpage_["rewrite_handler"] : "pb_adminpage_rewrite_common_handler";
 $current_adminpage_path_ = call_user_func_array($rewrite_handler_, array(pb_adminpage_rewrite_path(), $current_adminpage_));
 
+pb_hook_do_action("pb_admin_started");
+
 global $pb_config;
 
 ?><!DOCTYPE html>

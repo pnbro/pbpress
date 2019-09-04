@@ -4,9 +4,9 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "1.0.0");
+define('PB_PAGE_BUILDER_VERSION', "1.0.1");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "0.0.1");
-define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', "1.0.0");
+define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', "1.0.1");
 
 function _pb_page_builder_recursive_parse_inner($element_){
 	$element_map_ = pb_page_builder_elements();
