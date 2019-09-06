@@ -1,21 +1,21 @@
 {
   "name": "PBPress",
-  "version": "0.11.1",
+  "version": "1.2.3",
   "description": "PBPress for PHP Frameworks",
   "main": "Gruntfile.js",
   "dependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.7.0",
-    "grunt-contrib-copy": "^0.8.2",
-    "grunt-contrib-cssmin": "^0.14.0",
-    "grunt-contrib-less": "^1.1.0",
-    "grunt-contrib-uglify": "^0.11.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-less-imports": "^1.1.0"
+    "grunt": "^1.0.4",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-less": "^2.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-less-imports": "^1.2.2"
   },
   "devDependencies": {
-    "grunt-contrib-concat": "^1.0.0",
-    "grunt-contrib-less": "^1.4.0"
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-less": "^2.0.0"
   },
   "scripts": {},
   "author": "Paul & Bro Company",
