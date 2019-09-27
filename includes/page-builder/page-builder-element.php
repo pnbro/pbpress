@@ -127,7 +127,7 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 
 	$bacground_color_picker_id_ = "pb-background-color-picker-".pb_random_string(5);
 	$bacground_image_picker_id_ = "pb-background-image-picker-".pb_random_string(5);
-	$unique_class_name_ = isset($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : "pb-element-class-".pb_random_string(10, PB_RANDOM_STRING_NUMLOWER);
+	$unique_class_name_ = isset($element_data_['unique_class_name']) && strlen($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : "pb-element-class-".pb_random_string(10, PB_RANDOM_STRING_NUMLOWER);
 
 	$classes_ = isset($element_data_['classes']) ? $element_data_['classes'] : null;
 	?>
@@ -227,7 +227,7 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 
 
 function pb_page_builder_element_make_styles($element_data_ = array()){
-	$class_name_ = isset($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : null;
+	$class_name_ = isset($element_data_['unique_class_name']) && strlen($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : null;
 	if(!strlen($class_name_)) return null;
 
 	$data_ = array();
@@ -243,7 +243,7 @@ function pb_page_builder_element_make_styles($element_data_ = array()){
 	$data_['padding-right'] = isset($element_data_['padding_right']) ? $element_data_['padding_right'] : null;
 	
 	$data_['background-color'] = isset($element_data_['background_color']) ? $element_data_['background_color'] : null;
-	$data_['background-image'] = isset($element_data_['background_image']) && strlen($element_data_['background_image']) ? "url(".pb_home_url("uploads/".$element_data_['background_image']).")" : null;
+	$data_['background-image'] = isset($element_data_['background_image']) && strlen($element_data_['background_image']) ? "url('".pb_home_url("uploads/".$element_data_['background_image'])."')" : null;
 	$data_['background-size'] = isset($element_data_['background_size']) ? $element_data_['background_size'] : null;
 	$data_['background-position'] = isset($element_data_['background_position']) ? $element_data_['background_position'] : null;
 
