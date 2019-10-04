@@ -293,6 +293,27 @@
 }
 
 
-.pb-image{
+.pb-image-group{
+  position: relative;
+  display: block;
   max-width: 100%;
+
+  > .pb-image{
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &.align-center > .pb-image{
+    margin: 0 auto;
+  }
+  &.align-left > .pb-image{
+    margin-left: 0px;
+    margin-right: auto;
+  }
+  &.align-right > .pb-image{
+    margin-left: auto;
+    margin-right: 0px;
+  }
 }
