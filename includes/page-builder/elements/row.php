@@ -71,10 +71,10 @@ class PBPageBuilderElement_column extends PBPageBuilderElement{
 		$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
 		$unique_class_name_ = isset($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : null;
-		$column_width_ = isset($element_data_['column_width']) ? $element_data_['column_width'] : "12";
-		$column_width_md_ = isset($element_data_['column_width_md']) ? $element_data_['column_width_md'] : $column_width_;
-		$column_width_sm_ = isset($element_data_['column_width_sm']) ? $element_data_['column_width_sm'] : $column_width_md_;
-		$column_width_xs_ = isset($element_data_['column_width_xs']) ? $element_data_['column_width_xs'] : "12";
+		$column_width_ = isset($element_data_['column_width']) && strlen($element_data_['column_width']) ? $element_data_['column_width'] : "12";
+		$column_width_md_ = isset($element_data_['column_width_md']) && strlen($element_data_['column_width_md']) ? $element_data_['column_width_md'] : $column_width_;
+		$column_width_sm_ = isset($element_data_['column_width_sm']) && strlen($element_data_['column_width_sm']) ? $element_data_['column_width_sm'] : $column_width_md_;
+		$column_width_xs_ = isset($element_data_['column_width_xs']) && strlen($element_data_['column_width_xs']) ? $element_data_['column_width_xs'] : "12";
 		
 		?><div class="pb-col-lg-<?=$column_width_?> <?=$unique_class_name_?> pb-col-md-<?=$column_width_md_?> pb-col-sm-<?=$column_width_sm_?> pb-col-sm-<?=$column_width_sm_?> pb-col-xs-<?=$column_width_xs_?> <?=$class_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($element_content_)?></div><?php
 	}
