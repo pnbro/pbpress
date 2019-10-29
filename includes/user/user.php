@@ -273,7 +273,7 @@ function pb_user_send_email_for_findpass($user_email_){
 	$user_data_ = pb_user_by_user_email($user_email_);
 
 	if(!isset($user_data_) || empty($user_data_)){
-		return new WP_Error(PB_USER_FINDPASS_VKEY_NOTFOUND, '가입이력없음', '해당 이메일로 가입이력이 존재하지 않습니다.');
+		return new PBError(PB_USER_FINDPASS_VKEY_NOTFOUND, '가입이력없음', '해당 이메일로 가입이력이 존재하지 않습니다.');
 	}
 
 	$user_id_ = $user_data_['id'];
