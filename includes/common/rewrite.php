@@ -161,25 +161,18 @@ function _pb_rewrite_path_normalize(){
 		pb_end();
 	}
 
-	$subpath_map_ = explode("/", $subpath_string_);
-	unset($subpath_map_[count($subpath_map_) - 1]);
-	$real_subpaths_ = array();
+	$subpath_string_normalized_ = preg_replace('/(\/+)/','/',$subpath_string_normalized_);
 
-	foreach($subpath_map_ as $subpath_){
-		$subpath_ = trim($subpath_);
-		if(strlen($subpath_) <= 0) continue;
-		$real_subpaths_[] = $subpath_;
-	}
-
-	if(count($real_subpaths_) != count($subpath_map_)){
-		$normalized_url_ = pb_home_url(join($real_subpaths_,"/"));
+	if($subpath_string_ !== $subpath_string_normalized_){
+		$normalized_url_ = pb_home_url($subpath_string_normalized_);
 		if(strlen($query_string_)){
 			$normalized_url_ .= "?".$query_string_;
 		}
-
+		
 		pb_redirect($normalized_url_);
 		pb_end();
 	}
+
 }
 pb_hook_add_action("pb_init", "_pb_rewrite_path_normalize");
 pb_hook_add_action("pb_admin_init", "_pb_rewrite_path_normalize");
