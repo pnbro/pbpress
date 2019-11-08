@@ -57,5 +57,5 @@ if((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") && $pb_config->use_
 }	
 
 header("Content-Type: text/html; CharSet=".$pb_config->charset);
-
+pb_hook_do_action("pb_init");
 ?>

@@ -17,8 +17,8 @@ function _pb_user_install_table($args_){
 		`user_name` varchar(50) NOT NULL COMMENT '사용자명',
 		`status` varchar(5) NOT NULL COMMENT '사용여부',
 
-		`findpass_vkey` varchar(20) NOT NULL COMMENT '암호찾기 - 인증키',
-		`findpass_vkey_exp_date` datetime NOT NULL COMMENT '암호찾기 - 키만료일자',
+		`findpass_vkey` varchar(20) DEFAULT NULL COMMENT '암호찾기 - 인증키',
+		`findpass_vkey_exp_date` datetime DEFAULT NULL COMMENT '암호찾기 - 키만료일자',
 
 		`reg_date` datetime DEFAULT NULL COMMENT '등록일자',
 		`mod_date` datetime DEFAULT NULL COMMENT '수정일자',

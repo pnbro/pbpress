@@ -67,10 +67,9 @@ function pb_rewrite_path(){
 	if(!isset($_SERVER['REDIRECT_URL'])) return null;
 	if(strpos($_SERVER['REQUEST_URI'], PB_REWRITE_BASE) === false) return null;
 
-
-	$subpath_map_ = preg_replace('/'.preg_quote(PB_REWRITE_BASE,"/").'/', '', strtok($_SERVER['REQUEST_URI'], "?"), 1);
-	$subpath_map_ = rtrim($subpath_map_, '/');
-	$subpath_map_ = explode("/", $subpath_map_);
+	$subpath_string_ = preg_replace('/'.preg_quote(PB_REWRITE_BASE,"/").'/', '', strtok($_SERVER['REQUEST_URI'], "?"), 1);
+	$subpath_string_ = rtrim($subpath_string_,"/");
+	$subpath_map_ = strlen($subpath_string_) > 0 ? explode("/", $subpath_string_) : array();
 
 	global $pb_rewrite_path;
 	$pb_rewrite_path = $subpath_map_;
@@ -143,5 +142,46 @@ function _pb_rewrite_unique_slug_for_reserved($result_, $original_slug_, $retry_
 	return pb_rewrite_unique_slug($original_slug_, ++$retry_count_, $extra_data_);
 }
 pb_hook_add_filter("pb_rewrite_unique_slug", "_pb_rewrite_unique_slug_for_reserved");
+
+function _pb_rewrite_path_normalize(){	
+	$subpath_string_ = preg_replace('/'.preg_quote(PB_REWRITE_BASE,"/").'/', '', strtok($_SERVER['REQUEST_URI'], "?"), 1);
+	$subpath_string_normalized_ = rtrim($subpath_string_,"/")."/";
+
+	$is_last_slash_ = strrpos($subpath_string_, "/") == strlen($subpath_string_) - 1;
+	$subpath_string_ .= ($is_last_slash_ ? "" : "/");
+	$query_string_ = @$_SERVER['QUERY_STRING'];
+
+	if($subpath_string_ !== $subpath_string_normalized_){
+		$normalized_url_ = pb_home_url($subpath_string_normalized_);
+		if(strlen($query_string_)){
+			$normalized_url_ .= "?".$query_string_;
+		}
+		
+		pb_redirect($normalized_url_);
+		pb_end();
+	}
+
+	$subpath_map_ = explode("/", $subpath_string_);
+	unset($subpath_map_[count($subpath_map_) - 1]);
+	$real_subpaths_ = array();
+
+	foreach($subpath_map_ as $subpath_){
+		$subpath_ = trim($subpath_);
+		if(strlen($subpath_) <= 0) continue;
+		$real_subpaths_[] = $subpath_;
+	}
+
+	if(count($real_subpaths_) != count($subpath_map_)){
+		$normalized_url_ = pb_home_url(join($real_subpaths_,"/"));
+		if(strlen($query_string_)){
+			$normalized_url_ .= "?".$query_string_;
+		}
+
+		pb_redirect($normalized_url_);
+		pb_end();
+	}
+}
+pb_hook_add_action("pb_init", "_pb_rewrite_path_normalize");
+pb_hook_add_action("pb_admin_init", "_pb_rewrite_path_normalize");
 
 ?>

@@ -23,6 +23,8 @@ if((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") && $pb_config->use_
 	exit;
 }
 
+pb_hook_do_action("pb_admin_init");
+
 function pb_admin_head(){
 
 	$pbvar_ = pb_hook_apply_filters('pb-admin-head-pbvar', array());

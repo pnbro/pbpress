@@ -239,8 +239,8 @@ class PBDB{
 			$where_value_str_ .= "AND ";
 
 			$column_type_ = "%s";
-			if(isset($update_data_types_[$col_index_])){
-				$column_type_ = $update_data_types_[$col_index_];
+			if(isset($update_key_types_[$col_index_])){
+				$column_type_ = $update_key_types_[$col_index_];
 			}
 
 			$where_value_str_ .= "{$column_name_} = {$column_type_} ";
