@@ -109,6 +109,47 @@
 			</tr>
 
 			<tr>
+				<th>여분값명1</th>
+				<td>
+					<div class="form-group">
+						<input type="text" name="col1" class="form-control">
+						<div class="help-block with-errors"></div>
+						<div class="clearfix"></div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>여분값명2</th>
+				<td>
+					<div class="form-group">
+						<input type="text" name="col2" class="form-control">
+						<div class="help-block with-errors"></div>
+						<div class="clearfix"></div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>여분값명3</th>
+				<td>
+					<div class="form-group">
+						<input type="text" name="col3" class="form-control">
+						<div class="help-block with-errors"></div>
+						<div class="clearfix"></div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>여분값명4</th>
+				<td>
+					<div class="form-group">
+						<input type="text" name="col4" class="form-control">
+						<div class="help-block with-errors"></div>
+						<div class="clearfix"></div>
+					</div>
+				</td>
+			</tr>
+
+			<tr>
 				<th>사용여부</th>
 				<td >
 					<div class="form-group">
@@ -158,6 +199,47 @@
 				<td>
 					<div class="form-group">
 						<input type="text" name="code_dnm" class="form-control" placeholder="코드명 입력" required data-error="레벨명을 입력하세요">
+						<div class="help-block with-errors"></div>
+						<div class="clearfix"></div>
+					</div>
+				</td>
+			</tr>
+
+			<tr data-extra-col="col1">
+				<th data-column="col1_title"></th>
+				<td>
+					<div class="form-group">
+						<input type="text" name="col1" class="form-control">
+						<div class="help-block with-errors"></div>
+						<div class="clearfix"></div>
+					</div>
+				</td>
+			</tr>
+			<tr data-extra-col="col2">
+				<th data-column="col2_title"></th>
+				<td>
+					<div class="form-group">
+						<input type="text" name="col2" class="form-control">
+						<div class="help-block with-errors"></div>
+						<div class="clearfix"></div>
+					</div>
+				</td>
+			</tr>
+			<tr data-extra-col="col3">
+				<th data-column="col3_title"></th>
+				<td>
+					<div class="form-group">
+						<input type="text" name="col3" class="form-control">
+						<div class="help-block with-errors"></div>
+						<div class="clearfix"></div>
+					</div>
+				</td>
+			</tr>
+			<tr data-extra-col="col4">
+				<th data-column="col4_title"></th>
+				<td>
+					<div class="form-group">
+						<input type="text" name="col4" class="form-control">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>

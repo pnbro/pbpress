@@ -66,35 +66,60 @@ function pb_gcode_dtl_list($conditions_ = array()){
 
 	
 	$query_ = "SELECT 
-					code_id code_id,
-					code_did code_did,
-					code_dnm code_dnm,
-					code_ddesc code_ddesc,
+					gcode_dtl.code_id code_id,
+					gcode_dtl.code_did code_did,
+					gcode_dtl.code_dnm code_dnm,
+					gcode_dtl.code_ddesc code_ddesc,
 
-					col1 col1,
-					col2 col2,
-					col3 col3,
-					col4 col4,
+					gcode_dtl.col1 col1,
+					gcode_dtl.col2 col2,
+					gcode_dtl.col3 col3,
+					gcode_dtl.col4 col4,
 
-					use_yn use_yn,
-					sort_char sort_char,
-					reg_date reg_date,
-					mod_date mod_date,
+					gcode.col1 col1_title,
+					gcode.col2 col2_title,
+					gcode.col3 col3_title,
+					gcode.col4 col4_title,
 
-					DATE_FORMAT(reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis,
-					DATE_FORMAT(mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
+					gcode_dtl.use_yn use_yn,
+					gcode_dtl.sort_char sort_char,
+					gcode_dtl.reg_date reg_date,
+					gcode_dtl.mod_date mod_date,
+
+					DATE_FORMAT(gcode_dtl.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis,
+					DATE_FORMAT(gcode_dtl.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
 	FROM gcode_dtl
+
+	LEFT OUTER JOIN gcode
+	ON   gcode.code_id = gcode_dtl.code_id
+
+
 	WHERE 1=1 ";
 
 	if(isset($conditions_['only_use']) && $conditions_['only_use'] === true){
 		$query_ .= " AND gcode_dtl.use_yn = 'Y' ";
 	}
 	if(isset($conditions_['code_id']) && strlen($conditions_['code_id'])){
-		$query_ .= " AND   code_id = '".pb_database_escape_string($conditions_['code_id'])."' ";
+		$query_ .= " AND   gcode_dtl.code_id = '".pb_database_escape_string($conditions_['code_id'])."' ";
 	}
 	if(isset($conditions_['code_did']) && strlen($conditions_['code_did'])){
 		$query_ .= " AND gcode_dtl.code_did = '".pb_database_escape_string($conditions_['code_did'])."' ";
 	}
+
+	if(isset($conditions_['col1']) && strlen($conditions_['col1'])){
+		$query_ .= " AND gcode_dtl.col1 = '".pb_database_escape_string($conditions_['col1'])."' ";
+	}
+	if(isset($conditions_['col2']) && strlen($conditions_['col2'])){
+		$query_ .= " AND gcode_dtl.col2 = '".pb_database_escape_string($conditions_['col2'])."' ";
+	}
+	if(isset($conditions_['col3']) && strlen($conditions_['col3'])){
+		$query_ .= " AND gcode_dtl.col3 = '".pb_database_escape_string($conditions_['col3'])."' ";
+	}
+	if(isset($conditions_['col4']) && strlen($conditions_['col4'])){
+		$query_ .= " AND gcode_dtl.col4 = '".pb_database_escape_string($conditions_['col4'])."' ";
+	}
+
+
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
 		$query_ .= " AND gcode_dtl.code_dnm LIKE '".pb_database_escape_string($conditions_['keyword'])."%' ";
 	}
@@ -105,7 +130,7 @@ function pb_gcode_dtl_list($conditions_ = array()){
     }
 
     
-	$query_ .= " ORDER BY sort_char ASC";
+	$query_ .= " ORDER BY gcode_dtl.sort_char ASC";
 
 	if(isset($conditions_['limit'])){
         $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";

@@ -38,7 +38,7 @@ class PB_page_list_table extends PBListTable{
 
 	function columns(){
 		return array(
-			'seq' => 'NO',
+			'seq' => '',
 			'page_title' => '페이지명',
 			'status_name' => '상태',
 			'reg_date_ymdhi' => '등록일자',

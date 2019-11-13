@@ -62,6 +62,12 @@ function _pb_ajax_admin_gcode_insert(){
 		'code_id' => $target_data_['code_id'],
 		'code_nm' => $target_data_['code_nm'],
 		'use_yn' => $target_data_['use_yn'],
+		
+		'col1' => isset($target_data_['col1']) && strlen($target_data_['col1']) ? $target_data_['col1'] : null,
+		'col2' => isset($target_data_['col2']) && strlen($target_data_['col2']) ? $target_data_['col2'] : null,
+		'col3' => isset($target_data_['col3']) && strlen($target_data_['col3']) ? $target_data_['col3'] : null,
+		'col4' => isset($target_data_['col4']) && strlen($target_data_['col4']) ? $target_data_['col4'] : null,
+
 		'reg_date' => pb_current_time(),
 	));
 
@@ -94,6 +100,12 @@ function _pb_ajax_admin_gcode_update(){
 		'code_id' => $target_data_['code_id'],
 		'code_nm' => $target_data_['code_nm'],
 		'use_yn' => $target_data_['use_yn'],
+
+		'col1' => isset($target_data_['col1']) && strlen($target_data_['col1']) ? $target_data_['col1'] : null,
+		'col2' => isset($target_data_['col2']) && strlen($target_data_['col2']) ? $target_data_['col2'] : null,
+		'col3' => isset($target_data_['col3']) && strlen($target_data_['col3']) ? $target_data_['col3'] : null,
+		'col4' => isset($target_data_['col4']) && strlen($target_data_['col4']) ? $target_data_['col4'] : null,
+
 		'mod_date' => pb_current_time(),
 	), array("code_id" => $code_id_));
 
@@ -142,16 +154,7 @@ function _pb_ajax_admin_gcode_dtl_load(){
 
 	global $pbdb;
 
-	$code_data_ = $pbdb->get_first_row("
-		SELECT Code_id
-		,code_did
-        ,code_dnm
-        ,use_yn
-        ,sort_char
-		FROM gcode_dtl
-		WHERE code_id = '".pb_database_escape_string($code_id_)."'
-		AND code_did = '".pb_database_escape_string($code_did_)."'
-	");
+	$code_data_ = pb_gcode_dtl($code_id_, $code_did_);
 	
 	echo json_encode(array(
 		"success" => true,
@@ -179,6 +182,12 @@ function _pb_ajax_admin_gcode_dtl_insert(){
 		'code_id' => $target_data_['code_id'],
 		'code_did' => $target_data_['code_did'],
 		'code_dnm' => $target_data_['code_dnm'],
+
+		'col1' => isset($target_data_['col1']) && strlen($target_data_['col1']) ? $target_data_['col1'] : null,
+		'col2' => isset($target_data_['col2']) && strlen($target_data_['col2']) ? $target_data_['col2'] : null,
+		'col3' => isset($target_data_['col3']) && strlen($target_data_['col3']) ? $target_data_['col3'] : null,
+		'col4' => isset($target_data_['col4']) && strlen($target_data_['col4']) ? $target_data_['col4'] : null,
+
 		'use_yn' => $target_data_['use_yn'],
 		'sort_char' => $target_data_['sort_char'],
 		'reg_date' => pb_current_time(),
@@ -213,6 +222,10 @@ function _pb_ajax_admin_gcode_dtl_update(){
 		'code_did' => $target_data_['code_did'],
 		'code_dnm' => $target_data_['code_dnm'],
 		'use_yn' => $target_data_['use_yn'],
+		'col1' => isset($target_data_['col1']) && strlen($target_data_['col1']) ? $target_data_['col1'] : null,
+		'col2' => isset($target_data_['col2']) && strlen($target_data_['col2']) ? $target_data_['col2'] : null,
+		'col3' => isset($target_data_['col3']) && strlen($target_data_['col3']) ? $target_data_['col3'] : null,
+		'col4' => isset($target_data_['col4']) && strlen($target_data_['col4']) ? $target_data_['col4'] : null,
 		'sort_char' => $target_data_['sort_char'],
 		'mod_date' => pb_current_time(),
 	), array("code_id" => $code_id_,"code_did" => $code_did_));

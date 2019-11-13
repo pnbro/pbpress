@@ -30,7 +30,7 @@ class PB_gcode_list_table extends PBListTable{
 		return array(
 			'code_id' => 'id',
 			'code_nm' => '코드명',
-			'use_yn' => '사용여부',
+			'use_yn' => '사용',
 			
 			
 			'button_area' => '',
@@ -149,8 +149,12 @@ class PB_gcode_dtl_list_table extends PBListTable{
 		return array(
 			"code_did" => "did",
 			"code_dnm" => "상세코드명",
-			"use_yn" => "사용여부",
+			"use_yn" => "사용",
 			'sort_char' => '정렬순서',
+			'col1' => '',
+			'col2' => '',
+			'col3' => '',
+			'col4' => '',
 			"button_area" => "",
 			
 		);
@@ -167,6 +171,12 @@ class PB_gcode_dtl_list_table extends PBListTable{
 				 return "col-4";
 			case "use_yn" :
 				 return "col-2 text-center";
+			case "col1" :
+			case "col2" :
+			case "col3" :
+			case "col4" :
+				 return "col-2 text-center extra-".$column_name_;
+
 			case "sort_char" :
 				 return "col-2 text-center";
 			case "button_area" :
@@ -194,6 +204,11 @@ class PB_gcode_dtl_list_table extends PBListTable{
 				return $item_['code_dnm'];
 			case "use_yn" :
 				 return $item_['use_yn'];
+			case "col1" :
+			case "col2" :
+			case "col3" :
+			case "col4" :
+				 return $item_[$column_name_];
 			case "sort_char" :
 				 return $item_['sort_char'];
 

@@ -28,7 +28,7 @@ class PB_user_list_table extends PBListTable{
 
 	function columns(){
 		return array(
-			'seq' => 'seq',
+			'seq' => '',
 			'user_name' => '사용자명',
 			'user_login' => 'id',
 			'user_email' => '이메일',

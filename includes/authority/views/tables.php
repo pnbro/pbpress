@@ -28,7 +28,7 @@ class PB_authority_list_table extends PBListTable{
 
 	function columns(){
 		return array(
-			'seq' => 'SEQ',
+			'seq' => '',
 			'auth_name' => '권한명',
 			'slug' => '슬러그',
 		
@@ -47,10 +47,10 @@ class PB_authority_list_table extends PBListTable{
 			case "auth_name" :
 				 return "col-4";
 			case "slug" :
-				 return "col-3 text-center";
+				 return "col-4 text-center";
 		
 			case "button_area" :
-				 return "col-4 text-right";
+				 return "col-3 text-right";
 			
 			default : 
 				return '';
