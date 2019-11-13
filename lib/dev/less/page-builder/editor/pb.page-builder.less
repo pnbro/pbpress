@@ -533,6 +533,67 @@
 							}					
 						}
 
+						> .collapse-toggle-btn{
+							position: absolute;
+							right: 10px;
+							top: 5px;
+							z-index: 3;
+
+							> .icon{
+								
+								&.open{
+									display: none;
+								}
+							}
+						}
+
+						&.closed{
+							min-height: 0px;
+							height: 70px;
+							overflow: hidden;
+							padding-top: 0px;
+							padding-bottom: 0px;
+							
+							&:after{
+								position: absolute;
+								display: block;
+								content: "";
+								left: 0px;
+								bottom: 0px;
+
+								width: 100%;
+								height: 100%;
+
+								background: rgb(255,255,255);
+								background: -webkit-linear-gradient(bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+								background: -o-linear-gradient(bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+								background: linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+								z-index: 2;
+							}
+							
+							> .element-content-item{
+								opacity: 0.6;
+							}
+						
+							> .add-element-btn{
+								display: none;
+							}
+						
+							> .collapse-toggle-btn{
+						
+								> .icon{
+									&.close{
+										display: none;
+									}
+									&.open{
+										display: block;
+									} 	
+								}
+							}
+						
+							
+						}
+
 						> .add-element-btn{
 							position: absolute;
 							display: block;
