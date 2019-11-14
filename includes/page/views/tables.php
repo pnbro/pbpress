@@ -8,7 +8,7 @@ class PB_page_list_table extends PBListTable{
 
 		$page_index_ = isset($_GET["page_index"]) ? (int)$_GET["page_index"] : 0;
 		$keyword_ = isset($_GET["keyword"]) ? $_GET["keyword"] : null;
-		$status_ = isset($_GET["status"]) ? $_GET["status"] : null;
+		$status_ = isset($_GET["search_status"]) ? $_GET["search_status"] : null;
 		$per_page_ = 15;
 		$offset_ = $this->offset($page_index_, $per_page_);
 
