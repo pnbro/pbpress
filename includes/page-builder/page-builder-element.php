@@ -89,22 +89,31 @@ function pb_page_builder_element_edit_category_common($element_data_){
 	$id_ = isset($element_data_['id']) ? $element_data_['id'] : null;
 	$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
 	?>
-	<div class="form-group">
-		<label>ID</label>
-		<input type="text" name="id" placeholder="ID 입력" class="form-control" value="<?=$id_?>">
 
-		<div class="help-block with-errors"></div>
-		<div class=""></div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-6">
+			<div class="form-group">
+				<label>ID</label>
+				<input type="text" name="id" placeholder="ID 입력" class="form-control" value="<?=$id_?>">
+
+				<div class="help-block with-errors"></div>
+				<div class=""></div>
+			</div>
+
+		</div>
+		<div class="col-xs-12 col-sm-6">
+
+			<div class="form-group">
+				<label>클래스</label>
+				<input type="text" name="class" placeholder="클래스 입력" class="form-control" value="<?=$class_?>">
+
+				<div class="help-block with-errors"></div>
+				<div class=""></div>
+			</div>
+
+		</div>
 	</div>
-
-	<div class="form-group">
-		<label>클래스</label>
-		<input type="text" name="class" placeholder="클래스 입력" class="form-control" value="<?=$class_?>">
-
-		<div class="help-block with-errors"></div>
-		<div class=""></div>
-	</div>
-
+			
 	<?php
 }
 
