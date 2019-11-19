@@ -14,7 +14,7 @@
 		$pbpage_meta_map = array();
 	}
 
-
+	$is_front_page_ = !$is_new_ && pb_front_page_id() === (string)$pbpage['id'];
 
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-page/edit.css">
@@ -33,7 +33,7 @@
 					<div class="input-group input-group-sm">
 						<span class="input-group-addon"><?=pb_home_url()?></span>
 						<input type="text" name="slug" class="form-control" placeholder="URL슬러그 입력" value="<?=$pbpage['slug']?>" data-original-slug="<?=$pbpage['slug']?>">
-
+		
 						<?php if(!$is_new_){ ?>
 						<span class="input-group-btn">
 							<button class="btn btn-primary" type="button" data-slug-edit-update-btn>수정</button>
@@ -47,9 +47,18 @@
 						// $page_url_ = pb_page_url($pbpage['id']);
 					?>
 					<p class="page-url-info">
-						<a href="<?=pb_home_url($pbpage['slug'])?>" target="_blank" data-page-link>
+						<?php if($is_front_page_){ ?>
+							<a href="<?=pb_page_url($pbpage['id'])?>" target="_blank" data-page-link>
+							<?=pb_page_url($pbpage['id'])?>
+						</a>
+						<?php }else{ ?>
+							<a href="<?=pb_home_url($pbpage['slug'])?>" target="_blank" data-page-link>
 							<?=pb_home_url()?><strong class="slug"><?=$pbpage['slug']?></strong>
 						</a> <a href="" class="btn btn-sm btn-default" data-slug-edit-btn>수정</a>
+						<?php } ?>
+						
+
+						
 					</p>
 						
 					<?php } ?>

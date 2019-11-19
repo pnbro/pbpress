@@ -19,8 +19,13 @@ function pb_install_rewrite(){
 		return new PBError(-1, "에러발생", "Rewrite를 생성할 수 없습니다. 파일권한을 확인하세요.");
 	}
 
-
-	fwrite($rewrite_file_, "RewriteEngine On\nRewriteBase ".PB_REWRITE_BASE."\nRewriteRule ^index\.php$ - [L]\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . ".PB_REWRITE_BASE."index.php [L]");
+	fwrite($rewrite_file_, "RewriteEngine On
+\nRewriteCond %{REQUEST_FILENAME} !-f
+\nRewriteCond %{REQUEST_FILENAME} !-d
+\nRewriteRule ^admin/(.+)$ admin/index.php [L]
+\nRewriteCond %{REQUEST_FILENAME} !-f
+\nRewriteCond %{REQUEST_FILENAME} !-d
+\nRewriteRule ^(.+)$ index.php [L]");
 	fclose($rewrite_file_);
 
 	return true;

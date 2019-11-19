@@ -26,8 +26,8 @@ $upload_dir_ = rtrim($upload_dir_, '/') . '/';
 $yyymmdd = new DateTime();
 $yyymmdd_ = date_format($yyymmdd,"Ymd")."/";
 
-$upload_path_ = PB_DOCUMENT_PATH."uploads/".$upload_dir_;
-$upload_url_ = PB_DOCUMENT_URL."uploads/".$upload_dir_;
+$upload_path_ = PB_DOCUMENT_PATH."uploads".$upload_dir_;
+$upload_url_ = PB_DOCUMENT_URL."uploads".$upload_dir_;
 
 $upload_handler_ = new UploadHandler(array(
 	'upload_dir' => $upload_path_.$yyymmdd_,
@@ -52,7 +52,7 @@ foreach($tmps_['files'] as $file_){
 	);
 
 	if(strlen($thumbnail_url_)){
-		$row_data_['thumbnail'] = $yyymmdd_."/thumbnail/".pathinfo($thumbnail_url_, PATHINFO_BASENAME);
+		$row_data_['thumbnail'] = $yyymmdd_."thumbnail/".pathinfo($thumbnail_url_, PATHINFO_BASENAME);
 	}
 
 	$results_[] = $row_data_;

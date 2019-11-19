@@ -1,6 +1,24 @@
 <?php 		
 
-	include(dirname( __FILE__ ) . "/includes.php");
+		
+	require(dirname( __FILE__ ) . '/../defined.php');
+	require(PB_DOCUMENT_PATH . 'includes/includes.php');
+	require(dirname( __FILE__ ) . '/admin-hook.php');
+	require(dirname( __FILE__ ) . '/function.php');
+
+	//check rewrite rule
+	if(!pb_exists_rewrite()){
+		pb_install_rewrite();
+	}
+
+	//check https config
+	if((empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === "off") && $pb_config->use_https()){
+		$https_location_ = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		header('HTTP/1.1 301 Moved Permanently');
+		header('Location: ' . $https_location_);
+		pb_hook_do_action('pb_ended');
+		exit;
+	}
 
 	global $pbdb;
 	if($pbdb->exists_table("options")){

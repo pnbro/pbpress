@@ -1,6 +1,9 @@
 <?php
 
-include(dirname( __FILE__ ) . "/includes.php");
+require(dirname( __FILE__ ) . '/../defined.php');
+require(PB_DOCUMENT_PATH . 'includes/includes.php');
+require(dirname( __FILE__ ) . '/admin-hook.php');
+require(dirname( __FILE__ ) . '/function.php');
 
 global $pb_config;
 
@@ -67,16 +70,6 @@ if(pb_is_error($common_rewrite_bool_)){
 		'success' => false,
 		'error_title' => '에러발생',
 		'error_message' => $common_rewrite_bool_->error_message(),
-	));
-	pb_admin_end();
-}
-
-$admin_rewrite_bool_ = pb_install_admin_rewrite();
-if(pb_is_error($admin_rewrite_bool_)){
-	echo json_encode(array(
-		'success' => false,
-		'error_title' => '에러발생',
-		'error_message' => $admin_rewrite_bool_->error_message(),
 	));
 	pb_admin_end();
 }

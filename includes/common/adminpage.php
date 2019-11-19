@@ -96,23 +96,23 @@ function pb_adminpage_tree($apply_authority_ = true){
 	return $pb_adminpage_tree;
 }
 
-function pb_exists_admin_rewrite(){
-	return file_exists(PB_DOCUMENT_PATH."admin/.htaccess");
-}
-function pb_install_admin_rewrite(){
+// function pb_exists_admin_rewrite(){
+// 	return file_exists(PB_DOCUMENT_PATH."admin/.htaccess");
+// }
+// function pb_install_admin_rewrite(){
 
-	$rewrite_base_ = str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH);
-	$rewrite_file_ = fopen(PB_DOCUMENT_PATH."admin/.htaccess", "w");
+// 	$rewrite_base_ = str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH);
+// 	$rewrite_file_ = fopen(PB_DOCUMENT_PATH."admin/.htaccess", "w");
 
-	if(!isset($rewrite_file_)){
-		return new PBError(-1, "에러발생", "관리자 Rewrite를 생성할 수 없습니다. 파일권한을 확인하세요.");
-	}
+// 	if(!isset($rewrite_file_)){
+// 		return new PBError(-1, "에러발생", "관리자 Rewrite를 생성할 수 없습니다. 파일권한을 확인하세요.");
+// 	}
 
 
-	fwrite($rewrite_file_, "RewriteEngine On\nRewriteBase ".PB_ADMINPAGE_REWRITE_BASE."\nRewriteRule ^index\.php$ - [L]\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . ".$rewrite_base_."admin/index.php [L]");
-	fclose($rewrite_file_);
-	return true;
-}
+// 	fwrite($rewrite_file_, "RewriteEngine On\nRewriteBase ".PB_ADMINPAGE_REWRITE_BASE."\nRewriteRule ^index\.php$ - [L]\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . ".$rewrite_base_."admin/index.php [L]");
+// 	fclose($rewrite_file_);
+// 	return true;
+// }
 
 function pb_adminpage_rewrite_path(){
 	global $pb_adminpage_rewrite_path;
