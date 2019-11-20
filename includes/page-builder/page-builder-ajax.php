@@ -138,4 +138,38 @@ function _pb_page_builder_ajax_load_edit_element_form(){
 }
 pb_add_ajax('page-builder-load-edit-form', '_pb_page_builder_ajax_load_edit_element_form');
 
+function _pb_page_builder_ajax_render_element_custom_preview(){
+	$element_id_ = isset($_POST['key']) ? $_POST['key'] : null;
+	$field_name_ = isset($_POST['field_name']) ? $_POST['field_name'] : null;
+	$element_data_ = isset($_POST['element_data']) ? $_POST['element_data'] : null;
+	$content_ = isset($_POST['content']) ? $_POST['content'] : null;
+
+	$temp_page_builder_elements_ = pb_page_builder_elements();
+
+	$target_element_ = $temp_page_builder_elements_[$element_id_];
+
+	$preview_fields_ = $target_element_['preview_fields'];
+	$target_preview_data_ = null;
+
+	foreach($preview_fields_ as $preview_field_){
+		if($preview_field_['name'] === $field_name_){
+			$target_preview_data_ = $preview_field_;
+			break;
+		}
+	}
+
+	ob_start();
+	call_user_func_array($target_preview_data_['func'], array($element_data_, $content_));
+	$preview_html_ = ob_get_clean();
+
+	echo json_encode(array(
+		'success' => true,
+		'preview_html' => $preview_html_,
+	));
+
+	pb_end();	
+}
+
+pb_add_ajax('page-builder-render-element-custom-preview', '_pb_page_builder_ajax_render_element_custom_preview')
+
 ?>

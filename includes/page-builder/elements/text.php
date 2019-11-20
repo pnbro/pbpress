@@ -54,7 +54,7 @@ pb_page_builder_add_element("text", array(
 			'name' => 'content',
 			'type' => 'html',
 			'display' => 'block',
-		)
+		),
 	),
 	'category' => "기본",
 ));

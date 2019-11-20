@@ -510,11 +510,27 @@
 								padding: 3px 0px;
 							}
 
-							img{
+							.preview-image{
 								position: relative;
 								display: block;
 								width: 100%;
-								max-width: 300px;
+								max-width: 350px;
+								margin: 0 auto;
+
+								background-repeat: no-repeat;
+								background-position: center;
+								background-size: contain;
+								background-color: #f7f7f7;
+
+								> .image{
+									position: relative;
+									display: block;
+									width: 100%;
+									padding-top: 60%;
+									background-repeat: no-repeat;
+									background-position: center;
+									background-size: cover;
+								}
 							}
 
 						}
