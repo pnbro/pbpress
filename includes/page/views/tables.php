@@ -107,7 +107,7 @@ class PB_page_list_table extends PBListTable{
 			<div class="xs-visiable-info">
 				<div class="subinfo"><i class="icon material-icons">access_time</i> <span class="text"><?=$item_['reg_date_ymdhi']?></span></div>
 				<div class="subinfo">
-					<select class="form-control input-sm display-inline" name="status" data-page-status="<?=$item_['id']?>">
+					<select class="form-control input-sm display-inline" data-page-status="<?=$item_['id']?>">
 						<?= pb_gcode_make_options(array("code_id" => "PAG01"), $item_['status']); ?>
 					</select>
 				</div>
@@ -121,7 +121,7 @@ class PB_page_list_table extends PBListTable{
 				ob_start();
 				?>
 
-				<select class="form-control input-sm" name="status" data-page-status="<?=$item_['id']?>">
+				<select class="form-control input-sm" data-page-status="<?=$item_['id']?>">
 					<?= pb_gcode_make_options(array("code_id" => "PAG01"), $item_['status']); ?>
 				</select>
 
