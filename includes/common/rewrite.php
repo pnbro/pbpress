@@ -73,7 +73,10 @@ function pb_rewrite_path(){
 	if(strpos($_SERVER['REQUEST_URI'], PB_REWRITE_BASE) === false) return null;
 
 	$subpath_string_ = preg_replace('/'.preg_quote(PB_REWRITE_BASE,"/").'/', '', strtok($_SERVER['REQUEST_URI'], "?"), 1);
+	$subpath_string_ = ltrim($subpath_string_,"/");
 	$subpath_string_ = rtrim($subpath_string_,"/");
+	$subpath_string_ = preg_replace('/(\/+)/','/',$subpath_string_);
+
 	$subpath_map_ = strlen($subpath_string_) > 0 ? explode("/", $subpath_string_) : array();
 
 	global $pb_rewrite_path;
@@ -148,9 +151,12 @@ function _pb_rewrite_unique_slug_for_reserved($result_, $original_slug_, $retry_
 }
 pb_hook_add_filter("pb_rewrite_unique_slug", "_pb_rewrite_unique_slug_for_reserved");
 
-function _pb_rewrite_path_normalize(){	
+function _pb_rewrite_path_normalize(){
+	if(!in_array($_SERVER["REQUEST_METHOD"], array("GET"))) return;
+
 	$subpath_string_ = preg_replace('/'.preg_quote(PB_REWRITE_BASE,"/").'/', '', strtok($_SERVER['REQUEST_URI'], "?"), 1);
-	$subpath_string_normalized_ = rtrim($subpath_string_,"/")."/";
+	$subpath_string_normalized_ = ltrim($subpath_string_, "/");
+	$subpath_string_normalized_ = rtrim($subpath_string_normalized_,"/")."/";
 
 	$is_last_slash_ = strrpos($subpath_string_, "/") == strlen($subpath_string_) - 1;
 	$subpath_string_ .= ($is_last_slash_ ? "" : "/");
@@ -161,7 +167,6 @@ function _pb_rewrite_path_normalize(){
 		if(strlen($query_string_)){
 			$normalized_url_ .= "?".$query_string_;
 		}
-		
 		pb_redirect($normalized_url_);
 		pb_end();
 	}

@@ -27,17 +27,13 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarResponsive">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item <?=pb_is_home() ? "active" : ""?>">
-						<a class="nav-link" href="<?=pb_home_url()?>">Home
-							<span class="sr-only">(current)</span>
-						</a>
-					</li>
-					<li class="nav-item <?=pb_is_current_slug("other-page") ? "active" : ""?>">
-						<a class="nav-link" href="<?=pb_home_url("other-page")?>">다른 페이지</a>
-					</li>
-					
-				</ul>
+				<?php
+					$main_menu_id_ = pb_option_value("sample_theme_menu_id");
+					pb_menu_render(array(
+						'menu_slug' => $main_menu_id_,
+						'walker' => 'PBMenuWalker_sample_mainmenu',
+					)); ?>
+
 			</div>
 		</div>
 	</nav>
