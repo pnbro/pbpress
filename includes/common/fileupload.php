@@ -99,7 +99,7 @@ function pb_fileupload_handle($files_, $options_ = array()){
 		while(file_exists($upload_path_.$yyymmdd_.$renamed_file_name_)){
 			$renamed_file_name_ = pb_random_string(15); 
 		}
-		
+
 		$file_extension_ = pathinfo($original_file_name_, PATHINFO_EXTENSION);
 
 		if(strlen($file_extension_)){
@@ -108,6 +108,10 @@ function pb_fileupload_handle($files_, $options_ = array()){
 
 		$image_size_info_ = @getimagesize($origianl_file_path_);
 		$is_image_ = is_array($image_size_info_);
+
+		if(!file_exists($upload_path_.$yyymmdd_)){
+			mkdir($upload_path_.$yyymmdd_, 0755, true);
+		}
 
 		$move_result_ = move_uploaded_file($origianl_file_path_, $upload_path_.$yyymmdd_.$renamed_file_name_);
 
