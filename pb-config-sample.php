@@ -22,4 +22,8 @@ define("PB_MULTILINGUAL_THEME", false);
 
 // define("PB_HTTPS", true);
 
+// define("PB_UPLOAD_MAX_IMAGE_WIDTH", 2000);
+// define("PB_UPLOAD_MAX_IMAGE_HEIGHT", 2000);
+
+
 ?>

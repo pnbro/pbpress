@@ -17,45 +17,32 @@ if(!file_exists(PB_DOCUMENT_PATH."uploads/.htaccess")){
 	_pb_install_rewrite_for_upload_directory();
 }
 
-include_once(PB_DOCUMENT_PATH."includes/common/lib/UploadHandler.php");
 
-$upload_dir_ = (isset($_GET['upload_dir']) && strlen($_GET['upload_dir'])) ? $_GET['upload_dir'] : "";
-$upload_dir_ = '/'.trim($upload_dir_, '/');
-$upload_dir_ = rtrim($upload_dir_, '/') . '/';	
+if(empty($_FILES)){
+	echo json_encode(array(
+		'success' => false,
+		'error_title' =>"업로드실패",
+		'error_message' =>"업로드 파일이 비어있습니다.",
+	));
+	pb_end();
+}
 
-$yyymmdd = new DateTime();
-$yyymmdd_ = date_format($yyymmdd,"Ymd")."/";
+$upload_dir_ = (isset($_GET['upload_dir']) && strlen($_GET['upload_dir'])) ? $_GET['upload_dir'] : null;
 
-$upload_path_ = PB_DOCUMENT_PATH."uploads".$upload_dir_;
-$upload_url_ = PB_DOCUMENT_URL."uploads".$upload_dir_;
+$results_ = array();
+$files_ = $_FILES['files'];
 
-$upload_handler_ = new UploadHandler(array(
-	'upload_dir' => $upload_path_.$yyymmdd_,
-	'upload_url' => $upload_url_.$yyymmdd_,
-	'print_response' => false,
+$results_ = pb_fileupload_handle($files_, array(
+	'upload_dir' => $upload_dir_,
 ));
 
-$tmps_ = $upload_handler_->get_response();
-$results_ = array();
-
-foreach($tmps_['files'] as $file_){
-	$thumbnail_url_ = isset($file_->thumbnailUrl) ? $file_->thumbnailUrl : null;
-	$row_data_ = array(
-		
-		'size' => $file_->size,
-		'type' => $file_->type,
-
-		'upload_path' => $upload_dir_,
-		
-		'o_name' => $yyymmdd_.$file_->name,
-		'r_name' => $yyymmdd_.pathinfo($file_->url, PATHINFO_BASENAME),
-	);
-
-	if(strlen($thumbnail_url_)){
-		$row_data_['thumbnail'] = $yyymmdd_."thumbnail/".pathinfo($thumbnail_url_, PATHINFO_BASENAME);
-	}
-
-	$results_[] = $row_data_;
+if(pb_is_error($results_)){
+	echo json_encode(array(
+		'success' => false,
+		'error_title' => $results_->error_title(),
+		'error_message' => $results_->error_message(),
+	));
+	pb_end();
 }
 
 echo json_encode(array(

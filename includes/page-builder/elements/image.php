@@ -31,6 +31,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 	function render_admin_form($element_data_ = array(), $content_ = null){
 		$temp_form_id_ = "image-input-".pb_random_string(5);
 		$src_ = isset($element_data_['src']) ? $element_data_['src'] : null;
+		$thumbnail_src_ = isset($element_data_['thumbnail_src']) ? $element_data_['thumbnail_src'] : null;
 
 		$max_width_ = isset($element_data_['max_width']) ? $element_data_['max_width'] : null;
 		$image_align_ = isset($element_data_['image_align']) ? $element_data_['image_align'] : "center";
@@ -39,7 +40,8 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 
 		<div class="form-group">
 			<label>이미지선택</label>
-			<input type="text" name="src" value="<?=$src_?>" class="hidden" id="<?=$temp_form_id_?>" data-upload-path="/">
+			<input type="hidden" name="thumbnail_src" value="<?=$thumbnail_src_?>" id="<?=$temp_form_id_?>-thumbnail">
+			<input type="text" name="src" value="<?=$src_?>" class="hidden" id="<?=$temp_form_id_?>" data-upload-path="/" data-thumbnail-ipnut="#<?=$temp_form_id_?>-thumbnail">
 			<div class="clearfix"></div>
 		</div>
 
