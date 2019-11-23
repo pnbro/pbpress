@@ -84,7 +84,6 @@ you can make a theme that you want, and just put your theme you made into 'theme
 	sortablejs : https://sortablejs.github.io/Sortable/
 
 ### Backend
-	blueimp UploadHandler : https://github.com/blueimp/jQuery-File-Upload
 	phpmailer : https://github.com/PHPMailer/PHPMailer
 
 ### Font
