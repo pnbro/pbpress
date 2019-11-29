@@ -7,6 +7,13 @@ if(!defined('PB_DOCUMENT_PATH')){
 //load common modules
 require(PB_DOCUMENT_PATH . 'includes/includes.php');
 
+//check install
+if(!$pbdb->exists_table("options")){
+	pb_redirect(PB_DOCUMENT_URL."admin/install.php");
+	pb_hook_do_action('pb_ended');
+	exit;
+}
+
 //check install pbress
 global $pbdb, $pb_config;
 
