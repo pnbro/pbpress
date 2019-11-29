@@ -25,4 +25,6 @@ function _pb_page_builder_element_library_for_common(){
 }
 pb_hook_add_action("pb_head", "_pb_page_builder_element_library_for_common");
 
+pb_page_builder_css_add(PB_DOCUMENT_PATH.'includes/page-builder/elements/common.css');
+
 ?>

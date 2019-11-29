@@ -4,9 +4,9 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "1.3.1");
+define('PB_PAGE_BUILDER_VERSION', "1.4.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "1.0.0");
-define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', "1.3.1");
+define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', "1.4.0");
 
 function _pb_page_builder_recursive_parse_inner($element_){
 	$element_map_ = pb_page_builder_elements();
@@ -175,8 +175,109 @@ jQuery(document).ready(function(){
 <?php 
 }
 
+define('PB_PAGE_BUILDER_COMPILED_SLUG', '_page_builder_compiled.css');
+
+global $_pb_page_builder_css_map;
+$_pb_page_builder_css_map = array();
+
+function pb_page_builder_css_add($file_path_){
+	global $_pb_page_builder_css_map;
+	$_pb_page_builder_css_map[] = array(
+		'path' => $file_path_,
+	);
+}
+function pb_page_builder_css_remove($file_path_){
+	global $_pb_page_builder_css_map;
+
+	$finded_index_ = array_search($file_path_, $_pb_page_builder_css_map);
+	if($finded_index_ === FALSE) return;
+
+	array_splice($_pb_page_builder_css_map, $finded_index_, 1);
+}
+
+function _pb_page_builder_compile_css_map(){
+	$screen_xs_min_ = pb_option_value('pb_page_builder_screen_xs', 480);
+	$screen_sm_min_ = pb_option_value('pb_page_builder_screen_sm', 768);
+	$screen_md_min_ = pb_option_value('pb_page_builder_screen_md', 992);
+	$screen_lg_min_ = pb_option_value('pb_page_builder_screen_lg', 1220);
+
+	$screen_xs_max_ = $screen_sm_min_ - 1;
+	$screen_sm_max_ = $screen_md_min_ - 1;
+	$screen_md_max_ = $screen_lg_min_ - 1;
+
+	$default_padding_ = pb_option_value('pb_page_builder_default_padding', 20);
+
+	$style_data_ = array(
+		'screen_xs_min' => $screen_xs_min_,
+		'screen_xs_max' => $screen_xs_max_,
+		'screen_sm_min' => $screen_sm_min_,
+		'screen_sm_max' => $screen_sm_max_,
+		'screen_md_min' => $screen_md_min_,
+		'screen_md_max' => $screen_md_max_,
+		'screen_lg_min' => $screen_lg_min_,
+		'default_padding' => $default_padding_,
+		'default_padding_double' => $default_padding_ * 2,
+		'default_padding_half' => $default_padding_ / 2,
+	);
+
+	$style_data_ = pb_hook_apply_filters('pb_page_builder_compile_css_style_data', $style_data_);
+
+	global $_pb_page_builder_css_map;
+	if(!isset($_pb_page_builder_css_map)) $_pb_page_builder_css_map = array();
+
+	$css_string_ = "";
+
+	foreach($_pb_page_builder_css_map as $css_map_data_){
+		$css_string_ .= @file_get_contents($css_map_data_['path']) . PHP_EOL;
+	}
+
+
+	$css_string_ = pb_hook_apply_filters('pb_page_builder_compile_css_string', $css_string_);
+
+	foreach($style_data_ as $key_ => $value_){
+		$css_string_ = str_replace("@@".$key_."@@", $value_, $css_string_);	
+		$css_string_ = str_replace(urlencode("@@".$key_."@@"), urlencode($value_), $css_string_);	
+	}
+
+	preg_match_all('(\@\@\{[0-9\@a-zA-Z\_\-\+\ ]{1,}\}\@\@)', $css_string_, $regex_matches_);
+
+	if(count($regex_matches_) > 0){
+		foreach($regex_matches_[0] as $string_){
+			$exp_ = ltrim($string_, "@@{");
+			$exp_ = rtrim($exp_, "}@@");
+			// print_r($exp_);
+		}
+	}
+		
+
+	return $css_string_;
+}
+
+pb_rewrite_register(PB_PAGE_BUILDER_COMPILED_SLUG, array(
+	"rewrite_handler" => "_pb_page_builder_rewrite_handler_for_compiled_css",
+));
+function _pb_page_builder_rewrite_handler_for_compiled_css(){
+	$css_string_ = _pb_page_builder_compile_css_map();
+	header("Content-type: text/css", true);
+	echo $css_string_;
+	pb_end();
+}
+
+function pb_page_builder_compiled_url(){
+	return pb_home_url(PB_PAGE_BUILDER_COMPILED_SLUG);
+}
+
+
+pb_hook_add_action("pb_head", "_pb_page_builder_head_hook_for_css_map");
+function _pb_page_builder_head_hook_for_css_map(){
+	?>
+	<link rel="stylesheet" type="text/css" href="<?=pb_page_builder_compiled_url()?>">
+	<?php
+}
+
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-element.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-ajax.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-builtin.php');
+include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-adminpage.php');
 
 ?>
