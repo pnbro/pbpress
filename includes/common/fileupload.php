@@ -148,7 +148,8 @@ function pb_fileupload_handle($files_, $options_ = array()){
 				$original_rate_ = $original_width_ / $original_height_;
 
 				//image resizing
-				if(isset($max_image_width_) || isset($max_image_height_)){
+				if((isset($max_image_width_) && $max_image_width_ < $original_width_)
+					|| (isset($max_image_height_) && $max_image_height_ < $original_height_)){
 
 					$image_dst_width_ = $original_width_;
 					$image_dst_height_ = $original_height_;
@@ -164,6 +165,10 @@ function pb_fileupload_handle($files_, $options_ = array()){
 					}
 
 					$resize_dst_instance_ = imagecreatetruecolor($image_dst_width_, $image_dst_height_);
+					imagealphablending($resize_dst_instance_, false);
+					imagesavealpha($resize_dst_instance_,true);
+					$transparent_ = imagecolorallocatealpha($resize_dst_instance_, 255, 255, 255, 127);
+					imagefilledrectangle($resize_dst_instance_, 0, 0, $image_dst_width_, $image_dst_height_, $transparent_);
 					imagecopyresampled($resize_dst_instance_, $original_src_instance_, 0, 0, 0, 0, $image_dst_width_, $image_dst_height_, $original_width_, $original_height_);
 
 					if($file_extension_ === "gif"){

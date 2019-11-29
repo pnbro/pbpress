@@ -513,9 +513,9 @@
 							.preview-image{
 								position: relative;
 								display: block;
-								min-width: 300px;
+								// min-width: 300px;
 								width: 100%;
-								width: 350px;
+								max-width: 350px;
 								margin: 0 auto;
 
 								background-repeat: no-repeat;
@@ -531,6 +531,18 @@
 									background-repeat: no-repeat;
 									background-position: center;
 									background-size: cover;
+								}
+							}
+
+							&.inline-item{
+								.preview-image{
+									position: relative;
+									display: inline-block;
+									// min-width: 300px;
+									min-width: 100px;
+									max-width: 350px;
+									margin: 0px;
+									vertical-align: top;
 								}
 							}
 
