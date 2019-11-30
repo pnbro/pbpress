@@ -57,5 +57,11 @@ function __($text_, $domain_ = null){
 	}
 	return dgettext($domain_, $text_);
 }
+function _e($text_, $domain_ = null){
+	if(!strlen($domain_)){
+		$domain_ = pb_current_theme();
+	}
+	echo dgettext($domain_, $text_);
+}
 
 ?>

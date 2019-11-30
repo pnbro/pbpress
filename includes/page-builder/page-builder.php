@@ -168,7 +168,11 @@ jQuery(document).ready(function(){
 	var page_builder_ = $("#<?=$builder_id_?>").pb_page_builder();
 
 	var default_content_ = $('<textarea />').html($("#<?=$builder_id_?>-defaults").html()).text();
-	page_builder_.apply_xml(default_content_);
+
+	if(default_content_ && default_content_ !== ""){
+		page_builder_.apply_xml(default_content_);	
+	}
+	
 });
 </script>
 

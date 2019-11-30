@@ -52,8 +52,6 @@ class PBListTable{
 
 		$listtable_maps_[$global_id_] = serialize($this);
 		pb_session_put(PB_LISTTABLE_MAPS, $listtable_maps_);
-		pb_hook_add_action('pb_admin_foot', array($this, "_hook_for_initialize"));
-		pb_hook_add_action('pb_foot', array($this, "_hook_for_initialize"));
 	}
 
 	function offset($page_index_, $per_page_){
@@ -101,54 +99,77 @@ class PBListTable{
 	}
 
 	function rander_header(){
-		$html_ = '';
-		$html_ .= '<tr>';
 
-		$columns_ = $this->columns();
-		foreach($columns_ as $key_ => $title_){
-			$html_ .= '<th class="'.$key_.' '.$this->column_header_classes($key_).'">'.$title_.'</th>';
-		}
+		ob_start();
 
-		$html_ .= '</tr>';
+		?>
+		<tr>
+			<?php
 
-		return $html_;
+				$columns_ = $this->columns();
+				foreach($columns_ as $key_ => $title_){ ?>
+
+					<th class="<?=$key_?> <?=$this->column_header_classes($key_)?>"><?=$title_?></th>
+					
+				<?php }
+			?>
+			
+		</tr>
+
+		<?php
+
+		return ob_get_clean();
 	}
+
 	function rander_body($args_, $items_){
 		$is_first_ = isset($args_["first"]) ? $args_["first"] : false;
 		$columns_ = $this->columns();
 		$is_norowdata_ = (count($items_) == 0);
 
-		$html_ = '';
+		ob_start();
 		
 		$this->current_row = 0;
 		$this->display_row_number = ($is_first_ ? 0 : ($args_["page_index"] * $args_["per_page"])) + 1;
 		$this->display_r_row_number = ($is_first_ ? 0 : ($args_["total_count"] - ($args_["page_index"] * $args_["per_page"])) );
 		foreach($items_ as $row_index_ => $row_data_){
+			echo $this->before_row($row_data_, $row_index_);
+
 			$tr_attributes_ = $this->row_attributes($row_data_, $row_index_);
-			$html_ .= $this->before_row($row_data_, $row_index_);
-			$html_ .= '<tr ';
+			$tr_attributes_html_ = "";
 			foreach($tr_attributes_ as $key_ => $value_){
-				$html_ .= $key_.'="'.$value_.'"';
-			}
-			$html_ .= ' >';
-
-			foreach($columns_ as $key_ => $title_){
-				$html_ .= '<td class="'.$key_.' '.$this->column_body_classes($key_, $row_data_).'" >'.$this->column_value($row_data_, $key_).'</td>';
+				$tr_attributes_html_ .= $key_.'="'.$value_.'"';
 			}
 
-			$html_ .= '</tr>'.$this->after_row($row_data_, $row_index_);
+			?>
+
+			<tr <?=$tr_attributes_html_?>>
+
+			<?php 
+
+			foreach($columns_ as $key_ => $title_){ ?>
+				<td class="<?=$key_?> <?=$this->column_body_classes($key_, $row_data_)?>" ><?=$this->column_value($row_data_, $key_)?></td>
+			<?php }
+
+			?>
+
+			</tr>
+
+			<?php
+
+			echo $this->after_row($row_data_, $row_index_);
+
 			$this->current_row += 1;
 			$this->display_row_number += 1;
 			$this->display_r_row_number -= 1;
 		}
 
-		if($is_first_){
-			$html_ .= '<tr><td class="no-rowdata first" colspan="'.(count($columns_)).'">'.$this->first_row_display().'</td></tr>';
-		}else if($is_norowdata_){
-			$html_ .= '<tr><td class="no-rowdata" colspan="'.(count($columns_)).'">'.$this->norowdata().'</td></tr>';
-		}
+		if($is_first_){ ?>
+			<tr><td class="no-rowdata first" colspan="<?=(count($columns_))?>"><?=$this->first_row_display()?></td></tr>
+		<?php }else if($is_norowdata_){ ?>
+			<tr><td class="no-rowdata" colspan="<?=(count($columns_))?>"><?=$this->norowdata()?></td></tr>
+		<?php }
 
-		return $html_;
+		return ob_get_clean();
 	}
 	function rander_pagenav($args_){
 		$per_page_ = $args_["per_page"];
@@ -159,14 +180,8 @@ class PBListTable{
 		$is_pagenav_number_ = isset($args_['pagenav_number']) ? $args_['pagenav_number'] : true;
 		
 		$pagenav_offset_ = floor(($page_index_) / $pagenav_count_);
-	/*	$pagenav_start_index_ = ($pagenav_offset_ * $pagenav_count_);
-		$pagenav_end_offset_ = ($pagenav_count_*($pagenav_offset_+1));
 
-		if($total_page_count_ <= $pagenav_end_offset_){
-			$pagenav_end_offset_= $total_page_count_;
-		}*/
-
-		$html_ = '';
+		ob_start();
 
 		if($is_pagenav_number_){
 
@@ -177,44 +192,54 @@ class PBListTable{
 				$pagenav_end_offset_= $total_page_count_;
 			}
 
-			if($pagenav_start_index_ > 0){
-				$html_ .= '<a href="javascript:void(0);" class="pagenav-left pagenav-btn" data-page-index="'.($pagenav_start_index_-1).'"><i class="icon material-icons">keyboard_arrow_left</i></a>';
-			}else{
-				$html_ .= '<span class="pagenav-left pagenav-btn"></span>';
-			}
+			if($pagenav_start_index_ > 0){ ?>
+				<a href="javascript:void(0);" class="pagenav-left pagenav-btn" data-page-index="<?=$pagenav_start_index_-1?>"><i class="icon material-icons">keyboard_arrow_left</i></a>
+			<?php }else{ ?>
+				<span class="pagenav-left pagenav-btn"></span>
+			<?php }
 
-			for($pagenav_index_ = $pagenav_start_index_; $pagenav_index_ < $pagenav_end_offset_; ++$pagenav_index_){
-				$html_ .= '<a href="javascript:void(0);" data-page-index="'.($pagenav_index_).'" class="'.($pagenav_index_ == $page_index_ ? "active" : "").' page-numbers">'.($pagenav_index_ + 1).'</a>';
-			}
+			for($pagenav_index_ = $pagenav_start_index_; $pagenav_index_ < $pagenav_end_offset_; ++$pagenav_index_){ ?>
 
-			if($total_page_count_ > $pagenav_end_offset_){
-				$html_ .= '<a href="javascript:void(0);" class="pagenav-right pagenav-btn" data-page-index="'.($pagenav_end_offset_).'"><i class="icon material-icons">keyboard_arrow_right</i></a>';
-			}else{
-				$html_ .= '<span class="pagenav-left pagenav-btn"></span>';
-			}
+				<a href="javascript:void(0);" data-page-index="<?=$pagenav_index_?>" class="<?=$pagenav_index_ == $page_index_ ? "active" : ""?> page-numbers"><?=$pagenav_index_ + 1?></a>
+				
+			<?php }
+
+			if($total_page_count_ > $pagenav_end_offset_){ ?>
+
+				<a href="javascript:void(0);" class="pagenav-right pagenav-btn" data-page-index="<?=$pagenav_end_offset_?>"><i class="icon material-icons">keyboard_arrow_right</i></a>
+			<?php }else{ ?>
+
+				<span class="pagenav-left pagenav-btn"></span>
+				
+			<?php }
 		}else{
-			if(($page_index_-1) >= 0){
-				$html_ .= '<a href="javascript:void(0);" class="pagenav-left pagenav-btn" data-page-index="'.($page_index_-1).'"><i class="icon material-icons">keyboard_arrow_left</i></a>';
-			}else{
-				$html_ .= '<span class="pagenav-left pagenav-btn"></span>';
-			}
+			if(($page_index_-1) >= 0){ ?>
+
+				<a href="javascript:void(0);" class="pagenav-left pagenav-btn" data-page-index="<?=($page_index_-1)?>"><i class="icon material-icons">keyboard_arrow_left</i></a>
+				
+			<?php }else{ ?>
+
+				<span class="pagenav-left pagenav-btn"></span>
+			<?php }
 
 			
-			if($total_count_ > 0){
-				$html_ .= '<span class="page-monitor">'.($page_index_+1).'/'.$total_page_count_.'</span>';	
-			}	
+			if($total_count_ > 0){ ?>
+				<span class="page-monitor"><?=($page_index_+1)?>/<?=$total_page_count_?></span>
+			<?php }	
 			
-			if($total_page_count_ > ($page_index_+1)){
-				$html_ .= '<a href="javascript:void(0);" class="pagenav-right pagenav-btn" data-page-index="'.($page_index_+1).'"><i class="icon material-icons">keyboard_arrow_right</i></a>';
-			}else{
-				$html_ .= '<span class="pagenav-left pagenav-btn"></span>';
-			}
+			if($total_page_count_ > ($page_index_+1)){ ?>
+				<a href="javascript:void(0);" class="pagenav-right pagenav-btn" data-page-index="<?=$page_index_+1?>"><i class="icon material-icons">keyboard_arrow_right</i></a>
+			<?php }else{ ?>
+				<span class="pagenav-left pagenav-btn"></span>
+			<?php }
 
 		}
 
-		$html_ .= '<div class="clearfix"></div>';
+		?>
+			<div class="clearfix"></div>
+		<?php
 
-		return $html_;
+		return ob_get_clean();
 	}
 
 	function html(){
@@ -227,49 +252,64 @@ class PBListTable{
 		$hide_pagenav_ = (isset($args_["hide_pagenav"]) ? $args_["hide_pagenav"] : false);
 		$hide_header_ = (isset($args_["hide_header"]) ? $args_["hide_header"] : false);
 
-		$html_ = '';
-		$html_ .= '<input type="hidden" name="page_index" value="'.$page_index_.'">';
-		$html_ .= '<table class="table table-hover table-striped pb-listtable '.$this->html_class.'" '.(strlen($this->html_id) ? 'id="'.$this->html_id.'"' : '').' data-pb-listtable-id="'.$this->global_id.'" ';
+		$args_['table_class'] = isset($args_['table_class']) ? $args_['table_class'] : "table table-hover table-striped pb-listtable";
 
-		$html_ .= '>';
+		ob_start();
+
+		?>
+
+		<input type="hidden" name="page_index" value="<?=$page_index_?>">
+			
+		<table class="<?=$args_['table_class']?> <?=$this->html_class?>" <?=(strlen($this->html_id) ? 'id="'.$this->html_id.'"' : '')?> data-pb-listtable-id="<?=$this->global_id?>" >
+		<?php
 
 		if(!$hide_header_){
-			$html_ .= '<thead>';
-			$html_ .= $this->rander_header();
-			$html_ .= '</thead>';	
+			?>
+
+			<thead><?=$this->rander_header()?></thead>
+
+			<?php
 		}
-		
-		$html_ .= '<tbody>';
-		if(!$this->is_ajax()){
-			$html_ .= $this->rander_body($args_, $this->items($args_));
-		}else $html_ .= $this->rander_body(array('first' => true), array());
-		$html_ .= '</tbody>';
 
-		$html_ .= '</table>';
-
-		ob_start();
-		pb_hook_apply_filters('pb-listtable-before-pagenav-'.$this->html_id, '');
-		$html_ .= ob_get_clean();
-
-		$html_ .= '<div class="pb-list-pagenav '.($hide_pagenav_ ? "hidden" : "").'" '.(strlen($this->html_id) ? 'id="'.$this->html_id.'-pagenav"' : '').'  data-pb-listtable-pagenav-id="'.$this->global_id.'">';
-		if(!$hide_pagenav_){
-			$html_ .= $this->rander_pagenav($args_);
-		}
-		$html_ .= '</div>';
-
-		ob_start();
-		pb_hook_apply_filters('pb-listtable-after-pagenav-'.$this->html_id, '');
-		$html_ .= ob_get_clean();
-
-		return $html_;
-	}
-
-	function _hook_for_initialize(){
 		?>
-		<script type="text/javascript">
-		_pb_list_table_initialize("<?=$this->global_id?>",<?=($this->is_ajax() === true ? "true" : "false")?>);
-		</script>
+
+		<tbody>
+			<?php
+				if(!$this->is_ajax()){
+					echo $this->rander_body($args_, $this->items($args_));
+				}else{
+					echo $this->rander_body(array('first' => true), array());
+				}
+			?>
+
+		</tbody>
+
+	</table>
+
 		<?php
+	
+		pb_hook_do_action('pb-listtable-before-pagenav-'.$this->html_id, '');
+
+		?>
+
+		<div class="pb-list-pagenav <?=($hide_pagenav_ ? "hidden" : "")?>" <?=(strlen($this->html_id) ? 'id="'.$this->html_id.'-pagenav"' : '')?>  data-pb-listtable-pagenav-id="<?=$this->global_id?>">
+
+		<?php
+		
+		if(!$hide_pagenav_){
+			echo $this->rander_pagenav($args_);
+		}
+
+		?>
+	</div>
+	<script type="text/javascript">
+	_pb_list_table_initialize("<?=$this->global_id?>",<?=($this->is_ajax() === true ? "true" : "false")?>);
+	</script>
+		<?php
+
+		pb_hook_do_action('pb-listtable-after-pagenav-'.$this->html_id, '');
+
+		return ob_get_clean();
 	}
 }
 
