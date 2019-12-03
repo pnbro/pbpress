@@ -33,6 +33,7 @@ function _pb_page_builder_add_shared_modal_to_footer(){
 		<div class="modal-body">
 			<form id="pb-page-builder-element-picker-cond-form" class="form-inline text-right" data-element-search-form>
 				<input type="hidden" name="parent">
+				<input type="hidden" name="elements">
 				<div class="input-group input-lg">
 					<input type="text" class="form-control search-input" placeholder="요소 검색..." name="keyword">
 					<span class="input-group-btn">
@@ -97,9 +98,18 @@ pb_hook_add_filter('pb_editor_list', '_pb_editor_register_page_builder');
 function _pb_editor_render_page_builder($content_, $data_){
 	$editor_id_ = $data_['id'];
 
-	pb_page_builder($content_, array(
+	$options_ = isset($data_['options']) ? $data_['options'] : null;
+	$options_ = isset($options_['pbpagebuilder']) ? $options_['pbpagebuilder'] : array();
+
+	$builder_options_ = array(
 		'id' => $editor_id_."-page-builder",
-	));
+	);
+
+	if(isset($options_['elements'])){
+		$builder_options_['elements'] = $options_['elements'];
+	}
+
+	pb_page_builder($content_, $builder_options_);
 	?>
 	
 	<script type="text/javascript">

@@ -4,9 +4,9 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "1.4.0");
+define('PB_PAGE_BUILDER_VERSION', "1.5.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "1.0.0");
-define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', "1.4.0");
+define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', "1.5.0");
 
 function _pb_page_builder_recursive_parse_inner($element_){
 	$element_map_ = pb_page_builder_elements();
@@ -116,6 +116,7 @@ function pb_page_builder($content_ = null, $data_ = array()){
 	global $pb_config, $pb_page_builder_admin_initialized;
 
 	$builder_id_ = isset($data_['id']) ? $data_['id'] : "pb-page-builder-".pb_random_string(5);
+	$elements_ = isset($data_['elements']) ? $data_['elements'] : null;
 
 	if(!$pb_page_builder_admin_initialized){ 
 		$element_map_ = pb_page_builder_elements();
@@ -163,7 +164,9 @@ window.pbpage_builder_element_map = <?=json_encode($element_map_)?>;
 <script type="text/javascript">
 jQuery(document).ready(function(){
 	window._pbpagebuilder_page_settings_modal_module = $("#pb-page-builder-page-settings-modal").pb_page_builder_page_settings_modal();
-	window._pbpagebuilder_element_picker_modal_module = $("#pb-page-builder-element-picker-modal").pb_page_builder_element_picker_modal();
+	window._pbpagebuilder_element_picker_modal_module = $("#pb-page-builder-element-picker-modal").pb_page_builder_element_picker_modal({
+		elements : <?=isset($elements_) ? json_encode($elements_) : "null"?>
+	});
 	window._pbpagebuilder_element_edit_modal_module = $("#pb-page-builder-element-edit-modal").pb_page_builder_element_edit_modal();
 	var page_builder_ = $("#<?=$builder_id_?>").pb_page_builder();
 

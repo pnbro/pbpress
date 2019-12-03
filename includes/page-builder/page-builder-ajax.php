@@ -26,6 +26,12 @@ function _pb_page_builder_ajax_load_elements(){
 	$options_ = $_POST['options'];
 	$parent_id_ = isset($options_['parent']) ? $options_['parent'] : null;
 	$keyword_ = isset($options_['keyword']) ? $options_['keyword'] : null;
+	$elements_ = isset($options_['elements']) ? $options_['elements'] : null;
+
+	if(gettype($elements_) !== 'array'){
+		if(strlen($elements_)) $elements_ = explode(",", $elements_);
+		else $elements_ = array();
+	}
 
 	$temp_page_builder_elements_ = pb_page_builder_elements();
 	$page_builder_elements_ = array();
@@ -39,6 +45,9 @@ function _pb_page_builder_ajax_load_elements(){
 	foreach($temp_page_builder_elements_ as $key_ => $page_builder_element_){
 		if(strlen($keyword_)){
 			if(strpos($page_builder_element_['name'], $keyword_) === false) continue;
+		}
+		if(count($elements_) > 0){
+			if(in_array($key_, $elements_) === false) continue;
 		}
 
 		if(isset($page_builder_element_['parent'])){
