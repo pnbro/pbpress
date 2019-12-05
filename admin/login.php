@@ -35,7 +35,7 @@ $admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', "PBPress �
 			<div class="panel-body">
 				<form id="pb-login-form" method="POST">
 					<input type="hidden" name="redirect_url" value="<?=$redirect_url_?>">
-					<input type="hidden" name="_request_chip", value="<?=pb_session_instance_token("pbpress_admin_login")?>">
+					<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_admin_login")?>">
 
 					<div class="form-group">
 						<label for="pb-login-form-user_login">ID 또는 이메일 <sup class="text-primary">*</sup></label>

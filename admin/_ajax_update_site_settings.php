@@ -27,7 +27,7 @@ if(!isset($settings_data_)){
 	pb_admin_end();	
 }
 
-if(!pb_session_verify_instance_token("pbpress_manage-site", $settings_data_['_request_chip'])){
+if(!pb_verify_request_token("pbpress_manage_site", $settings_data_['_request_chip'])){
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => '에러발생',

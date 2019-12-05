@@ -15,7 +15,7 @@
 			<form id="pb-manage-user-add-form" method="POST">
 				<?php pb_hook_do_action('pb_admin_manage_user_edit_form_before')?>
 
-				<input type="hidden" name="_request_chip", value="<?=pb_session_instance_token("pbpress_manage-user")?>">
+				<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_manage_user")?>">
 				<input type="hidden" name="id", value="<?=$user_data['id']?>">
 				<div class="form-group">
 					<label for="pb-manage-user-add-form-user_login">사용자ID</label>

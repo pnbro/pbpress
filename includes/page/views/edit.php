@@ -23,6 +23,7 @@
 <form id="pb-page-edit-form" method="POST">
 	<?php pb_hook_do_action("pb_page_edit_form_before", $pbpage) ?>
 	<input type="hidden" name="id" value="<?=$pbpage['id']?>">
+	<input type="hidden" name="_request_chip" value="<?=pb_request_token('edit_page')?>">
 
 	<div class="page-edit-frame">
 		<div class="col-content">

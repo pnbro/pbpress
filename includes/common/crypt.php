@@ -29,9 +29,7 @@ function pb_crypt_shared_keys(){
 	$public_key_ = $public_key_['key'];
 	
 	$matches_ = array();
-    // preg_match('~^-----BEGIN ([A-Z ]+)-----\s*?([A-Za-z0-9+=/\r\n]+)\s*?-----END \1-----\s*$~D', $public_key_, $matches_);
-    // $public_key_ = str_replace(array("\r", "\n"), array('', ''), $matches_[2]);
-	
+    
 	$shared_key_ = array(
 		'private_key' => $private_key_,
 		'public_key' => $public_key_,

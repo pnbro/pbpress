@@ -30,7 +30,7 @@
 					
 						<?php pb_hook_do_action('pb_admin_manage_site_form_before')?>
 
-						<input type="hidden" name="_request_chip", value="<?=pb_session_instance_token("pbpress_manage-site")?>">
+						<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_manage_site")?>">
 						<div class="form-group">
 							<label for="pb-manage-site-form-site_name">사이트명 <sup class="text-primary">*</sup></label>
 							<input type="text" name="site_name" placeholder="사이트명 입력" id="pb-manage-site-form-site_name" class="form-control" required data-error="사이트명을 입력하세요" value="<?=pb_option_value("site_name")?>">

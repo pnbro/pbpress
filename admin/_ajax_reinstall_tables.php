@@ -15,7 +15,7 @@ global $pb_config;
 
 header("Content-Type:application/json; charset=".$pb_config->charset);
 
-if(!pb_session_verify_instance_token("pbpress_manage-site", $_POST['request_chip'])){
+if(!pb_verify_request_token("pbpress_manage_site", $_POST['request_chip'])){
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => '에러발생',

@@ -139,13 +139,13 @@ function _pb_ajax_admin_user_update(){
 
 	$request_data_ = $_POST["request_data"];
 
-	if(!pb_session_verify_instance_token("pbpress_manage-user", $request_data_['_request_chip'])){
+	if(!pb_verify_request_token("pbpress_manage_user", $request_data_['_request_chip'])){
 		echo json_encode(array(
 			'success' => false,
 			'error_title' => '에러발생',
 			'error_message' => '요청토큰이 잘못되었습니다.',
 		));
-		pb_admin_end();	
+		pb_end();	
 	}
 
 	$update_data_ = array(
@@ -206,13 +206,13 @@ function _pb_ajax_admin_user_add(){
 
 	$request_data_ = $_POST["request_data"];
 
-	if(!pb_session_verify_instance_token("pbpress_manage-user", $request_data_['_request_chip'])){
+	if(!pb_verify_request_token("pbpress_manage_user", $request_data_['_request_chip'])){
 		echo json_encode(array(
 			'success' => false,
 			'error_title' => '에러발생',
 			'error_message' => '요청토큰이 잘못되었습니다.',
 		));
-		pb_admin_end();	
+		pb_end();	
 	}
 
 	$add_data_ = array(

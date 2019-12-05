@@ -15,7 +15,7 @@ if(!isset($request_data_)){
 	pb_admin_end();	
 }
 
-if(!pb_session_verify_instance_token("pbpress_admin_resetpass", $request_data_['_request_chip'])){
+if(!pb_verify_request_token("pbpress_admin_resetpass", $request_data_['_request_chip'])){
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => '에러발생',

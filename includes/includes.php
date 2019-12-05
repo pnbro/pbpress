@@ -8,6 +8,7 @@ include(PB_DOCUMENT_PATH . "includes/common/session.php");
 include(PB_DOCUMENT_PATH . "includes/common/database-utils.php");
 include(PB_DOCUMENT_PATH . "includes/common/database.php");
 include(PB_DOCUMENT_PATH . "includes/common/crypt.php");
+include(PB_DOCUMENT_PATH . "includes/common/request-token.php");
 include(PB_DOCUMENT_PATH . "includes/common/functions.php");
 include(PB_DOCUMENT_PATH . "includes/common/rewrite.php");
 include(PB_DOCUMENT_PATH . "includes/common/option.php");

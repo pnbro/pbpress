@@ -56,7 +56,7 @@
 			</div>
 			<div class="panel-body">
 				<form id="pb-install-form" method="POST">
-					<input type="hidden" name="_request_chip", value="<?=pb_session_instance_token("pbpress_install")?>">
+					<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_install")?>">
 					<div class="form-group">
 						<label for="pb-install-form-site_name">사이트명 <sup class="text-primary">*</sup></label>
 						<input type="text" name="site_name" placeholder="사이트명 입력" id="pb-install-form-site_name" class="form-control" required data-error="사이트명을 입력하세요">

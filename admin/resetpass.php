@@ -49,7 +49,7 @@ if(pb_is_error($check_vkey_)){
 				<form id="pb-resetpass-form" method="POST">
 					<input type="hidden" name="user_email" value="<?=$user_email_?>">
 					<input type="hidden" name="vkey" value="<?=$vkey_?>">
-					<input type="hidden" name="_request_chip", value="<?=pb_session_instance_token("pbpress_admin_resetpass")?>">
+					<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_admin_resetpass")?>">
 
 					<div class="form-group">
 						<label for="pb-resetpass-form-user_pass">변경할 비밀번호 입력</label>
