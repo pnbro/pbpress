@@ -33,7 +33,7 @@ function _pb_page_builder_add_shared_modal_to_footer(){
 		<div class="modal-body">
 			<form id="pb-page-builder-element-picker-cond-form" class="form-inline text-right" data-element-search-form>
 				<input type="hidden" name="parent">
-				<input type="hidden" name="elements">
+				<input type="hidden" name="included_elements">
 				<div class="input-group input-lg">
 					<input type="text" class="form-control search-input" placeholder="요소 검색..." name="keyword">
 					<span class="input-group-btn">
