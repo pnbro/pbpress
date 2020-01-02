@@ -239,10 +239,12 @@ function pb_user_logout(){
 }
 
 function pb_current_user(){
-	return pb_session_get(PB_USER_SESSION_KEY);
+	$check_data_ = pb_session_get(PB_USER_SESSION_KEY);
+	if(!isset($check_data_)) return null;
+	return pb_user($check_data_['id']);
 }
 function pb_current_user_id(){
-	$user_data_ = pb_current_user();
+	$user_data_ = pb_session_get(PB_USER_SESSION_KEY);
 	if(!isset($user_data_)) return -1;
 
 	return $user_data_['id'];
