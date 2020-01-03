@@ -243,7 +243,7 @@ function pb_current_user($fetch_ = false){
 	if(!isset($check_data_)) return null;
 	$result_ = null;
 	if($fetch_) $result_ = pb_user($check_data_['id']);
-	$result_ = $check_data_;
+	else $result_ = $check_data_;
 	return pb_hook_apply_filters('pb_current_user', $result_);
 }
 function pb_current_user_id(){
