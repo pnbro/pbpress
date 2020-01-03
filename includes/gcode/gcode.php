@@ -157,10 +157,12 @@ function pb_gcode_dtl_name($code_id_, $code_did_){
 function pb_gcode_make_options($conditions_, $default_ = null){
 	$dtl_list_ = pb_gcode_dtl_list($conditions_);
 
+	if(gettype($default_) === "string") $default_ = array($default_);
+
 	ob_start();
 
 	foreach($dtl_list_ as $row_index_ => $row_data_){ ?>
-		<option value="<?=$row_data_['code_did']?>" <?=($default_ === $row_data_['code_did'] ? "selected" : "")?>
+		<option value="<?=$row_data_['code_did']?>" <?=(in_array($row_data_['code_did'], $default_) ? "selected" : "")?>
 			data-col1="<?= $row_data_['col1'] ?>" data-col2="<?= $row_data_['col2'] ?>"
 			 data-col3="<?= $row_data_['col3'] ?>" data-col4="<?= $row_data_['col4'] ?>"
 
