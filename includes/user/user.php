@@ -238,10 +238,13 @@ function pb_user_logout(){
 	return true;
 }
 
-function pb_current_user(){
+function pb_current_user($fetch_ = false){
 	$check_data_ = pb_session_get(PB_USER_SESSION_KEY);
 	if(!isset($check_data_)) return null;
-	return pb_user($check_data_['id']);
+	$result_ = null;
+	if($fetch_) $result_ = pb_user($check_data_['id']);
+	$result_ = $check_data_;
+	return pb_hook_apply_filters('pb_current_user', $result_);
 }
 function pb_current_user_id(){
 	$user_data_ = pb_session_get(PB_USER_SESSION_KEY);
