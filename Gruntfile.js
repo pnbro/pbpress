@@ -89,6 +89,7 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/pb/modules/pb.mainmodule.js',
           'lib/dev/concat-lib/src/pb/modules/pb.crypt.js',
           'lib/dev/concat-lib/src/pb/modules/pb.utils.js',
+          'lib/dev/concat-lib/src/pb/modules/pb.lang.js',
 
         ],
         dest: 'lib/dev/concat-lib/dist/pb-main.js'
@@ -99,6 +100,7 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/pb/modules/pb.mainmodule.js',
           'lib/dev/concat-lib/src/pb/modules/pb.crypt.js',
           'lib/dev/concat-lib/src/pb/modules/pb.utils.js',
+          'lib/dev/concat-lib/src/pb/modules/pb.lang.js',
           'lib/dev/concat-lib/src/pb/modules/pb.listtable.js',
           'lib/dev/concat-lib/src/pb/modules/pb.edit-form-modal.js',
           'lib/dev/concat-lib/src/pb/modules/pb.splitted-view.js',

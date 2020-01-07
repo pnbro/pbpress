@@ -11,13 +11,13 @@ include(PB_DOCUMENT_PATH . "includes/common/crypt.php");
 include(PB_DOCUMENT_PATH . "includes/common/request-token.php");
 include(PB_DOCUMENT_PATH . "includes/common/functions.php");
 include(PB_DOCUMENT_PATH . "includes/common/rewrite.php");
+include(PB_DOCUMENT_PATH . "includes/common/multilingual.php");
 include(PB_DOCUMENT_PATH . "includes/common/option.php");
 include(PB_DOCUMENT_PATH . "includes/common/clob-options.php");
 include(PB_DOCUMENT_PATH . "includes/common/ajax.php");
 include(PB_DOCUMENT_PATH . "includes/common/fileupload.php");
 include(PB_DOCUMENT_PATH . "includes/common/theme.php");
 include(PB_DOCUMENT_PATH . "includes/common/mail.php");
-include(PB_DOCUMENT_PATH . "includes/common/multilingual.php");
 
 if(class_exists("SimpleXMLElement")){
 	include(PB_DOCUMENT_PATH . "includes/page-builder/page-builder.php");	
