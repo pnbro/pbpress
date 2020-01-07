@@ -65,10 +65,12 @@ function pb_gcode_install(){
 			'reg_date' => pb_current_time("mysql"),
 		));
 
-		$sort_char_ = 0;
+		$t_sort_char_ = 0;
+		$sort_digit_ = ceil((count($gcode_dtl_list_) / 10));
 		foreach($gcode_dtl_list_ as $code_did_ => $dtl_data_){
 
-			++$sort_char_;
+			++$t_sort_char_;
+			$sort_char_ = str_pad($t_sort_char_, $sort_digit_, "0", STR_PAD_LEFT);
 
 			$code_dnm_ = null;
 			$duse_yn_ = "Y";
@@ -86,7 +88,7 @@ function pb_gcode_install(){
 				$col2_ = isset($dtl_data_['col2']) ? $dtl_data_['col2'] : null;
 				$col3_ = isset($dtl_data_['col3']) ? $dtl_data_['col3'] : null;
 				$col4_ = isset($dtl_data_['col4']) ? $dtl_data_['col4'] : null;
-
+				$sort_char_ = isset($dtl_data_['sort_char']) ? $dtl_data_['sort_char'] : $sort_char_;
 				$duse_yn_ = ((isset($dtl_data_['use_yn']) ? $dtl_data_['use_yn'] : true) ? "Y" : "N");
 			}
 

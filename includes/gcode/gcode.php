@@ -154,9 +154,10 @@ function pb_gcode_dtl_name($code_id_, $code_did_){
 	return $gcode_dtl_['code_dnm'];
 }
 
-function pb_gcode_make_options($conditions_, $default_ = null){
+function pb_gcode_make_options($conditions_, $default_ = null, $echo_ = false){
 	$dtl_list_ = pb_gcode_dtl_list($conditions_);
 
+	$default_ = isset($default_) ? $default_ : array();
 	if(gettype($default_) === "string") $default_ = array($default_);
 
 	ob_start();
@@ -169,7 +170,10 @@ function pb_gcode_make_options($conditions_, $default_ = null){
 		 ><?=$row_data_['code_dnm']?></option>
 	<?php }
 
-	return ob_get_clean();
+	$result_ = ob_get_clean();
+
+	if($echo_) echo $result_;
+	return $echo_;
 }
 function pb_query_gcode_dtl_name($code_id_, $column_){
 	global $pbdb;
