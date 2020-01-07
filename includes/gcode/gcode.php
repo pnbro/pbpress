@@ -154,7 +154,7 @@ function pb_gcode_dtl_name($code_id_, $code_did_){
 	return $gcode_dtl_['code_dnm'];
 }
 
-function pb_gcode_make_options($conditions_, $default_ = null, $echo_ = false){
+function pb_gcode_make_options($conditions_, $default_ = null, $echo_ = true){
 	$dtl_list_ = pb_gcode_dtl_list($conditions_);
 
 	$default_ = isset($default_) ? $default_ : array();
