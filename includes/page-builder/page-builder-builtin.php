@@ -84,11 +84,7 @@ function _pb_editor_register_page_builder($results_){
 	$results_['pbpagebuilder'] = array(
 		'title' => "빌더",
 		'rendering' => "_pb_editor_render_page_builder",
-	);
-
-	$results_['text'] = array(
-		'title' => "텍스트",
-		'rendering' => "_pb_editor_editor_text",
+		'sort' => 21,
 	);
 
 	return $results_;

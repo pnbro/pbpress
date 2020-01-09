@@ -1,7 +1,7 @@
 module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-uglify-es');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -38,14 +38,23 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/defaults/sortable-jquery.js',
 
           'lib/dev/concat-lib/src/defaults/codemirror.js',
+          'lib/dev/concat-lib/src/defaults/codemirror.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/mode/javascript.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/mode/css.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/mode/xml.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/mode/htmlmixed.js',
 
           'lib/dev/concat-lib/src/defaults/codemirror-addons/matchbrackets.js',
-          // 'lib/dev/concat-lib/src/defaults/codemirror-addons/comment.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/continuecomment.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/closebrackets.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/active-line.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/foldcode.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/show-hint.js',
+          
+
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/xml-fold.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/xml-hint.js',
+          'lib/dev/concat-lib/src/defaults/codemirror-addons/html-hint.js',
           
           'lib/dev/concat-lib/src/bootstrap/bootstrap-validator.js',
           'lib/dev/concat-lib/src/bootstrap/bootstrap-select.js',
