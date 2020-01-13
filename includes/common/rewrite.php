@@ -111,8 +111,8 @@ function pb_is_home(){
 	return !isset($_SERVER['REDIRECT_STATUS']);
 }
 
-function pb_rewrite_common_handler($rewrite_path_, $page_data_){
-	if(!isset($page_data_)){
+function pb_rewrite_common_handler($rewrite_path_, $rewrite_data_){
+	if(!isset($rewrite_data_)){
 		return new PBError(503, "잘못된 접근", "잘못된 접근입니다.");
 	}
 
@@ -120,7 +120,7 @@ function pb_rewrite_common_handler($rewrite_path_, $page_data_){
 		return new PBError(404, "잘못된 접근", "잘못된 접근입니다.");
 	}
 
-	return $page_data_['page'];
+	return $rewrite_data_['page'];
 }
 
 function pb_rewrite_unique_slug($slug_, $retry_count_ = 0, $extra_data_ = array()){
