@@ -5,11 +5,11 @@ function pb_locale_update($locale_){
 	pb_hook_do_action('pb_locale_updated', $locale_);
 }
 
-function pb_current_locale(){
+function pb_current_locale($short_ = false){
 	global $pb_config;
-	$locale_ = setlocale(LC_ALL, 0);
-	if(!strlen($locale_)) return $pb_config->default_locale();
-	return $locale_;
+	$result_ = setlocale(LC_ALL, 0);
+	if($short_) return substr($result_, 0, strpos($result_, "_"));
+	return $result_;
 }
 
 define('PBDOMAIN', 'pbpress');

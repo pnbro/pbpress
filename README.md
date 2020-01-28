@@ -79,7 +79,7 @@ you can make a theme that you want, and just put your theme you made into 'theme
 	bootstrap-select : https://developer.snapappointments.com/bootstrap-select
 	jsencrypt : https://github.com/travist/jsencrypt
 	momentjs : https://momentjs.com
-	summernote : https://github.com/summernote/summernote
+	trumbowyg : https://alex-d.github.io/Trumbowyg/
 	colorpicker : https://farbelous.io/bootstrap-colorpicker/v2/
 	sortablejs : https://sortablejs.github.io/Sortable/
 

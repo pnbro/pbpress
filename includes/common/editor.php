@@ -120,34 +120,62 @@ function _pb_editor_rendering_for_editor($content_, $data_){
 	$max_height_ = isset($data_['max_height']) ? $data_['max_height'] : 800;
 	$height_ = isset($data_['height']) ? $data_['height'] : null;
 	?>
-	<textarea class="form-control" placeholder="<?=$placeholder_?>" id="<?=$editor_id_?>-editor-textarea"><?=$content_?></textarea>
+	<?php pb_editor_load_trumbowyg_library(); ?>
+	<div id="<?=$editor_id_?>-editor"><?=$content_?></div>
+	<style type="text/css">
+	#<?=$editor_id_?>-editor{
+		max-height: <?=$max_height_?>px;
+		min-height: <?=$min_height_?>px;
+	}
+	</style>
 	<script type="text/javascript">
 		jQuery(document).ready(function(){
 			pb_add_editor("editor", {
 				initialize : function(){
-					$("#<?=$editor_id_?>-editor-textarea").init_summernote_for_pb({
-						minHeight: <?=$min_height_?>,
-						maxHeight: <?=$max_height_?>,
-						<?=strlen($height_) ? "height : ".$height_."," : "" ?>
-						fullscreen : true,
-						callbacks : {
-							onBlur : $.proxy(function(){
-								this.sync_input();
-							}, this)
-						}
+					var editor_el_ = $("#<?=$editor_id_?>-editor");
+					var editor_module_ = editor_el_.trumbowyg({
+						lang : "<?=pb_current_locale(true)?>",
 					});
+
+					editor_el_.data("editor-module", editor_module_);
 				},
 				html : function(html_){
+					var editor_el_ = $("#<?=$editor_id_?>-editor");
+					var editor_module_ = $("#<?=$editor_id_?>-editor").data("editor-module");
 					if(html_ !== undefined){
-						$("#<?=$editor_id_?>-editor-textarea").summernote('code', html_);
+						editor_module_.html(html_);
 					}
 
-					return $("#<?=$editor_id_?>-editor-textarea").summernote('code');
+					return editor_module_.html();
 				}
 			});
 		});
+
+
 	</script>
 	<?php
+}
+
+function pb_editor_load_trumbowyg_library(){
+	global $_pb_editor_trumbowyg_library_loaded;
+	if(!$_pb_editor_trumbowyg_library_loaded){
+		$current_locale_ = pb_current_locale(true);
+		?>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/trumbowyg.js?version=2.21.0"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/langs/<?=$current_locale_?>.js?version=2.21.0"></script>
+
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/plugins/resizimg/resizable-resolveconflict.js"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/plugins/resizimg/jquery-resizable.js"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/plugins/resizimg/trumbowyg.resizimg.js"></script>
+
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/trumbowyg.pb.extends.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/trumbowyg/trumbowyg.css?version=2.21.0">
+
+		<?php
+
+		$_pb_editor_trumbowyg_library_loaded = true;
+	}
 }
 
 function _pb_editor_rendering_for_text($content_, $data_){
@@ -222,6 +250,5 @@ function _pb_editor_rendering_for_html($content_, $data_){
 	</script>
 	<?php
 }
-
 
 ?>

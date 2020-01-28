@@ -25,6 +25,7 @@ class PBPageBuilderElement_text extends PBPageBuilderElement{
 		$temp_form_id_ = "text-input-".pb_random_string(5);
 
 		?>
+		<?php pb_editor_load_trumbowyg_library(); ?>
 
 		<div class="form-group">
 			<label>텍스트에디터</label>
@@ -33,7 +34,9 @@ class PBPageBuilderElement_text extends PBPageBuilderElement{
 		</div>
 		<script type="text/javascript">
 			jQuery(document).ready(function(){
-				$("#<?=$temp_form_id_?>").init_summernote_for_pb();
+				$("#<?=$temp_form_id_?>").trumbowyg({
+					lang : "<?=pb_current_locale(true)?>",
+				});
 			});
 		</script>
 

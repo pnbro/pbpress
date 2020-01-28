@@ -33,7 +33,6 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/defaults/moment.js',
           'lib/dev/concat-lib/src/defaults/bootstrap.js',
           'lib/dev/concat-lib/src/defaults/jsencrypt.js',
-          'lib/dev/concat-lib/src/defaults/summernote.js',
           'lib/dev/concat-lib/src/defaults/sortable.js',
           'lib/dev/concat-lib/src/defaults/sortable-jquery.js',
 
@@ -50,7 +49,6 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/defaults/codemirror-addons/active-line.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/foldcode.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/show-hint.js',
-          
 
           'lib/dev/concat-lib/src/defaults/codemirror-addons/xml-fold.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/xml-hint.js',
@@ -119,8 +117,8 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.imageinput.js',
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.fileinput.js',
 
-          'lib/dev/concat-lib/src/pb/modules/pb.summernote.js',
-          'lib/dev/concat-lib/src/pb/modules/pb.summernote-image-uploader.js',
+          'lib/dev/concat-lib/src/pb/modules/pb.quill.js',
+          // 'lib/dev/concat-lib/src/pb/modules/pb.summernote-image-uploader.js',
 
           'lib/dev/concat-lib/src/pb/modules/pb.editors.js',
           
@@ -179,6 +177,15 @@ module.exports = function (grunt) {
           cwd: 'lib/dev/less/page-builder',
           src: ['**/*.less'],
           dest: 'lib/dev/css/page-builder/',
+          rename : function(dest, src){
+            return dest + src.replace('.less','.css');
+          }
+        },
+        {
+          expand: true,
+          cwd: 'lib/dev/less/trumbowyg',
+          src: ['trumbowyg.less'],
+          dest: 'lib/dev/css/trumbowyg/',
           rename : function(dest, src){
             return dest + src.replace('.less','.css');
           }

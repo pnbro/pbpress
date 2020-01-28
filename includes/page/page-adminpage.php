@@ -24,6 +24,44 @@ function _pb_page_register_adminpage($results_){
 }
 pb_hook_add_filter('pb_adminpage_list', '_pb_page_register_adminpage');
 
+pb_rewrite_register('__page-live-edit', array(
+	'rewrite_handler' => '_page_rewrite_handler_for_live_edit',
+));
+function _page_rewrite_handler_for_live_edit(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
+		return new PBError(403, "잘못된 접근", "접근 권한이 없습니다.");
+	}
+
+	$rewrite_path_ = pb_rewrite_path();
+
+	if(count($rewrite_path_) !== 2) return new PBError(503, "잘못된 접근", "잘못된 요청입니다."); 
+
+	global $pbdb;
+
+	$page_id_ = isset($rewrite_path_[1]) ? $rewrite_path_[1] : -1;
+	$pbpage = pb_page($page_id_);
+
+	if(!isset($pbpage)){
+		return new PBError(503, "잘못된 접근", "존재하지 않는 페이지입니다.");
+	}
+
+	global $pbpage_meta_map;
+	$pbpage_meta_map = pb_page_meta_map($pbpage['id']);
+
+	return PB_DOCUMENT_PATH . 'includes/page/views/live-edit.php';
+}
+
+pb_rewrite_register('__page-live-edit-preview', array(
+	'rewrite_handler' => '_page_rewrite_handler_for_live_edit_previewer',
+));
+function _page_rewrite_handler_for_live_edit_previewer(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
+		return new PBError(403, "잘못된 접근", "접근 권한이 없습니다.");
+	}
+
+	return PB_DOCUMENT_PATH . 'includes/page/views/live-edit-previewer.php';
+}
+
 include(PB_DOCUMENT_PATH . "includes/page/views/tables.php");
 
 function _pb_page_rewrite_handler_for_adminpage($rewrite_path_){
