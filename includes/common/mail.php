@@ -1,91 +1,34 @@
 <?php
 
+if(!defined('PB_DOCUMENT_PATH')){
+	die( '-1' );
+}
+
+abstract class PBMailSender{
+	abstract function send($to_, $subject_, $body_, $attachments_ = array(), $options_ = array());
+}
+
+$default_mail_sender_type_ = null;
+
+if(version_compare(PHP_VERSION, '5.5.0') >= 0){
+	require(PB_DOCUMENT_PATH."includes/common/mailsender-newer.php");
+	$default_mail_sender_type_ = "newer";
+}else{
+	require(PB_DOCUMENT_PATH."includes/common/mailsender-older.php");
+	$default_mail_sender_type_ = "older";
+}
+
+function pb_mail_sender_types(){
+	return pb_hook_apply_filters("pb_mail_sender_types", array());
+}
+
+global $pb_mail_sender;
+$mail_sender_types_ = pb_mail_sender_types();
+$pb_mail_sender = new $mail_sender_types_[pb_hook_apply_filters('pb_mail_default_sender', $default_mail_sender_type_)]();
 
 function pb_mail_send($to_, $subject_, $body_, $attachments_ = array(), $options_ = array()){
-	include_once(PB_DOCUMENT_PATH."includes/common/lib/phpmailer/class.phpmailer.php");
-	include_once(PB_DOCUMENT_PATH."includes/common/lib/phpmailer/class.smtp.php");
-
-	if(!isset($options_['from'])){
-		$options_['from'] = pb_option_value("mail_sender");	
-	}
-
-	if(!strlen($options_['from'])){
-		return new PBError(-1, "SMTP정보없음", "SMT정보가 없습니다.");
-	}
-	
-	$mail_receipt_ = pb_option_value('mail_receipt');
-	$mail_smtp_host_ = pb_option_value('mail_smtp_host');
-	$mail_smtp_port_ = pb_option_value('mail_smtp_port');
-	$mail_smtp_auth_ = pb_option_value('mail_smtp_auth');
-	$mail_smtp_user_id_ = pb_option_value('mail_smtp_user_id');
-	$mail_smtp_user_pass_ = pb_option_value('mail_smtp_user_pass');
-	$mail_smtp_secure_ = pb_option_value('mail_smtp_secure');
-
-	$phpmailer_ = new PHPMailer;
-
-	$phpmailer_->isSMTP();
-	$phpmailer_->Host = $mail_smtp_host_;
-	$phpmailer_->SMTPAuth = ($mail_smtp_auth_ === "Y" ? true : false);
-
-	if($phpmailer_->SMTPAuth){
-		$phpmailer_->Username = $mail_smtp_user_id_;
-		$phpmailer_->Password = $mail_smtp_user_pass_;
-	}
-
-	$phpmailer_->SMTPSecure = $mail_smtp_secure_;
-	$phpmailer_->Port = $mail_smtp_port_;
-
-	$phpmailer_->setFrom($options_['from']);
-	$phpmailer_->addAddress($to_);
-
-	foreach($attachments_ as $file_path_){
-		$phpmailer_->addAttachment($file_path_);
-	}
-
-	if(isset($options_['cc'])){
-		if(gettype($options_['cc']) !== "array"){
-			$options_['cc'] = array($options_['cc']);
-		}
-
-		foreach($options_['cc'] as $cc_){
-			$phpmailer_->addCC($cc_);
-		}
-	}
-
-	if(isset($options_['bcc'])){
-		if(gettype($options_['bcc']) !== "array"){
-			$options_['bcc'] = array($options_['bcc']);
-		}
-
-		foreach($options_['bcc'] as $bcc_){
-			$phpmailer_->addBCC($bcc_);
-		}
-	}
-
-	if(isset($options_['replyto'])){
-		if(gettype($options_['replyto']) !== "array"){
-			$options_['replyto'] = array($options_['replyto']);
-		}
-
-		foreach($options_['replyto'] as $replyto_){
-			$phpmailer_->addReplyTo($replyto_);
-		}
-	}
-
-	$options_['is_html'] = isset($options_['is_html']) ? $options_['is_html'] : true;
-
-	$phpmailer_->isHTML($options_['is_html']);
-	$phpmailer_->Subject = $subject_;
-	$phpmailer_->Body = $body_;
-
-	$result_ = $phpmailer_->send();
-
-
-	if(!$result_){
-		return new PBError(-1, "메일발송실패", $phpmailer_->ErrorInfo);
-	}
-
-	return true;
+	global $pb_mail_sender;
+	return $pb_mail_sender->send($to_, $subject_, $body_, $attachments_, $options_);
 }
 function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ = array(), $options_ = array()){
 	$mail_template_upload_path_ = pb_option_value('mail_template_upload', "");
