@@ -132,6 +132,8 @@ function _pb_mail_hook_register_manage_site_menu_list($results_){
 pb_hook_add_filter('pb-admin-manage-site-menu-list', "_pb_mail_hook_register_manage_site_menu_list");
 
 function _pb_mail_hook_render_manage_site($menu_data_){
+
+	global $pb_config;
 	?>
 
 	<div class="manage-site-form-panel panel panel-default">
@@ -249,6 +251,7 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 					</script>
 
 				</div>
+				<?php pb_editor_load_trumbowyg_library(); ?>
 
 				<script type="text/javascript">
 					jQuery(document).ready(function(){
@@ -260,7 +263,9 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 						var bool_ = $("[name='mail_smtp_auth']:checked").val() === "Y";
 						$("[data-mail-smtp-auth-subdata]").toggle(bool_);
 
-						$("#pb-manage-site-form-mail_template").init_summernote_for_pb();
+						$("#pb-manage-site-form-mail_template").trumbowyg({
+							lang : "<?=pb_current_locale(true)?>",
+						});
 
 						pb_add_filter('pb-manage-site-update-settings', function($setting_data_){
 							return $setting_data_;
