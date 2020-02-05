@@ -7,6 +7,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 include(PB_DOCUMENT_PATH . 'includes/page-builder/elements/container.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/elements/row.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/elements/text.php');
+include(PB_DOCUMENT_PATH . 'includes/page-builder/elements/html.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/elements/image.php');
 
 function _pb_page_builder_admin_initialize_for_common(){
