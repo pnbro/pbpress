@@ -5,6 +5,7 @@ PHP Framework for simple website creation.
 ## Features
 * powerful backend functions
 * expandable adminpage
+* theme, plugins
 * page managing (page builder)
 * menu managing (menu editor)
 
@@ -91,5 +92,3 @@ you can make a theme that you want, and just put your theme you made into 'theme
 
 ## TODO
 	1. Write API documentation and manuals.
-	2. Developing plugin features?
-	4. Developing multi languages features -> alpha version added.
