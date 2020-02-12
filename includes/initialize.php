@@ -45,7 +45,7 @@ date_default_timezone_set($timezone_);
 $current_theme_path_ = pb_current_theme_path();
 
 if(file_exists($current_theme_path_."functions.php")){
-	include($current_theme_path_."functions.php");
+	include_once $current_theme_path_."functions.php";
 }
 
 header("Content-Type: text/html; CharSet=".$pb_config->charset);

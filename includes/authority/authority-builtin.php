@@ -84,6 +84,4 @@ function _pb_authority_register_task(){
 }
 pb_hook_add_action('pb_installed_tables', "_pb_authority_register_task");
 
-
-
 ?>

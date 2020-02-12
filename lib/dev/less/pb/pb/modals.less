@@ -129,18 +129,23 @@
 .blockUI.blockMsg.blockElement{
 	border: none !important;
 	background-color: transparent !important;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
 
 	.pb-indicator-frame{
 		position: relative;
-		
-		> .uil-ring-css{
-			position: absolute;
-			left: 50%;
-			top: 50;
-			margin: 0 auto;
-			transform: translateY(-50%) translateX(-50%) scale(0.6);
-			-webkit-transform: translateY(-50%) translateX(-50%) scale(0.6);
-		}
+    display: block;
+    width: 160px;
+    height: 160px;
+
+    > .lds-spin{
+      position: relative;
+      top: 50%;
+      left: 50%;
+
+      -webkit-transform: translateX(-50%) translateY(-50%) scale(0.8);
+              transform: translateX(-50%) translateY(-50%) scale(0.8);
+    }
 	}
 }
 
@@ -340,8 +345,8 @@
 .lds-spin {
 	margin-left: auto;
     margin-right: auto;
-  width: 160px !important;
-  height: 160px !important;
-  -webkit-transform: translate(-80px, -80px) scale(0.8) translate(80px, 80px);
-  transform: translate(-80px, -80px) scale(0.8) translate(80px, 80px);
+  width: 200px !important;
+  height: 200px !important;
+  -webkit-transform: scale(0.8);
+  transform: scale(0.8);
 }

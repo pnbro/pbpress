@@ -1,5 +1,9 @@
 <?php
 
+if(!defined('PB_DOCUMENT_PATH')){
+	die( '-1');
+}
+
 // define('PB_DEV', true);
 // define('PB_SHOW_DATABASE_ERROR', PB_DEV);
 

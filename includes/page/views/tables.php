@@ -54,7 +54,7 @@ class PB_page_list_table extends PBListTable{
 			case "seq" :
 				return "col-seq text-center";
 			case "page_title" :
-				 return "col-8";
+				 return "col-8 link-action";
 			case "status_name" :
 				 return "col-1 text-center hidden-xs";
 			case "reg_date_ymdhi" :
@@ -85,7 +85,7 @@ class PB_page_list_table extends PBListTable{
 			ob_start();
 
 			?>
-			<div class="page-title-frame"><a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>" ><?=$item_['page_title']?></a>
+			<div class="title-frame page-title-frame"><a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>" ><?=$item_['page_title']?></a>
 				<?php if($is_front_page_){ ?>
 					<small class="fontpage-text"> - 홈화면</small>
 				<?php } ?>

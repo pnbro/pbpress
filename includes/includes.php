@@ -16,22 +16,23 @@ include(PB_DOCUMENT_PATH . "includes/common/option.php");
 include(PB_DOCUMENT_PATH . "includes/common/clob-options.php");
 include(PB_DOCUMENT_PATH . "includes/common/ajax.php");
 include(PB_DOCUMENT_PATH . "includes/common/fileupload.php");
-include(PB_DOCUMENT_PATH . "includes/common/theme.php");
+include(PB_DOCUMENT_PATH . "includes/common/editor.php");
+include(PB_DOCUMENT_PATH . "includes/common/listtable.php");
 include(PB_DOCUMENT_PATH . "includes/common/mail.php");
+include(PB_DOCUMENT_PATH . "includes/common/theme.php");
 
 if(class_exists("SimpleXMLElement")){
 	include(PB_DOCUMENT_PATH . "includes/page-builder/page-builder.php");	
 }
 
-include(PB_DOCUMENT_PATH . "includes/common/editor.php");
-include(PB_DOCUMENT_PATH . "includes/common/listtable.php");
+include(PB_DOCUMENT_PATH . "includes/authority/authority.php");
 include(PB_DOCUMENT_PATH . "includes/common/adminpage.php");
 
 include(PB_DOCUMENT_PATH . "includes/gcode/gcode.php");
-include(PB_DOCUMENT_PATH . "includes/authority/authority.php");
 include(PB_DOCUMENT_PATH . "includes/user/user.php");
 include(PB_DOCUMENT_PATH . "includes/page/page.php");
 include(PB_DOCUMENT_PATH . "includes/menu/menu.php");
 
+include(PB_DOCUMENT_PATH . "includes/common/plugin.php");
 
 ?>

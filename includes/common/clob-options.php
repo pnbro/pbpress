@@ -59,7 +59,7 @@ function pb_clob_options_list($conditions_ = array()){
 	return $pbdb->select($query_);
 }
 
-function pb_clob_options_value($option_name_, $default_ = null, $cache_ = true){
+function pb_clob_option_value($option_name_, $default_ = null, $cache_ = true){
 	global $_pb_clob_options_map;
 
 	if($cache_ && isset($_pb_clob_options_map) && isset($_pb_clob_options_map[$option_name_])){
@@ -86,10 +86,15 @@ function pb_clob_options_value($option_name_, $default_ = null, $cache_ = true){
 	return $_pb_clob_options_map[$option_name_];
 }
 
-function pb_clob_options_update($option_name_, $option_value_){
+//Deprecated
+function pb_clob_options_value($option_name_, $default_ = null, $cache_ = true){
+	return pb_clob_option_value($option_name_, $default_, $cache_);
+}
+
+function pb_clob_option_update($option_name_, $option_value_){
 	global $pbdb;
 
-	$before_value_ = pb_clob_options_value($option_name_);
+	$before_value_ = pb_clob_option_value($option_name_);
 
 	if($option_value_ === null){
 		$update_data_ = array(
@@ -131,6 +136,10 @@ function pb_clob_options_update($option_name_, $option_value_){
 		unset($_pb_clob_options_map[$option_name_]);
 	}
 	pb_hook_do_action('pb_clob_option_updated', $option_name_);
+}
+//Deprecated
+function pb_clob_options_update($option_name_, $option_value_){
+	return pb_clob_option_update($option_name_, $option_value_);
 }
 
 include(PB_DOCUMENT_PATH . 'includes/common/clob-options-builtin.php');
