@@ -158,11 +158,11 @@ function pb_is_adminpage(){
 }
 
 function pb_adminpage_rewrite_common_handler($rewrite_path_, $adminpage_data_){
-	if(count($rewrite_path_) > 1){
+	if(isset($rewrite_path_) && count($rewrite_path_) > 1){
 		return new PBError(503, "잘못된 접근", "잘못된 접근입니다.");
 	}
 
-	if(count($rewrite_path_) <= 0){
+	if(!isset($rewrite_path_) || count($rewrite_path_) <= 0){
 		return pb_hook_apply_filters("pb-adminpage-dashboard",PB_DOCUMENT_PATH."admin/dashboard.php");
 	}
 
