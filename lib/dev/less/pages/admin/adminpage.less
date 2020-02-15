@@ -29,7 +29,14 @@ body{
 
 	> .wrap{
 		position: relative;
-		display: block;
+		display: flex;
+		-webkit-align-items: center;
+		-ms-align-items: center;
+		align-items: center;
+
+		-webkit-justify-content: space-between;
+		-ms-justify-content: space-between;
+		justify-content: space-between;
 
 		> .col-left,
 		> .col-right{
@@ -39,12 +46,8 @@ body{
 		}
 
 		> .col-left{
-			float: left;
-			width: 70%;
-
-			@media screen and (max-width: @screen-xs-max){
-				width: 60%;
-			}
+			// float: left;
+			// width: 20%;
 
 			> .admin-home-link{
 				position: relative;
@@ -61,13 +64,13 @@ body{
 
 		}
 		> .col-right{
-			float: right;
-			text-align: right;
-			width: 30%;
+			// float: right;
+			// text-align: right;
+			// width: 80%;
 
-			@media screen and (max-width: @screen-xs-max){
+			/*@media screen and (max-width: @screen-xs-max){
 				width: 40%;
-			}
+			}*/
 
 			> .mypage-menu{
 				display: inline-block;

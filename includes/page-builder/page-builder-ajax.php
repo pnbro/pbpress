@@ -66,6 +66,10 @@ function _pb_page_builder_ajax_load_elements(){
 }
 pb_add_ajax('page-builder-load-element', '_pb_page_builder_ajax_load_elements');
 
+function _pb_page_builder_render_edit_form_group($func_){
+
+}
+
 function _pb_page_builder_ajax_load_edit_element_form(){
 	$element_id_ = isset($_POST['element_id']) ? $_POST['element_id'] : null;
 	$defaults_ = isset($_POST['element_data']) ? $_POST['element_data'] : null;
@@ -118,12 +122,23 @@ function _pb_page_builder_ajax_load_edit_element_form(){
 						<h3 class="panel-title"><?=$category_data_['title']?></h3>
 					</div>
 					<div class="panel-body">
-					<?php foreach($edit_category_functions_[$category_data_['key']] as $func_){
-						call_user_func_array($func_, array($defaults_, $content_));
+					<?php foreach($edit_category_functions_[$category_data_['key']] as $edit_form_){
+
+						if(is_callable($edit_form_['render'])){
+							call_user_func_array($edit_form_['render'], array($defaults_, $content_));	
+						}else{
+							pb_page_builder_element_edit_form_render($edit_form_['render'], $defaults_, $content_);
+						}
+
+						
 					} ?>
 
-					<?php foreach($element_edit_forms_ as $func_){
-						call_user_func_array($func_, array($defaults_, $content_));
+					<?php foreach($element_edit_forms_ as $edit_form_){
+						if(is_callable($edit_form_['render'])){
+							call_user_func_array($edit_form_['render'], array($defaults_, $content_));	
+						}else{
+							pb_page_builder_element_edit_form_render($edit_form_['render'], $defaults_, $content_);
+						}
 					} ?>
 					</div>
 				</div>

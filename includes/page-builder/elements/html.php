@@ -7,7 +7,15 @@ if(!defined('PB_DOCUMENT_PATH')){
 class PBPageBuilderElement_html extends PBPageBuilderElement{
 
 	function initialize(){
-		$this->add_edit_form("common", array($this, "render_admin_form"));
+		$this->add_edit_form("common", array(
+			
+			array(
+				'name' => 'content',
+				'type' => 'html',
+				'label' => 'HTML에디터',
+			),
+
+		));
 	}
 
 	public function render($data_ = array(), $element_content_ = null){
@@ -18,46 +26,6 @@ class PBPageBuilderElement_html extends PBPageBuilderElement{
 
 		?>
 		<div class="html <?=$class_?> <?=$unique_class_name_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($element_content_)?></div>
-		<?php
-	}
-
-	function render_admin_form($element_data_ = array(), $content_ = null){
-		$temp_form_id_ = "html-input-".pb_random_string(5);
-
-		?>
-		<?php pb_editor_load_trumbowyg_library(); ?>
-
-		<div class="form-group">
-			<label>HTML에디터</label>
-			<textarea id="<?=$temp_form_id_?>" name="content"><?=stripslashes($content_)?></textarea>
-			<div class="clearfix"></div>
-		</div>
-		<script type="text/javascript">
-			jQuery(document).ready(function(){
-				var target_textarea_ = $("#<?=$temp_form_id_?>");
-				var target_module_ = CodeMirror.fromTextArea(target_textarea_[0], {
-					lineNumbers: true,
-					selectionPointer: true,
-					styleActiveLine: true,
-					matchBrackets: true, 
-					autoCloseBrackets : true,
-					continueComments : true,
-					selectionPointer: true,
-					mode: "text/html",
-					extraKeys: {"Ctrl-Space": "autocomplete"},
-				});
-
-				target_module_.on("change", $.proxy(function(instance_){
-					this.val(instance_.getValue());
-				}, target_textarea_));
-
-				setTimeout($.proxy(function() {
-					target_module_.refresh();
-				}, target_module_),100);
-			});
-		</script>
-
-
 		<?php
 	}
 }

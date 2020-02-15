@@ -76,7 +76,12 @@ function pb_page_builder_element_add_edit_category_function($key_, $func_, $prio
 		}
 	}
 
-	array_splice($pb_page_builder_element_edit_category_funcs[$key_], $insert_index_, 0, array($func_));
+	array_splice($pb_page_builder_element_edit_category_funcs[$key_], $insert_index_, 0, array(
+		array(
+			'render' => $func_,
+			'priority' => $priority_,
+		)
+	));
 }
 
 pb_page_builder_element_add_edit_category('common', '기본설정', 1);
@@ -291,6 +296,183 @@ function _pb_page_builder_element_render_styles($results_, $builder_data_){
 	return $results_;
 }
 pb_hook_add_filter('pb_page_builder_global_style', '_pb_page_builder_element_render_styles');
+
+
+function pb_page_builder_element_edit_form_types(){
+	global $_pb_page_builder_element_edit_form_types;
+	if(isset($_pb_page_builder_element_edit_form_types)) return $_pb_page_builder_element_edit_form_types;
+	$_pb_page_builder_element_edit_form_types = pb_hook_apply_filters('pb_page_builder_element_edit_form_types', array(
+		'text' => '_pb_page_builder_element_edit_form_type_common_render',
+		'textarea' => '_pb_page_builder_element_edit_form_type_common_render',
+		'image' => '_pb_page_builder_element_edit_form_type_common_render',
+		'select' => '_pb_page_builder_element_edit_form_type_common_render',
+		'checkbox' => '_pb_page_builder_element_edit_form_type_common_render',
+		'radio' => '_pb_page_builder_element_edit_form_type_common_render',
+		'editor' => '_pb_page_builder_element_edit_form_type_common_render',
+		'html' => '_pb_page_builder_element_edit_form_type_common_render',
+	));
+
+	return $_pb_page_builder_element_edit_form_types;
+}
+
+function pb_page_builder_element_edit_form_render($edit_list_, $element_data_, $content_ = null){
+	$edit_form_types_ = pb_page_builder_element_edit_form_types();
+
+	foreach($edit_list_ as $edit_data_){
+		$type_ = isset($edit_data_['type']) ? $edit_data_['type'] : 'text';
+		$edit_renderer_ = isset($edit_form_types_[$type_]) ? $edit_form_types_[$type_] : null;
+
+		if(is_callable($edit_renderer_)){
+			call_user_func_array($edit_renderer_, array($edit_data_, $element_data_, $content_));
+		}
+	}
+}
+
+function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $element_data_, $content_ = null){
+
+	$name_ = isset($edit_data_['name']) ? $edit_data_['name'] : null;
+	$label_ = isset($edit_data_['label']) ? $edit_data_['label'] : null;
+	$placeholder_ = isset($edit_data_['placeholder']) ? $edit_data_['placeholder'] : null;
+	$help_ = isset($edit_data_['help']) ? $edit_data_['help'] : null;
+	$type_ = isset($edit_data_['type']) ? $edit_data_['type'] : null;
+
+	$input_value_ = null;
+
+	if($name_ === 'content'){
+		$input_value_ = $content_;
+	}else{
+		$input_value_ = isset($element_data_[$name_]) ? $element_data_[$name_] : null;
+	}
+
+	$validators_ = isset($edit_data_['validators']) ? $edit_data_['validators'] : array();
+	$validator_attr_ = "";
+
+	foreach($validators_ as $validator_){
+		$type_ = $validator_['type'];
+		$value_ = isset($validator_['value'])? $validator_['value'] : null;
+		$error_message_ = isset($validator_['error']) ? $validator_['error'] : null;
+
+		$attr_str_ = ' data-'.$type_.'="'.$value_.'" ';
+
+		if(strlen($error_message_)){
+			$attr_str_ .= ' data-'.$type_.'-error="'.$error_message_.'" ';
+		}
+
+		$validator_attr_ .= $attr_str_;
+	}
+
+	?>
+
+	<div class="form-group">
+
+	<?php 
+
+	if(strlen($label_)){ ?>
+
+		<label><?=$label_?></label>
+
+	<?php }
+
+	switch($type_){
+		
+		case 'textarea' : ?>
+			<textarea name="<?=$name_?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>" class="form-control"><?=stripslashes($input_value_)?></textarea>
+		<?php break;
+		case 'image' :
+
+			$image_input_id_ = 'pb-page-builder-image-input-'.pb_random_string(5);
+			$thumbnail_src_ = isset($element_data_[$name_.'_thumbnail']) ? $element_data_[$name_.'_thumbnail'] : $input_value_;
+
+		?>
+			<input type="hidden" name="<?=$name_?>_thumbnail" value="<?=stripslashes($thumbnail_src_)?>" id="<?=$image_input_id_?>-thumbnail">
+			<input type="hidden" name="<?=$name_?>" data-upload-path="/" id='<?=$image_input_id_?>' value="<?=stripslashes($input_value_)?>" data-thumbnail-ipnut="#<?=$image_input_id_?>-thumbnail">
+			<script type="text/javascript">jQuery("#<?=$image_input_id_?>").pb_image_input();</script>
+			
+		<?php break;
+		case 'select' : 
+			$options_ = $edit_data_['options'];
+		?>
+
+			<select class="form-control" name="<?=$name_?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>" >
+				<?php foreach($options_ as $option_value_ => $option_name_){ ?>
+					<option value="<?=$option_value_?>" <?=pb_selected($option_value_, $input_value_)?>><?=$option_name_ ?></option>
+				<?php } ?>
+			</select>
+			
+		<?php break;
+		case 'checkbox' :
+		case 'radio' : 
+
+			$options_ = $edit_data_['options'];
+		?>
+
+		<div>
+			<?php foreach($options_ as $option_value_ => $option_name_){ ?>
+			<label class="<?=$type_?>-inline"><input type="<?=$type_?>" name="<?=$name_?>" value="<?=$option_value_?>" <?=$validator_attr_?> ><?=$option_name_?></label>
+			<?php } ?>
+		</div>
+			
+		<?php break;
+		case 'editor' :
+			$editor_id_ = 'pb-page-builder-editor-'.pb_random_string(5);
+		?>
+
+		<textarea name="<?=$name_?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>" id="<?=$editor_id_?>"><?=stripslashes($input_value_)?></textarea>
+		<script type="text/javascript">
+		$("#<?=$editor_id_?>").trumbowyg({
+				lang : "<?=pb_current_locale(true)?>",
+			});
+		</script>
+			
+		<?php break;
+		case 'html' :
+			$editor_id_ = 'pb-page-builder-html-editor-'.pb_random_string(5);
+		?>
+		
+		<textarea id="<?=$editor_id_?>" name="<?=$name_?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>"><?=stripslashes($input_value_)?></textarea>
+		<script type="text/javascript">
+		jQuery(document).ready(function(){
+			var target_textarea_ = $("#<?=$editor_id_?>");
+			var target_module_ = CodeMirror.fromTextArea(target_textarea_[0], {
+				lineNumbers: true,
+				selectionPointer: true,
+				styleActiveLine: true,
+				matchBrackets: true, 
+				autoCloseBrackets : true,
+				continueComments : true,
+				selectionPointer: true,
+				mode: "text/html",
+				extraKeys: {"Ctrl-Space": "autocomplete"},
+			});
+
+			target_module_.on("change", $.proxy(function(instance_){
+				this.val(instance_.getValue());
+			}, target_textarea_));
+
+			setTimeout($.proxy(function() {
+				this.refresh();
+			}, target_module_),100);
+		});
+		</script>
+			
+		<?php break;
+		case 'text' :
+		default : ?>
+			<input type="text" name="<?=$name_?>" value="<?=stripslashes($input_value_)?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>" class="form-control">
+		<?php break;
+	}
+
+	?>
+
+		<div class="help-block with-errors"></div>
+		<?php if(strlen($help_)){ ?>
+			<div class="help-block"><?=$help_?></div>
+		<?php } ?>
+		<div class="clearfix"></div>
+	</div>
+
+	<?php 
+}
 
 include(PB_DOCUMENT_PATH . 'includes/page-builder/class.page-builder-element.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/elements/common.php');

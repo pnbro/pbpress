@@ -34,7 +34,12 @@ abstract class PBPageBuilderElement{
 			}
 		}
 
-		array_splice($this->edit_form_func_map[$edit_category_], $insert_index_, 0, array($func_));
+		array_splice($this->edit_form_func_map[$edit_category_], $insert_index_, 0, array(
+			array(
+				'render' => $func_,
+				'priority' => $priority_,
+			)
+		));
 	}
 	public function edit_forms($edit_category_){
 		if(!isset($this->edit_form_func_map[$edit_category_])){

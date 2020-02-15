@@ -7,7 +7,15 @@ if(!defined('PB_DOCUMENT_PATH')){
 class PBPageBuilderElement_text extends PBPageBuilderElement{
 
 	function initialize(){
-		$this->add_edit_form("common", array($this, "render_admin_form"));
+		$this->add_edit_form("common", array(
+			
+			array(
+				'name' => 'content',
+				'type' => 'editor',
+				'label' => '텍스트에디터',
+			),
+
+		));
 	}
 
 	public function render($data_ = array(), $element_content_ = null){
@@ -18,29 +26,6 @@ class PBPageBuilderElement_text extends PBPageBuilderElement{
 
 		?>
 		<div class="text <?=$class_?> <?=$unique_class_name_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>><?=$this->render_content($element_content_)?></div>
-		<?php
-	}
-
-	function render_admin_form($element_data_ = array(), $content_ = null){
-		$temp_form_id_ = "text-input-".pb_random_string(5);
-
-		?>
-		<?php pb_editor_load_trumbowyg_library(); ?>
-
-		<div class="form-group">
-			<label>텍스트에디터</label>
-			<textarea id="<?=$temp_form_id_?>" name="content"><?=stripslashes($content_)?></textarea>
-			<div class="clearfix"></div>
-		</div>
-		<script type="text/javascript">
-			jQuery(document).ready(function(){
-				$("#<?=$temp_form_id_?>").trumbowyg({
-					lang : "<?=pb_current_locale(true)?>",
-				});
-			});
-		</script>
-
-
 		<?php
 	}
 }

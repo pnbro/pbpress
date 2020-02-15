@@ -8,6 +8,24 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 
 	function initialize(){
 		$this->add_edit_form("common", array($this, "render_admin_form"));
+		$this->add_edit_form("common", array(
+			array(
+				'name' => 'max_width',
+				'type' => 'text',
+				'label' => '최대넓이',
+			),
+			array(
+				'name' => 'image_align',
+				'type' => 'select',
+				'label' => '정렬',
+				'options' => array(
+					'center' => '중앙',
+					'left' => '좌측',
+					'right' => '우측',
+				)
+			),
+
+		));
 	}
 
 	public function render($data_ = array(), $element_content_ = null){
@@ -32,32 +50,12 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 		$temp_form_id_ = "image-input-".pb_random_string(5);
 		$src_ = isset($element_data_['src']) ? $element_data_['src'] : null;
 		$thumbnail_src_ = isset($element_data_['thumbnail_src']) ? $element_data_['thumbnail_src'] : null;
-
-		$max_width_ = isset($element_data_['max_width']) ? $element_data_['max_width'] : null;
-		$image_align_ = isset($element_data_['image_align']) ? $element_data_['image_align'] : "center";
-
 		?>
 
 		<div class="form-group">
 			<label>이미지선택</label>
 			<input type="hidden" name="thumbnail_src" value="<?=$thumbnail_src_?>" id="<?=$temp_form_id_?>-thumbnail">
 			<input type="text" name="src" value="<?=$src_?>" class="hidden" id="<?=$temp_form_id_?>" data-upload-path="/" data-thumbnail-ipnut="#<?=$temp_form_id_?>-thumbnail">
-			<div class="clearfix"></div>
-		</div>
-
-		<div class="form-group">
-			<label>최대넓이</label>
-			<input type="text" name="max_width" value="<?=$max_width_?>" class="form-control">
-			<div class="clearfix"></div>
-		</div>
-
-		<div class="form-group">
-			<label>정렬</label>
-			<select class="form-control" name="image_align">
-				<option <?=pb_selected($image_align_, "center")?> value="center">중앙</option>
-				<option <?=pb_selected($image_align_, "left")?> value="left">좌측</option>
-				<option <?=pb_selected($image_align_, "right")?> value="right">우측</option>
-			</select>
 			<div class="clearfix"></div>
 		</div>
 
