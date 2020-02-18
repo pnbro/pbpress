@@ -55,12 +55,17 @@ abstract class PBPageBuilderElement{
 		if(isset($element_map_[$this->element_id]['loadable']) && $element_map_[$this->element_id]['loadable']){
 			foreach($elementcontent_ as $element_data_){
 				$element_class_ = $pb_page_builder_element_classes[$element_data_['name']];
-				call_user_func_array(array($element_class_, "render"), array($element_data_, $element_data_['elementcontent']));	
+				$element_data_ = pb_hook_apply_filters('pb_page_builder_element_render', $element_data_, $element_data_['elementcontent']);
+				call_user_func_array(array($element_class_, "_render"), array($element_data_, $element_data_['elementcontent']));
 			} 
 			
 		}else{
 			echo $elementcontent_;
 		}
+	}
+	public function _render($data_ = array(), $content_ = null){
+		$data_ = pb_hook_apply_filters('pb_page_builder_element_render', $data_, $content_);
+		return $this->render($data_, $content_);
 	}
 
 	abstract function initialize();

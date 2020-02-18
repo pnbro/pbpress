@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "1.7.0");
+define('PB_PAGE_BUILDER_VERSION', "1.7.1");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "1.0.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', PB_PAGE_BUILDER_VERSION);
 
@@ -108,7 +108,7 @@ function pb_page_builder_render($builder_data_){
 
 <?php foreach($page_contents_ as $element_data_){
 	$element_class_ = $pb_page_builder_element_classes[$element_data_['name']];
-	call_user_func_array(array($element_class_, "render"), array($element_data_, $element_data_['elementcontent']));
+	call_user_func_array(array($element_class_, "_render"), array($element_data_, $element_data_['elementcontent']));
 } ?>
 
 <script type="text/javascript"><?=pb_hook_apply_filters('pb_page_builder_global_script',$settings_['script'], $builder_data_)?></script>
