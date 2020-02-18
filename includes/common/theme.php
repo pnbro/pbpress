@@ -14,6 +14,7 @@ function pb_theme_list(){
 	$pb_theme_list = array();
 
 	foreach(glob(PB_DOCUMENT_PATH . "themes/**") as $theme_){
+		if(!is_dir($theme_)) continue;
 		$theme_slug_ = basename($theme_);
 
 		$theme_info_ = null;

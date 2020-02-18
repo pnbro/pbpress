@@ -66,6 +66,7 @@ function pb_plugin_list(){
 	$activated_plugins_ = pb_activated_plugins();
 
 	foreach(glob(PB_PLUGINS_PATH . "**") as $plugin_){
+		if(!is_dir($plugin_)) continue;
 		$plugin_slug_ = basename($plugin_);
 		$plugin_info_ = null;
 
