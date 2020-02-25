@@ -116,5 +116,15 @@ function pb_slugify($slug_){
 	$slug_ = preg_replace("/[ #\&\+%@=\/\\\:;,\.'\"\^`~|\!\?\*$#<>()\[\]\{\}]/i", "", $slug_);
 	return $slug_;
 }
+
+function pb_is_https(){
+	$https_ = false;
+	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
+		$https_ = true;
+	}elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on'){
+		$https_ = true;
+	}
+	return $https_;
+}
 	
 ?>

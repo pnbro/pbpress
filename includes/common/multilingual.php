@@ -1,15 +1,22 @@
 <?php
 
+define('PB_SESSION_CURRENT_LOCALE', '_PB_SESSION_CURRENT_LOCALE_');
+
 function pb_locale_update($locale_){
 	setlocale(LC_ALL, $locale_);
+	pb_session_put(PB_SESSION_CURRENT_LOCALE, $locale_);
 	pb_hook_do_action('pb_locale_updated', $locale_);
 }
 
 function pb_current_locale($short_ = false){
+	$current_locale_ = pb_session_get(PB_SESSION_CURRENT_LOCALE);
+	if(!isset($current_locale_)){
+		$current_locale_ = setlocale(LC_ALL, 0);	
+	}
 	global $pb_config;
-	$result_ = setlocale(LC_ALL, 0);
-	if($short_) return substr($result_, 0, strpos($result_, "_"));
-	return $result_;
+	
+	if($short_) return substr($current_locale_, 0, strpos($current_locale_, "_"));
+	return $current_locale_;
 }
 
 define('PBDOMAIN', 'pbpress');

@@ -7,8 +7,16 @@ if(!file_exists(dirname( __FILE__ )."/pb-config.php")){
 	die("config file not found");
 }
 
+$https_ = false;
+if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
+	$https_ = true;
+}elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on'){
+	$https_ = true;
+}
+
+
 define("PB_DOCUMENT_PATH", dirname( __FILE__ )."/");
-define("PB_DOCUMENT_URL", (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH));
+define("PB_DOCUMENT_URL", ($https_ ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH));
 
 if(defined("PB_DEV") && PB_DEV){
 	define("PB_LIBRARY_PATH", PB_DOCUMENT_PATH."lib/dev/");
