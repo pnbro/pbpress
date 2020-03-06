@@ -12,7 +12,7 @@ PHP Framework for simple website creation.
 ## Requirements
 	PHP >= 5.3
 	MySQL >= 5.x (innoDB)
-		- mysql, mysqli
+		- mysql, mysqli, pdo
 		
 ## How to install
 PBPress need to initialize frontend library that based by NPM Gruntjs.
