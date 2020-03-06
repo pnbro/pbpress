@@ -16,7 +16,7 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 		}
 
 		global $pb_config;
-		$this->_connection = @mysql_connect($pb_config->db_host, $pb_config->db_username, $pb_config->db_userpass, true) Or die("Error On DB Connection : MYSQL");
+		$this->_connection = @mysql_connect($pb_config->db_host.":".$pb_config->db_port, $pb_config->db_username, $pb_config->db_userpass, true) Or die("Error On DB Connection : MYSQL");
 
 		mysql_select_db($pb_config->db_name) Or die("Error On Select DB : MYSQL");
 
@@ -27,7 +27,21 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 		return mysql_real_escape_string($str_);
 	}
 
-	public function query($query_){
+	public function query($query_, $values_ = array(), $types_ = array()){
+		$param_index_ = 0;
+		while(($last_pos_ = strpos($query_, "?")) !== false){
+
+			$column_value_ = $values_[$param_index_];
+			$column_type_ = $types_[$param_index_];
+
+			if($column_type_ === PBDB::TYPE_STRING){
+				$column_value_ = "'{$column_value_}'";
+			}
+
+			$query_ = preg_replace("/\?/", $column_value_, $query_, 1);
+			++$param_index_;
+		}
+
 		$result_ =  mysql_query($query_, $this->_connection);
 
 		$this->_last_error_no = mysql_errno($this->_connection);

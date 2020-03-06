@@ -23,7 +23,7 @@ abstract class PBDatabase_connection{
 	abstract protected function escape_string($str);
 
 	abstract protected function connect();
-	abstract protected function query($query_);
+	abstract protected function query($query_, $values_ = array(), $types_ = array());
 	abstract protected function inserted_id();
 	abstract protected function last_error();
 
@@ -31,7 +31,6 @@ abstract class PBDatabase_connection{
 	abstract protected function fetch_array($resource_);
 
 	abstract protected function autocommit($bool_);
-
 	abstract protected function commit();
 	abstract protected function rollback();
 	abstract protected function close_connection();
@@ -39,6 +38,7 @@ abstract class PBDatabase_connection{
 
 include(PB_DOCUMENT_PATH . "includes/common/database-mysql.php");
 include(PB_DOCUMENT_PATH . "includes/common/database-mysqli.php");
+include(PB_DOCUMENT_PATH . "includes/common/database-pdo.php");
 
 function pb_database_connection_types(){
 	return pb_hook_apply_filters("pb_database_connection_types", array());
@@ -75,11 +75,15 @@ global $pbdb;
 
 class PBDB{
 
+	const TYPE_STRING = "%s";
+	const TYPE_NUMBER = "%d";
+	const TYPE_FLOAT = "%f";
+
 	private $_last_query = null;
 
-	function query($query_){
+	function query($query_, $values_ = array(), $types_ = array()){
 		global $pb_config, $pb_db_connection;
-		$result_ = pb_hook_apply_filters("pb_database_query",$pb_db_connection->query($query_));
+		$result_ = pb_hook_apply_filters("pb_database_query",$pb_db_connection->query($query_, $values_, $types_));
 		$last_error_ = $this->last_error();
 
 		if(pb_is_error($last_error_)){
@@ -94,10 +98,10 @@ class PBDB{
 		return $this->_last_query;
 	}
 
-	function select($query_){
+	function select($query_, $values_ = array(), $types_ = array()){
 		global $pb_db_connection;
 
-		$resources_ = $this->query($query_);
+		$resources_ = $this->query($query_, $values_, $types_);
 		$this->_last_query = $query_;
 
 		if(!isset($resources_)) return null;
@@ -110,10 +114,10 @@ class PBDB{
 		return $results_;
 	}
 
-	function get_first_row($query_){
+	function get_first_row($query_, $values_ = array(), $types_ = array()){
 		global $pb_db_connection;
 
-		$resources_ = $this->query($query_);
+		$resources_ = $this->query($query_, $values_, $types_);
 		$this->_last_query = $query_;
 
 		if(!isset($resources_)) return null;
@@ -125,10 +129,10 @@ class PBDB{
 		return null;
 	}
 
-	function get_var($query_){
+	function get_var($query_, $values_ = array(), $types_ = array()){
 		global $pb_db_connection;
 
-		$resources_ = $this->query($query_);
+		$resources_ = $this->query($query_, $values_, $types_);
 		$this->_last_query = $query_;
 
 		if(!isset($resources_)) return null;
@@ -138,16 +142,6 @@ class PBDB{
     	}
 
 		return null;
-	}
-
-
-	function prepare($query_, $data_){
-		$query_ = str_replace( "'%s'", '%s', $query_);
-		$query_ = str_replace( '"%s"', '%s', $query_);
-		$query_ = preg_replace( '/(?<!%)%s/', "'%s'", $query_);
-		$query_ = str_replace( "##null##", '%s', $query_);
-
-		return vsprintf($query_, $data_);
 	}
 
 	function insert($table_name_, $insert_data_, $insert_data_types_ = array()){
@@ -160,9 +154,10 @@ class PBDB{
 		$start_column_ = true;
 		$col_index_ = 0;
 
-		$field_maps_ = array();
+		$values_ = array();
+		$types_ = array();
 		foreach($insert_data_ as $column_name_ => $column_value_){
-			$field_maps_[] = $pb_db_connection->escape_string($column_value_);
+			$values_[] = $pb_db_connection->escape_string($column_value_);
 
 			if(!$start_column_){
 				$query_column_str_ .= ",";
@@ -173,9 +168,11 @@ class PBDB{
 
 			$query_column_str_ .= strtolower($column_name_);
 			if(isset($insert_data_types_[$col_index_])){
-				$query_type_str_ .= $insert_data_types_[$col_index_];
+				$query_type_str_ .= "?";
+				$types_[] = $insert_data_types_[$col_index_];
 			}else{
-				$query_type_str_ .= "%s";
+				$query_type_str_ .= "?";
+				$types_[] = PBDB::TYPE_STRING;
 			}
 
 			++$col_index_;
@@ -186,9 +183,7 @@ class PBDB{
 		$insert_query_ .= $query_type_str_;
 		$insert_query_ .= ")";
 
-		$insert_query_ = $this->prepare($insert_query_, $field_maps_);
-
-		$result_ = $this->query($insert_query_);
+		$result_ = $this->query($insert_query_, $values_, $types_);
 		$this->_last_query = $insert_query_;
 
 		if(!$result_){
@@ -204,13 +199,15 @@ class PBDB{
 		$update_query_ = "UPDATE {$table_name_} SET ";
 
 		$column_value_str_ = "";
-		$field_maps_ = array();
+
+		$values_ = array();
+		$types_ = array();
 
 		$start_column_ = true;
 		$col_index_ = 0;
 
 		foreach($update_data_ as $column_name_ => $column_value_){
-			$field_maps_[] = $pb_db_connection->escape_string($column_value_);
+			$values_[] = $pb_db_connection->escape_string($column_value_);
 
 			if(!$start_column_){
 				$column_value_str_ .= ",";
@@ -218,12 +215,14 @@ class PBDB{
 				$start_column_ = false;
 			}
 
-			$column_type_ = "%s";
+			$column_type_ = PBDB::TYPE_STRING;
 			if(isset($update_data_types_[$col_index_])){
 				$column_type_ = $update_data_types_[$col_index_];
 			}
+			$types_[] = $column_type_;
 
-			$column_value_str_ .= "{$column_name_} = {$column_type_} ";
+			$column_value_str_ .= "{$column_name_} = ? ";
+
 
 			++$col_index_;
 		}
@@ -234,16 +233,17 @@ class PBDB{
 		$col_index_ = 0;
 
 		foreach($key_data_ as $column_name_ => $column_value_){
-			$field_maps_[] = $pb_db_connection->escape_string($column_value_);
+			$values_[] = $pb_db_connection->escape_string($column_value_);
 
 			$where_value_str_ .= "AND ";
 
-			$column_type_ = "%s";
+			$column_type_ = PBDB::TYPE_STRING;
 			if(isset($update_key_types_[$col_index_])){
 				$column_type_ = $update_key_types_[$col_index_];
 			}
+			$types_[] = $column_type_;
 
-			$where_value_str_ .= "{$column_name_} = {$column_type_} ";
+			$where_value_str_ .= "{$column_name_} = ? ";
 
 			++$col_index_;
 		}
@@ -252,11 +252,7 @@ class PBDB{
 		$update_query_ .= " WHERE 1 ";
 		$update_query_ .= $where_value_str_;
 
-		$update_query_ = $this->prepare($update_query_, $field_maps_);
-
-		
-
-		$result_ = $this->query($update_query_);
+		$result_ = $this->query($update_query_, $values_, $types_);
 		$this->_last_query = $update_query_;
 
 		if(!$result_){
@@ -270,23 +266,25 @@ class PBDB{
 
 		$delete_query_ = "DELETE FROM {$table_name_} ";
 
-		$field_maps_ = array();
+		$values_ = array();
+		$types_ = array();
 		$where_value_str_ = "";
 
 		$start_column_ = true;
 		$col_index_ = 0;
 
 		foreach($key_data_ as $column_name_ => $column_value_){
-			$field_maps_[] = $pb_db_connection->escape_string($column_value_);
+			$values_[] = $pb_db_connection->escape_string($column_value_);
 
 			$where_value_str_ .= "AND ";
 
-			$column_type_ = "%s";
+			$column_type_ = PBDB::TYPE_STRING;
 			if(isset($delete_key_types_[$col_index_])){
 				$column_type_ = $delete_key_types_[$col_index_];
 			}
 
-			$where_value_str_ .= "{$column_name_} = {$column_type_} ";
+			$where_value_str_ .= "{$column_name_} = ? ";
+			$types_[] = $column_type_;
 
 			++$col_index_;
 		}
@@ -294,9 +292,7 @@ class PBDB{
 		$delete_query_ .= " WHERE 1 ";
 		$delete_query_ .= $where_value_str_;
 
-		$delete_query_ = $this->prepare($delete_query_, $field_maps_);
-
-		$result_ = $this->query($delete_query_, $pb_db_connection);
+		$result_ = $this->query($delete_query_, $values_, $types_);
 		$this->_last_query = $delete_query_;
 
 		return $result_;
@@ -356,7 +352,6 @@ $pbdb = new PBDB();
 
 function _pb_database_close_hook(){
 	global $pbdb,$pb_db_connection;
-	$pbdb->commit();
 	$pb_db_connection->close_connection();
 }
 pb_hook_add_action('pb_ended', "_pb_database_close_hook");
@@ -367,5 +362,7 @@ if($pb_config->is_show_database_error()){
 	}
 	pb_hook_add_action('pb_database_error_occurred','_pb_database_hook_print_error');
 }
+
+include(PB_DOCUMENT_PATH . "includes/common/database-select-statement.php");
 	
 ?>

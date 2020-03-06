@@ -17,7 +17,7 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 			die("MySQLi not supported");
 		}
 
-		$this->_connection = @mysqli_connect($pb_config->db_host, $pb_config->db_username, $pb_config->db_userpass, $pb_config->db_name) Or die("Error On DB Connection : MYSQLI");
+		$this->_connection = @mysqli_connect($pb_config->db_host, $pb_config->db_username, $pb_config->db_userpass, $pb_config->db_name,$pb_config->db_port) Or die("Error On DB Connection : MYSQLI");
 
 		return isset($this->_connection);
 	}
@@ -26,7 +26,21 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 		return mysqli_real_escape_string($this->_connection, $str_);
 	}
 
-	public function query($query_){
+	public function query($query_, $values_ = array(), $types_ = array()){
+		$param_index_ = 0;
+		while(($last_pos_ = strpos($query_, "?")) !== false){
+
+			$column_value_ = $values_[$param_index_];
+			$column_type_ = isset($types_[$param_index_]) ? $types_[$param_index_] : PBDB::TYPE_STRING;
+
+			if($column_type_ === PBDB::TYPE_STRING){
+				$column_value_ = "'{$column_value_}'";
+			}
+
+			$query_ = preg_replace("/\?/", $column_value_, $query_, 1);
+			++$param_index_;
+		}
+
 		$result_ =  mysqli_query($this->_connection, $query_);
 
 		$this->_last_error_no = mysqli_errno($this->_connection);

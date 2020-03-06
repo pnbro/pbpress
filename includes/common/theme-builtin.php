@@ -17,17 +17,6 @@ function _pb_theme_install_tables(){
 }
 pb_hook_add_action('pb_installed_tables', "_pb_theme_install_tables");
 
-function _pb_switch_theme_after_for_includes(){
-	$current_theme_path_ = pb_current_theme_path();
-
-	if(file_exists($current_theme_path_."functions.php")){
-		include_once $current_theme_path_."functions.php";
-	}
-
-	_pb_theme_install_tables();
-}
-pb_hook_add_action('pb_switch_theme_after', "_pb_switch_theme_after_for_includes");
-
 function _pb_theme_hook_register_adminpage_list($results_){
 	$results_['manage-theme'] = array(
 		'name' => '테마설정',

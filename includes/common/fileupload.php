@@ -64,7 +64,8 @@ function pb_fileupload_handle($files_, $options_ = array()){
 	$total_file_count_ = count($files_['name']);
 
 	for($file_index_= 0; $file_index_ < $total_file_count_; ++$file_index_){
-		$original_file_name_ = basename($files_['name'][$file_index_]);
+		$original_file_name_ = basename(urlencode($files_['name'][$file_index_]));
+		$original_file_name_ = urldecode($original_file_name_);
 		$origianl_file_path_ = $files_['tmp_name'][$file_index_];
 
 		switch($files_['error'][$file_index_]){

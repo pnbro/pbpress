@@ -13,6 +13,7 @@ class PBConfig{
 	
 	public $db_connection_type = "mysqli";
 	public $db_host = "";
+	public $db_port = "";
 	public $db_username = "";
 	public $db_userpass = "";
 	public $db_name = "";
@@ -40,6 +41,7 @@ class PBConfig{
 
 		$this->db_connection_type = (defined("PB_DB_CONNECTION_TYPE")) ?  PB_DB_CONNECTION_TYPE : "mysqli";
 		$this->db_host = (defined("PB_DB_HOST")) ?  PB_DB_HOST : null;
+		$this->db_port = (defined("PB_DB_PORT")) ?  PB_DB_PORT : "3306";
 		$this->db_username = (defined("PB_DB_USERNAME")) ? PB_DB_USERNAME : null;
 		$this->db_userpass = (defined("PB_DB_USERPASS")) ? PB_DB_USERPASS : null;
 		$this->db_name = (defined("PB_DB_NAME")) ? PB_DB_NAME : null;
