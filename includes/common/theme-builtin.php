@@ -13,7 +13,6 @@ function _pb_theme_install_tables(){
 	}
 
 	pb_hook_do_action("pb_installed_theme_tables");
-	$pbdb->commit();
 }
 pb_hook_add_action('pb_installed_tables', "_pb_theme_install_tables");
 

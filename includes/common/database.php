@@ -330,8 +330,6 @@ class PBDB{
 		}
 
 		pb_hook_do_action("pb_installed_tables");
-
-		$pb_db_connection->commit();
 	}
 
 	function exists_column($table_name_, $column_name_){

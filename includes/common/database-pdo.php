@@ -47,7 +47,7 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 		$this->_last_error_message = $this->_connection->errorInfo();
 		$this->_last_error_message = implode(":", $this->_last_error_message);
 
-		if($this->last_error() === false){
+		if($this->last_error() !== false){
 			return false;
 		}
 
