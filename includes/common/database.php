@@ -362,5 +362,6 @@ if($pb_config->is_show_database_error()){
 }
 
 include(PB_DOCUMENT_PATH . "includes/common/database-select-statement.php");
+include(PB_DOCUMENT_PATH . "includes/common/database-do.php");
 	
 ?>
