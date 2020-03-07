@@ -4,6 +4,20 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+global $users_do;
+$users_do = pbdb_data_object("users", array(
+	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
+	'user_pass' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "nn" => true, "comment" => "패스워드"),
+	'user_login' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "nn" => true, "index" => true, "comment" => "로그인ID"),
+	'user_email' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "nn" => true, "index" => true, "comment" => "이메일"),
+	'user_name' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "nn" => true, "comment" => "사용자명"),
+	'status' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "index" => true, "comment" => "상태"),
+	'findpass_vkey' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "index" => true, "comment" => "암호찾기 - 인증키"),
+	'findpass_vkey_exp_date' => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "암호찾기 - 키만료일자"),
+	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
+	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
+),"사용자");
+
 function pb_user_list($conditions_ = array()){
 	global $pbdb;
 
@@ -99,42 +113,12 @@ function pb_user_by_user_email($user_email_){
 	return pb_user_by("user_email", $user_email_);
 }
 
-
-function _pb_user_parse_fields($data_){
-	return pb_format_mapping(pb_hook_apply_filters("pb_user_parse_fields",array(
-
-		'user_login' => '%s',
-		'user_pass' => '%s',
-		'user_email' => '%s',
-		'user_name' => '%s',
-		'status' => '%s',
-			
-		'findpass_vkey' => '%s',
-		'findpass_vkey_exp_date' => '%s',
-
-		'reg_date' => '%s',
-		'mod_date' => '%s',
-		
-	)), $data_);
-}
-
 function pb_user_add($raw_data_){
 	$before_check_ = pb_hook_apply_filters("pb_user_before_add", $raw_data_);
-
-	if(pb_is_error($before_check_)){
-		return $before_check_;
-	}
-
-	global $pbdb;
-
-	$raw_data_ = _pb_user_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$insert_id_ = $pbdb->insert("users", $data_, $format_);
-	pb_hook_do_action("pb_user_added", $insert_id_);
-
-	return $insert_id_;
+	global $users_do;
+	$inserted_id_ = $users_do->insert($raw_data_);
+	pb_hook_do_action("pb_user_added", $inserted_id_);
+	return $inserted_id_;
 }
 function _pb_user_before_add_common($raw_data_){
 	$exists_check1_ = pb_user_by_user_login($raw_data_['user_login']);
@@ -158,13 +142,9 @@ function pb_user_update($id_, $raw_data_){
 		return $before_check_;
 	}
 
-	global $pbdb;
+	global $users_do, $pbdb;
+	$users_do->update($id_, $raw_data_);
 
-	$raw_data_ = _pb_user_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$pbdb->update("users", $data_, array("id" => $id_), $format_, array("%d"));
 	pb_hook_do_action("pb_user_updated", $id_);
 }
 
@@ -175,8 +155,8 @@ function pb_user_delete($id_){
 		return $before_check_;
 	}
 
-	global $pbdb;
-	$pbdb->delete("users", array("id" => $id_), array("%d"));
+	global $users_do;
+	$users_do->delete($id_);
 	pb_hook_do_action("pb_user_deleted", $id_);
 }
 

@@ -41,13 +41,22 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 			$statement_->bindValue($index_+1, $value_, $column_type_);
 		}
 
-		$statement_->execute();
+		try{
+			$result_ = $statement_->execute();
 
-		$this->_last_error_no = $this->_connection->errorCode();
-		$this->_last_error_message = $this->_connection->errorInfo();
-		$this->_last_error_message = implode(":", $this->_last_error_message);
+			if(!$result_){
+				$this->_last_error_no = $this->_connection->errorCode();
+				$this->_last_error_message = $this->_connection->errorInfo();
+				$this->_last_error_message = implode(":", $this->_last_error_message);
 
-		if($this->last_error() !== false){
+				return false;
+			}
+
+		}catch(PDOException $ex_){
+			$this->_last_error_no = $this->_connection->errorCode();
+			$this->_last_error_message = $this->_connection->errorInfo();
+			$this->_last_error_message = implode(":", $this->_last_error_message);
+
 			return false;
 		}
 
