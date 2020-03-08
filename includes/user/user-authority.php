@@ -4,6 +4,26 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+
+global $users_auth_do;
+$users_auth_do = pbdb_data_object("users_auth", array(
+	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
+	'user_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
+		'table' => 'users',
+		'column' => "id",
+		'delete' => PBDB_DO::FK_CASCADE,
+		'update' => PBDB_DO::FK_CASCADE,
+	), "comment" => "사용자ID"),
+	'auth_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
+		'table' => 'auth',
+		'column' => "id",
+		'delete' => PBDB_DO::FK_CASCADE,
+		'update' => PBDB_DO::FK_CASCADE,
+	), "comment" => "권한ID"),
+	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
+	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
+),"사용자");
+
 function pb_user_authority_list($conditions_ = array()){
 	global $pbdb;
 
@@ -101,16 +121,6 @@ function pb_user_authority_by_slug($user_id_, $slug_){
 	return $data_[0];
 }
 
-function _pb_user_authority_parse_fields($data_){
-	return pb_format_mapping(pb_hook_apply_filters("pb_user_authority_parse_fields",array(
-
-		'user_id' => '%d',
-		'auth_id' => '%s',
-		'reg_date' => '%s',
-		'mod_date' => '%s',
-		
-	)), $data_);
-}
 
 function pb_user_authority_add($raw_data_){
 	$before_check_ = pb_hook_apply_filters("pb_user_authority_before_add", $raw_data_);
@@ -119,16 +129,11 @@ function pb_user_authority_add($raw_data_){
 		return $before_check_;
 	}
 
-	global $pbdb;
+	global $users_auth_do;
+	$inserted_id_ = $users_auth_do->insert($raw_data_);
+	pb_hook_do_action("pb_user_authority_added", $inserted_id_);
 
-	$raw_data_ = _pb_user_authority_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$insert_id_ = $pbdb->insert("users_auth", $data_, $format_);
-	pb_hook_do_action("pb_user_authority_added", $insert_id_);
-
-	return $insert_id_;
+	return $inserted_id_;
 }
 function pb_user_authority_update($id_, $raw_data_){
 	$before_check_ = pb_hook_apply_filters("pb_user_authority_before_update", $id_, $raw_data_);
@@ -137,13 +142,8 @@ function pb_user_authority_update($id_, $raw_data_){
 		return $before_check_;
 	}
 
-	global $pbdb;
-
-	$raw_data_ = _pb_user_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$pbdb->update("users_auth", $data_, array("id" => $id_), $format_, array("%d"));
+	global $users_auth_do;
+	$users_auth_do->update($id_, $raw_data_);
 	pb_hook_do_action("pb_user_updated", $id_);
 }
 
@@ -154,8 +154,9 @@ function pb_user_authority_delete($id_){
 		return $before_check_;
 	}
 
-	global $pbdb;
-	$pbdb->delete("users_auth", array("id" => $id_), array("%d"));
+	global $users_auth_do;
+	pb_hook_do_action("pb_user_delete", $id_);
+	$users_auth_do->delete($id_);
 	pb_hook_do_action("pb_user_deleted", $id_);
 }
 

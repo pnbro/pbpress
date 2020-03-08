@@ -217,7 +217,7 @@ class PBDB_DO extends ArrayObject{
 		$statment_ = pbdb_ss($this->_table_name);
 
 		foreach($this->_fields as $column_name_ => $field_data_){
-			$statment_->add_field("{$this->_table_name}.{$column_name_}");
+			$statment_->add_field("$column_name_");
 		}
 
 		return $statment_;

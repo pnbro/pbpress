@@ -141,7 +141,21 @@ class PBDB_select_statement{
 		$this->_cond_list = new PBDB_select_statement_conditions();
 	}
 
-	
+	function from_table(){
+		return $this->_from_table;
+	}
+	function from_table_alias(){
+		return $this->_from_table_alias;
+	}
+	function fields(){
+		return $this->_field_list;
+	}
+	function joins(){
+		return $this->_join_list;
+	}
+	function conditions(){
+		return $this->_cond_list;
+	}
 
 	function add_field(){
 		$fields_count_ = func_num_args();
@@ -160,6 +174,19 @@ class PBDB_select_statement{
 			'alias' => $alias_,
 			'on' => $join_cond_,
 		);
+
+		return $join_cond_;
+	}
+	function &add_join_statement($join_type_, $statement_, $alias_ = null, $column_prefix_ = "", $fields_ = null){
+		$join_cond_ = new PBDB_select_statement_conditions();
+
+		$this->_join_list[] = array(
+			'type' => $join_type_,
+			'statement' => $statement_,
+			'prefix' => $alias_,
+			'on' => $join_cond_,
+			'fields' => $fields_,
+		);	
 
 		return $join_cond_;
 	}
@@ -190,14 +217,52 @@ class PBDB_select_statement{
 
 		$fields_array_ = array();
 
-		$query_ .= implode(",", $this->_field_list) ." \n\r"; 
+		foreach($this->_field_list as $column_name_){
+			$fields_array_[] = "{$from_table_alias_}.{$column_name_}";
+		}
+
+		foreach($this->_join_list as $join_data_){
+			if(isset($join_data_['statement'])){
+				$join_table_statement_ = $join_data_['statement'];
+				$join_table_name_ = $join_table_statement_->from_table();
+				$join_table_alias_ = isset($join_data_['alias']) ? $join_data_['alias'] : $join_table_statement_->from_table_alias();
+				$join_table_alias_ = strlen($join_table_alias_) ? $join_table_alias_ : $join_table_name_;
+				$join_table_prefix_ = $join_data_['prefix'];
+				$join_table_fields_ = $join_data_['fields'];
+
+				foreach($join_table_statement_->fields() as $column_name_){
+					if(isset($join_table_fields_) && in_array($column_name_, $join_table_fields_) === false) continue;
+
+					$column_name_ = trim($column_name_);
+					$column_name_array_ = explode(" ", $column_name_);
+
+					$column_oname_ = $column_name_array_[0];
+					$column_alias_ = isset($column_name_array_[1]) ? $column_name_array_[1] : $column_oname_;
+					$column_alias_ = $join_table_prefix_.$column_alias_;
+
+					$fields_array_[] = "{$join_table_alias_}.{$column_oname_} {$column_alias_}";
+				}
+			}
+		}
+		$query_ .= implode(",\n\r", $fields_array_) ." \n\r"; 
+
 		$query_ .= " FROM {$from_table_} {$from_table_alias_} \n\r";
 
 
 		foreach($this->_join_list as $join_data_){
-			$join_table_ = $join_data_['table'];
-			$join_table_alias_ = isset($join_data_['alias']) ? $join_data_['alias'] : $join_table_;
-			$query_ .= " {$join_data_['type']} {$join_table_} {$join_table_alias_} \n\r";
+			if(isset($join_data_['statement'])){
+				$join_table_statement_ = $join_data_['statement'];
+				$join_table_alias_ = isset($join_data_['alias']) ? $join_data_['alias'] : $join_table_statement_->from_table_alias();
+				$join_table_alias_ = strlen($join_table_alias_) ? $join_table_alias_ : $join_table_name_;
+				$join_table_name_ = $join_table_statement_->from_table();
+				$query_ .= " {$join_data_['type']} {$join_table_name_} {$join_table_alias_} \n\r";
+
+			}else{
+				$join_table_ = $join_data_['table'];
+				$join_table_alias_ = isset($join_data_['alias']) ? $join_data_['alias'] : $join_table_;
+				$query_ .= " {$join_data_['type']} {$join_table_} {$join_table_alias_} \n\r";
+			}
+			
 			$query_ .= " ON 1 \n\r";
 
 			$join_cond_ = $join_data_['on']->build();
