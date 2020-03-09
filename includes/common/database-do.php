@@ -223,6 +223,12 @@ class PBDB_DO extends ArrayObject{
 		return $statment_;
 	}
 
+	private $_legacy_field_filters = array();
+
+	function add_legacy_field_filter(){
+		$this->_legacy_field_filters[] = func_get_args();
+	}
+
 	function insert($data_){
 		global $pbdb;
 
@@ -240,6 +246,19 @@ class PBDB_DO extends ArrayObject{
 
 			$insert_values_[$column_name_] = $column_value_;
 			$insert_types_[] = PBDB_DO::convert_to_pbdb_type($type_);
+		}
+
+		$legacy_fields_ = array();
+		foreach($this->_legacy_field_filters as $args_){
+			$legacy_fields_ = array_merge($legacy_fields_, call_user_func_array("pb_hook_apply_filters", $args_));
+		}
+		if(count($legacy_fields_) > 0){
+			foreach($data_ as $column_name_ => $column_value_){
+				if(!isset($legacy_fields_[$column_name_])) continue;
+
+				$insert_values_[$column_name_] = $column_value_;
+				$insert_types_[] = $legacy_fields_[$column_name_];
+			}
 		}
 
 		$inserted_id_ = $pbdb->insert($this->_table_name, $insert_values_, $insert_types_);

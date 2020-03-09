@@ -4,48 +4,6 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-function pb_gcode_install_tables($args_){
-	global $pbdb;
-
-	$args_[] = "CREATE TABLE IF NOT EXISTS `gcode` (
-		`code_id` varchar(20) NOT NULL COMMENT '코드ID',
-		`code_nm` varchar(50) DEFAULT NULL COMMENT '코드명',
-		`code_desc` varchar(100) DEFAULT NULL COMMENT '코드설명',
-		`use_yn` varchar(1) DEFAULT NULL COMMENT '사용여부',
-
-		`col1` VARCHAR(100) DEFAULT NULL COMMENT 'COL1',
-		`col2` VARCHAR(100) DEFAULT NULL COMMENT 'COL2',
-		`col3` VARCHAR(100) DEFAULT NULL COMMENT 'COL3',
-		`col4` VARCHAR(100) DEFAULT NULL COMMENT 'COL4',
-
-		`reg_date` datetime DEFAULT null COMMENT '등록일자',
-		`mod_date` datetime DEFAULT null COMMENT '수정일자',
-		PRIMARY KEY (`code_id`)
-	) ENGINE=InnoDB COMMENT='공통코드';";
-
-	$args_[] = "CREATE TABLE IF NOT EXISTS `gcode_dtl` (
-		`code_id` varchar(20) NOT NULL COMMENT '코드ID',
-		`code_did` varchar(10) NOT NULL COMMENT '코드상세ID',
-		`code_dnm` varchar(50) DEFAULT NULL COMMENT '코드상세명',
-		`code_ddesc` varchar(100) DEFAULT NULL COMMENT '코드상세설명',
-
-		`col1` VARCHAR(100) DEFAULT NULL COMMENT 'COL1',
-		`col2` VARCHAR(100) DEFAULT NULL COMMENT 'COL2',
-		`col3` VARCHAR(100) DEFAULT NULL COMMENT 'COL3',
-		`col4` VARCHAR(100) DEFAULT NULL COMMENT 'COL4',
-
-		`use_yn` varchar(1) DEFAULT NULL COMMENT '사용여부',
-		`sort_char` varchar(5) DEFAULT NULL COMMENT '정렬구분자',
-		`reg_date` datetime DEFAULT NULL COMMENT '등록일자',
-		`mod_date` datetime DEFAULT null COMMENT '수정일자',
-		PRIMARY KEY (`code_id`,`code_did`),
-		CONSTRAINT `gcode_dtl_fk1` FOREIGN KEY (`code_id`) REFERENCES `gcode` (`code_id`) ON DELETE CASCADE ON UPDATE CASCADE
-	) ENGINE=InnoDB COMMENT='공통코드 - 상세';";
-
-	return $args_;
-}
-pb_hook_add_filter('pb_install_tables', "pb_gcode_install_tables");
-
 function pb_gcode_install(){
 	$gcode_list_ = pb_hook_apply_filters("pb_intialize_gcode_list", array());
 

@@ -4,7 +4,6 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-
 global $users_auth_do;
 $users_auth_do = pbdb_data_object("users_auth", array(
 	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
@@ -24,90 +23,67 @@ $users_auth_do = pbdb_data_object("users_auth", array(
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"사용자");
 
+$users_auth_do->add_legacy_field_filter("pb_user_authority_parse_fields"); // for legacy
+
 function pb_user_authority_list($conditions_ = array()){
-	global $pbdb;
+	global $auth_do, $users_auth_do;
 
-	/*$user_auth_statement_ = $users_auth_do->statement();
-	$user_auth_statement_->add_join_statement();*/
+	$statement_ = $users_auth_do->statement();
+	$statement_->add_field(
+		"DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
+		"DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d') reg_date_ymd",
+		"DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
+		"DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
+		"DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d') mod_date_ymd"
+	);
 
-	$query_ = "
-		SELECT   users_auth.id id
-	
-				,users_auth.user_id user_id
-				,users_auth.auth_id auth_id
+	$auth_join_cond_ = pbdb_ss_conditions();
+	$auth_join_cond_->add_compare("auth.id", "users_auth.auth_id", "=");
+	$statement_->add_join_statement("LEFT OUTER JOIN",$auth_do->statement(), "auth", $auth_join_cond_, array(
+		'auth_name',
+		'slug auth_slug',
+	));
 
-				,auth.auth_name auth_name
-				,auth.slug auth_slug
-				
-				,users_auth.reg_date reg_date
-				,DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis
-				,DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi
-				,DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d') reg_date_ymd
-
-				,users_auth.mod_date mod_date
-				,DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
-				,DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi
-				,DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d') mod_date_ymd
-
-				".pb_hook_apply_filters('pb_user_authority_list_select',"",$conditions_)."
-	
-	FROM users_auth
-
-	LEFT OUTER JOIN auth
-	ON   auth.id = users_auth.auth_id
-
-	LEFT OUTER JOIN users
-	ON   users.id = users_auth.user_id
-
-	".pb_hook_apply_filters('pb_user_authority_list_join',"",$conditions_)."
-	
-	WHERE 1 ";
+	$statement_->add_legacy_field_filter('pb_user_authority_list_select', '', $conditions_);
+	$statement_->add_legacy_join_filter('pb_user_authority_list_join', '', $conditions_);
+	$statement_->add_legacy_where_filter('pb_user_authority_list_where', '', $conditions_);
 
 	if(isset($conditions_['id']) && $conditions_['id'] === true){
-		$query_ .= " AND users_auth.id = '".pb_database_escape_string($conditions_['id'])."' ";
+		$statement_->add_compare_condition("users_auth.id", $conditions_['id'], "=", PBDB::TYPE_NUMBER);
 	}
 	if(isset($conditions_['auth_id'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['auth_id'], "users_auth.auth_id")." ";
+		$statement_->add_compare_condition("users_auth.auth_id", $conditions_['auth_id'], "=", PBDB::TYPE_NUMBER);
 	}
 	if(isset($conditions_['auth_slug'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['auth_slug'], "auth.slug")." ";
+		$statement_->add_compare_condition("auth.slug", $conditions_['auth_slug'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['auth_task_slug'])){
-		$query_ .= " AND users_auth.auth_id IN (
+		$statement_->add_custom_condition("users_auth.auth_id IN (
 			SELECT auth_task.auth_id
 			FROM   auth_task
 			WHERE  ".pb_query_in_fields($conditions_['auth_task_slug'], "auth_task.slug")."
-		) ";
+		)");
 	}
 
 	if(isset($conditions_['user_id']) && strlen($conditions_['user_id'])){
-		$query_ .= " AND users_auth.user_id = '".pb_database_escape_string($conditions_['user_id'])."' ";
+		$statement_->add_compare_condition("users_auth.user_id", $conditions_['user_id'], "=", PBDB::TYPE_NUMBER);
 	}
 	if(isset($conditions_['user_login']) && strlen($conditions_['user_login'])){
-		$query_ .= " AND users.user_login = '".pb_database_escape_string($conditions_['user_login'])."' ";
+		$statement_->add_compare_condition("users.user_login", $conditions_['user_login'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['user_email']) && strlen($conditions_['user_email'])){
-		$query_ .= " AND users.user_email = '".pb_database_escape_string($conditions_['user_email'])."' ";
+		$statement_->add_compare_condition("users.user_email", $conditions_['user_email'], "=", PBDB::TYPE_STRING);
 	}
 
-	$query_ .= ' '.pb_hook_apply_filters('pb_user_authority_list_where',"",$conditions_)." ";
-
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-        $query_ = " SELECT COUNT(*) CNT FROM (". $query_. ") TMP";
-        return $pbdb->get_var($query_);
+        return $statement_->count();
     }
 
-    if(isset($conditions_['orderby']) && strlen($conditions_['orderby'])){
-        $query_ .= " ".$conditions_['orderby']." ";
-    }else{
-    	$query_ .= " ORDER BY reg_date DESC";
-    }
+    $orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
+    $limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
 
-	if(isset($conditions_['limit'])){
-        $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
-    }
-
-	return pb_hook_apply_filters('pb_user_authority_list', $pbdb->select($query_));
+	return pb_hook_apply_filters('pb_user_authority_list', $statement_->select($orderby_, $limit_));
 }
 
 function pb_user_authority($id_){

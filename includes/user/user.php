@@ -18,81 +18,56 @@ $users_do = pbdb_data_object("users", array(
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"사용자");
 
+$users_do->add_legacy_field_filter("pb_user_parse_fields"); // for legacy
+
 function pb_user_list($conditions_ = array()){
-	global $pbdb;
+	global $users_do;
 
-	$query_ = "
-		SELECT   users.id id
+	$statement_ = $users_do->statement();
 
-				,users.user_login user_login
-				,users.user_email user_email
-				,users.user_pass user_pass
-				,users.user_name user_name
+	$statement_->add_field(
+		pb_query_gcode_dtl_name("U0001", "users.status")." status_name",
+		"DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
+		"DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d') reg_date_ymd",
+		"DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
+		"DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
+		"DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d') mod_date_ymd"
+	);
 
-				,users.status status
-				,".pb_query_gcode_dtl_name("U0001", "users.status")." status_name
-
-				,users.findpass_vkey findpass_vkey
-				,users.findpass_vkey_exp_date findpass_vkey_exp_date
-
-				,users.reg_date reg_date
-				,DATE_FORMAT(users.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis
-				,DATE_FORMAT(users.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi
-				,DATE_FORMAT(users.reg_date, '%Y.%m.%d') reg_date_ymd
-
-				,users.mod_date mod_date
-				,DATE_FORMAT(users.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
-				,DATE_FORMAT(users.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi
-				,DATE_FORMAT(users.mod_date, '%Y.%m.%d') mod_date_ymd
-
-				".pb_hook_apply_filters('pb_user_list_select',"",$conditions_)."
-
-	FROM users
-
-	".pb_hook_apply_filters('pb_user_list_join',"",$conditions_)."
-	
-	WHERE 1 ";
+	$statement_->add_legacy_field_filter('pb_user_list_select', '', $conditions_);
+	$statement_->add_legacy_join_filter('pb_user_list_join', '', $conditions_);
+	$statement_->add_legacy_where_filter('pb_user_list_where', '', $conditions_);
 
 	if(isset($conditions_['id']) && strlen($conditions_['id'])){
-		$query_ .= " AND users.id = '".pb_database_escape_string($conditions_['id'])."' ";
+		$statement_->add_compare_condition("users.id", $conditions_['id'], "=", PBDB::TYPE_NUMBER);
 	}
 	if(isset($conditions_['user_login']) && strlen($conditions_['user_login'])){
-		$query_ .= " AND users.user_login = '".pb_database_escape_string($conditions_['user_login'])."' ";
+		$statement_->add_compare_condition("users.user_login", $conditions_['user_login'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['user_email']) && strlen($conditions_['user_email'])){
-		$query_ .= " AND users.user_email = '".pb_database_escape_string($conditions_['user_email'])."' ";
+		$statement_->add_compare_condition("users.user_email", $conditions_['user_email'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['status']) && strlen($conditions_['status'])){
-		$query_ .= " AND users.status = '".pb_database_escape_string($conditions_['status'])."' ";
+		$statement_->add_in_condition("users.status", $conditions_['status']);
 	}
 
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
-		$query_ .= " AND ".pb_query_keyword_search(array(
+		$statement_->add_like_condition(array(
 			'users.user_login',
 			'users.user_email',
 			'users.user_name',
-		), $conditions_['keyword'])." ";
+		), $conditions_['keyword']);
 	}
 
-
-	$query_ .= ' '.pb_hook_apply_filters('pb_user_list_where',"",$conditions_)." ";
-
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-        $query_ = " SELECT COUNT(*) CNT FROM (". $query_. ") TMP";
-        return $pbdb->get_var($query_);
+		return $statement_->count();
     }
 
-    if(isset($conditions_['orderby']) && strlen($conditions_['orderby'])){
-        $query_ .= " ".$conditions_['orderby']." ";
-    }else{
-    	$query_ .= " ORDER BY reg_date DESC";
-    }
-
-	if(isset($conditions_['limit'])){
-        $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
-    }
+    $orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
+    $limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
     
-	return pb_hook_apply_filters('pb_user_list', $pbdb->select($query_));
+	return pb_hook_apply_filters('pb_user_list', $statement_->select($orderby_, $limit_));
 }
 
 function pb_user_by($by_, $val_){

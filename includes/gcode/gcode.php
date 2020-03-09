@@ -4,49 +4,46 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+global $gcode_do;
+$gcode_do = pbdb_data_object("gcode", array(
+	'code_id'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 20, "pk" => true, "comment" => "코드ID"),
+	'code_nm'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "comment" => "코드명"),
+	'code_desc'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "코드설명"),
+	'use_yn'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 1, "comment" => "사용여부"),
+
+	'col1'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "COL1"),
+	'col2'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "COL2"),
+	'col3'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "COL3"),
+	'col4'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "COL4"),
+	
+	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
+	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
+),"공통코드");
+
 function pb_gcode_list($conditions_ = array()){
-	global $pbdb;
+	global $gcode_do;
 
-	$query_ = "SELECT code_id code_id,
-					code_nm code_nm,
-					code_desc code_desc,
-					use_yn use_yn,
-
-					col1 col1,
-					col2 col2,
-					col3 col3,
-					col4 col4,
-
-					reg_date reg_date,
-					mod_date mod_date,
-
-					DATE_FORMAT(reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis,
-					DATE_FORMAT(mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
-	FROM gcode
-	WHERE 1=1 ";
+	$statement_ = $gcode_do->statement();
+	$statement_->add_field(
+		"DATE_FORMAT(gcode.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(gcode.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis"
+	);
 
 	if(isset($conditions_['only_use']) && $conditions_['only_use'] === true){
-		$query_ .= " AND gcode.use_yn = 'Y' ";
+		$statement_->add_compare_condition('gcode.use_yn', "Y", "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['code_id']) && strlen($conditions_['code_id'])){
-		$query_ .= " AND gcode.code_id = '".pb_database_escape_string($conditions_['code_id'])."' ";
+		$statement_->add_compare_condition('gcode.code_id', $conditions_['code_id'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
-		$query_ .= " AND gcode.code_nm LIKE '".pb_database_escape_string($conditions_['keyword'])."%' ";
+		$statement_->add_like_condition('gcode.code_nm', $conditions_['keyword']);
 	}
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-        $query_ = " SELECT COUNT(*) CNT FROM (". $query_. ") TMP";
-        return $pbdb->get_var($query_);
+        return $statement_->count();
     }
 
-	$query_ .= " ORDER BY code_id ASC";
-
-	if(isset($conditions_['limit'])){
-        $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
-    }
-
-	return $pbdb->select($query_);
+    return $statement_->select("code_id ASC", (isset($conditions_['limit']) ? $conditions_['limit'] : null));
 }
 
 function pb_gcode($code_id_){
@@ -61,82 +58,101 @@ function pb_gcode_name($code_id_){
 	return $gcode_["CODE_NM"];
 }
 
+
+function pb_gcode_add($raw_data_){
+	global $gcode_do;
+	$inserted_id_ = $gcode_do->insert($raw_data_);
+	pb_hook_do_action("pb_gcode_added", $inserted_id_);
+	return $inserted_id_;
+}
+
+function pb_gcode_update($id_, $raw_data_){
+	global $gcode_do;
+	$gcode_do->update($id_,$raw_data_);
+	pb_hook_do_action("pb_gcode_updated", $id_);
+}
+
+function pb_gcode_delete($id_){
+	global $gcode_do;
+	pb_hook_do_action("pb_gcode_delete", $id_);
+	$gcode_do->delete($id_);
+}
+
+global $gcode_dtl_do;
+
+$gcode_dtl_do = pbdb_data_object("gcode_dtl", array(
+	'code_id'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 20, "pk" => true, "fk" => array(
+		'table' => 'gcode',
+		'column' => "code_id",
+		'delete' => PBDB_DO::FK_CASCADE,
+		'update' => PBDB_DO::FK_CASCADE,
+	), "comment" => "코드ID"),
+	'code_did'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 20, "pk" => true, "comment" => "코드상세ID"),
+	'code_dnm'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "comment" => "코드상세명"),
+	'code_ddesc'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "코드상세설명"),
+	'use_yn'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 1, "comment" => "사용여부"),
+	'sort_char'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "comment" => "정렬순서"),
+
+	'col1'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "COL1"),
+	'col2'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "COL2"),
+	'col3'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "COL3"),
+	'col4'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "COL4"),
+
+	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
+	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
+),"권한별 작업범위");
+
 function pb_gcode_dtl_list($conditions_ = array()){
-	global $pbdb;
+	global $gcode_do, $gcode_dtl_do;
 
-	
-	$query_ = "SELECT 
-					gcode_dtl.code_id code_id,
-					gcode_dtl.code_did code_did,
-					gcode_dtl.code_dnm code_dnm,
-					gcode_dtl.code_ddesc code_ddesc,
+	$statement_ = $gcode_dtl_do->statement();
+	$statement_->add_field(
+		"DATE_FORMAT(gcode_dtl.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(gcode_dtl.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis"
+	);
 
-					gcode_dtl.col1 col1,
-					gcode_dtl.col2 col2,
-					gcode_dtl.col3 col3,
-					gcode_dtl.col4 col4,
+	$gcode_join_cond_ = pbdb_ss_conditions();
+	$gcode_join_cond_->add_compare("gcode.code_id", "gcode_dtl.code_id", "=");
+	$statement_->add_join_statement("LEFT OUTER JOIN", $gcode_do->statement(), "gcode_dtl", $gcode_join_cond_, array(
+		"col1 col1_title",
+		"col2 col2_title",
+		"col3 col3_title",
+		"col4 col4_title",
+	));
 
-					gcode.col1 col1_title,
-					gcode.col2 col2_title,
-					gcode.col3 col3_title,
-					gcode.col4 col4_title,
-
-					gcode_dtl.use_yn use_yn,
-					gcode_dtl.sort_char sort_char,
-					gcode_dtl.reg_date reg_date,
-					gcode_dtl.mod_date mod_date,
-
-					DATE_FORMAT(gcode_dtl.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis,
-					DATE_FORMAT(gcode_dtl.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
-	FROM gcode_dtl
-
-	LEFT OUTER JOIN gcode
-	ON   gcode.code_id = gcode_dtl.code_id
-
-
-	WHERE 1=1 ";
 
 	if(isset($conditions_['only_use']) && $conditions_['only_use'] === true){
-		$query_ .= " AND gcode_dtl.use_yn = 'Y' ";
+		$statement_->add_compare_condition('gcode_dtl.use_yn', "Y", "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['code_id']) && strlen($conditions_['code_id'])){
-		$query_ .= " AND   gcode_dtl.code_id = '".pb_database_escape_string($conditions_['code_id'])."' ";
+		$statement_->add_compare_condition('gcode_dtl.code_id', $conditions_['code_id'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['code_did']) && strlen($conditions_['code_did'])){
-		$query_ .= " AND gcode_dtl.code_did = '".pb_database_escape_string($conditions_['code_did'])."' ";
+		$statement_->add_compare_condition('gcode_dtl.code_did', $conditions_['code_did'], "=", PBDB::TYPE_STRING);
 	}
 
 	if(isset($conditions_['col1']) && strlen($conditions_['col1'])){
-		$query_ .= " AND gcode_dtl.col1 = '".pb_database_escape_string($conditions_['col1'])."' ";
+		$statement_->add_compare_condition('gcode_dtl.col1', $conditions_['col1'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['col2']) && strlen($conditions_['col2'])){
-		$query_ .= " AND gcode_dtl.col2 = '".pb_database_escape_string($conditions_['col2'])."' ";
+		$statement_->add_compare_condition('gcode_dtl.col2', $conditions_['col2'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['col3']) && strlen($conditions_['col3'])){
-		$query_ .= " AND gcode_dtl.col3 = '".pb_database_escape_string($conditions_['col3'])."' ";
+		$statement_->add_compare_condition('gcode_dtl.col3', $conditions_['col3'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['col4']) && strlen($conditions_['col4'])){
-		$query_ .= " AND gcode_dtl.col4 = '".pb_database_escape_string($conditions_['col4'])."' ";
+		$statement_->add_compare_condition('gcode_dtl.col4', $conditions_['col4'], "=", PBDB::TYPE_STRING);
 	}
 
-
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
-		$query_ .= " AND gcode_dtl.code_dnm LIKE '".pb_database_escape_string($conditions_['keyword'])."%' ";
+		$statement_->add_like_condition('gcode_dtl.code_dnm', $conditions_['keyword']);
 	}
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] == true){
-        $query_ = " SELECT COUNT(*) CNT FROM (". $query_. ") TMP";
-        return $pbdb->get_var($query_);
+        return $statement_->count();
     }
 
-    
-	$query_ .= " ORDER BY gcode_dtl.sort_char ASC";
-
-	if(isset($conditions_['limit'])){
-        $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
-    }
-
-	return $pbdb->select($query_);
+	return $statement_->select("gcode_dtl.sort_char ASC", (isset($conditions_['limit']) ? $conditions_['limit'] : null));
 }
 
 function pb_gcode_dtl($code_id_, $code_did_){
@@ -152,6 +168,25 @@ function pb_gcode_dtl_name($code_id_, $code_did_){
 	$gcode_dtl_ = pb_gcode_dtl($code_id_,$code_did_);
 	if(!isset($gcode_dtl_)) return null;
 	return $gcode_dtl_['code_dnm'];
+}
+
+function pb_gcode_dtl_add($raw_data_){
+	global $gcode_dtl_do;
+	$inserted_id_ = $gcode_dtl_do->insert($raw_data_);
+	pb_hook_do_action("pb_gcode_added", $inserted_id_);
+	return $inserted_id_;
+}
+
+function pb_gcode_dtl_update($code_id_, $code_did_, $raw_data_){
+	global $gcode_dtl_do;
+	$gcode_dtl_do->update($code_id_, $code_did_, $raw_data_);
+	pb_hook_do_action("pb_gcode_updated", $code_id_, $code_did_);
+}
+
+function pb_gcode_dtl_delete($code_id_, $code_did_){
+	global $gcode_dtl_do;
+	pb_hook_do_action("pb_gcode_delete", $code_id_, $code_did_);
+	$gcode_dtl_do->delete($code_id_, $code_did_);
 }
 
 function pb_gcode_make_options($conditions_, $default_ = null, $echo_ = true){

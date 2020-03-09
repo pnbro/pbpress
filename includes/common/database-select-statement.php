@@ -9,6 +9,7 @@ class PBDB_SS{
 	const COND_IN = 3;
 	const COND_ISNOTNULL = 5;
 	const COND_ISNULL = 7;
+	const COND_LIKE = 8;
 	const COND_CUSTOM = 9;
 }
 
@@ -37,11 +38,23 @@ class PBDB_select_statement_conditions extends ArrayObject{
 	}
 
 	function add_in($a_, $array_, $array_types_ = null){
+		if(gettype($array_) !== "array") $array_ = array($v_);
+
 		$this[] = array(
 			'type' => PBDB_SS::COND_IN,
 			'a' => $a_,
 			'b' => $array_,
 			'b_types' => $array_types_,
+		);
+	}
+	function add_like($a_ = array(), $keyword_, $full_search_ = false){
+		if(gettype($a_) !== "array") $a_ = array($a_);
+
+		$this[] = array(
+			'type' => PBDB_SS::COND_LIKE,
+			'a' => $a_,
+			'keyword' => $keyword_,
+			'full' => $full_search_,
 		);
 	}
 	function add_custom($text_, $values_ = null, $types_ = array()){
@@ -89,8 +102,6 @@ class PBDB_select_statement_conditions extends ArrayObject{
 
 					$a_ = $data_['a'];
 					$b_ = $data_['b'];
-
-					if(gettype($b_) !== "array") $b_ = array($b_);
 						
 					if(count($b_) > 0){
 						$b_types_ = $data_['b_types'];
@@ -118,6 +129,13 @@ class PBDB_select_statement_conditions extends ArrayObject{
 					$query_[] = "{$a_} IS NULL \n\r";
 
 				break;
+
+				case PBDB_SS::COND_LIKE :
+
+					$query_[] = pb_query_keyword_search($data_['a'], $data_['keyword'], $data_['full']);
+
+				break;
+
 
 				case PBDB_SS::COND_CUSTOM :
 					$values_ = $data_['values'];
@@ -209,7 +227,7 @@ class PBDB_select_statement{
 
 		return $on_;
 	}
-	function &add_join_statement($join_type_, $statement_, $alias_ = null, $on_ = null, $column_prefix_ = "", $fields_ = null){
+	function &add_join_statement($join_type_, $statement_, $alias_ = null, $on_ = null, $fields_ = null, $column_prefix_ = ""){
 		if(!isset($on_)){
 			$on_ = new PBDB_select_statement_conditions();
 		}
@@ -217,7 +235,7 @@ class PBDB_select_statement{
 		$this->_join_list[] = array(
 			'type' => $join_type_,
 			'statement' => $statement_,
-			'prefix' => $alias_,
+			'prefix' => $column_prefix_,
 			'on' => $on_,
 			'fields' => $fields_,
 		);	
@@ -240,12 +258,14 @@ class PBDB_select_statement{
 	function add_is_null_condition($a_){
 		$this->_cond_list->add_is_null($a_);
 	}
+	function add_like_condition($a_, $keyword_, $full_search_ = false){
+		$this->_cond_list->add_like($a_, $keyword_, $full_search_);
+	}
 	private $_legacy_field_filters = array();
 	private $_legacy_join_fileds = array();
 	private $_legacy_where_fileds = array();
 
 	private function _add_legacy_filter_to($to_, $args_){
-		$fields_count_ = func_num_args();
 		$to_[] = $args_;
 	}
 
@@ -293,21 +313,47 @@ class PBDB_select_statement{
 				$join_table_prefix_ = $join_data_['prefix'];
 				$join_table_fields_ = $join_data_['fields'];
 
-				foreach($join_table_statement_->fields() as $column_name_){
-					if(isset($join_table_fields_) && in_array($column_name_, $join_table_fields_) === false) continue;
+				$join_real_fields_ = array();
 
-					$column_name_ = trim($column_name_);
+				foreach($join_table_fields_ as $column_name_){
 					$column_name_array_ = explode(" ", $column_name_);
+					$real_column_name_ = $column_name_;
 
+					if(count($column_name_array_) > 1){
+						$real_column_name_ = $column_name_array_[0];
+
+						if(!preg_match($this->_column_name_pattern, $real_column_name_)){
+							continue;
+						}
+
+
+
+					}else if(!preg_match($this->_column_name_pattern, $real_column_name_)){
+						continue;
+					}
+
+					$join_real_fields_[] = $real_column_name_;
+				}
+
+				$join_table_statement_fields_ = $join_table_statement_->fields();
+
+				foreach($join_real_fields_ as $column_index_ => $t_column_name_){
+					if(isset($join_table_fields_) && in_array($t_column_name_, $join_table_statement_fields_) === false) continue;
+
+					$column_name_ = $join_data_['fields'][$column_index_];
+					$column_name_array_ = explode(" ", $column_name_);
 					$column_alias_ = end($column_name_array_);
 
-					if(!preg_match($this->_column_name_pattern, $column_alias_)){
-						$column_alias_ = null;
+					if(count($column_name_array_) > 1){
+						if(!preg_match($this->_column_name_pattern, $column_alias_)){
+							$column_alias_ = null;
+						}
+						
+						if(strlen($column_alias_)){
+							array_splice($column_name_array_, count($column_name_array_) - 1);	
+						}
 					}
-					
-					if(strlen($column_alias_)){
-						$column_name_array_ = array_splice($column_name_array_, count($column_name_array_) - 1);	
-					}
+						
 					
 					$column_oname_ = implode(' ', $column_name_array_);
 					$column_alias_ = strlen($column_alias_) ? $column_alias_ : $column_oname_;
@@ -318,7 +364,9 @@ class PBDB_select_statement{
 					}
 
 					$fields_array_[] = "{$join_table_alias_}.{$column_oname_} {$column_alias_}";
+
 				}
+
 			}
 		}
 		$query_ .= implode(",\n\r", $fields_array_) ." \n\r"; 

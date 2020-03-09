@@ -9,6 +9,8 @@
 	$temp_user_authority_data_ = pb_user_authority_list(array("user_id" => $user_data['id']));
 	$user_authority_slugs_ = array();
 
+	global $pbdb;
+
 	foreach($temp_user_authority_data_ as $row_data_){
 		$user_authority_slugs_[] = $row_data_['auth_slug'];
 	}

@@ -4,7 +4,6 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-
 function pb_authority_task_types(){
 	global $_pb_authority_task_types;
 	if(!isset($_pb_authority_task_types)){
@@ -28,10 +27,11 @@ $auth_do = pbdb_data_object("auth", array(
 	'slug'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "index"=> true,"comment" => "슬러그"),
 	'auth_name'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "comment" => "권한명"),
 	'auth_desc'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "권한설명"),
-	
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"권한");
+
+$auth_do->add_legacy_field_filter("pb_authority_parse_fields"); // for legacy
 
 function pb_authority_list($conditions_ = array()){
 	global $auth_do;
@@ -134,10 +134,11 @@ $auth_task_do = pbdb_data_object("auth_task", array(
 	), "comment" => "권한ID"),
 
 	'slug'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "index"=> true,"comment" => "슬러그"),
-	
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"권한별 작업범위");
+
+$auth_task_do->add_legacy_field_filter("pb_authority_task_parse_fields"); // for legacy
 
 function pb_authority_task_list($conditions_ = array()){
 	global $auth_do, $auth_task_do;
@@ -155,7 +156,7 @@ function pb_authority_task_list($conditions_ = array()){
 
 	$auth_cond_ = pbdb_ss_conditions();
 	$auth_cond_->add_compare("auth.id", "auth_task.auth_id", "=");
-	$statement_->add_join_statement("LEFT OUTER JOIN",$auth_do->statement(), "auth", $auth_cond_, "", array(
+	$statement_->add_join_statement("LEFT OUTER JOIN",$auth_do->statement(), "auth", $auth_cond_, array(
 		'slug auth_slug',
 		'auth_name',
 	));
@@ -178,10 +179,9 @@ function pb_authority_task_list($conditions_ = array()){
 	}
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-        return $statement_->count();
-    }
+		return $statement_->count();
+	}
 
-    
 	$orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
 	$limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
 
