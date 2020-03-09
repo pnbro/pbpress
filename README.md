@@ -4,6 +4,7 @@ PHP Framework for simple website creation.
 
 ## Features
 * powerful backend functions
+* Data Object (less query)
 * expandable adminpage
 * theme, plugins
 * page managing (page builder)
