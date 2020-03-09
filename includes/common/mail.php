@@ -49,11 +49,11 @@ function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ 
 				$mail_template_ = $_pb_last_mail_template_file_content;
 				
 			}else{
-				$mail_template_ = pb_option_value('mail_template', "{content}");
+				$mail_template_ = pb_clob_option_value('mail_template', "{content}");
 			}
 		}
 	}else{
-		$mail_template_ = pb_option_value('mail_template', "{content}");
+		$mail_template_ = pb_clob_option_value('mail_template', "{content}");
 	}	
 
 	$mail_body_ = $mail_template_;
@@ -177,7 +177,7 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 
 				<div class="form-group">
 					<label>메일서식</label>
-					<textarea id="pb-manage-site-form-mail_template" name="mail_template"><?=stripslashes(pb_option_value("mail_template", "{content}"))?></textarea>
+					<textarea id="pb-manage-site-form-mail_template" name="mail_template"><?=stripslashes(pb_clob_option_value('mail_template', "{content}"))?></textarea>
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
@@ -233,7 +233,7 @@ function _pb_mail_hook_update_site_settings($settings_data_){
 	pb_option_update("mail_smtp_user_pass", isset($settings_data_['mail_smtp_user_pass']) ? $settings_data_['mail_smtp_user_pass'] : null);
 	pb_option_update("mail_smtp_secure", $settings_data_['mail_smtp_secure']);
 
-	pb_option_update("mail_template", $settings_data_['mail_template']);
+	pb_clob_option_update("mail_template", $settings_data_['mail_template']);
 	pb_option_update("mail_template_upload", $settings_data_['mail_template_upload']);
 	
 }

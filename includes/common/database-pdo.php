@@ -25,6 +25,11 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 
 		$this->_connection = new PDO($dsn_, $pb_config->db_username, $pb_config->db_userpass) Or die("Error On DB Connection : PDO");
 
+
+		if($pb_config->is_show_database_error()){
+			$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		}
+
 		return isset($this->_connection);
 	}
 
@@ -79,6 +84,7 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 		return $resource_->rowCount();
 	}
 	public function fetch_array($resource_, $option_ = null){
+		if(!$resource_) return null;
 		switch($option_){
 			case PB_MYSQL_NUM :
 				$option_ = PDO::FETCH_NUM;	

@@ -4,59 +4,59 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-function pb_option_list($conditions_ = array()){
-	global $pbdb;
+global $options_do;
+$options_do = pbdb_data_object("options", array(
+	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
+	'option_name' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "nn" => true, "index" => true, "comment" => "패스워드"),
+	'option_value' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "패스워드"),
+	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
+	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
+),"옵션");
 
-	$query_ = "
-	SELECT   options.id id
-			,options.option_name option_name
-			,options.option_value option_value
-			
-			,options.reg_date reg_date
-			,DATE_FORMAT(options.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis
-			,DATE_FORMAT(options.reg_date, '%Y.%m.%d') reg_date_ymd
+function pb_option_statement($conditions_ = array()){
+	global $options_do;
 
-			,options.mod_date mod_date
-			,DATE_FORMAT(options.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
-			,DATE_FORMAT(options.mod_date, '%Y.%m.%d') mod_date_ymd
+	$statement_ = $options_do->statement();
 
-			".pb_hook_apply_filters('pb_option_list_fields', "", $conditions_)."
-		
-	FROM options
+	$statement_->add_field(
+		"DATE_FORMAT(options.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(options.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
+		"DATE_FORMAT(options.reg_date, '%Y.%m.%d') reg_date_ymd",
+		"DATE_FORMAT(options.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
+		"DATE_FORMAT(options.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
+		"DATE_FORMAT(options.mod_date, '%Y.%m.%d') mod_date_ymd"
+	);
 
-	".pb_hook_apply_filters('pb_option_list_join', "", $conditions_)."
-
-	WHERE 1=1 
-	
-	".pb_hook_apply_filters('pb_option_list_where', "", $conditions_)."
-
-	";
+	$statement_->add_legacy_field_filter('pb_option_list_fields', '', $conditions_);
+	$statement_->add_legacy_join_filter('pb_option_list_join', '', $conditions_);
+	$statement_->add_legacy_where_filter('pb_option_list_where', '', $conditions_);
 
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
-		$query_ .= " AND ".pb_query_keyword_search(array(
+		$statement_->add_like_condition(array(
 			'options.option_name',
-		), $conditions_['keyword'])." ";
+		), $conditions_['keyword']);
 	}
 	if(isset($conditions_['id']) && strlen($conditions_['id'])){
-		$query_ .= " AND options.id = '".pb_database_escape_string($conditions_['id'])."' ";
+		$statement_->add_compare_condition("options.id", $conditions_['id']);
 	}
 
 	if(isset($conditions_['option_name']) && strlen($conditions_['option_name'])){
-		$query_ .= " AND options.option_name = '".pb_database_escape_string($conditions_['option_name'])."' ";
+		$statement_->add_compare_condition("options.option_name", $conditions_['option_name']);
 	}
 
+	return $statement_;
+}
+function pb_option_list($conditions_ = array()){
+	$statement_ = pb_option_statement($conditions_);
+
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-        $query_ = " SELECT COUNT(*) CNT FROM (". $query_. ") TMP";
-        return $pbdb->get_var($query_);
+        return $statement_->count();
     }
 
-	$query_ .= " ORDER BY reg_date DESC";
-
-	if(isset($conditions_['limit'])){
-        $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
-    }
+	$orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
+    $limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
     
-	return $pbdb->select($query_);
+	return pb_hook_apply_filters('pb_option_list', $statement_->select($orderby_, $limit_));
 }
 
 function pb_option_value($option_name_, $default_ = null, $cache_ = true){
