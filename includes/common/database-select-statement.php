@@ -261,22 +261,19 @@ class PBDB_select_statement{
 	function add_like_condition($a_, $keyword_, $full_search_ = false){
 		$this->_cond_list->add_like($a_, $keyword_, $full_search_);
 	}
+	
 	private $_legacy_field_filters = array();
 	private $_legacy_join_fileds = array();
 	private $_legacy_where_fileds = array();
 
-	private function _add_legacy_filter_to($to_, $args_){
-		$to_[] = $args_;
-	}
-
 	function add_legacy_field_filter(){
-		$this->_add_legacy_filter_to($this->_legacy_field_filters, func_get_args());
+		$this->_legacy_field_filters[] = func_get_args();
 	}
 	function add_legacy_join_filter(){
-		$this->_add_legacy_filter_to($this->_legacy_join_fileds, func_get_args());
+		$this->_legacy_join_fileds[] = func_get_args();
 	}
 	function add_legacy_where_filter(){
-		$this->_add_legacy_filter_to($this->_legacy_where_fileds, func_get_args());
+		$this->_legacy_where_fileds[] = func_get_args();
 	}
 
 	private $_column_name_pattern = "/^([A-Za-z\_0-9])+$/";
