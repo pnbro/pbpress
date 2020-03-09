@@ -369,7 +369,7 @@ class PBDB_select_statement{
 		$query_ .= implode(",\n\r", $fields_array_) ." \n\r"; 
 
 		foreach($this->_legacy_field_filters as $filter_){
-			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_);
+			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_)." \n\r";
 		}
 
 		$query_ .= " FROM {$from_table_} {$from_table_alias_} \n\r";
@@ -401,8 +401,10 @@ class PBDB_select_statement{
 		}
 
 		foreach($this->_legacy_join_fileds as $filter_){
-			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_);
+			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_)." \n\r";
 		}
+
+		$query_ .= ' WHERE 1 ';
 
 		if(count($this->_cond_list) > 0){
 			$where_cond_ = $this->_cond_list->build();
@@ -411,11 +413,11 @@ class PBDB_select_statement{
 				$param_types_[] = $where_cond_['types'][$wv_index_];
 			}
 
-			$query_ .= " WHERE ".$where_cond_['query']." \n\r";	
+			$query_ .= " AND ".$where_cond_['query']." \n\r";	
 		}
 
 		foreach($this->_legacy_where_fileds as $filter_){
-			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_);
+			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_)." \n\r";
 		}
 
 		if(strlen($order_by_)){
