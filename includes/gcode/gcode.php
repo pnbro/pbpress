@@ -20,7 +20,7 @@ $gcode_do = pbdb_data_object("gcode", array(
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"공통코드");
 
-function pb_gcode_list($conditions_ = array()){
+function pb_gcode_statement($conditions_ = array()){
 	global $gcode_do;
 
 	$statement_ = $gcode_do->statement();
@@ -39,6 +39,10 @@ function pb_gcode_list($conditions_ = array()){
 		$statement_->add_like_condition('gcode.code_nm', $conditions_['keyword']);
 	}
 
+	return $statement_;
+}
+function pb_gcode_list($conditions_ = array()){
+	$statement_ = pb_gcode_statement($conditions_);
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
         return $statement_->count();
     }
@@ -102,7 +106,7 @@ $gcode_dtl_do = pbdb_data_object("gcode_dtl", array(
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"권한별 작업범위");
 
-function pb_gcode_dtl_list($conditions_ = array()){
+function pb_gcode_dtl_statement($conditions_ = array()){
 	global $gcode_do, $gcode_dtl_do;
 
 	$statement_ = $gcode_dtl_do->statement();
@@ -147,6 +151,11 @@ function pb_gcode_dtl_list($conditions_ = array()){
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
 		$statement_->add_like_condition('gcode_dtl.code_dnm', $conditions_['keyword']);
 	}
+
+	return $statement_;
+}
+function pb_gcode_dtl_list($conditions_ = array()){
+	$statement_ = pb_gcode_dtl_statement($conditions_);
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] == true){
         return $statement_->count();

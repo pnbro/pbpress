@@ -23,9 +23,9 @@ $users_auth_do = pbdb_data_object("users_auth", array(
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"사용자");
 
-$users_auth_do->add_legacy_field_filter("pb_user_authority_parse_fields"); // for legacy
+$users_auth_do->add_legacy_field_filter("pb_user_authority_parse_fields", array()); // for legacy
 
-function pb_user_authority_list($conditions_ = array()){
+function pb_user_authority_statement($conditions_ = array()){
 	global $auth_do, $users_auth_do;
 
 	$statement_ = $users_auth_do->statement();
@@ -76,6 +76,10 @@ function pb_user_authority_list($conditions_ = array()){
 		$statement_->add_compare_condition("users.user_email", $conditions_['user_email'], "=", PBDB::TYPE_STRING);
 	}
 
+	return $statement_;
+}
+function pb_user_authority_list($conditions_ = array()){
+	$statement_ = pb_user_authority_statement($conditions_);
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
         return $statement_->count();
     }

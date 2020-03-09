@@ -31,9 +31,9 @@ $auth_do = pbdb_data_object("auth", array(
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"권한");
 
-$auth_do->add_legacy_field_filter("pb_authority_parse_fields"); // for legacy
+$auth_do->add_legacy_field_filter("pb_authority_parse_fields", array()); // for legacy
 
-function pb_authority_list($conditions_ = array()){
+function pb_authority_statement($conditions_ = array()){
 	global $auth_do;
 
 	$statement_ = $auth_do->statement();
@@ -56,19 +56,23 @@ function pb_authority_list($conditions_ = array()){
 		$statement_->add_compare_condition("auth.auth_name", $conditions_['auth_name'], "=", PBDB::TYPE_STRING);
 	}
 
-	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-		return $statement_->count();
-    }
-
     $statement_->add_legacy_field_filter('pb_authority_list_select', '', $conditions_);
 	$statement_->add_legacy_join_filter('pb_authority_list_join', '', $conditions_);
 	$statement_->add_legacy_where_filter('pb_authority_list_where', '', $conditions_);
 
+	return $statement_;
+}
+
+function pb_authority_list($conditions_ = array()){
+	$statement_ = pb_authority_statement($conditions_);
 	$orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
 	$limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
 
-	$results_ = $statement_->select($orderby_, $limit_);
+	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
+		return $statement_->count();
+    }
 
+	$results_ = $statement_->select($orderby_, $limit_);
 	return pb_hook_apply_filters('pb_authority_list', $results_);
 }
 
@@ -131,14 +135,14 @@ $auth_task_do = pbdb_data_object("auth_task", array(
 		'column' => "id",
 		'delete' => PBDB_DO::FK_CASCADE,
 		'update' => PBDB_DO::FK_CASCADE,
-	), "comment" => "권한ID"),
+	), "nn" => true, "comment" => "권한ID"),
 
 	'slug'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "index"=> true,"comment" => "슬러그"),
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"권한별 작업범위");
 
-$auth_task_do->add_legacy_field_filter("pb_authority_task_parse_fields"); // for legacy
+$auth_task_do->add_legacy_field_filter("pb_authority_task_parse_fields", array()); // for legacy
 
 function pb_authority_task_list($conditions_ = array()){
 	global $auth_do, $auth_task_do;

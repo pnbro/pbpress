@@ -4,84 +4,88 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-function pb_page_list($conditions_ = array()){
-	global $pbdb;
+global $pages_do;
+$pages_do = pbdb_data_object("pages", array(
+	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
+	'slug'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, 'nn' => true, 'index' => true, "comment" => "슬러그"),
+	'page_title'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 200, "nn" => true, "comment" => "페이지명"),
+	'page_html'		 => array("type" => PBDB_DO::TYPE_LONGTEXT, "comment" => "페이지HTML"),
 
-	$query_ = "SELECT 
+	'status'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "comment" => "페이지상태(PA001)"),
+	'wrt_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
+		'table' => 'users',
+		'column' => 'id',
+		'delete' => PBDB_DO::FK_CASCADE,
+		'update' => PBDB_DO::FK_CASCADE,
+	), 'nn' => true, "comment" => "사용자ID"),
+		
+	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
+	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
+),"페이지");
+$pages_do->add_legacy_field_filter('pb_page_parse_fields', array());
 
-					 pages.id id
-					,pages.slug slug
-					,pages.page_title page_title
-					,pages.page_html page_html
+function pb_page_statement($conditions_ = array()){
+	global $pages_do, $users_do;
 
-					,pages.wrt_id wrt_id
-					,pages.status status
-					,".pb_query_gcode_dtl_name("PAG01", "pages.status")." status_name
+	$statement_ = $pages_do->statement();
+	$statement_->add_field(
+		pb_query_gcode_dtl_name("PAG01", "pages.status")." status_name",
+		"DATE_FORMAT(pages.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(pages.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
+		"DATE_FORMAT(pages.reg_date, '%Y.%m.%d') reg_date_ymd",
+		"DATE_FORMAT(pages.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
+		"DATE_FORMAT(pages.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
+		"DATE_FORMAT(pages.mod_date, '%Y.%m.%d') mod_date_ymd"
+	);
 
-					,users.user_login wrt_login
-					,users.user_email wrt_email
-					,users.user_name wrt_name
-					
-					,pages.reg_date reg_date
-					,DATE_FORMAT(pages.reg_date, '%Y.%m.%d') reg_date_ymd
-					,DATE_FORMAT(pages.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi
-					,DATE_FORMAT(pages.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis
-					
-					,pages.mod_date mod_date
-					,DATE_FORMAT(pages.mod_date, '%Y.%m.%d') mod_date_ymd
-					,DATE_FORMAT(pages.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi
-					,DATE_FORMAT(pages.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
+	$statement_->add_legacy_field_filter('pb_page_list_fields', '', $conditions_);
+	$statement_->add_legacy_join_filter('pb_page_list_join', '', $conditions_);
+	$statement_->add_legacy_where_filter('pb_page_list_where', '', $conditions_);
 
-					 ".pb_hook_apply_filters('pb_page_list_fields', "", $conditions_)." 
-	FROM pages
+	$users_join_cond_ = PBDB_SS_conditions();
+	$users_join_cond_->add_compare("users.id", "pages.wrt_id");
 
-	LEFT OUTER JOIN users
-	ON   users.id = pages.wrt_id
-
-	".pb_hook_apply_filters('pb_page_list_join', "", $conditions_)." 
-
-	WHERE 1 
-
-	 ".pb_hook_apply_filters('pb_page_list_where', "", $conditions_)."  
-
-	";
+	$statement_->add_join_statement("LEFT OUTER JOIN", $users_do->statement(), "users", $users_join_cond_, array(
+		"user_login wrt_login",
+		"user_email wrt_email",
+		"user_name wrt_name",
+	));
 
 	if(isset($conditions_['id'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['id'], "pages.id")." ";
+		$statement_->add_in_condition("pages.id", $conditions_['id']);
 	}
 	if(isset($conditions_['slug'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['slug'], "pages.slug")." ";
+		$statement_->add_in_condition("pages.slug", $conditions_['slug']);
 	}
 	if(isset($conditions_['status'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['status'], "pages.status")." ";
+		$statement_->add_in_condition("pages.status", $conditions_['status']);
 	}
 	if(isset($conditions_['wrt_id'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['wrt_id'], "pages.wrt_id")." ";
+		$statement_->add_in_condition("pages.wrt_id", $conditions_['wrt_id']);
 	}
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
-		$query_ .= " AND ".pb_query_keyword_search(pb_hook_apply_filters('pb_page_list_keyword', array(
+		$statement_->add_like_condition(pb_hook_apply_filters('pb_page_list_keyword', array(
 			"pages.slug",
 			"users.user_login",
 			"users.user_email",
 			"users.user_name",
-		)), $conditions_['keyword'])." ";
+		)), $conditions_['keyword']);
 	}
+    
+	return $statement_;
+}
+
+function pb_page_list($conditions_ = array()){
+	$statement_ = pb_page_statement($conditions_);
+
+	$orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
+	$limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-		return $pbdb->get_var("SELECT COUNT(*) FROM (".$query_.") TEMP");
+		return $statement_->count();
 	}
 
-	if(isset($conditions_['orderby']) && strlen($conditions_['orderby'])){
-		$query_ .= " ".$conditions_['orderby']." ";
-	}else{
-		$query_ .= " ORDER BY id DESC ";
-	}
-
-	if(isset($conditions_['limit'])){
-        $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
-    }
-
-	return pb_hook_apply_filters("pb_page_list", $pbdb->select($query_));
+	return pb_hook_apply_filters("pb_page_list", $statement_->select($orderby_, $limit_));
 }
 
 function pb_page($id_){
@@ -96,49 +100,26 @@ function pb_page_by_slug($slug_){
 	return $page_[0];
 }
 
-function _pb_page_parse_fields($data_){
-	return pb_format_mapping(pb_hook_apply_filters("pb_page_parse_fields",array(
-
-		'slug' => '%s',
-		'page_title' => '%s',
-		'page_html' => '%s',
-		'status' => '%s',
-		'wrt_id' => '%d',
-		'reg_date' => '%s',
-		'mod_date' => '%s',
-		
-	)), $data_);
-}
-
 function pb_page_insert($raw_data_){
-	global $pbdb;
-
-	$raw_data_ = _pb_page_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$insert_id_ = $pbdb->insert("pages", $data_, $format_);
+	global $pages_do;
+	$insert_id_ = $pages_do->insert($raw_data_);
 	pb_hook_do_action("pb_page_inserted", $insert_id_);
 	return $insert_id_;
 }
 
 function pb_page_update($id_, $raw_data_){
-	global $pbdb;
+	global $pages_do;
 
-	$raw_data_ = _pb_page_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$result_ = $pbdb->update("pages", $data_, array("id" => $id_), $format_, array("%d"));
+	$result_ = $pages_do->update($id_, $raw_data_);
 	pb_hook_do_action("pb_page_updated", $id_);
 
 	return $result_;
 }
 
 function pb_page_delete($id_){
-	global $pbdb;
-
-	$result_ = $pbdb->delete("pages", array("id" => $id_), array("%d"));
+	global $pages_do;
+	pb_hook_do_action("pb_page_delete", $id_);
+	$pages_do->delete($id_);
 	pb_hook_do_action("pb_page_deleted", $id_);
 	return $result_;
 }

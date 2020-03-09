@@ -33,7 +33,9 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 			$column_value_ = $values_[$param_index_];
 			$column_type_ = isset($types_[$param_index_]) ? $types_[$param_index_] : PBDB::TYPE_STRING;
 
-			if($column_type_ === PBDB::TYPE_STRING){
+			if($column_type_ === PBDB::TYPE_NUMBER && !strlen($column_value_)){
+				$column_value_ = "NULL";
+			}else if($column_type_ === PBDB::TYPE_STRING){
 				$column_value_ = "'{$column_value_}'";
 			}
 

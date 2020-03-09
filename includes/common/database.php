@@ -323,11 +323,24 @@ class PBDB{
 
 	function install_tables(){
 		global $pb_db_connection;
+
+
 		$query_list_ = pb_hook_apply_filters("pb_install_tables", array());
 
-		foreach($query_list_ as $query_){
-			$this->query($query_);
+		$this->autocommit(false);
+
+		try{
+			foreach($query_list_ as $query_){
+				$this->query($query_);
+			}
+
+			$this->commit();
+		}catch(Exception $ex_){
+			$this->rollback();
+
+			return new PBError(503, "DB설치실패", $ex_->getMessage());
 		}
+		$this->autocommit(true);
 
 		pb_hook_do_action("pb_installed_tables");
 	}

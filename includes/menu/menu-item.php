@@ -4,89 +4,97 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+global $menus_item_do;
+$menus_item_do = pbdb_data_object("menus_item", array(
+	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
+	'parent_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
+		'table' => 'menus_item',
+		'column' => 'id',
+		'delete' => PBDB_DO::FK_NOACTION,
+		'update' => PBDB_DO::FK_NOACTION,
+	), "comment" => "상위ID"),
+	'menu_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
+		'table' => 'menus',
+		'column' => 'id',
+		'delete' => PBDB_DO::FK_CASCADE,
+		'update' => PBDB_DO::FK_CASCADE,
+	), 'nn' => true, "comment" => "메뉴ID"),
+		
+	'category'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "comment" => "제목"),
+	'title'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "제목"),
+	'sort_char'		 => array("type" => PBDB_DO::TYPE_INT, "length" => 3, "comment" => "정렬순서"),
+	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
+	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
+),"메뉴 - 아이템");
+$menus_item_do->add_legacy_field_filter('pb_menu_item_parse_fields', array());
 
-function pb_menu_item_list($conditions_ = array()){
-	global $pbdb;
+function pb_menu_item_statement($conditions_ = array()){
+	global $menus_do, $menus_item_do;
 
-	$query_ = "SELECT 
+	$statement_ = $menus_item_do->statement();
+	$statement_->add_field(
+		"DATE_FORMAT(menus_item.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(menus_item.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
+		"DATE_FORMAT(menus_item.reg_date, '%Y.%m.%d') reg_date_ymd",
+		"DATE_FORMAT(menus_item.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
+		"DATE_FORMAT(menus_item.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
+		"DATE_FORMAT(menus_item.mod_date, '%Y.%m.%d') mod_date_ymd"
+	);
 
-					 menus_item.id id
-					,menus_item.parent_id parent_id
-					
-					,menus_item.menu_id menu_id
-					,menus.slug slug
-					
-					,menus_item.category category
-					,menus_item.title title
-					,menus_item.sort_char sort_char
-					
-					,menus_item.reg_date reg_date
-					,DATE_FORMAT(menus_item.reg_date, '%Y.%m.%d') reg_date_ymd
-					,DATE_FORMAT(menus_item.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi
-					,DATE_FORMAT(menus_item.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis
-					
-					,menus_item.mod_date mod_date
-					,DATE_FORMAT(menus_item.mod_date, '%Y.%m.%d') mod_date_ymd
-					,DATE_FORMAT(menus_item.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi
-					,DATE_FORMAT(menus_item.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
+	$statement_->add_legacy_field_filter('pb_menu_item_list_fields', '', $conditions_);
+	$statement_->add_legacy_join_filter('pb_menu_item_list_join', '', $conditions_);
+	$statement_->add_legacy_where_filter('pb_menu_item_list_where', '', $conditions_);
 
-					 ".pb_hook_apply_filters('pb_menu_item_list_fields', "", $conditions_)." 
-	FROM menus_item
+	$menu_join_cond_ = pbdb_ss_conditions();
+	$menu_join_cond_->add_compare("menus.id", "menus_item.menu_id", "=");
 
-	LEFT OUTER JOIN menus
-	ON   menus.id = menus_item.menu_id
-
-	".pb_hook_apply_filters('pb_menu_item_list_join', "", $conditions_)." 
-
-	WHERE 1 
-
-	 ".pb_hook_apply_filters('pb_menu_item_list_where', "", $conditions_)."  
-
-	";
+	$statement_->add_join_statement("LEFT OUTER JOIN", $menus_do->statement(), "menus", $menu_join_cond_, array(
+		'slug',
+	));
 
 	if(isset($conditions_['id'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['id'], "menus_item.id")." ";
+		$statement_->add_compare_condition("menus_item.id", $conditions_['id'], "=", PBDB::TYPE_NUMBER);
 	}
 
 	if(isset($conditions_['parent_id'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['parent_id'], "menus_item.parent_id")." ";
+		$statement_->add_compare_condition("menus_item.parent_id", $conditions_['parent_id'], "=", PBDB::TYPE_NUMBER);
 	}
 	if(isset($conditions_['root_only']) && $conditions_['root_only'] == true){
-		$query_ .= " AND menus_item.parent_id IS NULL ";
+		$statement_->add_is_null_condition("menus_item.parent_id");
 	}
 		
 	if(isset($conditions_['category'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['category'], "menus_item.category")." ";
+		$statement_->add_in_condition("menus_item.category", $conditions_['category']);
 	}
 	if(isset($conditions_['menu_id'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['menu_id'], "menus_item.menu_id")." ";
+		$statement_->add_in_condition("menus_item.menu_id", $conditions_['menu_id']);
 	}
 	if(isset($conditions_['menu_slug'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['menu_slug'], "menus.slug")." ";
+		$statement_->add_in_condition("menus.slug", $conditions_['menu_slug']);
 	}
 
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
-		$query_ .= " AND ".pb_query_keyword_search(pb_hook_apply_filters('pb_menu_item_list_keyword', array(
+		$statement_->add_like_condition(pb_hook_apply_filters('pb_menu_item_list_keyword', array(
 			"menus_item.title",
-		)), $conditions_['keyword'])." ";
+		)), $conditions_['keyword']);
 	}
+
+	return $statement_;
+
+	
+}
+function pb_menu_item_list($conditions_ = array()){
+	$statement_ = pb_menu_item_statement($conditions_);
+	$orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
+	$limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-		return $pbdb->get_var("SELECT COUNT(*) FROM (".$query_.") TEMP");
+		return $statement_->count();
 	}
 
-	if(isset($conditions_['orderby']) && strlen($conditions_['orderby'])){
-		$query_ .= " ".$conditions_['orderby']." ";
-	}else{
-		$query_ .= " ORDER BY sort_char ASC ";
-	}
-
-	if(isset($conditions_['limit'])){
-        $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
-    }
-
-	return pb_hook_apply_filters("pb_menu_item_list", $pbdb->select($query_));
+	return pb_hook_apply_filters("pb_menu_item_list", $statement_->select($orderby_, $limit_));
 }
+
 
 function pb_menu_item($id_){
 	$menu_item_ = pb_menu_item_list(array("id" => $id_));
@@ -94,51 +102,29 @@ function pb_menu_item($id_){
 	return $menu_item_[0];
 }
 
-function _pb_menu_item_parse_fields($data_){
-	return pb_format_mapping(pb_hook_apply_filters("pb_menu_item_parse_fields",array(
-
-		'parent_id' => '%d',
-		'menu_id' => '%d',
-		'category' => '%s',
-		'title' => '%s',
-		'sort_char' => '%d',
-
-		'reg_date' => '%s',
-		'mod_date' => '%s',
-		
-	)), $data_);
-}
-
-
 function pb_menu_item_insert($raw_data_){
+	global $menus_item_do, $pbdb;
+
+	$insert_id_ = $menus_item_do->insert($raw_data_);
 	global $pbdb;
-
-	$raw_data_ = _pb_menu_item_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$insert_id_ = $pbdb->insert("menus_item", $data_, $format_);
 	pb_hook_do_action("pb_menu_item_inserted", $insert_id_);
+
 	return $insert_id_;
 }
 
 function pb_menu_item_update($id_, $raw_data_){
-	global $pbdb;
+	global $menus_item_do, $pbdb;
+	$result_ = $menus_item_do->update($id_, $raw_data_);
 
-	$raw_data_ = _pb_menu_item_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$result_ = $pbdb->update("menus_item", $data_, array("id" => $id_), $format_, array("%d"));
 	pb_hook_do_action("pb_menu_item_updated", $id_);
 
 	return $result_;
 }
 
 function pb_menu_item_delete($id_){
-	global $pbdb;
-
-	$result_ = $pbdb->delete("menus_item", array("id" => $id_), array("%d"));
+	global $menus_item_do;
+	pb_hook_do_action("pb_menu_item_delete", $id_);
+	$result_ = $menus_item_do->delete($id_);
 	pb_hook_do_action("pb_menu_item_deleted", $id_);
 	return $result_;
 }

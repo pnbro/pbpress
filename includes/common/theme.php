@@ -49,31 +49,34 @@ function pb_switch_theme($theme_){
 
 	$switch_theme_url_ = PB_DOCUMENT_URL . 'includes/common/_switch_theme.php';
 
+	$request_token_ = pb_random_string(20);
+	pb_option_update("_theme_switch_key_",$request_token_);
+
 	$curl_instance_ = curl_init();
 	curl_setopt($curl_instance_,CURLOPT_URL, $switch_theme_url_);
 	curl_setopt($curl_instance_,CURLOPT_HTTPHEADER, array(
-		'Content-Type: application/json',
+		// 'Content-Type: application/json',
 	));
 	
 	curl_setopt($curl_instance_,CURLOPT_POST, true);
 	curl_setopt($curl_instance_,CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($curl_instance_,CURLOPT_POSTFIELDS, array(
 		'theme' => $theme_,
-		'request_token' => pb_request_token('switch_token'),
+		'request_token' => $request_token_,
 	));
 
 	$result_message_ = curl_exec($curl_instance_);
 	$result_code_ = curl_getinfo($curl_instance_, CURLINFO_HTTP_CODE);
 
-	curl_close($curl_instance_);
-
 	$result_ = @json_decode($result_message_, true);
 
 	if(!$result_['success']){
 		pb_option_update(PB_OPTION_THEME_NAME, $before_theme_);
-		return false;
+		pb_option_update("_theme_switch_key_",null);
+		return new PBError(503, $result_['error_title'], $result_['error_message']);
 	}
 
+	pb_option_update("_theme_switch_key_",null);
 	pb_hook_do_action('pb_switch_theme_after', $theme_);
 	return true;
 }
@@ -116,6 +119,5 @@ function pb_theme_footer($footer_name_ = null){
 }
 
 include(PB_DOCUMENT_PATH . 'includes/common/theme-builtin.php');
-
 
 ?>

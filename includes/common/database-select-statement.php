@@ -38,7 +38,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 	}
 
 	function add_in($a_, $array_, $array_types_ = null){
-		if(gettype($array_) !== "array") $array_ = array($v_);
+		if(gettype($array_) !== "array") $array_ = array($array_);
 
 		$this[] = array(
 			'type' => PBDB_SS::COND_IN,
@@ -422,7 +422,12 @@ class PBDB_select_statement{
 		}
 
 		if(strlen($order_by_)){
-			$query_ .= ' ORDER BY '.$order_by_." \n\r";
+
+			if(stripos($order_by_, "order by") !== FALSE){
+				$query_ .= $order_by_." \n\r";				
+			}else{
+				$query_ .= ' ORDER BY '.$order_by_." \n\r";	
+			}
 		}
 
 		if(isset($limit_)){

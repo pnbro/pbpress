@@ -48,18 +48,10 @@ if(!$pbdb->exists_table("options")){
 pb_option_update("site_name", $site_name_);
 pb_option_update("site_desc", $site_desc_);
 pb_option_update("timezone", $timezone_);
-$theme_list_ = pb_theme_list();
 
 if(!strlen($timezone_)){
 	$timezone_ = @date_default_timezone_get();
 	$timezone_ = strlen($timezone_) ? $timezone_ : "Asia/Seoul";
-}
-
-if(count($theme_list_) > 0){
-	foreach($theme_list_ as $theme_ => $theme_data_){
-		pb_switch_theme($theme_);
-		break;
-	}
 }
 
 $common_rewrite_bool_ = pb_install_rewrite();
@@ -89,6 +81,25 @@ $admin_id_ = pb_user_add(array(
 
 pb_user_grant_authority($admin_id_, PB_AUTHORITY_SLUG_ADMINISTRATOR);
 pb_user_create_session(pb_user($admin_id_));
+
+$theme_list_ = pb_theme_list();
+
+if(count($theme_list_) > 0){
+	foreach($theme_list_ as $theme_ => $theme_data_){
+		$result_ = pb_switch_theme($theme_);
+
+		if(pb_is_error($result_)){
+			echo json_encode(array(
+				'success' => false,
+				'error_title' => $result_->error_title(),
+				'error_message' => $result_->error_message(),
+			));
+			pb_admin_end();
+		}
+
+		break;
+	}
+}
 
 echo json_encode(array(
 	'success' => true,

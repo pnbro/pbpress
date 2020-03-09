@@ -154,7 +154,7 @@ function _pb_ajax_menu_editor_update_recv_menu_tree($menu_id_, $parent_id_, $dat
 	if(strlen($item_id_)){ //update
 		pb_menu_item_update($item_id_, array(
 			'menu_id' => $menu_id_,
-			'parent_id' => $parent_id_,
+			'parent_id' => strlen($parent_id_) ? $parent_id_ : null,
 			'sort_char' => $sort_char_,
 			'category' => $item_data_['category'],
 			'title' => $item_data_['title'],
@@ -164,7 +164,7 @@ function _pb_ajax_menu_editor_update_recv_menu_tree($menu_id_, $parent_id_, $dat
 	}else{ //insert
 		$item_id_ = pb_menu_item_insert(array(
 			'menu_id' => $menu_id_,
-			'parent_id' => $parent_id_,
+			'parent_id' => strlen($parent_id_) ? $parent_id_ : null,
 			'sort_char' => $sort_char_,
 			'category' => $item_data_['category'],
 			'title' => $item_data_['title'],

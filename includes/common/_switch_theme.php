@@ -1,6 +1,6 @@
 <?php
 
-require(dirname( __FILE__ ) . '../../defined.php');
+require(dirname( __FILE__ ) . '/../../defined.php');
 require(PB_DOCUMENT_PATH . 'includes/initialize.php');
 
 global $pb_config;
@@ -26,11 +26,12 @@ function _pb_exceptions_switch_theme_error_handler($severity_, $message_, $filen
 $theme_ = isset($_POST['theme']) ? $_POST['theme'] : null;
 $request_token_ = isset($_POST['request_token']) ? $_POST['request_token'] : null;
 
-if(!strlen($theme_) && !pb_request_token($request_token_)){
+if(!strlen($theme_) || (pb_option_value("_theme_switch_key_") !== $request_token_)){
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => "에러발생",
-		'error_message' => "잘못된 요청입니다.",
+		'error_message' => "잘못된 요청입니다.(".pb_option_value("_theme_switch_key_")." == {$request_token_})",
+		
 	));
 	pb_end();
 }
@@ -43,11 +44,9 @@ if(file_exists($current_theme_path_."functions.php")){
 
 _pb_theme_install_tables();
 
-
 echo json_encode(array(
 	'success' => true,
 ));
-pb_end();
 pb_end();
 	
 ?>

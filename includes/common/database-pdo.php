@@ -38,7 +38,12 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 		foreach($values_ as $index_ => $value_){
 			$column_type_ = isset($types_[$index_]) ? $types_[$index_] : PBDB::TYPE_STRING;
 			$column_type_ = $this->data_types[$column_type_];
-			$statement_->bindValue($index_+1, $value_, $column_type_);
+
+			if($value_ !== null){
+				$statement_->bindValue($index_+1, $value_, $column_type_);	
+			}else{
+				$statement_->bindValue($index_+1, null, PDO::PARAM_NULL);	
+			}
 		}
 
 		try{
@@ -92,13 +97,25 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 
 	public function autocommit($bool_){
 		$this->_connection->setAttribute(PDO::ATTR_AUTOCOMMIT,$bool_);
+
+		if(!$bool_){
+			$this->_connection->beginTransaction();
+		}else{
+			$this->rollback();
+		}
+		
 	}
 
 	public function commit(){
-		$this->_connection->commit();
+		if($this->_connection->inTransaction()){
+			$this->_connection->commit();
+		}
 	}
 	public function rollback(){
-		$this->_connection->rollBack();
+		if($this->_connection->inTransaction()){
+			$this->_connection->rollBack();
+		}
+		
 	}
 	public function close_connection(){
 		$this->_connection = null;

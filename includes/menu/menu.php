@@ -4,65 +4,60 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-function pb_menu_list($conditions_ = array()){
-	global $pbdb;
+global $menus_do;
+$menus_do = pbdb_data_object("menus", array(
+	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
+	'title'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "comment" => "제목"),
+	'slug'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, 'index' => true, "comment" => "슬러그"),
+	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
+	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
+),"메뉴");
+$menus_do->add_legacy_field_filter('pb_menu_parse_fields', array());
 
-	$query_ = "SELECT 
+function pb_menu_statement($conditions_ = array()){
+	global $menus_do;
 
-					 menus.id id
-						
-					,menus.title title
-					,menus.slug slug
-					
-					,menus.reg_date reg_date
-					,DATE_FORMAT(menus.reg_date, '%Y.%m.%d') reg_date_ymd
-					,DATE_FORMAT(menus.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi
-					,DATE_FORMAT(menus.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis
-					
-					,menus.mod_date mod_date
-					,DATE_FORMAT(menus.mod_date, '%Y.%m.%d') mod_date_ymd
-					,DATE_FORMAT(menus.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi
-					,DATE_FORMAT(menus.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
+	$statement_ = $menus_do->statement();
 
-					 ".pb_hook_apply_filters('pb_menu_list_fields', "", $conditions_)." 
-	FROM menus
+	$statement_->add_field(
+		"DATE_FORMAT(menus.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(menus.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
+		"DATE_FORMAT(menus.reg_date, '%Y.%m.%d') reg_date_ymd",
+		"DATE_FORMAT(menus.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
+		"DATE_FORMAT(menus.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
+		"DATE_FORMAT(menus.mod_date, '%Y.%m.%d') mod_date_ymd"
+	);
 
-	".pb_hook_apply_filters('pb_menu_list_join', "", $conditions_)." 
-
-	WHERE 1 
-
-	 ".pb_hook_apply_filters('pb_menu_list_where', "", $conditions_)."  
-
-	";
+	$statement_->add_legacy_field_filter('pb_menu_list_fields', '', $conditions_);
+	$statement_->add_legacy_join_filter('pb_menu_list_join', '', $conditions_);
+	$statement_->add_legacy_where_filter('pb_menu_list_where', '', $conditions_);
 
 	if(isset($conditions_['id'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['id'], "menus.id")." ";
+		$statement_->add_compare_condition('menus.id', $conditions_['id'], "=", PBDB::TYPE_NUMBER);
 	}
 	if(isset($conditions_['slug'])){
-		$query_ .= " AND ".pb_query_in_fields($conditions_['slug'], "menus.slug")." ";
+		$statement_->add_compare_condition('menus.slug', $conditions_['slug'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
-		$query_ .= " AND ".pb_query_keyword_search(pb_hook_apply_filters('pb_menu_list_keyword', array(
+		$statement_->add_like_condition(pb_hook_apply_filters('pb_menu_list_keyword', array(
 			"menus.title",
 			"menus.slug",
-		)), $conditions_['keyword'])." ";
+		)), $conditions_['keyword']);
 	}
+
+	return $statement_;
+}
+function pb_menu_list($conditions_ = array()){
+	$statement_ = pb_menu_statement($conditions_);
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-		return $pbdb->get_var("SELECT COUNT(*) FROM (".$query_.") TEMP");
+		return $statement_->count();
 	}
 
-	if(isset($conditions_['orderby']) && strlen($conditions_['orderby'])){
-		$query_ .= " ".$conditions_['orderby']." ";
-	}else{
-		$query_ .= " ORDER BY id DESC ";
-	}
+	$orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
+	$limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
 
-	if(isset($conditions_['limit'])){
-        $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
-    }
-
-	return pb_hook_apply_filters("pb_menu_list", $pbdb->select($query_));
+	return pb_hook_apply_filters("pb_menu_list", $statement_->select($orderby_, $limit_));
 }
 
 function pb_menu($id_){
@@ -77,52 +72,27 @@ function pb_menu_by_slug($slug_){
 	return $menu_[0];
 }
 
-function _pb_menu_parse_fields($data_){
-	return pb_format_mapping(pb_hook_apply_filters("pb_menu_parse_fields",array(
-
-		'title' => '%s',
-		'slug' => '%s',
-
-		'reg_date' => '%s',
-		'mod_date' => '%s',
-		
-	)), $data_);
-}
-
-
 function pb_menu_insert($raw_data_){
-	global $pbdb;
-
-	$raw_data_ = _pb_menu_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$insert_id_ = $pbdb->insert("menus", $data_, $format_);
+	global $menus_do;
+	$insert_id_ = $menus_do->insert($raw_data_);
 	pb_hook_do_action("pb_menu_inserted", $insert_id_);
 	return $insert_id_;
 }
 
 function pb_menu_update($id_, $raw_data_){
-	global $pbdb;
-
-	$raw_data_ = _pb_menu_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$result_ = $pbdb->update("menus", $data_, array("id" => $id_), $format_, array("%d"));
+	global $menus_do;
+	$result_ = $menus_do->update($id_, $raw_data_);
 	pb_hook_do_action("pb_menu_updated", $id_);
-
 	return $result_;
 }
 
 function pb_menu_delete($id_){
-	global $pbdb;
-
-	$result_ = $pbdb->delete("menus", array("id" => $id_), array("%d"));
+	global $menus_do;
+	pb_hook_do_action("pb_menu_delete", $id_);
+	$result_ = $menus_do->delete($id_);
 	pb_hook_do_action("pb_menu_deleted", $id_);
 	return $result_;
 }
-
 
 function pb_menu_delete_rewrite_slug($slug_, $retry_count_ = 0, $excluded_menu_id_ = null){
 	$temp_slug_ = $slug_;

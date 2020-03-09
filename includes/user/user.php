@@ -18,21 +18,21 @@ $users_do = pbdb_data_object("users", array(
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"사용자");
 
-$users_do->add_legacy_field_filter("pb_user_parse_fields"); // for legacy
+$users_do->add_legacy_field_filter("pb_user_parse_fields", array()); // for legacy
 
-function pb_user_list($conditions_ = array()){
+function pb_user_statement($conditions_ = array()){
 	global $users_do;
 
 	$statement_ = $users_do->statement();
 
 	$statement_->add_field(
 		pb_query_gcode_dtl_name("U0001", "users.status")." status_name",
-		"DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
-		"DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
-		"DATE_FORMAT(users_auth.reg_date, '%Y.%m.%d') reg_date_ymd",
-		"DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
-		"DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
-		"DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d') mod_date_ymd"
+		"DATE_FORMAT(users.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(users.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
+		"DATE_FORMAT(users.reg_date, '%Y.%m.%d') reg_date_ymd",
+		"DATE_FORMAT(users.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
+		"DATE_FORMAT(users.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
+		"DATE_FORMAT(users.mod_date, '%Y.%m.%d') mod_date_ymd"
 	);
 
 	$statement_->add_legacy_field_filter('pb_user_list_select', '', $conditions_);
@@ -60,6 +60,10 @@ function pb_user_list($conditions_ = array()){
 		), $conditions_['keyword']);
 	}
 
+	return $statement_;
+}
+function pb_user_list($conditions_ = array()){
+	$statement_ = pb_user_statement($conditions_);
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
 		return $statement_->count();
     }
