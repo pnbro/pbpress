@@ -53,7 +53,7 @@ function pb_page_meta_statement($conditions_ = array()){
 		$statement_->add_in_condition("pages_meta.meta_value", $conditions_['meta_value']);
 	}
 
-	return $statement_;
+	return pb_hook_apply_filters('pb_page_meta_statement', $statement_);
 }
 function pb_page_meta_list($conditions_ = array()){
 	$statement_ = pb_page_meta_statement($conditions_);
@@ -65,7 +65,7 @@ function pb_page_meta_list($conditions_ = array()){
 	$orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
 	$limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
 
-	return $statement_->select($orderby_, $limit_);
+	return pb_hook_apply_filters('pb_page_meta_list', $statement_->select($orderby_, $limit_));
 }
 
 function pb_page_meta_data($id_){

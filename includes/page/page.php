@@ -71,8 +71,8 @@ function pb_page_statement($conditions_ = array()){
 			"users.user_name",
 		)), $conditions_['keyword']);
 	}
-    
-	return $statement_;
+
+	return pb_hook_apply_filters('pb_page_statement', $statement_);
 }
 
 function pb_page_list($conditions_ = array()){

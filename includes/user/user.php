@@ -60,7 +60,7 @@ function pb_user_statement($conditions_ = array()){
 		), $conditions_['keyword']);
 	}
 
-	return $statement_;
+	return pb_hook_apply_filters('pb_user_statement', $statement_);
 }
 function pb_user_list($conditions_ = array()){
 	$statement_ = pb_user_statement($conditions_);

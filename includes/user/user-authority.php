@@ -76,7 +76,7 @@ function pb_user_authority_statement($conditions_ = array()){
 		$statement_->add_compare_condition("users.user_email", $conditions_['user_email'], "=", PBDB::TYPE_STRING);
 	}
 
-	return $statement_;
+	return pb_hook_apply_filters('pb_user_authority_statement', $statement_);
 }
 function pb_user_authority_list($conditions_ = array()){
 	$statement_ = pb_user_authority_statement($conditions_);

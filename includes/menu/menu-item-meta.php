@@ -49,8 +49,7 @@ function pb_menu_item_meta_statement($conditions_ = array()){
 	if(isset($conditions_['meta_value'])){
 		$statement_->add_in_condition("menus_item_meta.meta_value", $conditions_['meta_value']);
 	}
-
-	return $statement_;
+	return pb_hook_apply_filters('pb_menu_item_meta_statement', $statement_);
 }
 function pb_menu_item_meta_list($conditions_ = array()){
 	$statement_ = pb_menu_item_meta_statement($conditions_);

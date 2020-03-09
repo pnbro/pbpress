@@ -39,7 +39,7 @@ function pb_gcode_statement($conditions_ = array()){
 		$statement_->add_like_condition('gcode.code_nm', $conditions_['keyword']);
 	}
 
-	return $statement_;
+	return pb_hook_apply_filters('pb_gcode_statement', $statement_);
 }
 function pb_gcode_list($conditions_ = array()){
 	$statement_ = pb_gcode_statement($conditions_);
@@ -47,7 +47,8 @@ function pb_gcode_list($conditions_ = array()){
         return $statement_->count();
     }
 
-    return $statement_->select("code_id ASC", (isset($conditions_['limit']) ? $conditions_['limit'] : null));
+    $results_ = $statement_->select("code_id ASC", (isset($conditions_['limit']) ? $conditions_['limit'] : null));
+    return pb_hook_apply_filters('pb_gcode_list', $results_);
 }
 
 function pb_gcode($code_id_){
@@ -152,7 +153,7 @@ function pb_gcode_dtl_statement($conditions_ = array()){
 		$statement_->add_like_condition('gcode_dtl.code_dnm', $conditions_['keyword']);
 	}
 
-	return $statement_;
+	return pb_hook_apply_filters('pb_gcode_dtl_statement', $statement_);
 }
 function pb_gcode_dtl_list($conditions_ = array()){
 	$statement_ = pb_gcode_dtl_statement($conditions_);
@@ -161,7 +162,8 @@ function pb_gcode_dtl_list($conditions_ = array()){
         return $statement_->count();
     }
 
-	return $statement_->select("gcode_dtl.sort_char ASC", (isset($conditions_['limit']) ? $conditions_['limit'] : null));
+	$results_ = $statement_->select("gcode_dtl.sort_char ASC", (isset($conditions_['limit']) ? $conditions_['limit'] : null));
+	return pb_hook_apply_filters('pb_gcode_dtl_list', $results_);
 }
 
 function pb_gcode_dtl($code_id_, $code_did_){

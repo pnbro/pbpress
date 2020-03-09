@@ -79,9 +79,7 @@ function pb_menu_item_statement($conditions_ = array()){
 		)), $conditions_['keyword']);
 	}
 
-	return $statement_;
-
-	
+	return pb_hook_apply_filters('pb_menu_item_statement', $statement_);
 }
 function pb_menu_item_list($conditions_ = array()){
 	$statement_ = pb_menu_item_statement($conditions_);

@@ -14,7 +14,7 @@ $clob_options_do = pbdb_data_object("clob_options", array(
 ),"옵션");
 
 
-function pb_clob_options_statement($conditions_ = array()){
+function pb_clob_option_statement($conditions_ = array()){
 	global $clob_options_do;
 
 	$statement_ = $clob_options_do->statement();
@@ -45,11 +45,11 @@ function pb_clob_options_statement($conditions_ = array()){
 		$statement_->add_compare_condition("clob_options.option_name", $conditions_['option_name']);
 	}
 
-	return $statement_;
+	return pb_hook_apply_filters('pb_clob_option_statement', $statement_);
 }
 
-function pb_clob_options_list($conditions_ = array()){
-	$statement_ = pb_clob_options_statement($conditions_);
+function pb_clob_option_list($conditions_ = array()){
+	$statement_ = pb_clob_option_statement($conditions_);
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
         return $statement_->count();
@@ -59,6 +59,9 @@ function pb_clob_options_list($conditions_ = array()){
     $limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
     
 	return pb_hook_apply_filters('pb_clob_option_list', $statement_->select($orderby_, $limit_));
+}
+function pb_clob_options_list($conditions_ = array()){
+	return pb_clob_option_list($conditions_);
 }
 
 function pb_clob_option_value($option_name_, $default_ = null, $cache_ = true){
