@@ -140,6 +140,8 @@ function _pb_ajax_admin_authority_task_update(){
 	$grant_list_ = isset($_REQUEST["grant_list"]) ? $_REQUEST["grant_list"] : array();
 	$revoke_list_ = isset($_REQUEST["revoke_list"]) ? $_REQUEST["revoke_list"] : array();
 
+	global $pbdb;
+
 	foreach($revoke_list_ as $slug_){
 		$task_data_ = pb_authority_task_by_slug($auth_data_["slug"], $slug_);
 		if(isset($task_data_)){

@@ -4,6 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+
 function pb_authority_task_types(){
 	global $_pb_authority_task_types;
 	if(!isset($_pb_authority_task_types)){
@@ -21,62 +22,54 @@ function pb_authority_task_types(){
 	return $_pb_authority_task_types;
 }
 
-function pb_authority_list($conditions_ = array()){
-	global $pbdb;
-
-	$query_ = "
-		SELECT   auth.id id
-
-				,auth.slug slug
-				,auth.auth_name auth_name
-				,auth.auth_desc auth_desc
-				
-				,auth.reg_date reg_date
-				,DATE_FORMAT(auth.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis
-				,DATE_FORMAT(auth.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi
-				,DATE_FORMAT(auth.reg_date, '%Y.%m.%d') reg_date_ymd
-
-				,auth.mod_date mod_date
-				,DATE_FORMAT(auth.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
-				,DATE_FORMAT(auth.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi
-				,DATE_FORMAT(auth.mod_date, '%Y.%m.%d') mod_date_ymd
-
-				".pb_hook_apply_filters('pb_authority_list_select',"",$conditions_)."
-
-	FROM auth
-
-	".pb_hook_apply_filters('pb_authority_list_join',"",$conditions_)."
+global $auth_do;
+$auth_do = pbdb_data_object("auth", array(
+	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
+	'slug'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "index"=> true,"comment" => "슬러그"),
+	'auth_name'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "comment" => "권한명"),
+	'auth_desc'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "권한설명"),
 	
-	WHERE 1 ";
+	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
+	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
+),"권한");
+
+function pb_authority_list($conditions_ = array()){
+	global $auth_do;
+
+	$statement_ = $auth_do->statement();
+	$statement_->add_field(
+		"DATE_FORMAT(auth.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(auth.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
+		"DATE_FORMAT(auth.reg_date, '%Y.%m.%d') reg_date_ymd",
+		"DATE_FORMAT(auth.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
+		"DATE_FORMAT(auth.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
+		"DATE_FORMAT(auth.mod_date, '%Y.%m.%d') mod_date_ymd"
+	);
 
 	if(isset($conditions_['id']) && strlen($conditions_['id'])){
-		$query_ .= " AND auth.id = '".pb_database_escape_string($conditions_['id'])."' ";
+		$statement_->add_compare_condition("auth.id", $conditions_['id'], "=", PBDB::TYPE_NUMBER);
 	}
 	if(isset($conditions_['slug']) && strlen($conditions_['slug'])){
-		$query_ .= " AND auth.slug = '".pb_database_escape_string($conditions_['slug'])."' ";
+		$statement_->add_compare_condition("auth.slug", $conditions_['slug'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['auth_name']) && strlen($conditions_['auth_name'])){
-		$query_ .= " AND auth.auth_name = '".pb_database_escape_string($conditions_['auth_name'])."' ";
+		$statement_->add_compare_condition("auth.auth_name", $conditions_['auth_name'], "=", PBDB::TYPE_STRING);
 	}
 
-	$query_ .= ' '.pb_hook_apply_filters('pb_authority_list_where',"",$conditions_)." ";
-
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-        $query_ = " SELECT COUNT(*) CNT FROM (". $query_. ") TMP";
-        return $pbdb->get_var($query_);
+		return $statement_->count();
     }
 
-    if(isset($conditions_['orderby']) && strlen($conditions_['orderby'])){
-        $query_ .= " ".$conditions_['orderby']." ";
-    }else{
-    	$query_ .= " ORDER BY reg_date DESC";
-    }
+    $statement_->add_legacy_field_filter('pb_authority_list_select', '', $conditions_);
+	$statement_->add_legacy_join_filter('pb_authority_list_join', '', $conditions_);
+	$statement_->add_legacy_where_filter('pb_authority_list_where', '', $conditions_);
 
-	if(isset($conditions_['limit'])){
-        $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
-    }
+	$orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
+	$limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
 
-	return pb_hook_apply_filters('pb_authority_list', $pbdb->select($query_));
+	$results_ = $statement_->select($orderby_, $limit_);
+
+	return pb_hook_apply_filters('pb_authority_list', $results_);
 }
 
 function pb_authority($id_){
@@ -90,18 +83,6 @@ function pb_authority_by_slug($slug_){
 	return $data_[0];
 }
 
-function _pb_authority_parse_fields($data_){
-	return pb_format_mapping(pb_hook_apply_filters("pb_authority_parse_fields",array(
-
-		'slug' => '%s',
-		'auth_name' => '%s',
-		'auth_desc' => '%s',
-		'reg_date' => '%s',
-		'mod_date' => '%s',
-
-	)), $data_);
-}
-
 function pb_authority_add($raw_data_){
 	$before_check_ = pb_hook_apply_filters("pb_authority_before_add", $raw_data_);
 
@@ -109,15 +90,9 @@ function pb_authority_add($raw_data_){
 		return $before_check_;
 	}
 
-	global $pbdb;
-
-	$raw_data_ = _pb_authority_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$insert_id_ = $pbdb->insert("auth", $data_, $format_);
+	global $auth_do;
+	$insert_id_ = $auth_do->insert($raw_data_);
 	pb_hook_do_action("pb_authority_added", $insert_id_);
-
 	return $insert_id_;
 }
 
@@ -128,13 +103,8 @@ function pb_authority_update($id_, $raw_data_){
 		return $before_check_;
 	}
 
-	global $pbdb;
-
-	$raw_data_ = _pb_authority_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$pbdb->update("auth", $data_, array("id" => $id_), $format_, array("%d"));
+	global $auth_do;
+	$auth_do->update($id_, $data_, $raw_data_);
 	pb_hook_do_action("pb_authority_updated", $id_);
 }
 
@@ -145,76 +115,79 @@ function pb_authority_delete($id_){
 		return $before_check_;
 	}
 
-	global $pbdb;
-	$pbdb->delete("auth", array("id" => $id_), array("%d"));
+	global $auth_do;
+	pb_hook_do_action("pb_authority_delete", $id_);
+	$auth_do->delete($id_);
 	pb_hook_do_action("pb_authority_deleted", $id_);
 }
 
+
+global $auth_task_do;
+
+$auth_task_do = pbdb_data_object("auth_task", array(
+	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
+	'auth_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
+		'table' => 'auth',
+		'column' => "id",
+		'delete' => PBDB_DO::FK_CASCADE,
+		'update' => PBDB_DO::FK_CASCADE,
+	), "comment" => "권한ID"),
+
+	'slug'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "index"=> true,"comment" => "슬러그"),
+	
+	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
+	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
+),"권한별 작업범위");
+
 function pb_authority_task_list($conditions_ = array()){
-	global $pbdb;
+	global $auth_do, $auth_task_do;
 
-	$query_ = "
-		SELECT   auth_task.id id
-	
-				,auth.slug auth_slug
-				,auth.auth_name auth_name
+	$statement_ = $auth_task_do->statement();
 
-				,auth_task.slug slug
+	$statement_->add_field(
+		"DATE_FORMAT(auth_task.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
+		"DATE_FORMAT(auth_task.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
+		"DATE_FORMAT(auth_task.reg_date, '%Y.%m.%d') reg_date_ymd",
+		"DATE_FORMAT(auth_task.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
+		"DATE_FORMAT(auth_task.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
+		"DATE_FORMAT(auth_task.mod_date, '%Y.%m.%d') mod_date_ymd"
+	);
 
-				,auth_task.auth_id auth_id
-				
-				,auth_task.reg_date reg_date
-				,DATE_FORMAT(auth_task.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis
-				,DATE_FORMAT(auth_task.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi
-				,DATE_FORMAT(auth_task.reg_date, '%Y.%m.%d') reg_date_ymd
+	$auth_cond_ = pbdb_ss_conditions();
+	$auth_cond_->add_compare("auth.id", "auth_task.auth_id", "=");
+	$statement_->add_join_statement("LEFT OUTER JOIN",$auth_do->statement(), "auth", $auth_cond_, "", array(
+		'slug auth_slug',
+		'auth_name',
+	));
 
-				,auth_task.mod_date mod_date
-				,DATE_FORMAT(auth_task.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis
-				,DATE_FORMAT(auth_task.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi
-				,DATE_FORMAT(auth_task.mod_date, '%Y.%m.%d') mod_date_ymd
-
-				".pb_hook_apply_filters('pb_authority_task_list_select',"",$conditions_)."
-
-	FROM auth_task
-
-	LEFT OUTER JOIN auth
-	ON   auth.id = auth_task.auth_id
-
-	".pb_hook_apply_filters('pb_authority_task_list_join',"",$conditions_)."
-	
-	WHERE 1 ";
+	$statement_->add_legacy_field_filter('pb_authority_task_list_select', '', $conditions_);
+	$statement_->add_legacy_join_filter('pb_authority_task_list_join', '', $conditions_);
+	$statement_->add_legacy_where_filter('pb_authority_task_list_where', '', $conditions_);
 
 	if(isset($conditions_['id']) && strlen($conditions_['id'])){
-		$query_ .= " AND auth_task.id = '".pb_database_escape_string($conditions_['id'])."' ";
+		$statement_->add_compare_condition("auth_task.id", $conditions_['id'], "=", PBDB::TYPE_NUMBER);
 	}
 	if(isset($conditions_['slug']) && strlen($conditions_['slug'])){
-		$query_ .= " AND auth_task.slug = '".pb_database_escape_string($conditions_['slug'])."' ";
+		$statement_->add_compare_condition("auth_task.slug", $conditions_['slug'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['auth_slug']) && strlen($conditions_['auth_slug'])){
-		$query_ .= " AND auth.slug = '".pb_database_escape_string($conditions_['auth_slug'])."' ";
+		$statement_->add_compare_condition("auth.slug", $conditions_['auth_slug'], "=", PBDB::TYPE_STRING);
 	}
 	if(isset($conditions_['auth_id']) && strlen($conditions_['auth_id'])){
-		$query_ .= " AND auth_task.auth_id = '".pb_database_escape_string($conditions_['auth_id'])."' ";
+		$statement_->add_compare_condition("auth_task.auth_id", $conditions_['auth_id'], "=", PBDB::TYPE_NUMBER);
 	}
 
-	$query_ .= ' '.pb_hook_apply_filters('pb_authority_task_list_where',"",$conditions_)." ";
-
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
-        $query_ = " SELECT COUNT(*) CNT FROM (". $query_. ") TMP";
-        return $pbdb->get_var($query_);
+        return $statement_->count();
     }
 
-    if(isset($conditions_['orderby']) && strlen($conditions_['orderby'])){
-        $query_ .= " ".$conditions_['orderby']." ";
-    }else{
-    	$query_ .= " ORDER BY reg_date DESC";
-    }
+    
+	$orderby_ = isset($conditions_['orderby']) ? $conditions_['orderby'] : null;
+	$limit_ = isset($conditions_['limit']) ? $conditions_['limit'] : null;
 
-	if(isset($conditions_['limit'])){
-        $query_ .= " LIMIT ".$conditions_['limit'][0].",".$conditions_['limit'][1]." ";
-    }
+	$results_ = $statement_->select($orderby_, $limit_);
 
-	return pb_hook_apply_filters('pb_authority_task_list', $pbdb->select($query_));
+	return pb_hook_apply_filters('pb_authority_task_list', $results_);
 }
 
 
@@ -229,17 +202,6 @@ function pb_authority_task_by_slug($auth_slug_, $task_slug_){
 	return $data_[0];
 }
 
-function _pb_authority_task_parse_fields($data_){
-	return pb_format_mapping(pb_hook_apply_filters("pb_authority_task_parse_fields",array(
-
-		'auth_id' => '%d',
-		'slug' => '%s',
-		'reg_date' => '%s',
-		'mod_date' => '%s',
-
-	)), $data_);
-}
-
 function pb_authority_task_add($raw_data_){
 	$before_check_ = pb_hook_apply_filters("pb_authority_task_before_add", $raw_data_);
 
@@ -247,13 +209,8 @@ function pb_authority_task_add($raw_data_){
 		return $before_check_;
 	}
 
-	global $pbdb;
-
-	$raw_data_ = _pb_authority_task_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$insert_id_ = $pbdb->insert("auth_task", $data_, $format_);
+	global $auth_task_do;
+	$insert_id_ = $auth_task_do->insert($raw_data_);
 	pb_hook_do_action("pb_authority_task_added", $insert_id_);
 
 	return $insert_id_;
@@ -266,13 +223,9 @@ function pb_authority_task_update($id_, $raw_data_){
 		return $before_check_;
 	}
 
+	global $auth_task_do;
+	$result_ = $auth_task_do->update($id_, $raw_data_);
 	global $pbdb;
-
-	$raw_data_ = _pb_authority_task_parse_fields($raw_data_);
-	$data_ = $raw_data_['data'];
-	$format_ = $raw_data_['format'];
-
-	$pbdb->update("auth_task", $data_, array("id" => $id_), $format_, array("%d"));
 	pb_hook_do_action("pb_authority_task_updated", $id_);
 }
 
@@ -283,8 +236,8 @@ function pb_authority_task_delete($id_){
 		return $before_check_;
 	}
 
-	global $pbdb;
-	$pbdb->delete("auth_task", array("id" => $id_), array("%d"));
+	global $auth_task_do;
+	$auth_task_do->delete($id_);
 	pb_hook_do_action("pb_authority_task_deleted", $id_);
 }
 

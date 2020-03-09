@@ -7,13 +7,13 @@ if(!defined('PB_DOCUMENT_PATH')){
 class PBDB_SS{
 	const COND_COMPARE = 1;
 	const COND_IN = 3;
-	const COND_CUSTOM = 5;
+	const COND_ISNOTNULL = 5;
+	const COND_ISNULL = 7;
+	const COND_CUSTOM = 9;
 }
 
 class PBDB_select_statement_conditions extends ArrayObject{
-	private $_prepared_values = array();
-	private $_prepared_types = array();
-
+	
 	function add_compare($a_, $b_, $compare_ = "=", $b_type_ = null){
 		$this[] = array(
 			'type' => PBDB_SS::COND_COMPARE,
@@ -23,6 +23,19 @@ class PBDB_select_statement_conditions extends ArrayObject{
 			'compare' => $compare_,
 		);
 	}
+	function add_is_null($a_){
+		$this[] = array(
+			'type' => PBDB_SS::COND_ISNULL,
+			'a' => $a_,
+		);
+	}
+	function add_is_not_null($a_){
+		$this[] = array(
+			'type' => PBDB_SS::COND_ISNOTNULL,
+			'a' => $a_,
+		);
+	}
+
 	function add_in($a_, $array_, $array_types_ = null){
 		$this[] = array(
 			'type' => PBDB_SS::COND_IN,
@@ -43,6 +56,9 @@ class PBDB_select_statement_conditions extends ArrayObject{
 	public function build(){
 		$query_ = array();
 
+		$param_values_ = array();
+		$param_types_ = array();
+
 		foreach($this as $data_){
 			$cond_type_ = isset($data_['type']) ? $data_['type'] : null;
 			if(!strlen($cond_type_)) return $query_;
@@ -56,8 +72,8 @@ class PBDB_select_statement_conditions extends ArrayObject{
 					$compare_ = $data_['compare'];
 
 					if(strlen($b_type_)){
-						$this->_prepared_values[] = pb_database_escape_string($b_);
-						$this->_prepared_types[] = $b_type_;
+						$param_values_[] = pb_database_escape_string($b_);
+						$param_types_[] = $b_type_;
 
 						$query_[] = "{$a_} {$compare_} ? \n\r";
 
@@ -81,13 +97,25 @@ class PBDB_select_statement_conditions extends ArrayObject{
 						$in_str_array_ = array();
 
 						foreach($b_ as $bi_ => $bv_){
-							$this->_prepared_values[] = pb_database_escape_string($bv_);
-							$this->_prepared_types[] = isset($b_types_[$bi_]) ? $b_types_[$bi_] : PBDB::TYPE_STRING;
+							$param_values_[] = pb_database_escape_string($bv_);
+							$param_types_[] = isset($b_types_[$bi_]) ? $b_types_[$bi_] : PBDB::TYPE_STRING;
 							$in_str_array_[] = "?";
 						}
 
 						$query_[] = "{$a_} IN (".implode(",", $in_str_array_).") \n\r";
 					}
+
+				break;
+
+				case PBDB_SS::COND_ISNOTNULL :
+
+					$query_[] = "{$a_} IS NOT NULL \n\r";
+
+				break;
+
+				case PBDB_SS::COND_ISNULL :
+
+					$query_[] = "{$a_} IS NULL \n\r";
 
 				break;
 
@@ -99,8 +127,8 @@ class PBDB_select_statement_conditions extends ArrayObject{
 
 					if(isset($values_)){
 						foreach($values_ as $vi_ => $value_){
-							$this->_prepared_values[] = pb_database_escape_string($value_);
-							$this->_prepared_types[] = isset($types_[$vi_]) ? $types_[$vi_] : PBDB::TYPE_STRING;
+							$param_values_[] = pb_database_escape_string($value_);
+							$param_types_[] = isset($types_[$vi_]) ? $types_[$vi_] : PBDB::TYPE_STRING;
 						}
 					}
 						
@@ -116,20 +144,22 @@ class PBDB_select_statement_conditions extends ArrayObject{
 
 		$results_ = array(
 			'query' => implode(" AND ", $query_),
-			'values' => $this->_prepared_values,
-			'types' => $this->_prepared_types,
+			'values' => $param_values_,
+			'types' => $param_types_,
 		);
 
 		return $results_;
 	}
 }
 
+function pbdb_ss_conditions(){
+	return new PBDB_select_statement_conditions();
+}
+
 class PBDB_select_statement{
 
 	private $_from_table;
 	private $_from_table_alias;
-
-	private $_prepared_params = array();
 
 	private $_field_list = array();
 	private $_join_list = array();
@@ -165,30 +195,34 @@ class PBDB_select_statement{
 		}
 	}
 
-	function &add_join($join_type_, $table_, $alias_ = null){
-		$join_cond_ = new PBDB_select_statement_conditions();
+	function &add_join($join_type_, $table_, $alias_ = null, $on_ = null){
+		if(!isset($on_)){
+			$on_ = new PBDB_select_statement_conditions();
+		}
 
 		$this->_join_list[] = array(
 			'type' => $join_type_,
 			'table' => $table_,
 			'alias' => $alias_,
-			'on' => $join_cond_,
+			'on' => $on_,
 		);
 
-		return $join_cond_;
+		return $on_;
 	}
-	function &add_join_statement($join_type_, $statement_, $alias_ = null, $column_prefix_ = "", $fields_ = null){
-		$join_cond_ = new PBDB_select_statement_conditions();
+	function &add_join_statement($join_type_, $statement_, $alias_ = null, $on_ = null, $column_prefix_ = "", $fields_ = null){
+		if(!isset($on_)){
+			$on_ = new PBDB_select_statement_conditions();
+		}
 
 		$this->_join_list[] = array(
 			'type' => $join_type_,
 			'statement' => $statement_,
 			'prefix' => $alias_,
-			'on' => $join_cond_,
+			'on' => $on_,
 			'fields' => $fields_,
 		);	
 
-		return $join_cond_;
+		return $on_;
 	}
 
 	function add_compare_condition($a_, $b_, $compare_ = "=", $b_type_ = PBDB::TYPE_STRING){
@@ -200,13 +234,32 @@ class PBDB_select_statement{
 	function add_custom_condition($text_, $value_ = null, $types_ = array()){
 		$this->_cond_list->add_custom($text_, $value_, $types_);
 	}
-
-	function add_param($value_, $type_ = PBDB::TYPE_STRING){
-		$this->_prepared_params[] = array(
-			'type' => $type_,
-			'value' => $value_,
-		);
+	function add_is_not_null_condition($a_){
+		$this->_cond_list->add_is_not_null($a_);
 	}
+	function add_is_null_condition($a_){
+		$this->_cond_list->add_is_null($a_);
+	}
+	private $_legacy_field_filters = array();
+	private $_legacy_join_fileds = array();
+	private $_legacy_where_fileds = array();
+
+	private function _add_legacy_filter_to($to_, $args_){
+		$fields_count_ = func_num_args();
+		$to_[] = $args_;
+	}
+
+	function add_legacy_field_filter(){
+		$this->_add_legacy_filter_to($this->_legacy_field_filters, func_get_args());
+	}
+	function add_legacy_join_filter(){
+		$this->_add_legacy_filter_to($this->_legacy_join_fileds, func_get_args());
+	}
+	function add_legacy_where_filter(){
+		$this->_add_legacy_filter_to($this->_legacy_where_fileds, func_get_args());
+	}
+
+	private $_column_name_pattern = "/^([A-Za-z\_0-9])+$/";
 
 	function build($order_by_ = null, $limit_ = null){
 
@@ -216,9 +269,19 @@ class PBDB_select_statement{
 		$query_ = "SELECT \n\r";
 
 		$fields_array_ = array();
+		$param_values_ = array();
+		$param_types_ = array();
 
 		foreach($this->_field_list as $column_name_){
-			$fields_array_[] = "{$from_table_alias_}.{$column_name_}";
+			$func_check_ = explode(" ", $column_name_);
+			$func_check_ = preg_match($this->_column_name_pattern, $func_check_[0]);
+			if(!$func_check_){
+				$fields_array_[] = "{$column_name_}";
+
+			}else{
+				$fields_array_[] = "{$from_table_alias_}.{$column_name_}";	
+			}
+			
 		}
 
 		foreach($this->_join_list as $join_data_){
@@ -236,15 +299,33 @@ class PBDB_select_statement{
 					$column_name_ = trim($column_name_);
 					$column_name_array_ = explode(" ", $column_name_);
 
-					$column_oname_ = $column_name_array_[0];
-					$column_alias_ = isset($column_name_array_[1]) ? $column_name_array_[1] : $column_oname_;
+					$column_alias_ = end($column_name_array_);
+
+					if(!preg_match($this->_column_name_pattern, $column_alias_)){
+						$column_alias_ = null;
+					}
+					
+					if(strlen($column_alias_)){
+						$column_name_array_ = array_splice($column_name_array_, count($column_name_array_) - 1);	
+					}
+					
+					$column_oname_ = implode(' ', $column_name_array_);
+					$column_alias_ = strlen($column_alias_) ? $column_alias_ : $column_oname_;
 					$column_alias_ = $join_table_prefix_.$column_alias_;
+
+					if(!preg_match($this->_column_name_pattern, $column_alias_)){
+						$column_alias_ = "";
+					}
 
 					$fields_array_[] = "{$join_table_alias_}.{$column_oname_} {$column_alias_}";
 				}
 			}
 		}
 		$query_ .= implode(",\n\r", $fields_array_) ." \n\r"; 
+
+		foreach($this->_legacy_field_filters as $filter_){
+			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_);
+		}
 
 		$query_ .= " FROM {$from_table_} {$from_table_alias_} \n\r";
 
@@ -267,22 +348,30 @@ class PBDB_select_statement{
 
 			$join_cond_ = $join_data_['on']->build();
 			foreach($join_cond_['values'] as $jv_index_ => $jv_){
-				$this->add_param($jv_, $join_cond_['types'][$jv_index_]);
+				$param_values_[] = $jv_;
+				$param_types_[] = $join_cond_['types'][$jv_index_];
 			}
 
 			$query_ .= " AND ".$join_cond_['query']." \n\r";
 		}
 
+		foreach($this->_legacy_join_fileds as $filter_){
+			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_);
+		}
+
 		if(count($this->_cond_list) > 0){
 			$where_cond_ = $this->_cond_list->build();
 			foreach($where_cond_['values'] as $wv_index_ => $wv_){
-				$this->add_param($wv_, $where_cond_['types'][$wv_index_]);
+				$param_values_[] = $wv_;
+				$param_types_[] = $where_cond_['types'][$wv_index_];
 			}
 
 			$query_ .= " WHERE ".$where_cond_['query']." \n\r";	
 		}
 
-			
+		foreach($this->_legacy_where_fileds as $filter_){
+			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_);
+		}
 
 		if(strlen($order_by_)){
 			$query_ .= ' ORDER BY '.$order_by_." \n\r";
@@ -292,18 +381,10 @@ class PBDB_select_statement{
 			$query_ .= " LIMIT {$limit_[0]}, {$limit_[1]}";
 		}
 
-		$values_ = array();
-		$types_ = array();
-
-		foreach($this->_prepared_params as $param_data_){
-			$types_[]  = $param_data_['type'];
-			$values_[]  = $param_data_['value'];
-		}
-
 		return array(
 			'query' => $query_,
-			'values' => $values_,
-			'types' => $types_,
+			'values' => $param_values_,
+			'types' => $param_types_,
 		);
 	}
 

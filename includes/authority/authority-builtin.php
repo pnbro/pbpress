@@ -6,38 +6,6 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 define("PB_AUTHORITY_SLUG_ADMINISTRATOR", "administrator");
 
-function _pb_authority_install_table($args_){
-	global $pbdb;
-
-	$args_[] = "CREATE TABLE IF NOT EXISTS `auth` (
-		
-		`id` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-		`slug` varchar(100) NOT NULL COMMENT '슬러그',
-		`auth_name` varchar(50) NOT NULL COMMENT '권한명',
-		`auth_desc` varchar(100) DEFAULT NULL COMMENT '권한설명',
-		
-		`reg_date` datetime DEFAULT NULL COMMENT '등록일자',
-		`mod_date` datetime DEFAULT NULL COMMENT '수정일자',
-		PRIMARY KEY (`id`)
-	) ENGINE=InnoDB COMMENT='권한';";
-
-	$args_[] = "CREATE TABLE IF NOT EXISTS `auth_task` (
-		
-		`id` BIGINT(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-		
-		`auth_id` BIGINT(11) NOT NULL COMMENT '슬러그',
-		`slug` varchar(100) NOT NULL COMMENT '슬러그',
-		
-		`reg_date` datetime DEFAULT NULL COMMENT '등록일자',
-		`mod_date` datetime DEFAULT NULL COMMENT '수정일자',
-		PRIMARY KEY (`id`),
-		CONSTRAINT `auth_task_fk1` FOREIGN KEY (`auth_id`) REFERENCES `auth` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-	) ENGINE=InnoDB COMMENT='권한별 작업범위';";
-
-	return $args_;
-}
-pb_hook_add_filter('pb_install_tables', "_pb_authority_install_table");
-
 function _pb_authority_insert_defaults(){
 	global $pbdb;
 

@@ -27,6 +27,9 @@ $users_auth_do = pbdb_data_object("users_auth", array(
 function pb_user_authority_list($conditions_ = array()){
 	global $pbdb;
 
+	/*$user_auth_statement_ = $users_auth_do->statement();
+	$user_auth_statement_->add_join_statement();*/
+
 	$query_ = "
 		SELECT   users_auth.id id
 	
