@@ -174,6 +174,8 @@ function pb_editor_load_trumbowyg_library(){
 
 		<?php
 
+		pb_hook_do_action('pb_editor_load_trumbowyg_library');
+
 		$_pb_editor_trumbowyg_library_loaded = true;
 	}
 }
