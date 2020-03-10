@@ -261,6 +261,37 @@ class PBDB_select_statement{
 	function add_like_condition($a_, $keyword_, $full_search_ = false){
 		$this->_cond_list->add_like($a_, $keyword_, $full_search_);
 	}
+	function add_conditions_from_data($data_ = array(), $conditions_ = array()){
+		foreach($conditions_ as $key_ => $condition_){
+			if(!isset($data_[$key_])) continue;
+			if(!isset($condition_[0])) continue;
+
+			$type_ = array_splice($condition_,0, 1);
+			$type_ = isset($type_[0]) ? $type_[0] : null;
+
+			switch($type_){
+				case PBDB_SS::COND_COMPARE :
+					$a_ = $condition_[0];
+					$compare_ = isset($condition_[1]) ? $condition_[1] : "=";
+					$type_ = isset($condition_[2]) ? $condition_[2] : PBDB_SS::TYPE_STRING;
+
+					call_user_func_array(array($this, 'add_compare_condition'), array($a_, $data_[$key_], $compare_, $type_));
+				break;
+				case PBDB_SS::COND_IN :
+					$a_ = $condition_[0];
+					$array_types_ = isset($condition_[1]) ? $condition_[1] : null;
+
+					call_user_func_array(array($this, 'add_in_condition'), array($a_, $data_[$key_], $array_types_));
+				break;
+				case PBDB_SS::COND_LIKE :
+					$a_ = $condition_[0];
+					$full_search_ = isset($condition_[2]) ? $condition_[1] : false;
+
+					call_user_func_array(array($this, 'add_like_condition'), array($a_, $data_[$key_], $full_search_));
+				break;
+			}
+		}
+	}
 	
 	private $_legacy_field_filters = array();
 	private $_legacy_join_fileds = array();

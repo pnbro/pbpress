@@ -39,26 +39,17 @@ function pb_user_statement($conditions_ = array()){
 	$statement_->add_legacy_join_filter('pb_user_list_join', '', $conditions_);
 	$statement_->add_legacy_where_filter('pb_user_list_where', '', $conditions_);
 
-	if(isset($conditions_['id']) && strlen($conditions_['id'])){
-		$statement_->add_compare_condition("users.id", $conditions_['id'], "=", PBDB::TYPE_NUMBER);
-	}
-	if(isset($conditions_['user_login']) && strlen($conditions_['user_login'])){
-		$statement_->add_compare_condition("users.user_login", $conditions_['user_login'], "=", PBDB::TYPE_STRING);
-	}
-	if(isset($conditions_['user_email']) && strlen($conditions_['user_email'])){
-		$statement_->add_compare_condition("users.user_email", $conditions_['user_email'], "=", PBDB::TYPE_STRING);
-	}
-	if(isset($conditions_['status']) && strlen($conditions_['status'])){
-		$statement_->add_in_condition("users.status", $conditions_['status']);
-	}
-
-	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
-		$statement_->add_like_condition(array(
+	$statement_->add_conditions_from_data($conditions_, array(
+		'id' => array(PBDB_SS::COND_COMPARE, 'users.id', "=", PBDB::TYPE_NUMBER),
+		'user_login' => array(PBDB_SS::COND_COMPARE, 'users.user_login', "=", PBDB::TYPE_STRING),
+		'user_email' => array(PBDB_SS::COND_COMPARE, 'users.user_email', "=", PBDB::TYPE_STRING),
+		'status' => array(PBDB_SS::COND_IN, "users.status"),
+		'keyword' => array(PBDB_SS::COND_LIKE, array(
 			'users.user_login',
 			'users.user_email',
 			'users.user_name',
-		), $conditions_['keyword']);
-	}
+		)),
+	));
 
 	return pb_hook_apply_filters('pb_user_statement', $statement_);
 }

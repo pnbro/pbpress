@@ -49,31 +49,27 @@ function pb_user_authority_statement($conditions_ = array()){
 	$statement_->add_legacy_join_filter('pb_user_authority_list_join', '', $conditions_);
 	$statement_->add_legacy_where_filter('pb_user_authority_list_where', '', $conditions_);
 
-	if(isset($conditions_['id']) && $conditions_['id'] === true){
-		$statement_->add_compare_condition("users_auth.id", $conditions_['id'], "=", PBDB::TYPE_NUMBER);
-	}
-	if(isset($conditions_['auth_id'])){
-		$statement_->add_compare_condition("users_auth.auth_id", $conditions_['auth_id'], "=", PBDB::TYPE_NUMBER);
-	}
-	if(isset($conditions_['auth_slug'])){
-		$statement_->add_compare_condition("auth.slug", $conditions_['auth_slug'], "=", PBDB::TYPE_STRING);
-	}
+	$statement_->add_conditions_from_data($conditions_, array(
+		'id' => array(PBDB_SS::COND_COMPARE, 'users_auth.id', "=", PBDB::TYPE_NUMBER),
+		'auth_id' => array(PBDB_SS::COND_COMPARE, 'users_auth.auth_id', "=", PBDB::TYPE_NUMBER),
+		'auth_slug' => array(PBDB_SS::COND_COMPARE, 'auth.slug', "=", PBDB::TYPE_STRING),
+		'user_id' => array(PBDB_SS::COND_COMPARE, 'users_auth.user_id', "=", PBDB::TYPE_NUMBER),
+		'user_login' => array(PBDB_SS::COND_COMPARE, 'users.user_login', "=", PBDB::TYPE_STRING),
+		'user_email' => array(PBDB_SS::COND_COMPARE, 'users.user_email', "=", PBDB::TYPE_STRING),
+		'status' => array(PBDB_SS::COND_IN, "users.status"),
+		'keyword' => array(PBDB_SS::COND_LIKE, array(
+			'users.user_login',
+			'users.user_email',
+			'users.user_name',
+		)),
+	));
+
 	if(isset($conditions_['auth_task_slug'])){
 		$statement_->add_custom_condition("users_auth.auth_id IN (
 			SELECT auth_task.auth_id
 			FROM   auth_task
 			WHERE  ".pb_query_in_fields($conditions_['auth_task_slug'], "auth_task.slug")."
 		)");
-	}
-
-	if(isset($conditions_['user_id']) && strlen($conditions_['user_id'])){
-		$statement_->add_compare_condition("users_auth.user_id", $conditions_['user_id'], "=", PBDB::TYPE_NUMBER);
-	}
-	if(isset($conditions_['user_login']) && strlen($conditions_['user_login'])){
-		$statement_->add_compare_condition("users.user_login", $conditions_['user_login'], "=", PBDB::TYPE_STRING);
-	}
-	if(isset($conditions_['user_email']) && strlen($conditions_['user_email'])){
-		$statement_->add_compare_condition("users.user_email", $conditions_['user_email'], "=", PBDB::TYPE_STRING);
 	}
 
 	return pb_hook_apply_filters('pb_user_authority_statement', $statement_);
