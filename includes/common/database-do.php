@@ -90,7 +90,8 @@ class PBDB_DO extends ArrayObject{
 	private $_table_name;
 	private $_engine;
 	private $_comment;
-	private $_fields;
+	private $_fields = array();
+	private $_additional_fields = array();
 	private $_keys = array();
 	private $_indexes = array();
 
@@ -111,8 +112,8 @@ class PBDB_DO extends ArrayObject{
 		pb_hook_add_filter('pb_install_tables', array($this, "_install_tables"));
 	}
 
-	function add_field($column_name_, $field_data_){
-		$this->_fields[$column_name_] = $field_data_;
+	function add_field($array_){
+		$this->_additional_fields = array_merge($this->_additional_fields, $array_);
 	}
 
 	function _install_tables($querys_){

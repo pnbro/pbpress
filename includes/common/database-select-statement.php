@@ -342,6 +342,7 @@ class PBDB_select_statement{
 				$join_table_fields_ = $join_data_['fields'];
 
 				$join_real_fields_ = array();
+				$join_subquery_fields_ = array();
 
 				foreach($join_table_fields_ as $column_name_){
 					$column_name_array_ = explode(" ", $column_name_);
@@ -351,24 +352,23 @@ class PBDB_select_statement{
 						$real_column_name_ = $column_name_array_[0];
 
 						if(!preg_match($this->_column_name_pattern, $real_column_name_)){
+							$join_subquery_fields_[] = $column_name_;
 							continue;
 						}
 
-
-
 					}else if(!preg_match($this->_column_name_pattern, $real_column_name_)){
+						$join_subquery_fields_[] = $column_name_;
 						continue;
 					}
 
-					$join_real_fields_[] = $real_column_name_;
+					$join_real_fields_[] = $column_name_;
 				}
 
 				$join_table_statement_fields_ = $join_table_statement_->fields();
+				$join_fields_keys_ = array_keys($join_data_['fields']);
 
-				foreach($join_real_fields_ as $column_index_ => $t_column_name_){
-					if(isset($join_table_fields_) && in_array($t_column_name_, $join_table_statement_fields_) === false) continue;
+				foreach($join_real_fields_ as $column_index_ => $column_name_){
 
-					$column_name_ = $join_data_['fields'][$column_index_];
 					$column_name_array_ = explode(" ", $column_name_);
 					$column_alias_ = end($column_name_array_);
 
@@ -392,7 +392,9 @@ class PBDB_select_statement{
 					}
 
 					$fields_array_[] = "{$join_table_alias_}.{$column_oname_} {$column_alias_}";
-
+				}
+				foreach($join_subquery_fields_ as $column_index_ => $t_column_name_){
+					$fields_array_[] = $t_column_name_;	
 				}
 
 			}
