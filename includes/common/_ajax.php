@@ -23,6 +23,23 @@ function _pb_exceptions_ajax_error_handler($severity_, $message_, $filename_, $l
 	pb_end();
 }
 
+function pb_ajax_success($data_ = array()){
+	$results_ = array_merge($data_, array(
+		'success' => true,
+	));
+
+	echo json_encode($results_);
+	pb_end();
+}
+function pb_ajax_error($error_title_ = null, $error_message_ = null){
+	echo json_encode(array(
+		'success' => false,
+		'error_title' => $error_title_,
+		'error_message' => $error_message_,
+	));
+	pb_end();
+}
+
 $rewrite_slug_ = pb_current_slug();
 $rewrite_path_ = pb_rewrite_path();
 
