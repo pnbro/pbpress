@@ -61,8 +61,6 @@ function _user_adminpage_rewrite_handler($rewrite_path_){
 	}
 }
 
-include(PB_DOCUMENT_PATH . "includes/user/views/tables.php");
-
 function _pb_ajax_admin_user_check_login(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_user")){
 		echo json_encode(array(
