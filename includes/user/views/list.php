@@ -9,9 +9,9 @@
 
 <h3>사용자내역</h3>
 
-<form method="GET" id="pb-user-listtable-form">
+<form method="GET" id="pb-user-listtable-form" class="pb-easytable-group">
 
-	<div class="pb-easytable-group">
+	<div class="pb-easytable-conditions">
 		<div class="left-frame">
 			<a href="<?=pb_admin_url("manage-user/add")?>" class="btn btn-default">사용자 추가</a>
 		</div>
@@ -24,7 +24,5 @@
 			</div>
 		</div>
 	</div>	
-	<?php 
-		$user_listtable_->display($page_index_);
-	?>
+	<?php $user_listtable_->display($page_index_); ?>
 </form>

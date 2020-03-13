@@ -14,6 +14,7 @@ pb_easytable_register("pb-user-listtable", function($offset_, $per_page_){
 	'seq' => array(
 		'name' => "",
 		'class' => "col-seq text-center",
+		'seq' => true,
 	),
 	'user_name' => array(
 		'name' => "사용자명",
@@ -47,7 +48,7 @@ pb_easytable_register("pb-user-listtable", function($offset_, $per_page_){
 	),
 )), pb_hook_apply_filters("pb_adminpage_user_listtable_options", array(
 	"no_rowdata" => "조회된 사용자가 없습니다.",
-	'per_page' => 1,
+	'per_page' => 15,
 	'class' => 'table pb-easytable pb-user-listtable',
 	// 'ajax' => true,
 )));

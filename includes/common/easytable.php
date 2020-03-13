@@ -15,7 +15,12 @@ class PB_easytable{
 		$this->_id = $id_;
 		$this->_loader = $loader_;
 		$this->_data = $data_;
-		$this->_options = $options_;
+		$this->_options = array_merge(array(
+			'per_page' => 15,
+			'hide_pagenav' => false,
+			'pagenav_count' => 10,
+			'hide_pagenav_number' => false,
+		),$options_);
 	}
 
 	function loader(){
@@ -37,6 +42,20 @@ class PB_easytable{
 		}
 
 		return $this->_last_results;
+	}
+
+	function row_seq($page_index_, $row_index_){
+		$per_page_ = isset($this->_options['per_page']) ? $this->_options['per_page'] : 15;
+		return ($page_index_ * $per_page_) + 1 + $row_index_;
+
+		return ($is_first_ ? 0 : ($args_["page_index"] * $args_["per_page"])) + 1;
+		$this->display_r_row_number = ($is_first_ ? 0 : ($args_["total_count"] - ($args_["page_index"] * $args_["per_page"])) );
+	}
+	function row_rseq($page_index_, $row_index_){
+		$row_seq_ = $this->row_seq($page_index_, $row_index_);
+		$total_count_ = $this->last_results($page_index_);
+		$total_count_ = $total_count_['count'];
+		return ($total_count_ - $row_seq_) + 1;
 	}
 
 
@@ -105,7 +124,7 @@ class PB_easytable{
 		$total_count_ = $results_['count'];
 		$result_list_ = $results_['list'];
 
-		foreach($result_list_ as $row_data_){ ?>
+		foreach($result_list_ as $row_index_ => $row_data_){ ?>
 			<tr>
 
 				<?php 
@@ -119,10 +138,20 @@ class PB_easytable{
 					$column_value_ = null;
 					if(isset($column_data_['render'])){
 						ob_start();
-						call_user_func_array($column_data_['render'], array($this, $row_data_, $page_index_));
+						call_user_func_array($column_data_['render'], array($this, $row_data_, $page_index_, $row_index_));
 						$column_value_ = ob_get_clean();
 					}else{
-						$column_value_ = isset($row_data_[$key_]) ? $row_data_[$key_] : null;
+
+						if(isset($column_data_['seq']) && $column_data_['seq']){
+							$column_value_ = $this->row_seq($page_index_, $row_index_);
+							$column_value_ = number_format($column_value_);
+						}else if(isset($column_data_['rseq']) && $column_data_['rseq']){
+							$column_value_ = $this->row_rseq($page_index_, $row_index_);
+							$column_value_ = number_format($column_value_);
+						}else{
+							$column_value_ = isset($row_data_[$key_]) ? $row_data_[$key_] : null;
+						}
+						
 					}
 
 				?>

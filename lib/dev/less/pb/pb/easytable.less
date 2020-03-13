@@ -1,20 +1,35 @@
 .pb-easytable-group{
-	.form-inline;
-	border-bottom: 1px solid #ececec;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-    text-align: right;
-    .clearfix();
+	.pb-easytable-conditions{
+		.form-inline;
+		border-bottom: 1px solid #ececec;
+	    padding-bottom: 15px;
+	    margin-bottom: 15px;
+	    text-align: right;
+	    .clearfix();
 
-    > .left-frame{
-		float: left;
-		text-align: left;
-    }
+	     > .left-frame{
+			float: left;
+			text-align: left;
 
-    > .right-frame{
-    	float: right;
-    	text-align: right;
-    }
+			@media screen and (max-width: @screen-xs-max){
+				float: none;
+				& + .right-frame{
+					margin-top: 5px;	
+				}
+			}
+
+
+	    }
+
+	    > .right-frame{
+	    	float: right;
+	    	text-align: right;
+
+	    	@media screen and (max-width: @screen-xs-max){
+	    		float: none;
+	    	}
+	    }
+	}
 }
 
 
