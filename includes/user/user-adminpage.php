@@ -25,6 +25,8 @@ function _pb_user_register_adminpage($results_){
 }
 pb_hook_add_filter('pb_adminpage_list', '_pb_user_register_adminpage');
 
+include(PB_DOCUMENT_PATH . 'includes/user/views/tables.php');
+
 function _user_adminpage_rewrite_handler($rewrite_path_){
 	$subaction_ = isset($rewrite_path_[1]) ? $rewrite_path_[1] : "list";
 

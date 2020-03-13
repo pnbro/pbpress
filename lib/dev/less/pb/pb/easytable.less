@@ -1,0 +1,131 @@
+.pb-easytable-group{
+	.form-inline;
+	border-bottom: 1px solid #ececec;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    text-align: right;
+    .clearfix();
+
+    > .left-frame{
+		float: left;
+		text-align: left;
+    }
+
+    > .right-frame{
+    	float: right;
+    	text-align: right;
+    }
+}
+
+
+.pb-easytable{
+	.table;
+	.table-hover;
+	.table-striped;
+
+	margin-bottom: 0px;
+	border-bottom: 2px solid #dddddd;
+
+	> thead{
+		> tr{
+			background-color: #f1f1f1;
+		}
+	}
+
+	> tbody > tr{
+
+		&:hover{
+			background-color: #fff8f3;
+		}
+	}
+
+	.table-col-loop(@counter, @max) when (@counter > 1) {
+	  &.col-@{counter} {
+	  	width: ((@counter / @max) * 100%); // code for each iteration
+	  }
+
+	  .table-col-loop((@counter - 1), @max);    // next iteration
+	}
+
+	th,td{
+		.table-col-loop(12, 12);
+		&.col-seq{
+			width: 4%;
+		}
+	}
+
+	.btn{
+		.btn-sm;
+	}
+
+	.ajax-loading{
+		.pb-indicator-frame{
+			margin: 0 auto;
+		}
+	}
+
+}
+
+.pb-easytable-pagenav{
+	display: block;
+	text-align: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+
+	> .pagenav-btn,
+	> .pagenav-btn > .icon,
+	> .page-monitor,
+	> .page-monitor > .icon{
+		    vertical-align: middle;
+			display: inline-block;
+	}
+
+	> .pagenav-btn{
+
+		&, .icon{
+			font-size: @font-size-large;
+			line-height: @font-size-large;
+			color: @brand-primary;
+			padding: 0 10px;
+			margin: 0 7px;
+		}
+
+		> .icon{
+			font-size: ceil(@font-size-large * 1.5);
+			margin-bottom: 2px;
+			padding: 0px;
+		}
+			
+
+		&:active,
+		&:hover{
+			color: lighten(@brand-primary, 15%);
+		}
+	}
+
+	> .page-numbers{
+		font-size: @font-size-large;
+		line-height: @font-size-large;
+		margin-top: 2px;
+		display: inline-block;
+		padding: 5px 5px;
+		margin: 2px 5px 0 5px;
+		box-sizing: border-box;
+		border-bottom: 2px solid transparent;
+
+		&.active{
+			border-bottom: 2px solid @brand-primary;
+		}
+
+		&:hover,&:focus{
+			text-decoration: none;
+		}
+	}
+
+	> .page-monitor{
+		line-height: @font-size-large;
+		font-size: @font-size-large;
+		color: @gray-darker;
+		margin-top: 2px;
+	}
+}	
