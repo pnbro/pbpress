@@ -302,6 +302,18 @@ class PBDB_DO extends ArrayObject{
 			$update_types_[] = PBDB_DO::convert_to_pbdb_type($type_);
 		}
 
+		$legacy_fields_ = array();
+		foreach($this->_legacy_field_filters as $args_){
+			$legacy_fields_ = array_merge($legacy_fields_, call_user_func_array("pb_hook_apply_filters", $args_));
+		}
+		if(count($legacy_fields_) > 0){
+			foreach($update_data_ as $column_name_ => $column_value_){
+				if(!isset($legacy_fields_[$column_name_])) continue;
+
+				$update_values_[$column_name_] = $column_value_;
+				$update_types_[] = $legacy_fields_[$column_name_];
+			}
+		}
 
 		foreach($this->_keys as $index_ => $column_name_){
 			$field_data_ = $this->_fields[$column_name_];
