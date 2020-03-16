@@ -1,19 +1,14 @@
 <?php 	
 
-	$master_listable_ = new PB_authority_list_table("pb-authority-listtable", "pb-authority-listtable");
-	$master_listable_->set_ajax(true);
 
-	$detail_listable_ = new PB_authority_task_list_table("pb-authority-task-listtable", "pb-authority-task-listtable");
-	$detail_listable_->set_ajax(true);
-?>
-
-	<div class="splitted-view-frame" id="pb-authority-splitted-view"><div class="wrap">
-
-		<div class="col-master">
+pb_easy_splited_view("pb-authority-splitted-view","pb-admin-authority-table", "pb-admin-authority-task-table", array(
+	'master' => array(
+		'loader' => 'pb-admin-authority-load',
+		'header' => function(){ ?>
 			<h3>권한내역 <a href="javascript:_pb_authority_add();" class="btn btn-primary btn-sm">권한추가</a></h3>
-			<form method="GET" class="pb-listtable-cond-form" id="pb-authority-cond-form" data-master-cond-form>
-				<div class="right-frame">
-					<input type="hidden" name="page_index" value="0">
+			
+			<div class="pb-easytable-conditions">
+				<div class="right-frame">	
 					<div class="input-group">
 						<input type="text" class="form-control" placeholder="권한명" name="keyword" >
 						<span class="input-group-btn">
@@ -21,65 +16,41 @@
 						</span>
 					</div>
 				</div>
-			</form>	
-
-			<form method="GET" data-ref-conditions-form="#pb-authority-cond-form" data-master-listtable-form>
-				<input type="hidden" name="keyword">
-			<?php 
-				
-				echo $master_listable_->html();
-			?>
-			</form>
-		</div>
-		<div class="col-detail">
-
-			<div class="notfound-overlay">
-				좌측에서 권한을 선택하세요
 			</div>
-			
-			<div class="master-info-fram master-info-frame">
-				<h3>권한정보</h3>
-				<table class="pb-form-table master-info-table" data-master-info-form-table>
-					<tbody>
-						<tr>
-							<th>고유번호</th>
-							<td data-column="id"></td>
-							<th>권한명</th>
-							<td data-column="auth_name"></td>
-							<th>슬러그</th>
-							<td data-column="slug"></td>
-						</tr>
-					
-					</tbody>
-				</table>
+		<?php },
+
+		'preview_html' => function(){ ?>
+			<h3>권한정보 </h3>
+			<table class="pb-form-table master-info-table">
+				<tbody>
+					<tr>
+						<th>고유번호</th>
+						<td>{{id}}</td>
+						<th>권한명</th>
+						<td>{{auth_name}}</td>
+						<th>슬러그</th>
+						<td>{{slug}}</td>
+					</tr>
 				
-			</div>
+				</tbody>
+			</table>
+		<?php }
+	),
 
-			<h3>권한별 작업내역</h3>
-
-			<form method="GET" class="pb-listtable-cond-form detail-search-cond-form" data-detail-cond-form id="pb-authority-dtl-cond-form">
-
-				<input type="hidden" name="page_index" value="0">
-			</form>	
-
-
-			<div class="detail-listtable-frame">
-				<form method="GET" action="" data-ref-conditions-form="#pb-authority-dtl-cond-form" data-detail-listtable-form>
-					
-					<?php 
-						echo $detail_listable_->html();
-					?>
-				</form>
-
-				<hr/>
-
-				<div class="button-area text-right">
+	'detail' => array(
+		'header' => function(){ ?>
+			<h3>권한별 작업내역
+				<div class="pull-right">
 					<a href="javascript:pb_manage_authority_task_update();" class="btn btn-primary">변경사항 저장</a>
 				</div>
-			</div>
-		</div>
-	</div></div>
+				<div class="clearfix"></div>
+			</h3>
+		<?php },
+	),
+	'placeholder' => "좌측에서 권한을 선택하세요",
+));
 
+?>
 
 <form id="pb-authority-edit-form">
 	<table class="pb-form-table " >

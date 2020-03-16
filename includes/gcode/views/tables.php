@@ -1,243 +1,112 @@
 <?php
 
-class PB_gcode_list_table extends PBListTable{
+pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
+	$keyword_ = isset($_GET['keyword']) ? $_GET['keyword'] : null;
+	$statement_ = pb_gcode_statement(array(
+		"keyword" => $keyword_,
+	));
 
-	function prepare(){
-
-		global $pbdb;
-
-		$page_index_ = isset($_GET["page_index"]) ? (int)$_GET["page_index"] : 0;
-		$keyword_ = isset($_GET["keyword"]) ? $_GET["keyword"] : null;
-		$per_page_ = 15;
-		$offset_ = $this->offset($page_index_, $per_page_);
-
-		return array(
-			"page_index" => $page_index_,
-			"per_page" => $per_page_,
-			'total_count' => pb_gcode_list(array("justcount" => true)),
-			'items' => pb_gcode_list(array(
-				'keyword' => $keyword_,
-				"limit" => array($offset_, $per_page_)
-			)),
-		);
-	}
-
-	function items($args_){
-		return $args_['items'];
-	}
-
-	function columns(){
-		return array(
-			'code_id' => 'id',
-			'code_nm' => '코드명',
-			'use_yn' => '사용',
-			
-			
-			'button_area' => '',
-		
-		);
-	}
-
-	function column_header_classes($column_name_){
-		$row_index_ = $this->current_row();
-
-		switch($column_name_){
-		
-			case "code_id" :
-				return "col-2 text-center";
-			case "code_nm" :
-				 return "col-4";
-			case "use_yn" :
-				 return "col-2 text-center";
-		
-			case "button_area" :
-				 return "col-4 text-right";
-			
-			default : 
-				return '';
-			break;
-		}
-	}
-	function column_body_classes($key_, $item_){
-		return $this->column_header_classes($key_);
-	}
-
-	function column_value($item_, $column_name_){
-
-		$row_index_ = $this->current_row();
-
-		switch($column_name_){
-		
-			case "code_id" :
-				return $item_['code_id'];
-
-			case "code_nm" :
-			ob_start();
-
+	return array(
+		'count' => $statement_->count(),
+		'list' => $statement_->select(null, array($offset_, $per_page_)),
+	);
+},array(
+	"code_id" => array(
+		'name' => '코드',
+		'class' => 'col-2 text-center',
+	),
+	"code_nm" => array(
+		'name' => '코드명',
+		'class' => 'col-4',
+		'render' => function($table_, $item_, $row_index_){
 			?>
 			<a href="" data-master-id="<?=$item_['code_id']?>"><?=$item_['code_nm']?></a>
 
 			<?php
 
-			return ob_get_clean();
-			case "use_yn" :
-				 return $item_['use_yn'];
-
-			case "button_area" :
-				 ob_start();
-				 ?>
-
-				 <a href="javascript:_pb_gcode_edit('<?=$item_['code_id']?>');" class="btn btn-default">수정</a>
-				 <a href="javascript:_pb_gcode_remove('<?=$item_['code_id']?>');" class="btn btn-black">삭제</a>
-
-
-				 <?php
-
-
-				 return ob_get_clean();
-
-			
-
-			default : 
-				return '';
-			break;
 		}
-	}
+	),
+	"use_yn" => array(
+		'name' => '사용유무',
+		'class' => 'col-2 text-center',
+	),
+	"button_area" => array(
+		'name' => '',
+		'class' => 'col-4 text-center',
+		'render' => function($table_, $item_, $row_index_){
+			?>
+			<a href="javascript:_pb_gcode_edit('<?=$item_['code_id']?>');" class="btn btn-default">수정</a>
+			<a href="javascript:_pb_gcode_remove	('<?=$item_['code_id']?>');" class="btn btn-black">삭제</a>
+			<?php
 
-	function norowdata(){
-		return "검색된 공통코드가 없습니다.";	
-	}
-	
-}
-
-class PB_gcode_dtl_list_table extends PBListTable{
-
-	function prepare(){
-
-		global $pbdb;
-
-		$page_index_ = isset($_GET["page_index"]) ? (int)$_GET["page_index"] : 0;
-		$keyword_ = isset($_GET["keyword"]) ? $_GET["keyword"] : null;
-		$per_page_ = 15;
-		$offset_ = $this->offset($page_index_, $per_page_);
-
-		$code_id_ = isset($_GET["master_id"]) ? $_GET["master_id"] : null;
-		
-		return array(
-			"page_index" => $page_index_,
-			"per_page" => $per_page_,
-			'total_count' => pb_gcode_dtl_list(array(
-				'code_id' => $code_id_,
-				'only_use' => false,
-				'keyword' => $keyword_,
-				'justcount' => true,
-			)),
-			'items' => pb_gcode_dtl_list(array(
-				'code_id' => $code_id_,
-				'only_use' => false,
-				'keyword' => $keyword_,
-				'limit' => array($offset_, $per_page_),
-			)),
-		);
-	}
-
-	function items($args_){
-		return $args_['items'];
-	}
-
-	function columns(){
-		return array(
-			"code_did" => "did",
-			"code_dnm" => "상세코드명",
-			"use_yn" => "사용",
-			'sort_char' => '정렬순서',
-			'col1' => '',
-			'col2' => '',
-			'col3' => '',
-			'col4' => '',
-			"button_area" => "",
-			
-		);
-	}
-
-	function column_header_classes($column_name_){
-		$row_index_ = $this->current_row();
-
-		switch($column_name_){
-		
-			case "code_did" :
-				return "col-2 text-center";
-			case "code_dnm" :
-				 return "col-4";
-			case "use_yn" :
-				 return "col-2 text-center";
-			case "col1" :
-			case "col2" :
-			case "col3" :
-			case "col4" :
-				 return "col-2 text-center extra-".$column_name_;
-
-			case "sort_char" :
-				 return "col-2 text-center";
-			case "button_area" :
-				 return "col-4 text-right";
-			
-			default : 
-				return '';
-			break;
 		}
-	}
-	function column_body_classes($key_, $item_){
-		return $this->column_header_classes($key_);
-	}
+	)
+), array(
+	'class' => 'pb-gcode-table',
+	"no_rowdata" => "조회된 공통코드가 없습니다.",
+	'per_page' => 15,
+	'ajax' => true,
+));
 
-	function column_value($item_, $column_name_){
+pb_easytable_register("pb-admin-gcode-dtl-table", function($offset_, $per_page_){
+	$keyword_ = isset($_GET["keyword"]) ? $_GET["keyword"] : null;
+	$code_id_ = isset($_GET["master_id"]) ? $_GET["master_id"] : null;
 
-		$row_index_ = $this->current_row();
+	$statement_ = pb_gcode_dtl_statement(array(
+		'code_id' => $code_id_,
+		'only_use' => false,
+		"keyword" => $keyword_,
+	));
 
-		switch($column_name_){
-		
-			case "code_did" :
-				return $item_['code_did'];
+	return array(
+		'count' => $statement_->count(),
+		'list' => $statement_->select(null, array($offset_, $per_page_)),
+	);
+},array(
+	"code_did" => array(
+		'name' => '코드',
+		'class' => 'col-2 text-center',
+	),
+	"code_dnm" => array(
+		'name' => '코드명',
+		'class' => 'col-2',
+	),
+	"col1" => array(
+		'name' => '',
+		'class' => "col-1 text-center extra-col1",
+	),
+	"col2" => array(
+		'name' => '',
+		'class' => "col-1 text-center extra-col2",
+	),
+	"col3" => array(
+		'name' => '',
+		'class' => "col-1 text-center extra-col3",
+	),
+	"col4" => array(
+		'name' => '',
+		'class' => "col-1 text-center extra-col4",
+	),
+	"use_yn" => array(
+		'name' => '사용',
+		'class' => 'col-1 text-center',
+	),
+	"button_area" => array(
+		'name' => '',
+		'class' => 'col-2 text-center',
+		'render' => function($table_, $item_, $row_index_){
+			?>
+			<a href="javascript:_pb_gcode_dtl_edit('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-default">수정</a>
+			<a href="javascript:_pb_gcode_dtl_remove('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-black">삭제</a>
+			<?php
 
-			case "code_dnm" :
-				return $item_['code_dnm'];
-			case "use_yn" :
-				 return $item_['use_yn'];
-			case "col1" :
-			case "col2" :
-			case "col3" :
-			case "col4" :
-				 return $item_[$column_name_];
-			case "sort_char" :
-				 return $item_['sort_char'];
-
-			
-			case "button_area" :
-				 ob_start();
-				 ?>
-
-				 <a href="javascript:_pb_gcode_dtl_edit('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-default">수정</a>
-				 <a href="javascript:_pb_gcode_dtl_remove('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-black">삭제</a>
-
-
-				 <?php
-
-
-				 return ob_get_clean();
-
-			
-
-			default : 
-				return '';
-			break;
 		}
-	}
-
-	function norowdata(){
-		return "검색된 상세코드가 없습니다.";	
-	}
-	
-}
+	)
+), array(
+	'class' => 'pb-gcode-dtl-table',
+	"no_rowdata" => "조회된 상세코드가 없습니다.",
+	'per_page' => 15,
+	'ajax' => true,
+));
 
 ?>

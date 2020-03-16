@@ -1,89 +1,32 @@
 <?php
 
-class PB_page_list_table extends PBListTable{
+pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
+	$keyword_ = isset($_GET["keyword"]) ? $_GET["keyword"] : null;
+	$status_ = isset($_GET["search_status"]) && strlen($_GET["search_status"]) ? $_GET["search_status"] : null;
 
-	function prepare(){
+	$statement_ = pb_page_statement(array(
+		'keyword' => $keyword_,
+		'status' => $status_,
+	));
 
-		global $pbdb;
+	return array(
+		'count' => $statement_->count(),
+		'list' => $statement_->select(null, array($offset_, $per_page_)),
+	);
 
-		$page_index_ = isset($_GET["page_index"]) ? (int)$_GET["page_index"] : 0;
-		$keyword_ = isset($_GET["keyword"]) ? $_GET["keyword"] : null;
-		$status_ = isset($_GET["search_status"]) ? $_GET["search_status"] : null;
-		$per_page_ = 15;
-		$offset_ = $this->offset($page_index_, $per_page_);
-
-		$page_list_ = pb_page_list(array(
-			'keyword' => $keyword_,
-			"status" => $status_,
-			"limit" => array($offset_, $per_page_)
-		));
-
-		$page_list_count_ = pb_page_list(array(
-			"justcount" => true,
-			"status" => $status_,
-			"keyword" => $keyword_
-		));
-
-		return array(
-			"page_index" => $page_index_,
-			"per_page" => $per_page_,
-			'total_count' => $page_list_count_,
-			'items' => $page_list_,
-		);
-	}
-
-	function items($args_){
-		return $args_['items'];
-	}
-
-	function columns(){
-		return array(
-			'seq' => '',
-			'page_title' => '페이지명',
-			'status_name' => '상태',
-			'reg_date_ymdhi' => '등록일자',
-		
-		
-		);
-	}
-
-	function column_header_classes($column_name_){
-
-		switch($column_name_){
-		
-			case "seq" :
-				return "col-seq text-center";
-			case "page_title" :
-				 return "col-8 link-action";
-			case "status_name" :
-				 return "col-1 text-center hidden-xs";
-			case "reg_date_ymdhi" :
-				 return "col-2 text-center hidden-xs";
-		
-			default : 
-				return '';
-			break;
-		}
-	}
-	function column_body_classes($key_, $item_){
-		return $this->column_header_classes($key_);
-	}
-
-	function column_value($item_, $column_name_){
-
-		$row_index_ = $this->display_row_number();
-		$is_front_page_ = pb_front_page_id() === (string)$item_['id'];
-
-		$page_url_ = pb_page_url($item_['id']);
-
-		switch($column_name_){
-		
-			case "seq" :
-				return $row_index_;
-
-			case "page_title" :
-			ob_start();
-
+}, array(
+	"seq" => array(
+		'name' => '',
+		'class' => 'col-seq text-center',
+		'seq' => true,
+	),
+	"page_title" => array(
+		'name' => '페이지명',
+		'class' => 'col-8 link-action',
+		'render' => function($table_, $item_, $page_index_){
+			$is_front_page_ = pb_front_page_id() === (string)$item_['id'];
+			$page_url_ = pb_page_url($item_['id']);
+			
 			?>
 			<div class="title-frame page-title-frame"><a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>" ><?=$item_['page_title']?></a>
 				<?php if($is_front_page_){ ?>
@@ -115,33 +58,31 @@ class PB_page_list_table extends PBListTable{
 
 			<?php
 
-			return ob_get_clean();
-			case "status_name" :
-
-				ob_start();
-				?>
-
-				<select class="form-control input-sm" data-page-status="<?=$item_['id']?>">
-					<?= pb_gcode_make_options(array("code_id" => "PAG01"), $item_['status']); ?>
-				</select>
-
-				<?php
-
-				return ob_get_clean();
-			case "page_title" :
-			case "reg_date_ymdhi" :
-				 return $item_[$column_name_];
-
-			default : 
-				return '';
-			break;
 		}
-	}
+	),
+	"status_name" => array(
+		'name' => '상태',
+		'class' => 'col-1 text-center hidden-xs',
+		'render' => function($table_, $item_, $page_index_){
+			?>
 
-	function norowdata(){
-		return "검색된 페이지가 없습니다.";	
-	}
-	
-}
+			<select class="form-control input-sm" data-page-status="<?=$item_['id']?>">
+				<?= pb_gcode_make_options(array("code_id" => "PAG01"), $item_['status']); ?>
+			</select>
+
+			<?php
+		}
+	),
+	"reg_date_ymdhi" => array(
+		'name' => '',
+		'class' => 'col-2 text-center hidden-xs',
+	),
+), array(
+	'class' => 'pb-admin-page-table',
+	'hide_pagenav' => true,
+	"no_rowdata" => "검색된 페이지가 없습니다.",
+	'per_page' => 15,
+));
+
 
 ?>

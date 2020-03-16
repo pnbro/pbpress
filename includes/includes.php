@@ -19,6 +19,7 @@ include(PB_DOCUMENT_PATH . "includes/common/fileupload.php");
 include(PB_DOCUMENT_PATH . "includes/common/editor.php");
 include(PB_DOCUMENT_PATH . "includes/common/listtable.php");
 include(PB_DOCUMENT_PATH . "includes/common/easytable.php");
+include(PB_DOCUMENT_PATH . "includes/common/easy-splited-view.php");
 include(PB_DOCUMENT_PATH . "includes/common/mail.php");
 include(PB_DOCUMENT_PATH . "includes/common/theme.php");
 
