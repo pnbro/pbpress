@@ -142,7 +142,7 @@ function _pb_page_ajax_edit(){
 	}
 
 	$page_id_ = null;
-	$page_data_['page_html'] = stripslashes($page_data_['page_html']);
+	$page_data_['page_html'] = stripslashes(urldecode($page_data_['page_html']));
 
 	if(!strlen($page_data_['id'])){
 		$page_data_['wrt_id'] = pb_current_user_id();

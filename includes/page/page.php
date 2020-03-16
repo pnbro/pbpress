@@ -121,7 +121,6 @@ function pb_page_delete($id_){
 	pb_hook_do_action("pb_page_delete", $id_);
 	$pages_do->delete($id_);
 	pb_hook_do_action("pb_page_deleted", $id_);
-	return $result_;
 }
 
 function pb_page_rewrite_slug($slug_, $excluded_page_id_ = null){
