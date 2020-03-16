@@ -408,7 +408,7 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 
 		<div>
 			<?php foreach($options_ as $option_value_ => $option_name_){ ?>
-			<label class="<?=$type_?>-inline"><input type="<?=$type_?>" name="<?=$name_?>" value="<?=$option_value_?>" <?=$validator_attr_?> ><?=$option_name_?></label>
+			<label class="<?=$type_?>-inline"><input type="<?=$type_?>" name="<?=$name_?>" value="<?=$option_value_?>" <?=$validator_attr_?> <?=pb_checked($option_value_, $input_value_)?>><?=$option_name_?></label>
 			<?php } ?>
 		</div>
 			

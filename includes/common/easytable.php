@@ -32,6 +32,10 @@ class PB_easytable{
 	function options(){
 		return $this->_options;
 	}
+	function update_option_value($key_, $value_){
+		$this->_options[$key_] = $value_;
+	}
+	
 	function last_results($page_index_){
 		if(!isset($this->_last_results)){
 			$per_page_ = isset($this->_options['per_page']) ? $this->_options['per_page'] : 15;
