@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "1.7.2");
+define('PB_PAGE_BUILDER_VERSION', "1.7.3");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "1.0.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', PB_PAGE_BUILDER_VERSION);
 
@@ -79,10 +79,9 @@ function pb_page_builder_parse_xml($xml_string_){
 	$settings_ = $xml_instance_->settings;
 		
 	$results_ = array();
-
 	$results_['settings'] = array(
-		"style" => (string)$settings_->style,
-		"script" => (string)$settings_->script,
+		"style" => (string)(isset($settings_->style) ? $settings_->style : $settings_->pstyle),
+		"script" => (string)(isset($settings_->script) ? $settings_->script : $settings_->pscript),
 	);
 
 	$page_contents_ = array();
