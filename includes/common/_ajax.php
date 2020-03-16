@@ -16,6 +16,7 @@ function _pb_exceptions_ajax_error_handler($severity_, $message_, $filename_, $l
 	}
 	global $pb_config;
 	header("Content-Type:application/json; charset=".$pb_config->charset);
+	pb_hook_do_action('pb_ajax_error_occurred', $severity_, $message_, $filename_, $lineno_);
 	echo json_encode(array(
 		'success' => false,
 		'error_message' => "[".$filename_.", line : ".$lineno_."]".$message_, "AJAX ERROR",

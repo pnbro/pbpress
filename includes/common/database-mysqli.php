@@ -28,7 +28,7 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 
 	public function query($query_, $values_ = array(), $types_ = array()){
 		$param_index_ = 0;
-		while(($last_pos_ = strpos($query_, "?")) !== false){
+		while(($last_pos_ = strpos($query_, PBDB_PARAM_MAP_STR)) !== false){
 
 			$column_value_ = $values_[$param_index_];
 			$column_type_ = isset($types_[$param_index_]) ? $types_[$param_index_] : PBDB::TYPE_STRING;
@@ -39,7 +39,7 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 				$column_value_ = "'{$column_value_}'";
 			}
 
-			$query_ = preg_replace("/\?/", $column_value_, $query_, 1);
+			$query_ = preg_replace("/".PBDB_PARAM_MAP_STR."/", $column_value_, $query_, 1);
 			++$param_index_;
 		}
 

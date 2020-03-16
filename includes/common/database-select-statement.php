@@ -72,7 +72,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 		$param_values_ = array();
 		$param_types_ = array();
 
-		foreach($this as $data_){
+		foreach($this as $param_index_ => $data_){
 			$cond_type_ = isset($data_['type']) ? $data_['type'] : null;
 			if(!strlen($cond_type_)) return $query_;
 
@@ -88,7 +88,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 						$param_values_[] = pb_database_escape_string($b_);
 						$param_types_[] = $b_type_;
 
-						$query_[] = "{$a_} {$compare_} ? \n\r";
+						$query_[] = "{$a_} {$compare_} ".PBDB_PARAM_MAP_STR." \n\r";
 
 					}else{
 						$query_[] = "{$a_} {$compare_} {$b_} \n\r";
@@ -110,7 +110,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 						foreach($b_ as $bi_ => $bv_){
 							$param_values_[] = pb_database_escape_string($bv_);
 							$param_types_[] = isset($b_types_[$bi_]) ? $b_types_[$bi_] : PBDB::TYPE_STRING;
-							$in_str_array_[] = "?";
+							$in_str_array_[] = PBDB_PARAM_MAP_STR;
 						}
 
 						$query_[] = "{$a_} IN (".implode(",", $in_str_array_).") \n\r";

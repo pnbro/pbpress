@@ -40,6 +40,8 @@ include(PB_DOCUMENT_PATH . "includes/common/database-mysql.php");
 include(PB_DOCUMENT_PATH . "includes/common/database-mysqli.php");
 include(PB_DOCUMENT_PATH . "includes/common/database-pdo.php");
 
+define('PBDB_PARAM_MAP_STR', "::param::");
+
 function pb_database_connection_types(){
 	return pb_hook_apply_filters("pb_database_connection_types", array());
 }
@@ -168,10 +170,10 @@ class PBDB{
 
 			$query_column_str_ .= strtolower($column_name_);
 			if(isset($insert_data_types_[$col_index_])){
-				$query_type_str_ .= "?";
+				$query_type_str_ .= PBDB_PARAM_MAP_STR;
 				$types_[] = $insert_data_types_[$col_index_];
 			}else{
-				$query_type_str_ .= "?";
+				$query_type_str_ .= PBDB_PARAM_MAP_STR;
 				$types_[] = PBDB::TYPE_STRING;
 			}
 
@@ -221,7 +223,7 @@ class PBDB{
 			}
 			$types_[] = $column_type_;
 
-			$column_value_str_ .= "{$column_name_} = ? ";
+			$column_value_str_ .= "{$column_name_} = ".PBDB_PARAM_MAP_STR." ";
 
 
 			++$col_index_;
@@ -243,7 +245,7 @@ class PBDB{
 			}
 			$types_[] = $column_type_;
 
-			$where_value_str_ .= "{$column_name_} = ? ";
+			$where_value_str_ .= "{$column_name_} = ".PBDB_PARAM_MAP_STR." ";
 
 			++$col_index_;
 		}
@@ -283,7 +285,7 @@ class PBDB{
 				$column_type_ = $delete_key_types_[$col_index_];
 			}
 
-			$where_value_str_ .= "{$column_name_} = ? ";
+			$where_value_str_ .= "{$column_name_} = ".PBDB_PARAM_MAP_STR." ";
 			$types_[] = $column_type_;
 
 			++$col_index_;

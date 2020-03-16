@@ -38,6 +38,13 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 	}
 
 	public function query($query_, $values_ = array(), $types_ = array()){
+
+		$param_index_ = 0;
+		while(($last_pos_ = strpos($query_, PBDB_PARAM_MAP_STR)) !== false){			
+			$query_ = preg_replace("/".PBDB_PARAM_MAP_STR."/", ":pdo_param".$param_index_, $query_, 1);
+			++$param_index_;
+		}
+
 		$statement_ = $this->_connection->prepare($query_);
 
 		foreach($values_ as $index_ => $value_){
@@ -45,9 +52,9 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 			$column_type_ = $this->data_types[$column_type_];
 
 			if($value_ !== null){
-				$statement_->bindValue($index_+1, $value_, $column_type_);	
+				$statement_->bindValue(":pdo_param{$index_}", $value_, $column_type_);	
 			}else{
-				$statement_->bindValue($index_+1, null, PDO::PARAM_NULL);	
+				$statement_->bindValue(":pdo_param{$index_}", null, PDO::PARAM_NULL);	
 			}
 		}
 
@@ -62,9 +69,11 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 				return false;
 			}
 
+
+
 		}catch(PDOException $ex_){
-			$this->_last_error_no = $this->_connection->errorCode();
-			$this->_last_error_message = $this->_connection->errorInfo();
+			$this->_last_error_no = $ex_->getCode();
+			$this->_last_error_message = $ex_->errorInfo;
 			$this->_last_error_message = implode(":", $this->_last_error_message);
 
 			return false;
