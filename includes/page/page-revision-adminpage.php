@@ -67,4 +67,36 @@ function _pb_admin_ajax_page_revision_restore(){
 }
 pb_add_ajax('pb-admin-restore-page-from-revision', '_pb_admin_ajax_page_revision_restore');
 
+
+function _pb_admin_ajax_page_revision_delete(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
+		echo json_encode(array(
+			"success" => false,
+			"error_title" => "권한없음",
+			"error_message" => "접근권한이 없습니다.",
+		));
+		pb_end();
+	}
+
+	$revision_id_ = isset($_POST["revision_id"]) ? $_POST["revision_id"] : -1;
+	$revision_data_ = pb_page_revision($revision_id_);
+
+	if(!isset($revision_data_)){
+		echo json_encode(array(
+			"success" => false,
+			"error_title" => "잘못된 요청",
+			"error_message" => "요청정보가 잘못되었습니다.",
+		));
+		pb_end();
+	}
+
+	pb_page_revision_delete($revision_id_);
+
+	echo json_encode(array(
+		"success" => true,
+	));
+	pb_end();
+}
+pb_add_ajax('pb-admin-delete-page-revision', '_pb_admin_ajax_page_revision_delete');
+
 ?>
