@@ -85,4 +85,27 @@ function _pb_manage_page_listtable_subaction_hook_for_revision($item_){
 }
 pb_hook_add_action("pb_manage_page_listtable_subaction", '_pb_manage_page_listtable_subaction_hook_for_revision');
 
+
+function _pb_page_edit_form_after_hook_for_revision($page_data_){
+
+	$revision_statement_ = pb_page_revision_statement(array("page_id" => $page_data_['id']));
+	?>
+	<div class="panel panel-default" id="pb-page-edit-form-revision-panel">
+		<div class="panel-heading" role="tab">
+			<h4 class="panel-title">
+				<a role="button" data-toggle="collapse" href="#pb-page-edit-form-revision-panel-body" aria-expanded="true" aria-controls="collapseOne">리비젼</a>
+			</h4>
+		</div>
+		<div id="pb-page-edit-form-revision-panel-body" class="panel-collapse collapse in" role="tabpanel">
+			<div class="panel-body">
+				<label ><?=number_format($revision_statement_->count())?>개의 리비젼</label>
+				<div><a href="<?=pb_admin_url("manage-page/revision/".$page_data_['id'])?>" class="btn btn-block btn-default">리비젼보기</a></div>
+			</div>
+		</div>
+	</div>
+
+	<?php 
+}
+pb_hook_add_action("pb_page_edit_form_control_panel_after", '_pb_page_edit_form_after_hook_for_revision');
+
 ?>

@@ -79,7 +79,6 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
 	),
 ), array(
 	'class' => 'pb-admin-page-table',
-	'hide_pagenav' => true,
 	"no_rowdata" => "검색된 페이지가 없습니다.",
 	'per_page' => 15,
 ));

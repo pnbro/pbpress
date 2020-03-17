@@ -29,7 +29,6 @@ pb_easytable_register("pb-admin-page-revision-table", function($offset_, $per_pa
 	),
 ), array(
 	'class' => 'pb-admin-page-revision-table',
-	'hide_pagenav' => true,
 	"no_rowdata" => "등록된 리비젼이 없습니다.",
 	'per_page' => 15,
 ));
