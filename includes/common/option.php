@@ -44,7 +44,7 @@ function pb_option_statement($conditions_ = array()){
 		$statement_->add_compare_condition("options.option_name", $conditions_['option_name'], "=", PBDB::TYPE_STRING);
 	}
 
-	return pb_hook_apply_filters('pb_option_statement', $statement_);
+	return pb_hook_apply_filters('pb_option_statement', $statement_, $conditions_);
 }
 function pb_option_list($conditions_ = array()){
 	$statement_ = pb_option_statement($conditions_);

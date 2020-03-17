@@ -14,6 +14,8 @@ class PBDB_SS{
 }
 
 class PBDB_select_statement_conditions extends ArrayObject{
+
+
 	
 	function add_compare($a_, $b_, $compare_ = "=", $b_type_ = null){
 		$this[] = array(
@@ -64,6 +66,53 @@ class PBDB_select_statement_conditions extends ArrayObject{
 			'values' => $values_,
 			'types' => $types_,
 		);
+	}
+	function add(){
+		$condition_ = func_get_args();
+		$type_ = array_splice($condition_,0, 1);
+		$type_ = isset($type_[0]) ? $type_[0] : null;
+
+		switch($type_){
+			case PBDB_SS::COND_COMPARE :
+				$a_ = $condition_[0];
+				$b_ = $condition_[1];
+				$compare_ = isset($condition_[2]) ? $condition_[2] : "=";
+				$type_ = isset($condition_[3]) ? $condition_[3] : null;
+
+				call_user_func_array(array($this, 'add_compare'), array($a_, $b_, $compare_, $type_));
+			break;
+			case PBDB_SS::COND_IN :
+				$a_ = $condition_[0];
+				$array_ = isset($condition_[1]) ? $condition_[1] : array();
+				$array_types_ = isset($condition_[2]) ? $condition_[2] : null;
+
+				call_user_func_array(array($this, 'add_in'), array($a_, $array_, $array_types_));
+			break;
+			case PBDB_SS::COND_LIKE :
+				$a_ = $condition_[0];
+				$b_ = isset($condition_[1]) ? $condition_[1] : "";
+				$full_search_ = isset($condition_[2]) ? $condition_[2] : false;
+
+				call_user_func_array(array($this, 'add_like'), array($a_, $b_, $full_search_));
+			break;
+			case PBDB_SS::COND_ISNOTNULL :
+				$a_ = $condition_[0];
+				
+				call_user_func_array(array($this, 'add_is_not_null'), array($a_));
+			break;
+			case PBDB_SS::COND_ISNULL :
+				$a_ = $condition_[0];
+				
+				call_user_func_array(array($this, 'add_is_null'), array($a_));
+			break;
+			case PBDB_SS::COND_CUSTOM :
+				$text_ = $condition_[0];
+				$values_ = isset($condition_[1]) ? $condition_[1] : null;
+				$types_ = isset($condition_[2]) ? $condition_[2] : array();
+				
+				call_user_func_array(array($this, 'add_custom'), array($text_, $values_, $types_));
+			break;
+		}
 	}
 
 	public function build(){
@@ -168,6 +217,38 @@ class PBDB_select_statement_conditions extends ArrayObject{
 
 		return $results_;
 	}
+
+	function add_from_data($data_ = array(), $conditions_ = array()){
+		foreach($conditions_ as $key_ => $condition_){
+			if(!isset($data_[$key_])) continue;
+			if(!isset($condition_[0])) continue;
+
+			$type_ = array_splice($condition_,0, 1);
+			$type_ = isset($type_[0]) ? $type_[0] : null;
+
+			switch($type_){
+				case PBDB_SS::COND_COMPARE :
+					$a_ = $condition_[0];
+					$compare_ = isset($condition_[1]) ? $condition_[1] : "=";
+					$type_ = isset($condition_[2]) ? $condition_[2] : PBDB_SS::TYPE_STRING;
+
+					call_user_func_array(array($this, 'add_compare'), array($a_, $data_[$key_], $compare_, $type_));
+				break;
+				case PBDB_SS::COND_IN :
+					$a_ = $condition_[0];
+					$array_types_ = isset($condition_[1]) ? $condition_[1] : null;
+
+					call_user_func_array(array($this, 'add_in'), array($a_, $data_[$key_], $array_types_));
+				break;
+				case PBDB_SS::COND_LIKE :
+					$a_ = $condition_[0];
+					$full_search_ = isset($condition_[2]) ? $condition_[1] : false;
+
+					call_user_func_array(array($this, 'add_like'), array($a_, $data_[$key_], $full_search_));
+				break;
+			}
+		}
+	}
 }
 
 function pbdb_ss_conditions(){
@@ -262,35 +343,7 @@ class PBDB_select_statement{
 		$this->_cond_list->add_like($a_, $keyword_, $full_search_);
 	}
 	function add_conditions_from_data($data_ = array(), $conditions_ = array()){
-		foreach($conditions_ as $key_ => $condition_){
-			if(!isset($data_[$key_])) continue;
-			if(!isset($condition_[0])) continue;
-
-			$type_ = array_splice($condition_,0, 1);
-			$type_ = isset($type_[0]) ? $type_[0] : null;
-
-			switch($type_){
-				case PBDB_SS::COND_COMPARE :
-					$a_ = $condition_[0];
-					$compare_ = isset($condition_[1]) ? $condition_[1] : "=";
-					$type_ = isset($condition_[2]) ? $condition_[2] : PBDB_SS::TYPE_STRING;
-
-					call_user_func_array(array($this, 'add_compare_condition'), array($a_, $data_[$key_], $compare_, $type_));
-				break;
-				case PBDB_SS::COND_IN :
-					$a_ = $condition_[0];
-					$array_types_ = isset($condition_[1]) ? $condition_[1] : null;
-
-					call_user_func_array(array($this, 'add_in_condition'), array($a_, $data_[$key_], $array_types_));
-				break;
-				case PBDB_SS::COND_LIKE :
-					$a_ = $condition_[0];
-					$full_search_ = isset($condition_[2]) ? $condition_[1] : false;
-
-					call_user_func_array(array($this, 'add_like_condition'), array($a_, $data_[$key_], $full_search_));
-				break;
-			}
-		}
+		$this->_cond_list->add_from_data($data_, $conditions_);
 	}
 	
 	private $_legacy_field_filters = array();
@@ -424,7 +477,21 @@ class PBDB_select_statement{
 			
 			$query_ .= " ON 1 \n\r";
 
-			$join_cond_ = $join_data_['on']->build();
+			$join_on_ = $join_data_['on'];
+			$join_cond_ = null;
+
+			if(gettype($join_on_) === "array"){
+				$join_cond_ = pbdb_ss_conditions();
+
+				foreach($join_on_ as $join_args_){
+					call_user_func_array(array($join_cond_, "add"), $join_args_);
+				}
+					
+			}else{
+				$join_cond_ = $join_on_;
+			}
+
+			$join_cond_ = $join_cond_->build();
 			foreach($join_cond_['values'] as $jv_index_ => $jv_){
 				$param_values_[] = $jv_;
 				$param_types_[] = $join_cond_['types'][$jv_index_];

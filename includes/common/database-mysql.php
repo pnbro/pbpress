@@ -28,6 +28,10 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 	}
 
 	public function query($query_, $values_ = array(), $types_ = array()){
+
+		$this->_last_query = $query_;
+		$this->_last_query_paramters = array('values' => $values_, 'types' => $types_);
+
 		$param_index_ = 0;
 		while(($last_pos_ = strpos($query_, PBDB_PARAM_MAP_STR)) !== false){
 

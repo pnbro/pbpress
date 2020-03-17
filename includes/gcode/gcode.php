@@ -39,7 +39,7 @@ function pb_gcode_statement($conditions_ = array()){
 		$statement_->add_like_condition('gcode.code_nm', $conditions_['keyword']);
 	}
 
-	return pb_hook_apply_filters('pb_gcode_statement', $statement_);
+	return pb_hook_apply_filters('pb_gcode_statement', $statement_, $conditions_);
 }
 function pb_gcode_list($conditions_ = array()){
 	$statement_ = pb_gcode_statement($conditions_);
@@ -116,15 +116,14 @@ function pb_gcode_dtl_statement($conditions_ = array()){
 		"DATE_FORMAT(gcode_dtl.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis"
 	);
 
-	$gcode_join_cond_ = pbdb_ss_conditions();
-	$gcode_join_cond_->add_compare("gcode.code_id", "gcode_dtl.code_id", "=");
-	$statement_->add_join_statement("LEFT OUTER JOIN", $gcode_do->statement(), "gcode_dtl", $gcode_join_cond_, array(
+	$statement_->add_join_statement("LEFT OUTER JOIN", $gcode_do->statement(), "gcode_dtl", array(
+		array(PBDB_SS::COND_COMPARE, "gcode.code_id", "gcode_dtl.code_id", "=")
+	), array(
 		"col1 col1_title",
 		"col2 col2_title",
 		"col3 col3_title",
 		"col4 col4_title",
 	));
-
 
 	if(isset($conditions_['only_use']) && $conditions_['only_use'] === true){
 		$statement_->add_compare_condition('gcode_dtl.use_yn', "Y", "=", PBDB::TYPE_STRING);
@@ -135,7 +134,6 @@ function pb_gcode_dtl_statement($conditions_ = array()){
 	if(isset($conditions_['code_did']) && strlen($conditions_['code_did'])){
 		$statement_->add_compare_condition('gcode_dtl.code_did', $conditions_['code_did'], "=", PBDB::TYPE_STRING);
 	}
-
 	if(isset($conditions_['col1']) && strlen($conditions_['col1'])){
 		$statement_->add_compare_condition('gcode_dtl.col1', $conditions_['col1'], "=", PBDB::TYPE_STRING);
 	}
@@ -148,12 +146,11 @@ function pb_gcode_dtl_statement($conditions_ = array()){
 	if(isset($conditions_['col4']) && strlen($conditions_['col4'])){
 		$statement_->add_compare_condition('gcode_dtl.col4', $conditions_['col4'], "=", PBDB::TYPE_STRING);
 	}
-
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
 		$statement_->add_like_condition('gcode_dtl.code_dnm', $conditions_['keyword']);
 	}
 
-	return pb_hook_apply_filters('pb_gcode_dtl_statement', $statement_);
+	return pb_hook_apply_filters('pb_gcode_dtl_statement', $statement_, $conditions_);
 }
 function pb_gcode_dtl_list($conditions_ = array()){
 	$statement_ = pb_gcode_dtl_statement($conditions_);

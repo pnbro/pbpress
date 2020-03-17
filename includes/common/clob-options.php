@@ -45,7 +45,7 @@ function pb_clob_option_statement($conditions_ = array()){
 		$statement_->add_compare_condition("clob_options.option_name", $conditions_['option_name']);
 	}
 
-	return pb_hook_apply_filters('pb_clob_option_statement', $statement_);
+	return pb_hook_apply_filters('pb_clob_option_statement', $statement_, $conditions_);
 }
 
 function pb_clob_option_list($conditions_ = array()){

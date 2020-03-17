@@ -92,6 +92,16 @@ function _pb_page_rewrite_handler_for_adminpage($rewrite_path_){
 		return PB_DOCUMENT_PATH."includes/page/views/edit.php";
 	}
 
+	$other_page_ = pb_hook_apply_filters('pb_adminpage_manage_page_rewrite_handler', null, $sub_action_, $rewrite_path_);
+
+	if(pb_is_error($other_page_)){
+		return $other_page_;
+	}
+
+	if(strlen($other_page_)){
+		return $other_page_;
+	}
+
 	return new PBError(503, "잘못된 접근", "요청정보가 잘못됬습니다.");
 }
 

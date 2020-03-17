@@ -72,7 +72,7 @@ function pb_page_statement($conditions_ = array()){
 		)), $conditions_['keyword']);
 	}
 
-	return pb_hook_apply_filters('pb_page_statement', $statement_);
+	return pb_hook_apply_filters('pb_page_statement', $statement_, $conditions_);
 }
 
 function pb_page_list($conditions_ = array()){
@@ -110,6 +110,7 @@ function pb_page_insert($raw_data_){
 function pb_page_update($id_, $raw_data_){
 	global $pages_do;
 
+	pb_hook_do_action("pb_page_update", $id_, $raw_data_);
 	$result_ = $pages_do->update($id_, $raw_data_);
 	pb_hook_do_action("pb_page_updated", $id_);
 
@@ -248,6 +249,7 @@ pb_hook_add_filter('pb_page_url', '_pb_page_url_hook_for_front_page');
 include(PB_DOCUMENT_PATH . 'includes/page/page-builtin.php');
 include(PB_DOCUMENT_PATH . 'includes/page/page-builtin-rewrite.php');
 include(PB_DOCUMENT_PATH . 'includes/page/page-meta.php');
+include(PB_DOCUMENT_PATH . 'includes/page/page-revision.php');
 include(PB_DOCUMENT_PATH . 'includes/page/page-adminpage.php');
 
 ?>

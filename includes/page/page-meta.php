@@ -19,7 +19,7 @@ $pages_meta_do = pbdb_data_object("pages_meta", array(
 	'meta_value'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 500, "comment" => "메카값"),
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
-),"메뉴");
+),"페이지 - 메타");
 
 
 function pb_page_meta_statement($conditions_ = array()){
@@ -53,7 +53,7 @@ function pb_page_meta_statement($conditions_ = array()){
 		$statement_->add_in_condition("pages_meta.meta_value", $conditions_['meta_value']);
 	}
 
-	return pb_hook_apply_filters('pb_page_meta_statement', $statement_);
+	return pb_hook_apply_filters('pb_page_meta_statement', $statement_, $conditions_);
 }
 function pb_page_meta_list($conditions_ = array()){
 	$statement_ = pb_page_meta_statement($conditions_);

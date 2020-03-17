@@ -60,7 +60,7 @@ function pb_authority_statement($conditions_ = array()){
 	$statement_->add_legacy_join_filter('pb_authority_list_join', '', $conditions_);
 	$statement_->add_legacy_where_filter('pb_authority_list_where', '', $conditions_);
 
-	return $statement_;
+	return pb_hook_apply_filters('pb_authority_statement', $statement_, $conditions_);
 }
 
 function pb_authority_list($conditions_ = array()){
@@ -158,9 +158,9 @@ function pb_authority_task_list($conditions_ = array()){
 		"DATE_FORMAT(auth_task.mod_date, '%Y.%m.%d') mod_date_ymd"
 	);
 
-	$auth_cond_ = pbdb_ss_conditions();
-	$auth_cond_->add_compare("auth.id", "auth_task.auth_id", "=");
-	$statement_->add_join_statement("LEFT OUTER JOIN",$auth_do->statement(), "auth", $auth_cond_, array(
+	$statement_->add_join_statement("LEFT OUTER JOIN",$auth_do->statement(), "auth", array(
+		array(PBDB_SS::COND_COMPARE, "auth.id", "auth_task.auth_id", "=")
+	), array(
 		'slug auth_slug',
 		'auth_name',
 	));

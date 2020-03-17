@@ -12,13 +12,21 @@ function pb_easy_splited_view($id_, $master_table_id_, $detail_table_id_, $optio
 	$master_loader_ = isset($master_options_['loader']) ? $master_options_['loader'] : null;
 
 	$master_table_ = pb_easytable($master_table_id_);
-	$detail_table_ = pb_easytable($detail_table_id_);
-
 	$master_table_->update_option_value("ajax", true);
-	$detail_table_->update_option_value("ajax", true);
+
+	$detail_table_ = null; 
+
+	if(strlen($detail_table_id_)){
+		$detail_table_ = pb_easytable($detail_table_id_);
+		$detail_table_->update_option_value("ajax", true);
+	}	
 ?>
 
-	<div class="splitted-view-frame" id="<?=$id_?>" data-master-table-id="#<?=$master_table_id_?>" data-detail-table-id="#<?=$detail_table_id_?>" data-master-loader="<?=$master_loader_?>"><div class="wrap">
+	<div class="splitted-view-frame" id="<?=$id_?>" data-master-table-id="#<?=$master_table_id_?>"
+	 <?php if(strlen($detail_table_id_)){ ?>
+			data-detail-table-id="#<?=$detail_table_id_?>"
+	 <?php } ?>
+	  data-master-loader="<?=$master_loader_?>"><div class="wrap">
 
 		<div class="col-master">
 			<form method="GET" id="<?=$master_table_id_?>-form" class="pb-easytable-group" data-master-table-form>
@@ -63,7 +71,9 @@ function pb_easy_splited_view($id_, $master_table_id_, $detail_table_id_, $optio
 
 
 				?>
-				<?php $detail_table_->display(0); ?>
+				<?php if(isset($detail_table_)){
+					$detail_table_->display(0);
+				} ?>
 			</form>
 
 		</div>

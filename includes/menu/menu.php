@@ -44,7 +44,7 @@ function pb_menu_statement($conditions_ = array()){
 			"menus.slug",
 		)), $conditions_['keyword']);
 	}
-	return pb_hook_apply_filters('pb_menu_statement', $statement_);
+	return pb_hook_apply_filters('pb_menu_statement', $statement_, $conditions_);
 }
 function pb_menu_list($conditions_ = array()){
 	$statement_ = pb_menu_statement($conditions_);

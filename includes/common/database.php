@@ -11,6 +11,8 @@ define("PB_MYSQL_BOTH", 3);
 abstract class PBDatabase_connection{
 
 	private $_connection_type;
+	private $_last_query = null;
+	private $_last_query_parameters = null;
 	
 	function __construct($connection_type_){
 		$this->_connection_type = $connection_type_;
@@ -18,6 +20,13 @@ abstract class PBDatabase_connection{
 
 	public function connection_type(){
 		return $this->_connection_type;
+	}
+
+	public function last_query(){
+		return $this->_last_query;
+	}
+	public function last_query_parameters(){
+		return $this->_last_query_parameters;
 	}
 
 	abstract protected function escape_string($str);
@@ -81,8 +90,6 @@ class PBDB{
 	const TYPE_NUMBER = "%d";
 	const TYPE_FLOAT = "%f";
 
-	private $_last_query = null;
-
 	function query($query_, $values_ = array(), $types_ = array()){
 		global $pb_config, $pb_db_connection;
 		$result_ = pb_hook_apply_filters("pb_database_query",$pb_db_connection->query($query_, $values_, $types_));
@@ -97,14 +104,13 @@ class PBDB{
 
 	function last_query(){
 		global $pb_db_connection;
-		return $this->_last_query;
+		return $pb_db_connection->last_query();
 	}
 
 	function select($query_, $values_ = array(), $types_ = array()){
 		global $pb_db_connection;
 
 		$resources_ = $this->query($query_, $values_, $types_);
-		$this->_last_query = $query_;
 
 		if(!isset($resources_)) return null;
 
@@ -120,7 +126,6 @@ class PBDB{
 		global $pb_db_connection;
 
 		$resources_ = $this->query($query_, $values_, $types_);
-		$this->_last_query = $query_;
 
 		if(!isset($resources_)) return null;
 
@@ -135,7 +140,6 @@ class PBDB{
 		global $pb_db_connection;
 
 		$resources_ = $this->query($query_, $values_, $types_);
-		$this->_last_query = $query_;
 
 		if(!isset($resources_)) return null;
 
@@ -186,7 +190,6 @@ class PBDB{
 		$insert_query_ .= ")";
 
 		$result_ = $this->query($insert_query_, $values_, $types_);
-		$this->_last_query = $insert_query_;
 
 		if(!$result_){
 			return $result_;
@@ -255,7 +258,6 @@ class PBDB{
 		$update_query_ .= $where_value_str_;
 
 		$result_ = $this->query($update_query_, $values_, $types_);
-		$this->_last_query = $update_query_;
 
 		if(!$result_){
 			return $result_;
@@ -295,7 +297,6 @@ class PBDB{
 		$delete_query_ .= $where_value_str_;
 
 		$result_ = $this->query($delete_query_, $values_, $types_);
-		$this->_last_query = $delete_query_;
 
 		return $result_;
 	}

@@ -61,6 +61,9 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 		try{
 			$result_ = $statement_->execute();
 
+			$this->_last_query = $query_;
+			$this->_last_query_paramters = array('values' => $values_, 'types' => $types_);
+
 			if(!$result_){
 				$this->_last_error_no = $this->_connection->errorCode();
 				$this->_last_error_message = $this->_connection->errorInfo();
@@ -69,15 +72,18 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 				return false;
 			}
 
-
-
 		}catch(PDOException $ex_){
+			$this->_last_query = $query_;
+			$this->_last_query_paramters = array('values' => $values_, 'types' => $types_);
+
 			$this->_last_error_no = $ex_->getCode();
 			$this->_last_error_message = $ex_->errorInfo;
 			$this->_last_error_message = implode(":", $this->_last_error_message);
 
 			return false;
 		}
+
+
 
 		return $statement_;
 	}

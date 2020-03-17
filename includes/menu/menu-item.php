@@ -45,10 +45,9 @@ function pb_menu_item_statement($conditions_ = array()){
 	$statement_->add_legacy_join_filter('pb_menu_item_list_join', '', $conditions_);
 	$statement_->add_legacy_where_filter('pb_menu_item_list_where', '', $conditions_);
 
-	$menu_join_cond_ = pbdb_ss_conditions();
-	$menu_join_cond_->add_compare("menus.id", "menus_item.menu_id", "=");
-
-	$statement_->add_join_statement("LEFT OUTER JOIN", $menus_do->statement(), "menus", $menu_join_cond_, array(
+	$statement_->add_join_statement("LEFT OUTER JOIN", $menus_do->statement(), "menus", array(
+		array(PBDB_SS::COND_COMPARE, "menus.id", "menus_item.menu_id", "=")
+	), array(
 		'slug',
 	));
 

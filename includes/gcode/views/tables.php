@@ -27,7 +27,7 @@ pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
 		}
 	),
 	"use_yn" => array(
-		'name' => '사용유무',
+		'name' => '사용',
 		'class' => 'col-2 text-center',
 	),
 	"button_area" => array(

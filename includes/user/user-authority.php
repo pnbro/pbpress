@@ -38,9 +38,9 @@ function pb_user_authority_statement($conditions_ = array()){
 		"DATE_FORMAT(users_auth.mod_date, '%Y.%m.%d') mod_date_ymd"
 	);
 
-	$auth_join_cond_ = pbdb_ss_conditions();
-	$auth_join_cond_->add_compare("auth.id", "users_auth.auth_id", "=");
-	$statement_->add_join_statement("LEFT OUTER JOIN",$auth_do->statement(), "auth", $auth_join_cond_, array(
+	$statement_->add_join_statement("LEFT OUTER JOIN", $auth_do->statement(), "auth", array(
+		array(PBDB_SS::COND_COMPARE, "auth.id", "users_auth.auth_id", "=")
+	), array(
 		'auth_name',
 		'slug auth_slug',
 	));
@@ -72,7 +72,7 @@ function pb_user_authority_statement($conditions_ = array()){
 		)");
 	}
 
-	return pb_hook_apply_filters('pb_user_authority_statement', $statement_);
+	return pb_hook_apply_filters('pb_user_authority_statement', $statement_, $conditions_);
 }
 function pb_user_authority_list($conditions_ = array()){
 	$statement_ = pb_user_authority_statement($conditions_);
