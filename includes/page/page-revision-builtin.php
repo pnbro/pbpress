@@ -89,6 +89,9 @@ pb_hook_add_action("pb_manage_page_listtable_subaction", '_pb_manage_page_listta
 function _pb_page_edit_form_after_hook_for_revision($page_data_){
 
 	$revision_statement_ = pb_page_revision_statement(array("page_id" => $page_data_['id']));
+
+	if(!strlen($page_data_['id'])) return; //page is new
+
 	?>
 	<div class="panel panel-default" id="pb-page-edit-form-revision-panel">
 		<div class="panel-heading" role="tab">

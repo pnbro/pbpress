@@ -216,7 +216,7 @@ function pb_gcode_make_options($conditions_, $default_ = null, $echo_ = true){
 	$result_ = ob_get_clean();
 
 	if($echo_) echo $result_;
-	return $result_;
+	else return $result_;
 }
 function pb_query_gcode_dtl_name($code_id_, $column_){
 	global $pbdb;

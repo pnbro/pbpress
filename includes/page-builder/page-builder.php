@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "1.7.3");
+define('PB_PAGE_BUILDER_VERSION', "1.7.4");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "1.0.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', PB_PAGE_BUILDER_VERSION);
 
@@ -52,7 +52,7 @@ function _pb_page_builder_recursive_parse_inner($element_){
 }
 
 function pb_page_builder_parse_xml($xml_string_){
-	$xml_instance_ = simplexml_load_string($xml_string_);
+	$xml_instance_ = @simplexml_load_string($xml_string_);
 
 	if(!$xml_instance_){
 		return new PBError(-9, "잘못된 XML 형식입니다.", "문서형식오류");		
