@@ -4,6 +4,8 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+global $pb_config;
+
 define('PB_RANDOM_STRING_ALL', "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
 define('PB_RANDOM_STRING_NUMLOWER', "0123456789abcdefghijklmnopqrstuvwxyz");
 define('PB_RANDOM_STRING_NUMUPPER', "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
@@ -125,6 +127,31 @@ function pb_is_https(){
 		$https_ = true;
 	}
 	return $https_;
+}
+
+global $_pb_safe_substr_func, $_pb_safe_strlen;
+
+if(function_exists("mb_substr")){
+	mb_internal_encoding($pb_config->charset);
+	$_pb_safe_substr_func = "mb_substr";
+	$_pb_safe_strlen = "mb_strlen";
+	
+}else if(function_exists("iconv_substr")){
+	iconv_set_encoding($pb_config->charset);
+	$_pb_safe_substr_func = "iconv_substr";
+	$_pb_safe_strlen = "iconv_strlen";
+}else{
+	$_pb_safe_substr_func = "substr";
+	$_pb_safe_strlen = "strlen";
+}
+
+function pb_substr(){
+	global $_pb_safe_substr_func;
+	return call_user_func_array($_pb_safe_substr_func, func_get_args());
+}
+function pb_strlen(){
+	global $_pb_safe_strlen;
+	return call_user_func_array($_pb_safe_strlen, func_get_args());
 }
 	
 ?>
