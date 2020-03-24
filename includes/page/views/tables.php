@@ -28,7 +28,10 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
 			$page_url_ = pb_page_url($item_['id']);
 			
 			?>
-			<div class="title-frame page-title-frame"><a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>" ><?=$item_['page_title']?></a>
+			<div class="title-frame page-title-frame">
+				<?php pb_hook_do_action("pb_manage_page_listtable_page_title_before", $item_) ?>
+				<a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>" ><?=pb_hook_apply_filters('pb_manage_page_listtable_page_title', $item_['page_title'])?></a>
+				<?php pb_hook_do_action("pb_manage_page_listtable_page_title_after", $item_) ?>
 				<?php if($is_front_page_){ ?>
 					<small class="fontpage-text"> - 홈화면</small>
 				<?php } ?>

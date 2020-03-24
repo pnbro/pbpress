@@ -28,9 +28,20 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 		'render' => function($table_, $item_, $post_index_){
 			$post_url_ = pb_post_url($item_['id']);
 			$post_type_ = $item_['type'];
+
+			$post_title_ = pb_hook_apply_filters('pb_manage_post_listtable_post_title', $item_['post_title']);
+			$post_title_ = pb_hook_apply_filters('pb_manage_post_{$post_type_}_listtable_post_title', $post_title_);
 			
 			?>
-			<div class="title-frame post-title-frame"><a href="<?=pb_admin_url("manage-{$post_type_}/edit/".$item_['id'])?>" ><?=$item_['post_title']?></a></div>
+			<div class="title-frame post-title-frame">
+				<?php pb_hook_do_action("pb_manage_post_listtable_post_title_before", $item_) ?>
+				<?php pb_hook_do_action("pb_manage_post_{$post_type_}_listtable_post_title_before", $item_) ?>
+
+				<a href="<?=pb_admin_url("manage-{$post_type_}/edit/".$item_['id'])?>" ><?=pb_hook_apply_filters('pb_manage_post_listtable_post_title', $item_['post_title'])?></a>
+
+				<?php pb_hook_do_action("pb_manage_post_listtable_post_title_after", $item_) ?>
+				<?php pb_hook_do_action("pb_manage_post_{$post_type_}_listtable_post_title_after", $item_) ?>
+			</div>
 			<div class="url-link"><a href="<?=$post_url_?>" target="_blank"><?=$post_url_?></a></div>
 			<div class="subaction-frame">
 				<a href="<?=pb_admin_url("manage-{$post_type_}/edit/".$item_['id'])?>">수정</a>
