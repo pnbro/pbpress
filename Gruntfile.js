@@ -120,9 +120,7 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.imageuploader.js',
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.imageinput.js',
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.fileinput.js',
-
-          'lib/dev/concat-lib/src/pb/modules/pb.quill.js',
-          // 'lib/dev/concat-lib/src/pb/modules/pb.summernote-image-uploader.js',
+          'lib/dev/concat-lib/src/pb/modules/pb.wysiwyg.editor.js',
 
           'lib/dev/concat-lib/src/pb/modules/pb.editors.js',
           
@@ -190,6 +188,15 @@ module.exports = function (grunt) {
           cwd: 'lib/dev/less/trumbowyg',
           src: ['trumbowyg.less'],
           dest: 'lib/dev/css/trumbowyg/',
+          rename : function(dest, src){
+            return dest + src.replace('.less','.css');
+          }
+        },
+        {
+          expand: true,
+          cwd: 'lib/dev/less/summernote',
+          src: ['summernote.less'],
+          dest: 'lib/dev/css/summernote/',
           rename : function(dest, src){
             return dest + src.replace('.less','.css');
           }

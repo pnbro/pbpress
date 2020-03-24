@@ -417,12 +417,17 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 		case 'editor' :
 			$editor_id_ = 'pb-page-builder-editor-'.pb_random_string(5);
 		?>
-
-		<textarea name="<?=$name_?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>" id="<?=$editor_id_?>"><?=stripslashes($input_value_)?></textarea>
+	
+		<input type="text" name="<?=$name_?>" <?=$validator_attr_?> class="hidden" id="<?=$editor_id_?>-input" value="<?=htmlentities($input_value_)?>">
+		<?php pb_wysiwyg_editor('_'.$name_, stripslashes($input_value_), array(
+			'id' => $editor_id_,
+		)); ?>
 		<script type="text/javascript">
-		$("#<?=$editor_id_?>").trumbowyg({
-				lang : "<?=pb_current_locale(true)?>",
-			});
+		$("#<?=$editor_id_?>").pb_wysiwyg_editor().options({
+			'sync' : function(content_){
+				$("#<?=$editor_id_?>-input").val(content_);
+			}
+		});
 		</script>
 			
 		<?php break;

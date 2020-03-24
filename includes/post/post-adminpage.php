@@ -16,7 +16,7 @@ function _pb_post_register_adminpage($results_){
 			'rewrite_handler' => "_pb_post_rewrite_handler_for_adminpage",
 			'authority_task' => "manage_{$key_}",
 			'subpath' => null,
-			'sort' => 7,
+			'sort' => isset($type_data_['adminpage_sort']) ? $type_data_['adminpage_sort'] : 99,
 		);
 	}
 

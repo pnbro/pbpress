@@ -113,62 +113,87 @@ function _pb_editor_register_defaults($results_){
 }
 pb_hook_add_filter('pb_editor_list', '_pb_editor_register_defaults');
 
-function _pb_editor_rendering_for_editor($content_, $data_){
+function pb_wysiwyg_editor_renderers(){
+	global $_pb_wysiwyg_editor_renderers;
+	if(isset($_pb_wysiwyg_editor_renderers)) return $_pb_wysiwyg_editor_renderers;
+
+	$_pb_wysiwyg_editor_renderers = pb_hook_apply_filters('pb_wysiwyg_editor_renderers', array(
+		'trumbowyg' => '_pb_wysiwyg_editor_for_trumbowyg',
+		'summernote' => '_pb_wysiwyg_editor_for_summernote',
+	));
+
+	return $_pb_wysiwyg_editor_renderers;
+}
+function pb_wysiwyg_editor($name_, $content_, $data_){
+	global $pb_config;
+	$wysiwyg_editor_renderers_ = pb_wysiwyg_editor_renderers();
+
+	if(!isset($wysiwyg_editor_renderers_[$pb_config->wysiwyg_editor])){
+		echo "{$pb_config->wysiwyg_editor} 에디터가 존재하지 않습니다.";
+		return false;
+	}
+
+	$render_ = $wysiwyg_editor_renderers_[$pb_config->wysiwyg_editor];
+
+	if(!is_callable($render_)){
+		echo "{$pb_config->wysiwyg_editor} 에디터 렌더러가 존재하지 않습니다.";
+		return false;
+	}
+
+	call_user_func_array($render_, array($name_, $content_, $data_));
+	return true;
+}
+
+
+function _pb_wysiwyg_editor_for_trumbowyg($name_, $content_, $data_){
+	global $pb_config;
 	$editor_id_ = $data_['id'];
 	$placeholder_ = isset($data_['placeholder']) ? $data_['placeholder'] : null;
 	$min_height_ = isset($data_['min_height']) ? $data_['min_height'] : 300;
 	$max_height_ = isset($data_['max_height']) ? $data_['max_height'] : 800;
-	$height_ = isset($data_['height']) ? $data_['height'] : null;
+	$height_ = isset($data_['height']) ? $data_['height'] : 200;
+	$lang_ = isset($data_['lang']) ? $data_['lang'] : $pb_config->default_locale();
+	$placeholder_ = isset($data_['placeholder']) ? $data_['placeholder'] : null;
+
+
 	?>
 	<?php pb_editor_load_trumbowyg_library(); ?>
-	<div id="<?=$editor_id_?>-editor"><?=$content_?></div>
+	<input type="hidden" name="<?=$name_?>" id="<?=$editor_id_?>-input" value="<?=htmlentities($content_)?>">
+	<div id="<?=$editor_id_?>" placeholder="<?=$placeholder_?>"><?=$content_?></div>
 	<style type="text/css">
-	#<?=$editor_id_?>-editor{
+	#<?=$editor_id_?>{
 		max-height: <?=$max_height_?>px;
 		min-height: <?=$min_height_?>px;
 	}
 	</style>
 	<script type="text/javascript">
-		jQuery(document).ready(function(){
-			pb_add_editor("editor", {
-				initialize : function(){
-					var editor_el_ = $("#<?=$editor_id_?>-editor");
-					var editor_module_ = editor_el_.trumbowyg({
-						lang : "<?=pb_current_locale(true)?>",
-					});
-
-					editor_el_.data("editor-module", editor_module_);
-				},
-				html : function(html_){
-					var editor_el_ = $("#<?=$editor_id_?>-editor");
-					var editor_module_ = $("#<?=$editor_id_?>-editor").data("editor-module");
-					if(html_ !== undefined){
-						editor_module_.html(html_);
-					}
-
-					return editor_module_.html();
-				}
-			});
+	jQuery(document).ready(function(){
+		$("#<?=$editor_id_?>").pb_wysiwyg_editor_trumbowyg({
+			lang : "<?=$lang_?>",
+			input : "#<?=$editor_id_?>-input"
 		});
-
-
+	});
 	</script>
 	<?php
 }
 
 function pb_editor_load_trumbowyg_library(){
-	global $_pb_editor_trumbowyg_library_loaded;
+	global $pb_config, $_pb_editor_trumbowyg_library_loaded;
 	if(!$_pb_editor_trumbowyg_library_loaded){
+		$default_locale_ = $pb_config->default_locale();
+		$default_locale_ = substr($default_locale_, 0, strpos($default_locale_, "_"));
+		$default_locale_ = strtolower($default_locale_);
 		$current_locale_ = pb_current_locale(true);
 		?>
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/trumbowyg.js?version=2.21.0"></script>
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/langs/<?=$current_locale_?>.js?version=2.21.0"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/trumbowyg.js?version=2.21.0"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/langs/<?=$default_locale_?>.js?version=2.21.0"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/langs/<?=$current_locale_?>.js?version=2.21.0"></script>
 
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/plugins/resizimg/resizable-resolveconflict.js"></script>
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/plugins/resizimg/jquery-resizable.js"></script>
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/plugins/resizimg/trumbowyg.resizimg.js"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/plugins/resizimg/resizable-resolveconflict.js"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/plugins/resizimg/jquery-resizable.js"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/plugins/resizimg/trumbowyg.resizimg.js"></script>
 
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/trumbowyg/trumbowyg.pb.extends.js"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/trumbowyg.pb.extends.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/trumbowyg/trumbowyg.css?version=2.21.0">
 
@@ -178,6 +203,83 @@ function pb_editor_load_trumbowyg_library(){
 
 		$_pb_editor_trumbowyg_library_loaded = true;
 	}
+}
+
+function _pb_wysiwyg_editor_for_summernote($name_, $content_, $data_){
+	global $pb_config;
+	$editor_id_ = $data_['id'];
+	$placeholder_ = isset($data_['placeholder']) ? $data_['placeholder'] : null;
+	$min_height_ = isset($data_['min_height']) ? $data_['min_height'] : 300;
+	$max_height_ = isset($data_['max_height']) ? $data_['max_height'] : 800;
+	$height_ = isset($data_['height']) ? $data_['height'] : 200;
+	$lang_ = isset($data_['lang']) ? $data_['lang'] : $pb_config->default_locale();
+
+	?>
+	<?php pb_editor_load_summernote_library(); ?>
+	<textarea name="<?=$name_?>" id="<?=$editor_id_?>" placeholder="<?=$placeholder_?>"><?=stripslashes($content_)?></textarea>
+	<script type="text/javascript">
+	jQuery(document).ready(function(){
+		$("#<?=$editor_id_?>").pb_wysiwyg_editor_summernote({
+			lang : "<?=$lang_?>",
+			min_height : <?=$min_height_?>,
+			max_height : <?=$max_height_?>,
+			height : <?=$height_?>,
+			placeholder : "<?=$placeholder_?>",
+		});
+	});
+	</script>
+	<?php
+}
+
+function pb_editor_load_summernote_library(){
+	global $pb_config, $_pb_editor_load_summernote_library;
+	if(!$_pb_editor_load_summernote_library){
+		$default_locale_ = $pb_config->default_locale();
+		$current_locale_ = pb_current_locale();
+		?>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/summernote.js?version=0.8.16"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/lang/summernote_<?=$default_locale_?>.js?version=0.8.16"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/lang/summernote_<?=$current_locale_?>.js?version=0.8.16"></script>
+
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/summernote.pb.extends.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/summernote/summernote.css?version=0.8.16">
+
+		<?php
+
+		pb_hook_do_action('pb_editor_load_summernote_library');
+
+		$_pb_editor_load_summernote_library = true;
+	}
+}
+
+function _pb_editor_rendering_for_editor($content_, $data_){
+
+	$editor_id_ = $data_['id'].'-editor';
+	$data_['id'] = $editor_id_;
+	$temp_editor_name_ = "pb_editor_".pb_random_string(5);
+	$results_ = pb_wysiwyg_editor($temp_editor_name_, $content_, $data_);
+	if(!$results_) return;
+	?>
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+			pb_add_editor("editor", {
+				initialize : function(){
+					$("#<?=$editor_id_?>").pb_wysiwyg_editor().options({
+						"sync" : $.proxy(function(){
+							this.sync_input();
+						}, this)
+					});
+				},
+				html : function(html_){
+					return $("#<?=$editor_id_?>").pb_wysiwyg_editor().content(html_);
+				}
+			});
+		});
+
+
+	</script>
+	<?php
 }
 
 function _pb_editor_rendering_for_text($content_, $data_){

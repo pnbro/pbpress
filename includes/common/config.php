@@ -23,9 +23,12 @@ class PBConfig{
 	public $crypt_algorithm = "sha256";
 	public $crypt_bits = 2048;
 
+	public $wysiwyg_editor;
+
 	private $default_locale = "ko_KR";
 
 	private $use_https = false;
+
 
 	function __construct(){
 		$this->devmode = (defined("PB_DEV") && PB_DEV === true);
@@ -50,6 +53,8 @@ class PBConfig{
 		$this->crypt_password = (defined("PB_CRYPT_PASSWORD")) ? PB_CRYPT_PASSWORD : null;
 		$this->crypt_algorithm = (defined("PB_CRYPT_ALGORITHM")) ? PB_CRYPT_ALGORITHM : "sha256";
 		$this->crypt_bits = (defined("PB_CRYPT_BITS")) ? PB_CRYPT_BITS : 2048;
+
+		$this->wysiwyg_editor = (defined("PB_WYSIWYG_EDITOR")) ? PB_WYSIWYG_EDITOR : "trumbowyg";
 
 		$this->default_locale = (defined("PB_DEFAULT_LOCALE")) ? PB_DEFAULT_LOCALE : "ko_KR";
 

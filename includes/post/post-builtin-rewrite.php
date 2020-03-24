@@ -11,18 +11,7 @@ function _pb_post_hook_for_rewrite_handler($rewrite_path_){
 	$post_type_ = urldecode(pb_current_slug());
 
 	if(count($rewrite_path_) < 2){
-
-		$list_path_ = pb_current_theme_path()."post-{$post_type_}-list.php";
-
-		if(!file_exists($list_path_)){
-			$list_path_ = pb_current_theme_path()."post-list.php";
-		}
-
-		if(!file_exists($list_path_)){
-			$list_path_ = PB_DOCUMENT_PATH . 'includes/post/views/post-list.php';
-		}
-
-		return $list_path_;
+		return new PBError(404, "요청 글이 없습니다.", "404");
 	}
 
 	$current_slug_ = urldecode($rewrite_path_[1]);

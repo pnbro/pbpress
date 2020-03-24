@@ -26,11 +26,8 @@ function pb_post_types(){
 		'post' => array(
 			'name' => '글',
 			'label' => array(),
+			'adminpage_sort' => 8,
 		),
-		'news' => array(
-			'name' => '뉴스',
-			'label' => array(),
-		)
 	));
 
 	global $_pb_post_type_label_defaults;
