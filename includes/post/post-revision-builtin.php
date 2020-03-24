@@ -33,14 +33,9 @@ function _pb_adminpage_manage_post_rewrite_handler_for_revision($path_, $sub_act
 
 //리비젼 iframe 추가
 pb_rewrite_register('__post-revision', array(
-	'rewrite_handler' => '_pb_rewrite_handler_for_revision_iframe',
+	'rewrite_handler' => '_pb_rewrite_handler_for_post_revision_iframe',
 ));
-function _pb_rewrite_handler_for_revision_iframe($rewrite_path_){
-	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_post")){
-		pb_redirect_404();
-		pb_end();
-	}	
-
+function _pb_rewrite_handler_for_post_revision_iframe($rewrite_path_){
 	if(count($rewrite_path_) < 2){
 		pb_redirect_404();
 		pb_end();
@@ -55,6 +50,12 @@ function _pb_rewrite_handler_for_revision_iframe($rewrite_path_){
 	}
 
 	$original_post_data_ = pb_post($revision_data_['post_id']);
+	$original_post_type_ = $original_post_data_['type'];
+
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$original_post_type_}")){
+		pb_redirect_404();
+		pb_end();
+	}	
 
 
 	global $pbpost, $pbpost_meta_map;
@@ -76,21 +77,23 @@ function _pb_rewrite_handler_for_revision_iframe($rewrite_path_){
 
 //글 에디팅 영역에 서브메뉴추가
 function _pb_manage_post_listtable_subaction_hook_for_revision($item_){
+	$post_type_ = $item_['type'];
 	?>
 
-	<a href="<?=pb_admin_url("manage-post/revision/".$item_['id'])?>">리비젼</a>
+	<a href="<?=pb_admin_url("manage-{$post_type_}/revision/".$item_['id'])?>">리비젼</a>
 
 	<?php
 
 }
 pb_hook_add_action("pb_manage_post_listtable_subaction", '_pb_manage_post_listtable_subaction_hook_for_revision');
 
-
 function _pb_post_edit_form_after_hook_for_revision($post_data_){
 
 	$revision_statement_ = pb_post_revision_statement(array("post_id" => $post_data_['id']));
 
 	if(!strlen($post_data_['id'])) return; //post is new
+
+	$post_type_ = $post_data_['type'];
 
 	?>
 	<div class="panel panel-default" id="pb-post-edit-form-revision-panel">
@@ -102,7 +105,7 @@ function _pb_post_edit_form_after_hook_for_revision($post_data_){
 		<div id="pb-post-edit-form-revision-panel-body" class="panel-collapse collapse in" role="tabpanel">
 			<div class="panel-body">
 				<label ><?=number_format($revision_statement_->count())?>개의 리비젼</label>
-				<div><a href="<?=pb_admin_url("manage-post/revision/".$post_data_['id'])?>" class="btn btn-block btn-default">리비젼보기</a></div>
+				<div><a href="<?=pb_admin_url("manage-{$post_type_}/revision/".$post_data_['id'])?>" class="btn btn-block btn-default">리비젼보기</a></div>
 			</div>
 		</div>
 	</div>

@@ -4,22 +4,55 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+global $_pb_post_type_label_defaults;
+
+$_pb_post_type_label_defaults = array(
+	'list' => "글내역",
+	'add' => "글추가",
+	'update' => "글수정",
+	'delete' => "글삭제",
+	'button_add' => "글추가",
+	'button_update' => "글수정",
+	'before_delete' => "해당 글을 삭제합니다. 계속하시겠습니까?",
+	'after_delete' => "페이지가 삭제되었습니다.",
+	'no_results' => "검색된 글이 없습니다.",
+);
+
 function pb_post_types(){
-	return pb_hook_apply_filters('pb_post_types', array(
+	global $_pb_post_types;
+	if(isset($_pb_post_types)) return $_pb_post_types;
+
+	$_pb_post_types = pb_hook_apply_filters('pb_post_types', array(
 		'post' => array(
-			'name' => '글'
+			'name' => '글',
+			'label' => array(),
+		),
+		'news' => array(
+			'name' => '뉴스',
+			'label' => array(),
 		)
 	));
+
+	global $_pb_post_type_label_defaults;
+
+	foreach($_pb_post_types as $key_ => &$type_data_){
+		if(!isset($type_data_['label'])) $type_data_['label'] = array();
+
+		$type_data_['label'] = array_merge($_pb_post_type_label_defaults, $type_data_['label']);
+	}
+
+	return $_pb_post_types;
 }
 
 global $posts_do;
 $posts_do = pbdb_data_object("posts", array(
 	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
-	'type'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "nn" => true, "index" => true, "comment" => "글타입"),
+	'type'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "nn" => true, "index" => true, "comment" => "글형식"),
 	'slug'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, 'nn' => true, 'index' => true, "comment" => "슬러그"),
 	'post_title'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 200, "nn" => true, "comment" => "글제목"),
 	'post_html'		 => array("type" => PBDB_DO::TYPE_LONGTEXT, "comment" => "글HTML"),
 	'post_short'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "comment" => "글(줄임)"),
+	'featured_image_path'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 500, "comment" => "대표이미지"),
 
 	'status'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "comment" => "글상태(PA001)"),
 	'wrt_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
@@ -147,7 +180,7 @@ function pb_post_rewrite_slug($type_, $slug_, $excluded_post_id_ = null, $retry_
 		'type' => $type_,
 		'slug' => $temp_slug_,
 	));
-	if(count($check_data_) <= 0 || $check_data_[0]['id'] === $excluded_page_id_){
+	if(count($check_data_) <= 0 || $check_data_[0]['id'] === $excluded_post_id_){
 		return $temp_slug_;
 	}
 
@@ -159,26 +192,19 @@ function pb_post_write($data_){
 	$post_title_ = isset($data_['post_title']) ? $data_['post_title'] : null;
 	$post_html_ = isset($data_['post_html']) ? $data_['post_html'] : null;
 	$status_ = isset($data_['status']) ? $data_['status'] : PB_POST_STATUS_WRITING;
+	$featured_image_path_ = isset($data_['featured_image_path']) ? $data_['featured_image_path'] : null;
 	$slug_ = isset($data_['slug']) ? $data_['slug'] : null;
 	$slug_ = strlen($slug_) ? $slug_ : $post_title_;
 	$slug_ = pb_slugify($slug_);
 
 	$post_types_ = pb_post_types();
 	
-	if(!strlen($type_) || !isset($post_types_[$type_])) return new PBError(403, "글타입이 잘못되었습니다.", "잘못된 글타입");
+	if(!strlen($type_) || !isset($post_types_[$type_])) return new PBError(403, "글형식이 잘못되었습니다.", "잘못된 글형식");
 	if(!strlen($slug_)) return new PBError(403, "글 슬러그가 잘못되었습니다.", "잘못된 슬러그");
-
-	$post_short_ = strip_tags($post_html_);
-	$post_short_ = pb_hook_apply_filters('pb_post_short', $post_short_, $post_title_, $post_html_);
-
-	if(pb_strlen($post_short_) > 50){
-		$post_short_ = pb_substr($post_short_,0, 50);
-	}
 
 	$insert_data_ = array(
 		'post_title' => $post_title_,
 		'post_html' => $post_html_,
-		'post_short' => $post_short_,
 		'type' => $type_,
 		'status' => $status_,
 		'slug' => pb_post_rewrite_slug($type_, $slug_),
@@ -200,17 +226,12 @@ function pb_post_edit($id_, $data_){
 		$update_data_['post_title'] = $data_['post_title'];
 	}
 
+	if(isset($data_['featured_image_path'])){
+		$update_data_['featured_image_path'] = $data_['featured_image_path'];
+	}
+
 	if(isset($data_['post_html'])){
 		$update_data_['post_html'] = $data_['post_html'];
-
-		$post_short_ = strip_tags($data_['post_html']);
-		$post_short_ = pb_hook_apply_filters('pb_post_short', $post_short_, $post_title_, $post_html_);
-
-		if(pb_strlen($post_short_) > 50){
-			$post_short_ = pb_substr($post_short_,0, 50);
-		}
-
-		$update_data_['post_short'] = $post_short_;
 	}
 
 	if(isset($data_['status'])){
@@ -259,6 +280,18 @@ function pb_post_html($id_ = null){
 	$post_data_ = pb_post($id_);
 	if(!isset($post_data_)) return null;
 	return pb_hook_apply_filters('pb_post_html', $post_data_['post_html'], $post_data_);
+}
+function pb_post_featured_image_url($id_ = null){
+	if(!strlen($id_)){
+		$current_post_data_ = pb_current_post();
+		if(!isset($current_post_data_)) return null;
+
+		return pb_hook_apply_filters('pb_post_featured_image_url', pb_filebase_url($current_post_data_['featured_image_path']), $current_post_data_);
+	}
+
+	$post_data_ = pb_post($id_);
+	if(!isset($post_data_)) return null;
+	return pb_hook_apply_filters('pb_post_featured_image_url', pb_filebase_url($post_data_['post_html']), $post_data_);
 }
 
 function pb_post_url($id_ = null){

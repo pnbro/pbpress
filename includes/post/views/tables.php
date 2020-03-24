@@ -1,11 +1,13 @@
 <?php
 
 pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
+	global $pbpost_type;
 	$keyword_ = isset($_GET["keyword"]) ? $_GET["keyword"] : null;
 	$status_ = isset($_GET["search_status"]) && strlen($_GET["search_status"]) ? $_GET["search_status"] : null;
 
 	$statement_ = pb_post_statement(array(
 		'keyword' => $keyword_,
+		'type' => $pbpost_type,
 		'status' => $status_,
 	));
 
@@ -21,21 +23,17 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 		'seq' => true,
 	),
 	"post_title" => array(
-		'name' => '글제목',
+		'name' => '제목',
 		'class' => 'col-8 link-action',
 		'render' => function($table_, $item_, $post_index_){
-			$is_front_post_ = pb_front_post_id() === (string)$item_['id'];
 			$post_url_ = pb_post_url($item_['id']);
+			$post_type_ = $item_['type'];
 			
 			?>
-			<div class="title-frame post-title-frame"><a href="<?=pb_admin_url("manage-post/edit/".$item_['id'])?>" ><?=$item_['post_title']?></a>
-				<?php if($is_front_post_){ ?>
-					<small class="fontpost-text"> - 홈화면</small>
-				<?php } ?>
-			</div>
+			<div class="title-frame post-title-frame"><a href="<?=pb_admin_url("manage-{$post_type_}/edit/".$item_['id'])?>" ><?=$item_['post_title']?></a></div>
 			<div class="url-link"><a href="<?=$post_url_?>" target="_blank"><?=$post_url_?></a></div>
 			<div class="subaction-frame">
-				<a href="<?=pb_admin_url("manage-post/edit/".$item_['id'])?>">수정</a>
+				<a href="<?=pb_admin_url("manage-{$post_type_}/edit/".$item_['id'])?>">수정</a>
 				<?php pb_hook_do_action("pb_manage_post_listtable_subaction", $item_) ?>
 				<a href="javascript:pb_manage_post_remove('<?=$item_['id']?>');" class="text-danger">삭제</a>
 			</div>
@@ -72,7 +70,7 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 	),
 ), array(
 	'class' => 'pb-admin-post-table',
-	"no_rowdata" => "검색된 글가 없습니다.",
+	"no_rowdata" => "검색된 항목이 없습니다.",
 	'per_post' => 15,
 ));
 

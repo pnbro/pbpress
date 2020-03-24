@@ -23,4 +23,21 @@ function pb_post_initialize_gcode_list($gcode_list_){
 }
 pb_hook_add_filter("pb_intialize_gcode_list", "pb_post_initialize_gcode_list");
 
+pb_hook_add_action('pb_post_inserted', '_pb_post_update_post_short');
+pb_hook_add_action('pb_post_updated', '_pb_post_update_post_short');
+function _pb_post_update_post_short($id_){
+	$post_data_ = pb_post($id_);
+
+	$post_short_ = strip_tags($post_data_['post_html']);
+	$post_short_ = pb_hook_apply_filters('pb_post_short', $post_short_, $post_data_);
+
+	if(pb_strlen($post_short_) > 50){
+		$post_short_ = pb_substr($post_short_,0, 50);
+	}
+
+	global $posts_do;
+
+	$posts_do->update($post_data_['id'], array("post_short" => $post_short_));
+}
+
 ?>

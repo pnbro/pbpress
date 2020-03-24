@@ -33,9 +33,9 @@ function _pb_adminpage_manage_page_rewrite_handler_for_revision($path_, $sub_act
 
 //리비젼 iframe 추가
 pb_rewrite_register('__page-revision', array(
-	'rewrite_handler' => '_pb_rewrite_handler_for_revision_iframe',
+	'rewrite_handler' => '_pb_rewrite_handler_for_page_revision_iframe',
 ));
-function _pb_rewrite_handler_for_revision_iframe($rewrite_path_){
+function _pb_rewrite_handler_for_page_revision_iframe($rewrite_path_){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
 		pb_redirect_404();
 		pb_end();

@@ -3,7 +3,7 @@
 	global $pbpost, $pbpost_meta_map;
 
 ?>
-<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/posts/admin/manage-post/revision.css">
+<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-post/revision.css">
 <?php 
 	
 pb_easy_splited_view("pb-post-revision-splitted-view", "pb-admin-post-revision-table", null, array(
@@ -33,4 +33,4 @@ pb_easy_splited_view("pb-post-revision-splitted-view", "pb-admin-post-revision-t
 ));
 
 ?>
-<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/posts/admin/manage-post/revision.js"></script>
+<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/manage-post/revision.js"></script>

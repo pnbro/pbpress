@@ -7,7 +7,12 @@ if(!defined('PB_DOCUMENT_PATH')){
 include(PB_DOCUMENT_PATH . "includes/post/views/revision-tables.php");
 
 function _pb_admin_ajax_post_revision_load_master(){
-	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_post")){
+	$revision_id_ = $_REQUEST["key"];
+	$revision_data_ = pb_post_revision($revision_id_);
+
+	$post_type_ = $revision_data_['post_type'];
+
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$post_type_}")){
 		echo json_encode(array(
 			"success" => false,
 			"error_title" => "권한없음",
@@ -15,9 +20,6 @@ function _pb_admin_ajax_post_revision_load_master(){
 		));
 		pb_end();
 	}
-
-	$revision_id_ = $_REQUEST["key"];
-	$revision_data_ = pb_post_revision($revision_id_);
 	
 	echo json_encode(array(
 		"success" => true,
@@ -28,7 +30,11 @@ function _pb_admin_ajax_post_revision_load_master(){
 pb_add_ajax('pb-admin-post-revision-load', '_pb_admin_ajax_post_revision_load_master');
 
 function _pb_admin_ajax_post_revision_restore(){
-	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_post")){
+	$revision_id_ = isset($_POST["revision_id"]) ? $_POST["revision_id"] : -1;
+	$revision_data_ = pb_post_revision($revision_id_);
+	$post_type_ = $revision_data_['post_type'];
+
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$post_type_}")){
 		echo json_encode(array(
 			"success" => false,
 			"error_title" => "권한없음",
@@ -36,9 +42,6 @@ function _pb_admin_ajax_post_revision_restore(){
 		));
 		pb_end();
 	}
-
-	$revision_id_ = isset($_POST["revision_id"]) ? $_POST["revision_id"] : -1;
-	$revision_data_ = pb_post_revision($revision_id_);
 
 	if(!isset($revision_data_)){
 		echo json_encode(array(
@@ -69,7 +72,11 @@ pb_add_ajax('pb-admin-restore-post-from-revision', '_pb_admin_ajax_post_revision
 
 
 function _pb_admin_ajax_post_revision_delete(){
-	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_post")){
+	$revision_id_ = isset($_POST["revision_id"]) ? $_POST["revision_id"] : -1;
+	$revision_data_ = pb_post_revision($revision_id_);
+	$post_type_ = $revision_data_['post_type'];
+
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$post_type_}")){
 		echo json_encode(array(
 			"success" => false,
 			"error_title" => "권한없음",
@@ -77,9 +84,6 @@ function _pb_admin_ajax_post_revision_delete(){
 		));
 		pb_end();
 	}
-
-	$revision_id_ = isset($_POST["revision_id"]) ? $_POST["revision_id"] : -1;
-	$revision_data_ = pb_post_revision($revision_id_);
 
 	if(!isset($revision_data_)){
 		echo json_encode(array(

@@ -21,7 +21,7 @@ $posts_revision_do = pbdb_data_object("posts_revision", array(
 
 
 function pb_post_revision_statement($conditions_ = array()){
-	global $posts_revision_do;
+	global $posts_revision_do, $posts_do;
 
 	$statement_ = $posts_revision_do->statement();
 
@@ -30,6 +30,12 @@ function pb_post_revision_statement($conditions_ = array()){
 		"DATE_FORMAT(posts_revision.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
 		"DATE_FORMAT(posts_revision.reg_date, '%Y.%m.%d') reg_date_ymd"
 	);
+
+	$statement_->add_join_statement('LEFT OUTER JOIN', $posts_do->statement(), 'posts', array(
+		array(PBDB_SS::COND_COMPARE, "posts_revision.post_id", "posts.id", "=")
+	), array(
+		"posts.type post_type"
+	));
 
 	$statement_->add_legacy_field_filter('pb_post_revision_list_fields', '', $conditions_);
 	$statement_->add_legacy_join_filter('pb_post_revision_list_join', '', $conditions_);
