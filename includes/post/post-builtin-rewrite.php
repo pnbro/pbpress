@@ -38,6 +38,8 @@ function _pb_post_hook_for_rewrite_handler($rewrite_path_){
 		$post_path_ = PB_DOCUMENT_PATH . 'includes/post/views/post.php';
 	}
 
+	pb_hook_do_action('pb_post_setup', $pbpost, $pbpost_meta_map);
+
 	return $post_path_;
 }
 

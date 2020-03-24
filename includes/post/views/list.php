@@ -20,7 +20,7 @@
 		<div class="left-frame">
 			<?php pb_hook_do_action('pb_admin_post_list_conditions_group_left_before', $pbpost_type, $pbpost_type_data); ?>
 			<?php pb_hook_do_action("pb_admin_post_{$pbpost_type}_list_conditions_group_left_before", $pbpost_type, $pbpost_type_data); ?>
-			<a href="<?=pb_admin_url("manage-post/add")?>" class="btn btn-default"><?=$pbpost_type_data['label']['add']?></a>
+			<a href="<?=pb_admin_url("manage-{$pbpost_type}/add")?>" class="btn btn-default"><?=$pbpost_type_data['label']['add']?></a>
 			<?php pb_hook_do_action('pb_admin_post_list_conditions_group_left_after', $pbpost_type, $pbpost_type_data); ?>
 			<?php pb_hook_do_action("pb_admin_post_{$pbpost_type}_list_conditions_group_left_after", $pbpost_type, $pbpost_type_data); ?>
 			

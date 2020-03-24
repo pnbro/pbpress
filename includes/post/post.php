@@ -282,12 +282,14 @@ function pb_post_featured_image_url($id_ = null){
 	if(!strlen($id_)){
 		$current_post_data_ = pb_current_post();
 		if(!isset($current_post_data_)) return null;
+		if(!strlen($current_post_data_['featured_image_path'])) return null;
 
 		return pb_hook_apply_filters('pb_post_featured_image_url', pb_filebase_url($current_post_data_['featured_image_path']), $current_post_data_);
 	}
 
 	$post_data_ = pb_post($id_);
 	if(!isset($post_data_)) return null;
+	if(!strlen($post_data_['featured_image_path'])) return null;
 	return pb_hook_apply_filters('pb_post_featured_image_url', pb_filebase_url($post_data_['post_html']), $post_data_);
 }
 
