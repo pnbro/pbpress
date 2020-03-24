@@ -4,29 +4,28 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-function pb_easytable_update_default_loading_indicator($data_){
-	global $_pb_easytable_default_loading_indicator;
-	$_pb_easytable_default_loading_indicator = $data_;
+function pb_easylist_update_default_loading_indicator($data_){
+	global $_pb_easylist_default_loading_indicator;
+	$_pb_easylist_default_loading_indicator = $data_;
 }
 
-function pb_easytable_default_loading_indicator(){
-	global $_pb_easytable_default_loading_indicator;
-	if(!strlen($_pb_easytable_default_loading_indicator)) return "loading";
-	return $_pb_easytable_default_loading_indicator;
+function pb_easylist_default_loading_indicator(){
+	global $_pb_easylist_default_loading_indicator;
+	if(!strlen($_pb_easylist_default_loading_indicator)) return "loading";
+	return $_pb_easylist_default_loading_indicator;
 }
 
-
-class PB_easytable{
+class PB_easylist{
 
 	private $_loader;
-	private $_data;
+	private $_render;
 	private $_options;
 	private $_last_results;
 
-	function __construct($id_, $loader_, $data_, $options_ = array()){
+	function __construct($id_, $loader_, $render_, $options_ = array()){
 		$this->_id = $id_;
 		$this->_loader = $loader_;
-		$this->_data = $data_;
+		$this->_render = $render_;
 		$this->_options = array_merge(array(
 			'per_page' => 15,
 			'hide_pagenav' => false,
@@ -84,37 +83,24 @@ class PB_easytable{
 		$table_class_ = isset($options_['class']) ? $options_['class'] : "table";
 		$is_ajax_ = isset($options_['ajax']) ? $options_['ajax'] : false;
 
-		$loading_indicator_ = isset($options_['loading_indicator']) ? $options_['loading_indicator'] : pb_easytable_default_loading_indicator();
+		$loading_indicator_ = isset($options_['loading_indicator']) ? $options_['loading_indicator'] : pb_easylist_default_loading_indicator();
 		
 		?>
 		<input type="hidden" name="page_index" value="<?=$page_index_?>">
-		<table class="pb-easytable <?=$table_class_?>" id="<?=$this->_id?>" data-ajax="<?=$is_ajax_ ? "Y" : "N"?>" data-loading-indicator="<?=htmlentities($loading_indicator_)?>" data-hide-pagenav="<?=$hide_pagenav_ ? "Y" : "N" ?>">
-			<thead>
-				<?php foreach($this->_data as $key_ => $column_data_){ 
-					$class_ = isset($column_data_['head_class']) ? $column_data_['head_class'] : " ";
-					$class_ .= (isset($column_data_['class']) ? $column_data_['class'] : " ");
-					$class_ = trim($class_);
-
-				?>
-					<th class="<?=$key_?> <?=$class_?>"><?=isset($column_data_['name']) ? $column_data_['name'] : ""?></th>
-				<?php } ?>
-			</thead>
-			<tbody>
+		<div class="pb-easylist <?=$table_class_?>" id="<?=$this->_id?>" data-ajax="<?=$is_ajax_ ? "Y" : "N"?>" data-loading-indicator="<?=htmlentities($loading_indicator_)?>" data-hide-pagenav="<?=$hide_pagenav_ ? "Y" : "N" ?>">
+			
 
 				<?php if($is_ajax_){ ?>
-					<tr>
-						<td class="no-rowdata first" colspan="<?=count($this->_data)?>"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></td>
-					</tr>
+					<div class="no-rowdata first"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></div>
 				<?php }else{
-					$this->render_body($page_index_);
+					$this->render($page_index_);
 				} ?>
 				
-			</tbody>
 
-		</table>
+		</div>
 		<?php if(!$hide_pagenav_){ ?>
 
-			<div class="pb-easytable-pagenav" id="<?=$this->_id?>-pagenav"  data-easytable-pagenav-id="<?=$this->_id?>">
+			<div class="pb-easylist-pagenav" id="<?=$this->_id?>-pagenav"  data-easylist-pagenav-id="<?=$this->_id?>">
 				<?php if(!$is_ajax_){
 					$this->render_pagenav($page_index_);
 				} ?>
@@ -124,12 +110,12 @@ class PB_easytable{
 
 		<?php } ?>
 
-		<script type="text/javascript">$("#<?=$this->_id?>").pbeasytable();</script>
+		<script type="text/javascript">$("#<?=$this->_id?>").pbeasylist();</script>
 
 		<?php
 	}
 
-	function render_body($page_index_){
+	function render($page_index_){
 		$options_ = $this->_options;
 
 		$per_page_ = isset($options_['per_page']) ? $options_['per_page'] : 15;
@@ -140,53 +126,15 @@ class PB_easytable{
 		$total_count_ = $results_['count'];
 		$result_list_ = $results_['list'];
 
-		foreach($result_list_ as $row_index_ => $row_data_){ ?>
-			<tr>
-
-				<?php 
-
-				foreach($this->_data as $key_ => $column_data_){
-
-					$class_ = isset($column_data_['body_class']) ? $column_data_['body_class'] : " ";
-					$class_ .= (isset($column_data_['class']) ? $column_data_['class'] : " ");
-					$class_ = trim($class_);
-
-					$column_value_ = null;
-					if(isset($column_data_['render'])){
-						ob_start();
-						call_user_func_array($column_data_['render'], array($this, $row_data_, $page_index_, $row_index_));
-						$column_value_ = ob_get_clean();
-					}else{
-
-						if(isset($column_data_['seq']) && $column_data_['seq']){
-							$column_value_ = $this->row_seq($page_index_, $row_index_);
-							$column_value_ = number_format($column_value_);
-						}else if(isset($column_data_['rseq']) && $column_data_['rseq']){
-							$column_value_ = $this->row_rseq($page_index_, $row_index_);
-							$column_value_ = number_format($column_value_);
-						}else{
-							$column_value_ = isset($row_data_[$key_]) ? $row_data_[$key_] : null;
-						}
-						
-					}
-
-				?>
-					<td class="<?=$key_?> <?=$class_?>">
-						<?=$column_value_?>
-					</td>
-				<?php }
-
-				?>
-				
-			</tr>
-		<?php }
+		ob_start();
+		
+		foreach($result_list_ as $row_index_ => $row_data_){
+			call_user_func_array($this->_render, array($this, $row_data_, $row_index_));
+		}
+		
 
 		if(count($result_list_) <= 0){ ?>
-
-			<tr>
-				<td class="no-rowdata" colspan="<?=count($this->_data)?>"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></td>
-			</tr>
-
+			<div class="no-rowdata" ><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></div>
 		<?php }
 	}
 
@@ -257,51 +205,51 @@ class PB_easytable{
 	}
 }
 
-global $pb_easytable_map;
-$pb_easytable_map = array();
+global $pb_easylist_map;
+$pb_easylist_map = array();
 
-pb_add_ajax('pb-easytable-load-html', '_pb_ajax_easytable_load_html');
-function _pb_ajax_easytable_load_html(){
-	global $pb_easytable_map;
+pb_add_ajax('pb-easylist-load-html', '_pb_ajax_easylist_load_html');
+function _pb_ajax_easylist_load_html(){
+	global $pb_easylist_map;
 
 	$table_id_ = isset($_GET['table_id']) ? $_GET['table_id'] : -1;
 	$page_index_ = isset($_GET['page_index']) ? $_GET['page_index'] : null;
 
-	if(!isset($pb_easytable_map[$table_id_])){
+	if(!isset($pb_easylist_map[$table_id_])){
 		pb_ajax_error('잘못된 접근','잘못된 접근입니다.');
 	}
 
-	$easytable_ = $pb_easytable_map[$table_id_];
+	$easylist_ = $pb_easylist_map[$table_id_];
 
 	ob_start();
-	$easytable_->render_body($page_index_);
-	$body_html_ = ob_get_clean();
+	$easylist_->render($page_index_);
+	$list_html_ = ob_get_clean();
 
 	$pagenav_html_ = null;
 
-	$options_ = $easytable_->options();
+	$options_ = $easylist_->options();
 
 	$hide_pagenav_ = (isset($options_['hide_pagenav']) ? $options_['hide_pagenav'] : false);
 	$pagenav_html_ = null;
 	if(!$hide_pagenav_){
 		ob_start();
-		$easytable_->render_pagenav($page_index_);
+		$easylist_->render_pagenav($page_index_);
 		$pagenav_html_ = ob_get_clean();
 	}
 	
 	pb_ajax_success(array(
-		'body_html' => $body_html_,
+		'list_html' => $list_html_,
 		'pagenav_html' => $pagenav_html_,
 	));
 }
 
-function pb_easytable_register($id_, $loader_, $data_, $options_ = array()){
-	global $pb_easytable_map;
-	return ($pb_easytable_map[$id_] = new PB_easytable($id_, $loader_, $data_, $options_));
+function pb_easylist_register($id_, $loader_, $render_, $options_ = array()){
+	global $pb_easylist_map;
+	return ($pb_easylist_map[$id_] = new PB_easylist($id_, $loader_, $render_, $options_));
 }
-function pb_easytable($id_){
-	global $pb_easytable_map;
-	return isset($pb_easytable_map[$id_]) ? $pb_easytable_map[$id_] : null;
+function pb_easylist($id_){
+	global $pb_easylist_map;
+	return isset($pb_easylist_map[$id_]) ? $pb_easylist_map[$id_] : null;
 }
 	
 ?>

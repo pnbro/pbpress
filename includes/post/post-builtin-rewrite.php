@@ -32,7 +32,11 @@ function _pb_post_hook_for_rewrite_handler($rewrite_path_){
 
 	$pbpost_meta_map = pb_post_meta_map($pbpost['id']);
 
-	$post_path_ = pb_current_theme_path()."post.php";
+	$post_path_ = pb_current_theme_path()."post-{$pbpost['type']}.php";
+
+	if(!file_exists($post_path_)){
+		$post_path_ = pb_current_theme_path()."post.php";
+	}
 
 	if(!file_exists($post_path_)){
 		$post_path_ = PB_DOCUMENT_PATH . 'includes/post/views/post.php';
