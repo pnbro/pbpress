@@ -204,6 +204,7 @@ function pb_post_write($data_){
 		'post_html' => $post_html_,
 		'type' => $type_,
 		'status' => $status_,
+		'featured_image_path' => $featured_image_path_,
 		'slug' => pb_post_rewrite_slug($type_, $slug_),
 		'wrt_id' => pb_current_user_id(),
 		'reg_date' => pb_current_time(),
