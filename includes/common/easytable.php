@@ -49,6 +49,13 @@ class PB_easytable{
 	function update_option_value($key_, $value_){
 		$this->_options[$key_] = $value_;
 	}
+
+	function insert_column($index_, $column_name_, $data_){
+		$column_data_ = array();
+		$column_data_[$column_name_] = $data_;
+		$first_ = array_splice($this->_data, 0, $index_);
+	  	$this->_data = array_merge($first_, $column_data_, $this->_data);
+	}
 	
 	function last_results($page_index_){
 		if(!isset($this->_last_results)){
