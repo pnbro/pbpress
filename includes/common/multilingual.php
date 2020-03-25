@@ -86,7 +86,10 @@ function __($text_, $domain_ = PBDOMAIN){
 		if(!pb_lang_load_translations_json($domain_, $current_locale_)) return false;
 	}
 
-	return $pb_lang_domain_maps[$domain_]['locales'][$current_locale_]['translations'][$text_];
+	$translations_ = $pb_lang_domain_maps[$domain_]['locales'][$current_locale_]['translations'];
+
+	if(isset($translations_[$text_])) return $translations_[$text_];
+	else return $text_;
 }
 function _e($text_, $domain_ = PBDOMAIN){
 	echo __($text_, $domain_);
