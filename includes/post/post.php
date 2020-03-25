@@ -4,6 +4,8 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+define('PB_POST_SHORT_LENGTH', 100);
+
 global $_pb_post_type_label_defaults;
 
 $_pb_post_type_label_defaults = array(
@@ -48,7 +50,7 @@ $posts_do = pbdb_data_object("posts", array(
 	'slug'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, 'nn' => true, 'index' => true, "comment" => "슬러그"),
 	'post_title'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 200, "nn" => true, "comment" => "글제목"),
 	'post_html'		 => array("type" => PBDB_DO::TYPE_LONGTEXT, "comment" => "글HTML"),
-	'post_short'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "comment" => "글(줄임)"),
+	'post_short'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => PB_POST_SHORT_LENGTH, "comment" => "글(줄임)"),
 	'featured_image_path'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 500, "comment" => "대표이미지"),
 
 	'status'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "comment" => "글상태(PA001)"),

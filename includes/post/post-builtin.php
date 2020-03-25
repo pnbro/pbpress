@@ -31,8 +31,8 @@ function _pb_post_update_post_short($id_){
 	$post_short_ = strip_tags($post_data_['post_html']);
 	$post_short_ = pb_hook_apply_filters('pb_post_short', $post_short_, $post_data_);
 
-	if(pb_strlen($post_short_) > 50){
-		$post_short_ = pb_substr($post_short_,0, 50);
+	if(pb_strlen($post_short_) > PB_POST_SHORT_LENGTH){
+		$post_short_ = pb_substr($post_short_,0, PB_POST_SHORT_LENGTH);
 	}
 
 	global $posts_do;
