@@ -221,6 +221,7 @@ function pb_next_post($id_ = null, $column_ = "id", $prefix_ = "posts"){
 
 	$_pb_next_post_from_id = $id_;
 	$_pb_next_post_from_column = $column_;
+	$_pb_next_post_from_prefix = $prefix_;
 	$_pb_next_post = pb_sibling_post($id_, $column_, $prefix_, "next");
 
 	return $_pb_next_post;
