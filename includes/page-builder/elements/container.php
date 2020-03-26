@@ -52,7 +52,7 @@ pb_page_builder_add_element("container", array(
 	'loadable' => true,
 	'children' => array("*", "!container"),
 	'parent' => array("*", "!column"),
-	/*'preview_fields' => array(
+	'preview_fields' => array(
 		array(
 			'name' => 'container_type',
 			'type' => 'select',
@@ -62,19 +62,7 @@ pb_page_builder_add_element("container", array(
 			),
 			'display' => 'inline',
 		)
-	),*/
-	'preview' => function($element_data_, $content_){
-		?>
-
-		<table class="table">
-			<tr>
-				<TH>ㅅㄷㄴㅅ</TH>
-				<td>sdfsd</td>
-			</tr>
-		</table>
-
-		<?php
-	},
+	),
 	'category' => "기본",
 ));
 
