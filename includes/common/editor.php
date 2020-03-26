@@ -159,7 +159,7 @@ function _pb_wysiwyg_editor_for_trumbowyg($name_, $content_, $data_){
 	?>
 	<?php pb_editor_load_trumbowyg_library(); ?>
 	<input type="hidden" name="<?=$name_?>" id="<?=$editor_id_?>-input" value="<?=htmlentities($content_)?>">
-	<div id="<?=$editor_id_?>" placeholder="<?=$placeholder_?>"><?=$content_?></div>
+	<div id="<?=$editor_id_?>" placeholder="<?=$placeholder_?>"></div>
 	<style type="text/css">
 	#<?=$editor_id_?>{
 		max-height: <?=$max_height_?>px;
@@ -168,7 +168,9 @@ function _pb_wysiwyg_editor_for_trumbowyg($name_, $content_, $data_){
 	</style>
 	<script type="text/javascript">
 	jQuery(document).ready(function(){
-		$("#<?=$editor_id_?>").pb_wysiwyg_editor_trumbowyg({
+		var editor_el_ = $("#<?=$editor_id_?>");
+		editor_el_.html($("#<?=$editor_id_?>-input").val());
+		editor_el_.pb_wysiwyg_editor_trumbowyg({
 			lang : "<?=$lang_?>",
 			input : "#<?=$editor_id_?>-input"
 		});

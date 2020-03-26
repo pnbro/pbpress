@@ -194,6 +194,30 @@ function _pb_page_builder_ajax_render_element_custom_preview(){
 	pb_end();	
 }
 
-pb_add_ajax('page-builder-render-element-custom-preview', '_pb_page_builder_ajax_render_element_custom_preview')
+pb_add_ajax('page-builder-render-element-custom-preview', '_pb_page_builder_ajax_render_element_custom_preview');
+
+
+function _pb_page_builder_ajax_render_element_render_preview(){
+	$element_id_ = isset($_POST['key']) ? $_POST['key'] : null;
+	$element_data_ = isset($_POST['element_data']) ? $_POST['element_data'] : null;
+	$content_ = isset($_POST['content']) ? $_POST['content'] : null;
+
+	$temp_page_builder_elements_ = pb_page_builder_elements();
+
+	$target_element_ = $temp_page_builder_elements_[$element_id_];
+	$preview_render_ = $target_element_['preview'];
+	
+	ob_start();
+	call_user_func_array($preview_render_, array($element_data_, $content_));
+	$preview_html_ = ob_get_clean();
+
+	echo json_encode(array(
+		'success' => true,
+		'preview_html' => $preview_html_,
+	));
+
+	pb_end();	
+}
+pb_add_ajax('page-builder-render-element-render-preview', '_pb_page_builder_ajax_render_element_render_preview');
 
 ?>

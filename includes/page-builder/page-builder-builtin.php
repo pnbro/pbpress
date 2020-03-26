@@ -104,7 +104,7 @@ function _pb_editor_render_page_builder($content_, $data_){
 	if(isset($options_['elements'])){
 		$builder_options_['elements'] = $options_['elements'];
 	}
-
+	
 	pb_page_builder($content_, $builder_options_);
 	?>
 	
