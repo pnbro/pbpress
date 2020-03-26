@@ -50,6 +50,7 @@ include(PB_DOCUMENT_PATH . "includes/common/database-mysqli.php");
 include(PB_DOCUMENT_PATH . "includes/common/database-pdo.php");
 
 define('PBDB_PARAM_MAP_STR', "::param::");
+define('PBDB_P', PBDB_PARAM_MAP_STR); //shortcut
 
 function pb_database_connection_types(){
 	return pb_hook_apply_filters("pb_database_connection_types", array());

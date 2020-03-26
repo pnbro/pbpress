@@ -60,7 +60,7 @@ pb_easytable_register("pb-admin-gcode-dtl-table", function($offset_, $per_page_)
 
 	return array(
 		'count' => $statement_->count(),
-		'list' => $statement_->select(null, array($offset_, $per_page_)),
+		'list' => $statement_->select("gcode_dtl.sort_char ASC", array($offset_, $per_page_)),
 	);
 },array(
 	"code_did" => array(

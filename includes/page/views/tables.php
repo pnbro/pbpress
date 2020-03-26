@@ -11,7 +11,7 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
 
 	return array(
 		'count' => $statement_->count(),
-		'list' => $statement_->select(null, array($offset_, $per_page_)),
+		'list' => $statement_->select("pages.id DESC", array($offset_, $per_page_)),
 	);
 
 }, array(

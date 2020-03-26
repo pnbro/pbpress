@@ -13,7 +13,7 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 
 	return array(
 		'count' => $statement_->count(),
-		'list' => $statement_->select(null, array($offset_, $per_post_)),
+		'list' => $statement_->select("posts.id desc", array($offset_, $per_post_)),
 	);
 
 }, array(

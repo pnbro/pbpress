@@ -117,6 +117,13 @@ function pb_post_statement($conditions_ = array()){
 		)), $conditions_['keyword']);
 	}
 
+	if(isset($conditions_['_prev_sibling_from_id'])){
+		$statement_->add_custom_condition(PBDB_P.".".PBDB_P." < ".PBDB_P." AND posts.id != ".PBDB_P, array($conditions_['_prev_sibling_from_prefix'], $conditions_['_prev_sibling_from_column'], $conditions_['_prev_sibling_from_column_value'], $conditions_['_prev_sibling_from_id']), array("%d", "%d", "%s", "%d"));
+	}
+	if(isset($conditions_['_next_sibling_from_id'])){
+		$statement_->add_custom_condition(PBDB_P.".".PBDB_P." > ".PBDB_P." AND posts.id != ".PBDB_P, array($conditions_['_next_sibling_from_prefix'], $conditions_['_next_sibling_from_column'], $conditions_['_next_sibling_from_column_value'], $conditions_['_next_sibling_from_id']), array("%d", "%d", "%s", "%d"));
+	}
+
 	return pb_hook_apply_filters('pb_post_statement', $statement_, $conditions_);
 }
 
@@ -144,6 +151,112 @@ function pb_post_by_slug($type_, $slug_){
 	if(!isset($post_) || count($post_) <= 0) return null;
 	return $post_[0];
 }
+
+function pb_sibling_post($id_, $column_ = "id", $prefix_ = "posts", $sibling_ = "next"){
+	if(!strlen($id_)){
+		$id_ = pb_current_post_id();
+		if(!strlen($id_)) return null;
+	}
+
+	$post_data_ = pb_post($id_);
+	if(!isset($post_data_)) return null;
+
+	$conditions_ = array(
+		'type' => $post_data_['type'],
+		'status' => PB_POST_STATUS_PUBLISHED,
+	);
+	$conditions_['_'.$sibling_.'_sibling_from_id'] = $id_;
+	$conditions_['_'.$sibling_.'_sibling_from_prefix'] = $prefix_;
+	$conditions_['_'.$sibling_.'_sibling_from_column'] = $column_;
+	$conditions_['_'.$sibling_.'_sibling_from_column_value'] = $post_data_[$column_];
+	$statement_ = pb_post_statement(pb_hook_apply_filters('pb_'.$sibling_.'_post_conditions', $conditions_));
+	$results_ = $statement_->select(pb_hook_apply_filters('pb_'.$sibling_.'_post_orderby', "{$column_} ".($sibling_ === "next" ? "ASC" : "DESC")), array(0, 1));
+
+	if(count($results_) <= 0) return null;
+	return pb_hook_apply_filters('pb_'.$sibling_.'_post', $results_[0]);
+}
+
+function pb_prev_post($id_ = null, $column_ = "id", $prefix_ = "posts"){
+	if(!strlen($id_)){
+		$id_ = pb_current_post_id();
+		if(!strlen($id_)) return null;
+	}
+
+	global $_pb_prev_post,
+		$_pb_prev_post_from_id,
+		$_pb_prev_post_from_column,
+		$_pb_prev_post_from_prefix;
+
+	if(isset($_pb_prev_post)
+		&& $_pb_prev_post_from_id === $id_
+		&& $_pb_prev_post_from_column === $column_
+		&& $_pb_prev_post_from_prefix === $prefix_){
+		return $_pb_prev_post;
+	}
+
+	$_pb_prev_post_from_id = $id_;
+	$_pb_prev_post_from_column = $column_;
+	$_pb_prev_post_from_prefix = $prefix_;
+	$_pb_prev_post = pb_sibling_post($id_, $column_, $prefix_, "prev");
+
+	return $_pb_prev_post;
+}
+function pb_next_post($id_ = null, $column_ = "id", $prefix_ = "posts"){
+	if(!strlen($id_)){
+		$id_ = pb_current_post_id();
+		if(!strlen($id_)) return null;
+	}
+
+	global $_pb_next_post,
+		$_pb_next_post_from_id,
+		$_pb_next_post_from_column,
+		$_pb_next_post_from_prefix;
+
+	if(isset($_pb_next_post)
+		&& $_pb_next_post_from_id === $id_
+		&& $_pb_next_post_from_column === $column_
+		&& $_pb_next_post_from_prefix === $prefix_){
+		return $_pb_next_post;
+	}
+
+	$_pb_next_post_from_id = $id_;
+	$_pb_next_post_from_column = $column_;
+	$_pb_next_post = pb_sibling_post($id_, $column_, $prefix_, "next");
+
+	return $_pb_next_post;
+}
+
+function pb_exists_prev_post($id_ = null){
+	$check_ = pb_prev_post($id_);
+	return isset($check_);
+}
+function pb_exists_next_post($id_ = null){
+	$check_ = pb_next_post($id_);
+	return isset($check_);
+}
+
+function pb_prev_post_url($id_ = null){
+	$prev_post_data_ = pb_prev_post($id_);
+	if(!isset($prev_post_data_)) return null;
+	return pb_post_url($prev_post_data_['id']);
+}
+function pb_next_post_url($id_ = null){
+	$next_post_data_ = pb_next_post($id_);
+	if(!isset($next_post_data_)) return null;
+	return pb_post_url($next_post_data_['id']);
+}
+
+function pb_prev_post_title($id_ = null){
+	$prev_post_data_ = pb_prev_post($id_);
+	if(!isset($prev_post_data_)) return null;
+	return $prev_post_data_['post_title'];
+}
+function pb_next_post_title($id_ = null){
+	$next_post_data_ = pb_next_post($id_);
+	if(!isset($next_post_data_)) return null;
+	return $next_post_data_['post_title'];
+}
+
 
 function pb_post_insert($raw_data_){
 	global $posts_do;
@@ -255,6 +368,11 @@ function pb_post_edit($id_, $data_){
 function pb_current_post(){
 	global $pbpost;
 	return $pbpost;
+}
+function pb_current_post_id(){
+	$post_data_ = pb_current_post();
+	if(!isset($post_data_)) return null;
+	return $post_data_['id'];
 }
 
 function pb_post_title($id_ = null){
