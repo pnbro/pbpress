@@ -1,7 +1,7 @@
 <?php
 
 pb_easytable_register("pb-admin-page-revision-table", function($offset_, $per_page_){
-	$page_id_ = isset($_GET["page_id"]) ? $_GET["page_id"] : -1;
+	$page_id_ = _GET('page_id', -1);
 
 	$statement_ = pb_page_revision_statement(array(
 		'page_id' => $page_id_,

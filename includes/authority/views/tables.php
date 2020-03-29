@@ -1,7 +1,7 @@
 <?php
 
 pb_easytable_register("pb-admin-authority-table", function($offset_, $per_page_){
-	$keyword_ = isset($_GET['keyword']) ? $_GET['keyword'] : null;
+	$keyword_ = _GET('keyword', null);
 	$statement_ = pb_authority_statement(array(
 		"keyword" => $keyword_,
 	));
@@ -45,7 +45,7 @@ pb_easytable_register("pb-admin-authority-table", function($offset_, $per_page_)
 ));
 
 pb_easytable_register("pb-admin-authority-task-table", function($offset_, $per_page_){
-	$auth_id_ = isset($_GET["master_id"]) ? $_GET["master_id"] : null;
+	$auth_id_ = _GET('master_id', null);
 
 	if(!strlen($auth_id_) || $auth_id_ < 0){
 		return array(
@@ -61,7 +61,7 @@ pb_easytable_register("pb-admin-authority-task-table", function($offset_, $per_p
 		$data_['slug'] = $key_;
 	}
 
-	$page_index_ = isset($_GET["page_index"]) ? (int)$_GET["page_index"] : 0;
+	$page_index_ = _GET('page_index', 0, PB_PARAM_INT);
 	$per_page_ = count($task_types_);
 
 	global $_cached_authority_map, $_cached_auth_data;
@@ -95,7 +95,7 @@ pb_easytable_register("pb-admin-authority-task-table", function($offset_, $per_p
 		'name' => '권한부여',
 		'class' => 'col-3 text-center',
 		'render' => function($table_, $item_, $row_index_){
-			$auth_id_ = isset($_GET["master_id"]) ? $_GET["master_id"] : null;
+			$auth_id_ = _GET('master_id');
 
 			$authority_task_types_ = pb_authority_task_types();
 			$authority_task_type_data_ = isset($authority_task_types_[$item_["slug"]]) ? $authority_task_types_[$item_["slug"]] : null;

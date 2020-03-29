@@ -4,7 +4,7 @@ include(dirname( __FILE__ ) . "/includes.php");
 
 header("Content-Type:application/json; charset=UTF-8");
 
-$request_data_ = isset($_POST['request_data']) ? $_POST['request_data'] : null;
+$request_data_ = _POST('request_data');
 
 if(!isset($request_data_)){
 	echo json_encode(array(

@@ -53,10 +53,10 @@ function _pb_ajax_menu_editor_load_edit_form(){
 		pb_end();
 	}
 
-	$item_data_ = isset($_POST['item_data']) ? $_POST['item_data'] : null;
+	$item_data_ = _POST('item_data');
 	$category_ = isset($item_data_['category']) ? $item_data_['category'] : null;
 
-	$item_meta_data_ = isset($_POST['item_meta_data']) ? $_POST['item_meta_data'] : null;
+	$item_meta_data_ = _POST('item_meta_data');
 
 	$menu_categories_ = pb_menu_categories();
 	$menu_categories_ = isset($menu_categories_[$category_]) ? $menu_categories_[$category_] : $menu_categories_['common'];
@@ -194,8 +194,8 @@ function _pb_ajax_menu_editor_do_update(){
 		pb_end();
 	}
 
-	$menu_data_ = isset($_POST['menu_data']) ? $_POST['menu_data'] : null;
-	$target_menu_ids_ = isset($_POST['target_menu_ids']) ? $_POST['target_menu_ids'] : array();
+	$menu_data_ = _POST('menu_data');
+	$target_menu_ids_ = _POST('target_menu_ids', array(), PB_PARAM_ARRAY);
 
 	$menu_id_ = isset($menu_data_['menu_id']) ? $menu_data_['menu_id'] : null;
 	$menu_title_ = isset($menu_data_['menu_title']) ? $menu_data_['menu_title'] : null;
@@ -267,7 +267,7 @@ function _pb_ajax_menu_editor_do_delete(){
 		pb_end();
 	}
 
-	$menu_id_ = isset($_POST['menu_id']) ? $_POST['menu_id'] : null;
+	$menu_id_ = _POST('menu_id');
 
 	pb_menu_delete($menu_id_);
 
@@ -289,7 +289,7 @@ function _pb_ajax_menu_editor_load_menu(){
 		pb_end();
 	}
 
-	$menu_id_ = isset($_POST['menu_id']) ? $_POST['menu_id'] : null;
+	$menu_id_ = _POST('menu_id');
 	$check_data_ = pb_menu($menu_id_);
 	if(!isset($check_data_)){
 		echo json_encode(array(

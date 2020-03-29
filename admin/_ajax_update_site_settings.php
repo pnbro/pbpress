@@ -16,7 +16,7 @@ global $pb_config;
 
 header("Content-Type:application/json; charset=".$pb_config->charset);
 
-$settings_data_ = isset($_POST['settings_data']) ? $_POST['settings_data'] : null;
+$settings_data_ = _POST('settings_data');
 
 if(!isset($settings_data_)){
 	echo json_encode(array(

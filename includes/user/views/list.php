@@ -2,9 +2,8 @@
 
 	$user_listtable_ = pb_easytable("pb-user-listtable");
 
-	$page_index_ = isset($_GET['page_index']) ? $_GET['page_index'] : 0;
-	$keyword_ = isset($_GET['keyword']) ? $_GET['keyword'] : null;
-
+	$page_index_ = _GET('page_index', 0, PB_PARAM_INT);
+	$keyword_ = _GET('keyword');
 ?>
 
 <h3>사용자내역</h3>

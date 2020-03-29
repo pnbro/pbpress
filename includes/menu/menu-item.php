@@ -10,8 +10,8 @@ $menus_item_do = pbdb_data_object("menus_item", array(
 	'parent_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
 		'table' => 'menus_item',
 		'column' => 'id',
-		'delete' => PBDB_DO::FK_NOACTION,
-		'update' => PBDB_DO::FK_NOACTION,
+		'delete' => PBDB_DO::FK_SETNULL,
+		'update' => PBDB_DO::FK_SETNULL,
 	), "comment" => "상위ID"),
 	'menu_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
 		'table' => 'menus',

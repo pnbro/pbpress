@@ -2,8 +2,9 @@
 
 pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 	global $pbpost_type;
-	$keyword_ = isset($_GET["keyword"]) ? $_GET["keyword"] : null;
-	$status_ = isset($_GET["search_status"]) && strlen($_GET["search_status"]) ? $_GET["search_status"] : null;
+	
+	$keyword_ = _GET('keyword', null);
+	$status_ = _GET('search_status', null);
 
 	$statement_ = pb_post_statement(array(
 		'keyword' => $keyword_,

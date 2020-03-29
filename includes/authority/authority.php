@@ -108,7 +108,7 @@ function pb_authority_update($id_, $raw_data_){
 	}
 
 	global $auth_do;
-	$auth_do->update($id_, $data_, $raw_data_);
+	$auth_do->update($id_, $raw_data_);
 	pb_hook_do_action("pb_authority_updated", $id_);
 }
 

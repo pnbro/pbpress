@@ -2,8 +2,8 @@
 	
 include(dirname( __FILE__ ) . "/includes.php");
 
-$user_email_ = isset($_GET["user_email"]) ? $_GET["user_email"] : null;
-$vkey_ = isset($_GET["vkey"]) ? $_GET["vkey"] : null;
+$user_email_ = _GET('user_email'):
+$vkey_ = _GET('vkey');
 
 if(!strlen($user_email_) || !strlen($vkey_)){
 	pb_redirect(pb_home_url());

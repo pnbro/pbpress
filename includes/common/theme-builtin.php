@@ -43,7 +43,7 @@ function _pb_theme_ajax_do_update(){
 
 	global $pb_config;
 
-	$theme_data_ = isset($_POST['theme_data']) ? $_POST['theme_data'] : null;
+	$theme_data_ = _POST('theme_data');
 
 	if(!isset($theme_data_)){
 		echo json_encode(array(

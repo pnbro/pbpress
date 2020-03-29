@@ -23,8 +23,8 @@ function _pb_exceptions_switch_theme_error_handler($severity_, $message_, $filen
 	pb_end();
 }
 
-$theme_ = isset($_POST['theme']) ? $_POST['theme'] : null;
-$request_token_ = isset($_POST['request_token']) ? $_POST['request_token'] : null;
+$theme_ = _POST('theme');
+$request_token_ = _POST('request_token');
 
 if(!strlen($theme_) || (pb_option_value("_theme_switch_key_") !== $request_token_)){
 	echo json_encode(array(

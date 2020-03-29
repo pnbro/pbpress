@@ -15,7 +15,7 @@ global $pb_config;
 
 header("Content-Type:application/json; charset=".$pb_config->charset);
 
-if(!pb_verify_request_token("pbpress_manage_site", $_POST['request_chip'])){
+if(!pb_verify_request_token("pbpress_manage_site", _POST('request_chip'))){
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => '에러발생',
@@ -27,7 +27,7 @@ if(!pb_verify_request_token("pbpress_manage_site", $_POST['request_chip'])){
 global $pbdb;
 $pbdb->install_tables();
 
-if(!$pbdb->exists_table("OPTIONS")){
+if(!$pbdb->exists_table("options")){
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => '에러발생',

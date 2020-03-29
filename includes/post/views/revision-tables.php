@@ -1,8 +1,8 @@
 <?php
 
 pb_easytable_register("pb-admin-post-revision-table", function($offset_, $per_post_){
-	$post_id_ = isset($_GET["post_id"]) ? $_GET["post_id"] : -1;
-
+	$post_id_ = _GET('post_id', -1);
+	
 	$statement_ = pb_post_revision_statement(array(
 		'post_id' => $post_id_,
 	));

@@ -29,6 +29,6 @@ define("PB_CRYPT_PASSWORD", "~W.7bNa[~$+aeP>u");
 // define("PB_UPLOAD_MAX_IMAGE_WIDTH", 2000);
 // define("PB_UPLOAD_MAX_IMAGE_HEIGHT", 2000);
 
-// define("PB_WYSIWYG_EDITOR", "trumbowyg"); // trumbowyg or summernote
+// define("PB_WYSIWYG_EDITOR", "summernote"); // trumbowyg or summernote
 
 ?>

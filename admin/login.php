@@ -2,7 +2,7 @@
 
 include(dirname( __FILE__ ) . "/includes.php");
 
-$redirect_url_ = (isset($_GET["redirect_url"]) && strlen($_GET["redirect_url"])) ? $_GET["redirect_url"] : pb_admin_url();
+$redirect_url_ = _GET('redirect_url', pb_admin_url());
 
 $admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', "PBPress 로그인");
 

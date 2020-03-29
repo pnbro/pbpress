@@ -153,5 +153,56 @@ function pb_strlen(){
 	global $_pb_safe_strlen;
 	return call_user_func_array($_pb_safe_strlen, func_get_args());
 }
+
+define('PB_PARAM_PLAIN', 1);
+define('PB_PARAM_INT', 3);
+define('PB_PARAM_FLOAT', 5);
+define('PB_PARAM_ARRAY', 7);
+define('PB_PARAM_JSON', 9);
+
+function _pb_param_from_($map_, $key_, $default_ = null, $type_ = PB_PARAM_PLAIN){
+	if(!isset($map_[$key_])) return $default_;
+
+	$param_value_ = $map_[$key_];
+
+	switch($type_){
+		case PB_PARAM_INT : 
+			if(!strlen($param_value_)) return $default_;
+			$param_value_ = (int)$param_value_;
+
+		break;
+		case PB_PARAM_FLOAT : 
+			if(!strlen($param_value_)) return $default_;
+			$param_value_ = (float)$param_value_;
+
+		break;
+		case PB_PARAM_ARRAY : 
+			if(gettype($param_value_) === "array") return $param_value_;
+			if(!strlen($param_value_)) return $default_;
+			return explode(",", $param_value_);
+		break;
+		case PB_PARAM_JSON : 
+			if(gettype($param_value_) !== "array"){
+				return json_decode($param_value_, true);
+			}
+
+			return $param_value_;
+		break;
+		case PB_PARAM_PLAIN : 
+		default : 
+			if(gettype($param_value_) === "array" || gettype($param_value_) === "object") return $param_value_;
+			
+			if(!strlen($param_value_)) return $default_;
+			return $param_value_;
+		break;
+	}
+}
+
+function _GET($key_, $default_ = null, $type_ = PB_PARAM_PLAIN){
+	return _pb_param_from_($_GET, $key_, $default_, $type_);
+}
+function _POST($key_, $default_ = null, $type_ = PB_PARAM_PLAIN){
+	return _pb_param_from_($_POST, $key_, $default_, $type_);	
+}
 	
 ?>

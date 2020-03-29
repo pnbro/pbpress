@@ -271,8 +271,8 @@ pb_add_ajax('pb-easytable-load-html', '_pb_ajax_easytable_load_html');
 function _pb_ajax_easytable_load_html(){
 	global $pb_easytable_map;
 
-	$table_id_ = isset($_GET['table_id']) ? $_GET['table_id'] : -1;
-	$page_index_ = isset($_GET['page_index']) ? $_GET['page_index'] : null;
+	$table_id_ = _GET('table_id', -1);
+	$page_index_ = _GET('page_index', 0, PB_PARAM_INT);
 
 	if(!isset($pb_easytable_map[$table_id_])){
 		pb_ajax_error('잘못된 접근','잘못된 접근입니다.');

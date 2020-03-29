@@ -137,7 +137,7 @@ function _pb_ajax_admin_user_update(){
 		pb_end();
 	}
 
-	$request_data_ = $_POST["request_data"];
+	$request_data_ = _POST('request_data');
 
 	if(!pb_verify_request_token("pbpress_manage_user", $request_data_['_request_chip'])){
 		echo json_encode(array(
@@ -204,7 +204,7 @@ function _pb_ajax_admin_user_add(){
 		pb_end();
 	}
 
-	$request_data_ = $_POST["request_data"];
+	$request_data_ = _POST('request_data');
 
 	if(!pb_verify_request_token("pbpress_manage_user", $request_data_['_request_chip'])){
 		echo json_encode(array(

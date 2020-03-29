@@ -27,7 +27,7 @@ if(empty($_FILES)){
 	pb_end();
 }
 
-$upload_dir_ = (isset($_GET['upload_dir']) && strlen($_GET['upload_dir'])) ? $_GET['upload_dir'] : null;
+$upload_dir_ = _GET('upload_dir');
 
 $results_ = array();
 $files_ = $_FILES['files'];

@@ -37,7 +37,7 @@ function _pb_admin_ajax_page_revision_restore(){
 		pb_end();
 	}
 
-	$revision_id_ = isset($_POST["revision_id"]) ? $_POST["revision_id"] : -1;
+	$revision_id_ = _POST('revision_id', -1);
 	$revision_data_ = pb_page_revision($revision_id_);
 
 	if(!isset($revision_data_)){
@@ -78,7 +78,7 @@ function _pb_admin_ajax_page_revision_delete(){
 		pb_end();
 	}
 
-	$revision_id_ = isset($_POST["revision_id"]) ? $_POST["revision_id"] : -1;
+	$revision_id_ = _POST('revision_id', -1);
 	$revision_data_ = pb_page_revision($revision_id_);
 
 	if(!isset($revision_data_)){

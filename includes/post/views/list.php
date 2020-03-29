@@ -6,9 +6,9 @@
 
 	$post_table_->update_option_value('no_rowdata', $pbpost_type_data['label']['no_results']);
 
-	$post_index_ = isset($_GET['post_index']) ? $_GET['post_index'] : 0;
-	$keyword_ = isset($_GET['keyword']) ? $_GET['keyword'] : null;
-	$status_ = isset($_GET['search_status']) ? $_GET['search_status'] : null;
+	$page_index_ = _GET('page_index', 0, PB_PARAM_INT);
+	$keyword_ = _GET('keyword');
+	$status_ = _GET('search_status');
 
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-post/list.css">
@@ -46,7 +46,7 @@
 	</div>
 
 	<?php 
-		$post_table_->display($post_index_);
+		$post_table_->display($page_index_);
 	?>
 		
 </form>

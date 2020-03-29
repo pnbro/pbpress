@@ -1,7 +1,7 @@
 <?php
 
 pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
-	$keyword_ = isset($_GET['keyword']) ? $_GET['keyword'] : null;
+	$keyword_ = _GET('keyword');
 	$statement_ = pb_gcode_statement(array(
 		"keyword" => $keyword_,
 	));
@@ -49,8 +49,8 @@ pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
 ));
 
 pb_easytable_register("pb-admin-gcode-dtl-table", function($offset_, $per_page_){
-	$keyword_ = isset($_GET["keyword"]) ? $_GET["keyword"] : null;
-	$code_id_ = isset($_GET["master_id"]) ? $_GET["master_id"] : null;
+	$keyword_ = _GET('keyword');
+	$code_id_ = _GET('master_id');
 
 	$statement_ = pb_gcode_dtl_statement(array(
 		'code_id' => $code_id_,

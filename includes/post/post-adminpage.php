@@ -125,7 +125,7 @@ function _pb_post_installed_tables(){
 pb_hook_add_action('pb_installed_tables', "_pb_post_installed_tables");
 
 function _pb_post_ajax_edit(){
-	$post_data_ = isset($_POST['post_data']) ? $_POST['post_data'] : null;
+	$post_data_ = _POST('post_data');
 
 	if(!isset($post_data_)){
 		echo json_encode(array(
@@ -192,7 +192,7 @@ function _pb_post_ajax_edit(){
 pb_add_ajax('edit-post', "_pb_post_ajax_edit");
 
 function _pb_post_ajax_delete(){
-	$post_id_ = isset($_POST['post_id']) ? $_POST['post_id'] : null;
+	$post_id_ = _POST('post_id');
 
 	if(!strlen($post_id_)){
 		echo json_encode(array(
@@ -237,8 +237,8 @@ function _pb_post_ajax_delete(){
 pb_add_ajax('delete-post', "_pb_post_ajax_delete");
 
 function _pb_post_ajax_update_slug(){
-	$post_id_ = isset($_POST['post_id']) ? $_POST['post_id'] : null;
-	$slug_ = isset($_POST['slug']) ? $_POST['slug'] : null;
+	$post_id_ = _POST('post_id');
+	$slug_ = _POST('slug');
 
 	if(!strlen($post_id_)){
 		echo json_encode(array(
@@ -274,8 +274,8 @@ function _pb_post_ajax_update_slug(){
 pb_add_ajax('update-post-slug', "_pb_post_ajax_update_slug");
 
 function _pb_post_ajax_update_status(){
-	$post_id_ = isset($_POST['post_id']) ? $_POST['post_id'] : null;
-	$status_ = isset($_POST['status']) ? $_POST['status'] : null;
+	$post_id_ = _POST('post_id');
+	$status_ = _POST('status');
 	$post_data_ = pb_post($post_id_);
 	$post_type_ = $post_data_['type'];
 

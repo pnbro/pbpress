@@ -9,7 +9,7 @@ global $pb_config;
 
 header("Content-Type:application/json; charset=".$pb_config->charset);
 
-$request_data_ = isset($_POST['request_data']) ? $_POST['request_data'] : null;
+$request_data_ = _POST('request_data');
 
 if(!isset($request_data_)){
 	echo json_encode(array(

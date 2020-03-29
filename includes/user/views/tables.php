@@ -1,7 +1,7 @@
 <?php
 
 pb_easytable_register("pb-user-listtable", function($offset_, $per_page_){
-	$keyword_ = isset($_GET['keyword']) ? $_GET['keyword'] : null;
+	$keyword_ = _GET('keyword', null);
 	$statement_ = pb_user_statement(array(
 		"keyword" => $keyword_,
 	));

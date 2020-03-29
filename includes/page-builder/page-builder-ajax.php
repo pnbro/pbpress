@@ -23,7 +23,7 @@ function _pb_page_builder_parse_children_exp($exp_){
 }
 
 function _pb_page_builder_ajax_load_elements(){
-	$options_ = $_POST['options'];
+	$options_ = _POST('options');
 	$parent_id_ = isset($options_['parent']) ? $options_['parent'] : null;
 	$keyword_ = isset($options_['keyword']) ? $options_['keyword'] : null;
 	$elements_ = isset($options_['included_elements']) ? $options_['included_elements'] : null;
@@ -71,9 +71,9 @@ function _pb_page_builder_render_edit_form_group($func_){
 }
 
 function _pb_page_builder_ajax_load_edit_element_form(){
-	$element_id_ = isset($_POST['element_id']) ? $_POST['element_id'] : null;
-	$defaults_ = isset($_POST['element_data']) ? $_POST['element_data'] : null;
-	$content_ = isset($_POST['content']) ? $_POST['content'] : null;
+	$element_id_ = _POST('element_id');
+	$defaults_ = _POST('element_data');
+	$content_ = _POST('content');
 	
 	$temp_page_builder_elements_ = pb_page_builder_elements();
 	$element_data_ = $temp_page_builder_elements_[$element_id_];
@@ -163,10 +163,10 @@ function _pb_page_builder_ajax_load_edit_element_form(){
 pb_add_ajax('page-builder-load-edit-form', '_pb_page_builder_ajax_load_edit_element_form');
 
 function _pb_page_builder_ajax_render_element_custom_preview(){
-	$element_id_ = isset($_POST['key']) ? $_POST['key'] : null;
-	$field_name_ = isset($_POST['field_name']) ? $_POST['field_name'] : null;
-	$element_data_ = isset($_POST['element_data']) ? $_POST['element_data'] : null;
-	$content_ = isset($_POST['content']) ? $_POST['content'] : null;
+	$element_id_ = _POST('key');
+	$field_name_ = _POST('field_name');
+	$element_data_ = _POST('element_data');
+	$content_ = _POST('content');
 
 	$temp_page_builder_elements_ = pb_page_builder_elements();
 
@@ -198,9 +198,9 @@ pb_add_ajax('page-builder-render-element-custom-preview', '_pb_page_builder_ajax
 
 
 function _pb_page_builder_ajax_render_element_render_preview(){
-	$element_id_ = isset($_POST['key']) ? $_POST['key'] : null;
-	$element_data_ = isset($_POST['element_data']) ? $_POST['element_data'] : null;
-	$content_ = isset($_POST['content']) ? $_POST['content'] : null;
+	$element_id_ = _POST('key');
+	$element_data_ = _POST('element_data');
+	$content_ = _POST('content');
 
 	$temp_page_builder_elements_ = pb_page_builder_elements();
 

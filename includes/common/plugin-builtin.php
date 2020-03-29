@@ -66,8 +66,8 @@ function _pb_plugin_ajax_active(){
 
 	global $pb_config;
 
-	$slugs_ = isset($_POST['slugs']) ? $_POST['slugs'] : null;
-	$request_chip_ = isset($_POST['request_chip']) ? $_POST['request_chip'] : null;
+	$slugs_ = _POST('slugs');
+	$request_chip_ = _POST('request_chip');
 
 	if(!isset($slugs_)){
 		echo json_encode(array(
@@ -110,8 +110,8 @@ function _pb_plugin_ajax_deactive(){
 
 	global $pb_config;
 
-	$slugs_ = isset($_POST['slugs']) ? $_POST['slugs'] : null;
-	$request_chip_ = isset($_POST['request_chip']) ? $_POST['request_chip'] : null;
+	$slugs_ = _POST('slugs');
+	$request_chip_ = _POST('request_chip');
 
 	if(!isset($slugs_)){
 		echo json_encode(array(

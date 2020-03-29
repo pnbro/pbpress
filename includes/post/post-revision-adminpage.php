@@ -30,7 +30,7 @@ function _pb_admin_ajax_post_revision_load_master(){
 pb_add_ajax('pb-admin-post-revision-load', '_pb_admin_ajax_post_revision_load_master');
 
 function _pb_admin_ajax_post_revision_restore(){
-	$revision_id_ = isset($_POST["revision_id"]) ? $_POST["revision_id"] : -1;
+	$revision_id_ = _POST('revision_id', -1);
 	$revision_data_ = pb_post_revision($revision_id_);
 	$post_type_ = $revision_data_['post_type'];
 
@@ -72,7 +72,7 @@ pb_add_ajax('pb-admin-restore-post-from-revision', '_pb_admin_ajax_post_revision
 
 
 function _pb_admin_ajax_post_revision_delete(){
-	$revision_id_ = isset($_POST["revision_id"]) ? $_POST["revision_id"] : -1;
+	$revision_id_ = _POST('revision_id', -1);
 	$revision_data_ = pb_post_revision($revision_id_);
 	$post_type_ = $revision_data_['post_type'];
 

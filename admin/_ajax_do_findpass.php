@@ -4,7 +4,7 @@ include(dirname( __FILE__ ) . "/includes.php");
 
 header("Content-Type:application/json; charset=UTF-8");
 
-$user_email_ = isset($_POST['user_email']) ? $_POST['user_email'] : null;
+$user_email_ = _POST('user_email');
 
 if(!strlen($user_email_)){
 	echo json_encode(array(

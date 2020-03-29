@@ -1,5 +1,5 @@
 <?php 	
-	$page_content_ = isset($_POST['page_content']) ? $_POST['page_content'] : null;
+	$page_content_ = _POST('page_content');
 		
 	pb_theme_header();
 

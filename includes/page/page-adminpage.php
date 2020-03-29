@@ -140,7 +140,7 @@ function _pb_page_ajax_edit(){
 		pb_end();
 	}
 
-	$page_data_ = isset($_POST['page_data']) ? $_POST['page_data'] : null;
+	$page_data_ = _POST('page_data');
 
 	if(!isset($page_data_)){
 		echo json_encode(array(
@@ -204,7 +204,7 @@ function _pb_page_ajax_delete(){
 		pb_end();
 	}
 
-	$page_id_ = isset($_POST['page_id']) ? $_POST['page_id'] : null;
+	$page_id_ = _POST('page_id');
 
 	if(!strlen($page_id_)){
 		echo json_encode(array(
@@ -247,8 +247,8 @@ function _pb_page_ajax_update_slug(){
 		pb_end();
 	}
 
-	$page_id_ = isset($_POST['page_id']) ? $_POST['page_id'] : null;
-	$slug_ = isset($_POST['slug']) ? $_POST['slug'] : null;
+	$page_id_ = _POST('page_id');
+	$slug_ = _POST('slug');
 
 	if(!strlen($page_id_)){
 		echo json_encode(array(
@@ -281,8 +281,8 @@ function _pb_page_ajax_update_status(){
 		pb_end();
 	}
 
-	$page_id_ = isset($_POST['page_id']) ? $_POST['page_id'] : null;
-	$status_ = isset($_POST['status']) ? $_POST['status'] : null;
+	$page_id_ = _POST('page_id');
+	$status_ = _POST('status');
 	$page_data_ = pb_page($page_id_);
 
 	if(!strlen($page_id_) || !isset($page_data_)){
@@ -317,8 +317,8 @@ function _pb_page_ajax_register_front_page(){
 		pb_end();
 	}
 
-	$page_id_ = isset($_POST['page_id']) ? $_POST['page_id'] : null;
-	$status_ = isset($_POST['status']) ? $_POST['status'] : null;
+	$page_id_ = _POST('page_id');
+	$status_ = _POST('status');
 	$page_data_ = pb_page($page_id_);
 
 	if(!strlen($page_id_) || !isset($page_data_)){
