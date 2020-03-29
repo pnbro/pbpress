@@ -31,7 +31,7 @@ function pb_format_mapping($map_, $data_){
 				$converted_format_[] = $map_[$key_];
 			}else{
 				$converted_data_[$key_] = "NULL";
-				$converted_format_[] = "##null##";
+				$converted_format_[] = PBDB::TYPE_NUMBER;
 			}
 		}
 	}
