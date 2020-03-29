@@ -168,12 +168,12 @@ function _pb_param_from_($map_, $key_, $default_ = null, $type_ = PB_PARAM_PLAIN
 	switch($type_){
 		case PB_PARAM_INT : 
 			if(!strlen($param_value_)) return $default_;
-			$param_value_ = (int)$param_value_;
+			return (int)$param_value_;
 
 		break;
 		case PB_PARAM_FLOAT : 
 			if(!strlen($param_value_)) return $default_;
-			$param_value_ = (float)$param_value_;
+			return (float)$param_value_; 
 
 		break;
 		case PB_PARAM_ARRAY : 
