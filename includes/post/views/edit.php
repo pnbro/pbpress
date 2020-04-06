@@ -15,6 +15,8 @@
 		$pbpost_meta_map = array();
 	}
 
+	$editors_ = isset($pbpost_type_data['editors']) ? $pbpost_type_data['editors'] : array("text", "editor");
+
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-post/edit.css">
 <h3><?=($is_new_ ? $pbpost_type_data['label']['add'] : $pbpost_type_data['label']['update'])?></h3>
@@ -79,7 +81,7 @@
 					"min_height" => 400,
 					"id" => "pb-post-html-editor",
 					"editor" => isset($pbpost_meta_map['actived_editor_id']) ? $pbpost_meta_map['actived_editor_id'] : null,
-					"editors" => array("text","editor"),
+					"editors" => pb_hook_apply_filters('pb_post_{$pbpost_type}_editors', pb_hook_apply_filters('pb_post_editors', $editors_)),
 				));
 				pb_hook_do_action("pb_post_edit_form_post_html_after", $pbpost);
 				pb_hook_do_action("pb_post_{$pbpost_type}_edit_form_post_html_after", $pbpost);
