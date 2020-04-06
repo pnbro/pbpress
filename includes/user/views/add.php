@@ -16,7 +16,7 @@
 				<?php pb_hook_do_action('pb_admin_manage_user_edit_form_before')?>
 
 				<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_manage_user")?>">
-				<input type="hidden" name="id", value="<?=$user_data['id']?>">
+				<input type="hidden" name="id", value="">
 				<div class="form-group">
 					<label for="pb-manage-user-add-form-user_login">사용자ID</label>
 					<input type="text" name="user_login" placeholder="사용자ID 입력" id="pb-manage-user-add-form-user_login" class="form-control" required data-error="사용자명을 입력하세요" data-remote="<?=pb_ajax_url("pb-admin-manage-user-check-login")?>" data-remote-error="이미 사용하고 있는 ID입니다.">

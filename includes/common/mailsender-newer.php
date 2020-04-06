@@ -43,7 +43,14 @@ class PBMailSender_newer extends PBMailSender{
 	$phpmailer_->Port = $mail_smtp_port_;
 
 	$phpmailer_->setFrom($options_['from']);
-	$phpmailer_->addAddress($to_);
+
+	if(gettype($to_) === "string"){
+		$to_ = array($to_);
+	}
+
+	foreach($to_ as $temp_){
+		$phpmailer_->addAddress($temp_);	
+	}
 
 	foreach($attachments_ as $file_path_){
 		$phpmailer_->addAttachment($file_path_);

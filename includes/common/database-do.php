@@ -91,7 +91,6 @@ class PBDB_DO extends ArrayObject{
 	private $_engine;
 	private $_comment;
 	private $_fields = array();
-	private $_additional_fields = array();
 	private $_keys = array();
 	private $_indexes = array();
 
@@ -110,10 +109,11 @@ class PBDB_DO extends ArrayObject{
 		}
 
 		pb_hook_add_filter('pb_install_tables', array($this, "_install_tables"));
+		pb_hook_add_action('pb_installed_tables', array($this, "_installed_tables"));
 	}
 
 	function add_field($array_){
-		$this->_additional_fields = array_merge($this->_additional_fields, $array_);
+		$this->_fields = array_merge($this->_fields, $array_);
 	}
 
 	function _install_tables($querys_){
@@ -192,6 +192,73 @@ class PBDB_DO extends ArrayObject{
 		$querys_[] = $query_;
 
 		return $querys_;
+	}
+
+	function _installed_tables(){
+		global $pbdb;
+
+		$fk_last_index_ = 0;
+		foreach($this->_fields as $column_name_ => $field_data_){
+			if(isset($field_data_['check_exists'])) continue;
+
+			if(isset($field_data_['fk'])){
+				++$fk_last_index_;
+			}
+		}
+
+		foreach($this->_fields as $column_name_ => $field_data_){
+			if(isset($field_data_['check_exists']) && !!$field_data_['check_exists']){
+
+				if(!$this->is_column_exists($column_name_)){
+
+					$type_ = isset($field_data_['type']) ? $field_data_['type'] : PBDB_DO::TYPE_VARCHAR;
+					$length_ = isset($field_data_['length']) ? $field_data_['length'] : null;
+					$comment_ = isset($field_data_['comment']) ? $field_data_['comment'] : null;
+					$not_null_ = isset($field_data_['nn']) ? $field_data_['nn'] : false;
+					$pk_ = isset($field_data_['pk']) ? $field_data_['pk'] : false;
+					$default_ = isset($field_data_['default']) ? $field_data_['default'] : null;
+					$auto_increment_ = isset($field_data_['ai']) ? $field_data_['ai'] : false;
+
+					if(!!$pk_) continue;
+
+					$query_ = "ALTER TABLE {$this->_table_name} ADD `{$column_name_}` {$type_}".(strlen($length_) ? "({$length_})" : "")." ";
+
+					if($not_null_ || $pk_){
+						$query_ .= "NOT NULL ";
+					}else{
+						if(strlen($default_)){
+							$default_ = PBDB_DO::convert_to_pbdb_type($type_) === PBDB::TYPE_STRING ? "'{$default_}'" : $default_;
+						}else $default_ = "NULL";
+
+						$query_ .= "DEFAULT {$default_} ";
+					}
+
+					if($auto_increment_){
+						$query_ .= "AUTO_INCREMENT ";
+					}
+
+					if(strlen($comment_)){
+						$query_ .= 	"COMMENT '{$comment_}' ";
+					}
+
+					if(isset($field_data_['fk'])){
+						++$fk_last_index_;
+
+						$target_table_ = $field_data_['fk']['table'];
+						$target_column_ = $field_data_['fk']['column'];
+						$on_delete_ = isset($field_data_['fk']['delete']) ? $field_data_['fk']['delete'] : PBDB_DO::FK_NOACTION;
+						$on_update_ = isset($field_data_['fk']['update']) ? $field_data_['fk']['update'] : PBDB_DO::FK_NOACTION;
+
+						$query_ .= 	", ADD CONSTRAINT `{$this->_table_name}_fk{$fk_last_index_}` FOREIGN KEY (`{$column_name_}`) REFERENCES `{$target_table_}` (`{$target_column_}`) ON DELETE {$on_delete_} ON UPDATE {$on_update_}";
+
+					}
+
+					$pbdb->query($query_);
+				}
+
+			}
+		}
+
 	}
 
 	function is_exists(){

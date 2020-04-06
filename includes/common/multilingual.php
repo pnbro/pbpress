@@ -35,9 +35,9 @@ function pb_lang_load_translations($domain_, $json_dir_path_){
 
 	if(!file_exists($json_dir_path_)) return false;
 
-	foreach(glob($pb_lang_domain_maps[$domain_]['path'].'*.json') as $filename_){
+	foreach(glob($pb_lang_domain_maps[$domain_]['path'].'*.php') as $filename_){
 		
-		$locale_name_ = basename($filename_, ".json");
+		$locale_name_ = basename($filename_, ".php");
 		$pb_lang_domain_maps[$domain_]['locales'][$locale_name_] = array(
 			'loaded' => false,
 			'translations' => array(),
@@ -60,15 +60,14 @@ function pb_lang_load_translations_json($domain_, $locale_){
 	if(!isset($pb_lang_domain_maps[$domain_]['locales'][$locale_])) return false;
 
 	if(!$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded']){
-		$json_plain_text_ = @file_get_contents($pb_lang_domain_maps[$domain_]['path'].$locale_.'.json');
-		$json_object_ = @json_decode($json_plain_text_, true);
-
-		if(!isset($json_object_)){
+		$translations_data_ = @include($pb_lang_domain_maps[$domain_]['path'].$locale_.'.php');
+		
+		if(!isset($translations_data_)){
 			return false;
 		}
 
-		$pb_lang_domain_maps[$domain_]['locales'][$locale_]['translations'] = $json_object_;
-		pb_hook_do_action('pb_lang_translations_json_loaded', $domain_, $locale_, $json_object_);
+		$pb_lang_domain_maps[$domain_]['locales'][$locale_]['translations'] = $translations_data_;
+		pb_hook_do_action('pb_lang_translations_json_loaded', $domain_, $locale_, $translations_data_);
 		return true;
 	}
 

@@ -30,7 +30,7 @@ if(!strlen($theme_) || (pb_option_value("_theme_switch_key_") !== $request_token
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => "에러발생",
-		'error_message' => "잘못된 요청입니다.(".pb_option_value("_theme_switch_key_")." == {$request_token_})",
+		'error_message' => "잘못된 요청입니다.",
 		
 	));
 	pb_end();

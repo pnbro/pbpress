@@ -116,7 +116,7 @@ function pb_gcode_dtl_statement($conditions_ = array()){
 		"DATE_FORMAT(gcode_dtl.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis"
 	);
 
-	$statement_->add_join_statement("LEFT OUTER JOIN", $gcode_do->statement(), "gcode_dtl", array(
+	$statement_->add_join_statement("LEFT OUTER JOIN", $gcode_do->statement(), "gcode", array(
 		array(PBDB_SS::COND_COMPARE, "gcode.code_id", "gcode_dtl.code_id", "=")
 	), array(
 		"col1 col1_title",

@@ -77,6 +77,7 @@ function pb_switch_theme($theme_){
 	}
 
 	pb_option_update("_theme_switch_key_",null);
+
 	pb_hook_do_action('pb_switch_theme_after', $theme_);
 	return true;
 }

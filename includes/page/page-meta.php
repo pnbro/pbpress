@@ -21,7 +21,6 @@ $pages_meta_do = pbdb_data_object("pages_meta", array(
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"페이지 - 메타");
 
-
 function pb_page_meta_statement($conditions_ = array()){
 	global $pages_meta_do;
 
@@ -88,7 +87,6 @@ function pb_page_meta_map($page_id_, $cache_ = true){
 
 	$temp_ = pb_page_meta_list(array(
 		"page_id" => $page_id_,
-		// "meta_name" => $meta_name_,
 	));
 
 	$results_ = array();
@@ -102,8 +100,6 @@ function pb_page_meta_map($page_id_, $cache_ = true){
 
 			$results_[$row_data_['meta_name']][] = $row_data_['meta_value'];
 		}
-		
-		
 	}
 
 	$_pb_page_meta_map[$page_id_] = $results_;

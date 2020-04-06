@@ -85,11 +85,13 @@ function pb_option_value($option_name_, $default_ = null, $cache_ = true){
 
 	return $_pb_option_map[$option_name_];
 }
+function pb_option_exists($option_name_){
+	$check_ = pb_option_list(array('option_name' => $option_name_));
+	return count($check_) > 0;
+}
 
 function pb_option_update($option_name_, $option_value_){
 	global $pbdb;
-
-	$before_value_ = pb_option_value($option_name_);
 
 	if($option_value_ === null){
 		$update_data_ = array(
@@ -104,7 +106,7 @@ function pb_option_update($option_name_, $option_value_){
 	}else{
 		$option_value_ = serialize($option_value_);
 
-		if($before_value_ !== null){
+		if(pb_option_exists($option_name_)){
 			$update_data_ = array(
 				'option_value' => $option_value_,
 				'mod_date' => pb_current_time(),
@@ -123,8 +125,6 @@ function pb_option_update($option_name_, $option_value_){
 			$pbdb->insert("options", $insert_data_);
 		}	
 	}
-
-	
 
 	global $_pb_option_map;
 

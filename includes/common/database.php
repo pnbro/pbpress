@@ -164,8 +164,6 @@ class PBDB{
 		$values_ = array();
 		$types_ = array();
 		foreach($insert_data_ as $column_name_ => $column_value_){
-			$values_[] = $pb_db_connection->escape_string($column_value_);
-
 			if(!$start_column_){
 				$query_column_str_ .= ",";
 				$query_type_str_ .= ",";
@@ -173,13 +171,23 @@ class PBDB{
 				$start_column_ = false;
 			}
 
-			$query_column_str_ .= strtolower($column_name_);
-			if(isset($insert_data_types_[$col_index_])){
+			if($column_value_ === null){
+				$types_[] = PBDB::TYPE_NUMBER;
+				$values_[] = "NULL";
+
+				$query_column_str_ .= strtolower($column_name_);
 				$query_type_str_ .= PBDB_PARAM_MAP_STR;
-				$types_[] = $insert_data_types_[$col_index_];
 			}else{
-				$query_type_str_ .= PBDB_PARAM_MAP_STR;
-				$types_[] = PBDB::TYPE_STRING;
+				$values_[] = $pb_db_connection->escape_string($column_value_);
+
+				$query_column_str_ .= strtolower($column_name_);
+				if(isset($insert_data_types_[$col_index_])){
+					$query_type_str_ .= PBDB_PARAM_MAP_STR;
+					$types_[] = $insert_data_types_[$col_index_];
+				}else{
+					$query_type_str_ .= PBDB_PARAM_MAP_STR;
+					$types_[] = PBDB::TYPE_STRING;
+				}
 			}
 
 			++$col_index_;
@@ -213,23 +221,25 @@ class PBDB{
 		$col_index_ = 0;
 
 		foreach($update_data_ as $column_name_ => $column_value_){
-			$values_[] = $pb_db_connection->escape_string($column_value_);
-
 			if(!$start_column_){
 				$column_value_str_ .= ",";
 			}else{
 				$start_column_ = false;
 			}
 
-			$column_type_ = PBDB::TYPE_STRING;
-			if(isset($update_data_types_[$col_index_])){
-				$column_type_ = $update_data_types_[$col_index_];
+			if($column_value_ === null){
+				$types_[] = PBDB::TYPE_NUMBER;				
+				$values_[] = "NULL";
+			}else{
+				$values_[] = $pb_db_connection->escape_string($column_value_);	
+				$column_type_ = PBDB::TYPE_STRING;
+				if(isset($update_data_types_[$col_index_])){
+					$column_type_ = $update_data_types_[$col_index_];
+				}
+				$types_[] = $column_type_;
+
 			}
-			$types_[] = $column_type_;
-
 			$column_value_str_ .= "{$column_name_} = ".PBDB_PARAM_MAP_STR." ";
-
-
 			++$col_index_;
 		}
 

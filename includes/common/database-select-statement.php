@@ -7,6 +7,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 class PBDB_SS{
 	const COND_COMPARE = 1;
 	const COND_IN = 3;
+	const COND_NOT_IN = 4;
 	const COND_ISNOTNULL = 5;
 	const COND_ISNULL = 7;
 	const COND_LIKE = 8;
@@ -14,8 +15,6 @@ class PBDB_SS{
 }
 
 class PBDB_select_statement_conditions extends ArrayObject{
-
-
 	
 	function add_compare($a_, $b_, $compare_ = "=", $b_type_ = null){
 		$this[] = array(
@@ -49,6 +48,17 @@ class PBDB_select_statement_conditions extends ArrayObject{
 			'b_types' => $array_types_,
 		);
 	}
+	function add_not_in($a_, $array_, $array_types_ = null){
+		if(gettype($array_) !== "array") $array_ = array($array_);
+
+		$this[] = array(
+			'type' => PBDB_SS::COND_NOT_IN,
+			'a' => $a_,
+			'b' => $array_,
+			'b_types' => $array_types_,
+		);
+	}
+
 	function add_like($a_ = array(), $keyword_, $full_search_ = false){
 		if(gettype($a_) !== "array") $a_ = array($a_);
 
@@ -87,6 +97,13 @@ class PBDB_select_statement_conditions extends ArrayObject{
 				$array_types_ = isset($condition_[2]) ? $condition_[2] : null;
 
 				call_user_func_array(array($this, 'add_in'), array($a_, $array_, $array_types_));
+			break;
+			case PBDB_SS::COND_NOT_IN :
+				$a_ = $condition_[0];
+				$array_ = isset($condition_[1]) ? $condition_[1] : array();
+				$array_types_ = isset($condition_[2]) ? $condition_[2] : null;
+
+				call_user_func_array(array($this, 'add_not_in'), array($a_, $array_, $array_types_));
 			break;
 			case PBDB_SS::COND_LIKE :
 				$a_ = $condition_[0];
@@ -167,6 +184,26 @@ class PBDB_select_statement_conditions extends ArrayObject{
 
 				break;
 
+				case PBDB_SS::COND_NOT_IN :
+
+					$a_ = $data_['a'];
+					$b_ = $data_['b'];
+						
+					if(count($b_) > 0){
+						$b_types_ = $data_['b_types'];
+						$in_str_array_ = array();
+
+						foreach($b_ as $bi_ => $bv_){
+							$param_values_[] = pb_database_escape_string($bv_);
+							$param_types_[] = isset($b_types_[$bi_]) ? $b_types_[$bi_] : PBDB::TYPE_STRING;
+							$in_str_array_[] = PBDB_PARAM_MAP_STR;
+						}
+
+						$query_[] = "{$a_} NOT IN (".implode(",", $in_str_array_).") \n\r";
+					}
+
+				break;
+
 				case PBDB_SS::COND_ISNOTNULL :
 
 					$query_[] = "{$a_} IS NOT NULL \n\r";
@@ -240,6 +277,12 @@ class PBDB_select_statement_conditions extends ArrayObject{
 
 					call_user_func_array(array($this, 'add_in'), array($a_, $data_[$key_], $array_types_));
 				break;
+				case PBDB_SS::COND_NOT_IN :
+					$a_ = $condition_[0];
+					$array_types_ = isset($condition_[1]) ? $condition_[1] : null;
+
+					call_user_func_array(array($this, 'add_not_in'), array($a_, $data_[$key_], $array_types_));
+				break;
 				case PBDB_SS::COND_LIKE :
 					$a_ = $condition_[0];
 					$full_search_ = isset($condition_[2]) ? $condition_[1] : false;
@@ -263,6 +306,10 @@ class PBDB_select_statement{
 	private $_field_list = array();
 	private $_join_list = array();
 	private $_cond_list = null;
+
+	static function is_statement($obj_){
+		return @get_class($obj_) === "PBDB_select_statement";
+	}
 
 	function __construct($from_table_, $from_table_alias_ = null){
 		$this->_from_table = $from_table_;
@@ -294,34 +341,24 @@ class PBDB_select_statement{
 		}
 	}
 
-	function &add_join($join_type_, $table_, $alias_ = null, $on_ = null){
+	function &add_join($join_type_, $obj_, $alias_ = null, $on_ = null, $fields_ = null, $column_prefix_ = ""){
 		if(!isset($on_)){
 			$on_ = new PBDB_select_statement_conditions();
 		}
 
 		$this->_join_list[] = array(
 			'type' => $join_type_,
-			'table' => $table_,
+			'obj' => $obj_,
 			'alias' => $alias_,
 			'on' => $on_,
+			'fields' => $fields_,
+			'prefix' => $column_prefix_,
 		);
 
 		return $on_;
 	}
 	function &add_join_statement($join_type_, $statement_, $alias_ = null, $on_ = null, $fields_ = null, $column_prefix_ = ""){
-		if(!isset($on_)){
-			$on_ = new PBDB_select_statement_conditions();
-		}
-
-		$this->_join_list[] = array(
-			'type' => $join_type_,
-			'statement' => $statement_,
-			'prefix' => $column_prefix_,
-			'on' => $on_,
-			'fields' => $fields_,
-		);	
-
-		return $on_;
+		return $this->add_join($join_type_, $statement_, $alias_, $on_, $fields_, $column_prefix_);
 	}
 
 	function add_compare_condition($a_, $b_, $compare_ = "=", $b_type_ = PBDB::TYPE_STRING){
@@ -386,8 +423,11 @@ class PBDB_select_statement{
 		}
 
 		foreach($this->_join_list as $join_data_){
-			if(isset($join_data_['statement'])){
-				$join_table_statement_ = $join_data_['statement'];
+
+			$join_obj_ = $join_data_['obj'];
+
+			if(pb_database_is_statement($join_obj_)){
+				$join_table_statement_ = $join_obj_;
 				$join_table_name_ = $join_table_statement_->from_table();
 				$join_table_alias_ = isset($join_data_['alias']) ? $join_data_['alias'] : $join_table_statement_->from_table_alias();
 				$join_table_alias_ = strlen($join_table_alias_) ? $join_table_alias_ : $join_table_name_;
@@ -462,15 +502,16 @@ class PBDB_select_statement{
 
 
 		foreach($this->_join_list as $join_data_){
-			if(isset($join_data_['statement'])){
-				$join_table_statement_ = $join_data_['statement'];
+			$join_obj_ = $join_data_['obj'];
+
+			if(pb_database_is_statement($join_obj_)){
+				$join_table_statement_ = $join_obj_;
 				$join_table_alias_ = isset($join_data_['alias']) ? $join_data_['alias'] : $join_table_statement_->from_table_alias();
 				$join_table_alias_ = strlen($join_table_alias_) ? $join_table_alias_ : $join_table_name_;
 				$join_table_name_ = $join_table_statement_->from_table();
 				$query_ .= " {$join_data_['type']} {$join_table_name_} {$join_table_alias_} \n\r";
-
 			}else{
-				$join_table_ = $join_data_['table'];
+				$join_table_ = $join_obj_;
 				$join_table_alias_ = isset($join_data_['alias']) ? $join_data_['alias'] : $join_table_;
 				$query_ .= " {$join_data_['type']} {$join_table_} {$join_table_alias_} \n\r";
 			}
@@ -550,6 +591,15 @@ class PBDB_select_statement{
 		global $pbdb;
 		return $pbdb->select($result_['query'], $result_['values'], $result_['types']);
 	}
+	function serialize_column($column_name_, $order_by_ = null, $limit_ = null){
+		$temp_ = $this->select($order_by_, $limit_);
+		$results_ = array();
+
+		foreach($temp_ as $row_data_){
+			$results_[] = $row_data_[$column_name_];
+		}
+		return $results_;
+	}
 	function get_var($order_by_ = null, $limit_ = null){
 		$result_ = $this->build($order_by_, $limit_);
 		global $pbdb;
@@ -567,6 +617,9 @@ function pb_database_select_statement($table_, $alias_ = null){
 }
 function pbdb_ss($table_, $alias_ = null){
 	return pb_database_select_statement($table_, $alias_);
+}
+function pb_database_is_statement($statement_){
+	return PBDB_select_statement::is_statement($statement_);
 }
 	
 ?>
