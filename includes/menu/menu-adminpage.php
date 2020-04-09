@@ -19,30 +19,6 @@ function _pb_menu_register_adminpage($results_){
 }
 pb_hook_add_filter('pb_adminpage_list', '_pb_menu_register_adminpage');
 
-function pb_menu_register_authority_task_types($results_){
-	$results_['manage_menu'] = array(
-		'name' => '메뉴관리'
-	);
-
-	return $results_;
-}
-pb_hook_add_filter('pb_authority_task_types', "pb_menu_register_authority_task_types");
-
-function _pb_menu_installed_tables(){
-	$check_ = pb_authority_task_by_slug(PB_AUTHORITY_SLUG_ADMINISTRATOR, "manage_menu");
-	if(isset($check_)) return;
-
-	$auth_data_ = pb_authority_by_slug(PB_AUTHORITY_SLUG_ADMINISTRATOR);
-
-	pb_authority_task_add(array(
-		'auth_id' => $auth_data_['id'],
-		'slug' => "manage_menu",
-		'reg_date' => pb_current_time(),
-	));
-
-}
-pb_hook_add_action('pb_installed_tables', "_pb_menu_installed_tables");
-
 function _pb_ajax_menu_editor_load_edit_form(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_menu")){
 		echo json_encode(array(

@@ -5,7 +5,8 @@ if(!defined('PB_DOCUMENT_PATH')){
 }
 
 function pb_gcode_install(){
-	$gcode_list_ = pb_hook_apply_filters("pb_intialize_gcode_list", array());
+	global $_pb_gcode_initial_list;
+	$gcode_list_ = pb_hook_apply_filters("pb_intialize_gcode_list", $_pb_gcode_initial_list);
 
 	global $pbdb;
 

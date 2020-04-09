@@ -105,31 +105,6 @@ function _pb_page_rewrite_handler_for_adminpage($rewrite_path_){
 	return new PBError(503, "잘못된 접근", "요청정보가 잘못됬습니다.");
 }
 
-
-function _pb_page_register_authority_task_types($results_){
-	$results_['manage_page'] = array(
-		'name' => '페이지관리'
-	);
-
-	return $results_;
-}
-pb_hook_add_filter('pb_authority_task_types', "_pb_page_register_authority_task_types");
-
-function _pb_page_installed_tables(){
-	$check_ = pb_authority_task_by_slug(PB_AUTHORITY_SLUG_ADMINISTRATOR, "manage_page");
-	if(isset($check_)) return;
-
-	$auth_data_ = pb_authority_by_slug(PB_AUTHORITY_SLUG_ADMINISTRATOR);
-
-	pb_authority_task_add(array(
-		'auth_id' => $auth_data_['id'],
-		'slug' => "manage_page",
-		'reg_date' => pb_current_time(),
-	));
-
-}
-pb_hook_add_action('pb_installed_tables', "_pb_page_installed_tables");
-
 function _pb_page_ajax_edit(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
 		echo json_encode(array(

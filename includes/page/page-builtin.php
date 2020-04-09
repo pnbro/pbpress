@@ -8,20 +8,19 @@ define('PB_PAGE_STATUS_WRITING', '00001');
 define('PB_PAGE_STATUS_PUBLISHED', '00003');
 define('PB_PAGE_STATUS_UNPUBLISHED', '00009');
 
-function pb_page_initialize_gcode_list($gcode_list_){
+pb_gcode_initial_register('PAG01', array(
+	'name' => '페이지등록상태',
+	'data' => array(
+		PB_PAGE_STATUS_WRITING => "작성중",
+		PB_PAGE_STATUS_PUBLISHED => "공개",
+		PB_PAGE_STATUS_UNPUBLISHED => "비공개",
+	),
+));
 
-	$gcode_list_['PAG01'] = array(
-		'name' => '페이지등록상태',
-		'data' => array(
-			PB_PAGE_STATUS_WRITING => "작성중",
-			PB_PAGE_STATUS_PUBLISHED => "공개",
-			PB_PAGE_STATUS_UNPUBLISHED => "비공개",
-		),
-	);
-
-	return $gcode_list_;
-}
-pb_hook_add_filter("pb_intialize_gcode_list", "pb_page_initialize_gcode_list");
+pb_authority_task_add_type('manage_page', array(
+	'name' => '페이지관리',
+));
+pb_authority_initial_register(PB_AUTHORITY_SLUG_ADMINISTRATOR, "manage_page");
 
 function _pb_rewrite_unique_slug_for_page($result_, $original_slug_, $retry_count_ = 0, $extra_data_){
 	$check_data_ = pb_page_by_slug($result_);

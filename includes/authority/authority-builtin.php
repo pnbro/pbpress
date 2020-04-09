@@ -28,28 +28,33 @@ function _pb_authority_insert_defaults(){
 }
 pb_hook_add_action("pb_installed_tables", "_pb_authority_insert_defaults");
 
-function _pb_authority_register_authority_task_types($results_){
-	$results_['manage_authority'] = array(
-		'name' => '권한관리',
-		'selectable' => false,
-	);
+function _pb_installed_tables_for_initial_authority(){
+	global $_pb_authority_initial_list;
 
-	return $results_;
+	foreach($_pb_authority_initial_list as $authority_slug_ => $task_list_){
+		$auth_data_ = pb_authority_by_slug($authority_slug_);
+
+		if(!isset($auth_data_)) continue;
+
+		foreach($task_list_ as $task_){
+			$check_ = pb_authority_task_by_slug($authority_slug_, $task_);
+			if(isset($check_)) continue;
+
+			pb_authority_task_add(array(
+				'auth_id' => $auth_data_['id'],
+				'slug' => $task_,
+				'reg_date' => pb_current_time(),
+			));
+		}
+			
+	}
 }
-pb_hook_add_filter('pb_authority_task_types', "_pb_authority_register_authority_task_types");
+pb_hook_add_action('pb_installed_tables', '_pb_installed_tables_for_initial_authority');
 
-function _pb_authority_register_task(){
-	$check_ = pb_authority_task_by_slug(PB_AUTHORITY_SLUG_ADMINISTRATOR, "manage_authority");
-	if(isset($check_)) return;
-
-	$auth_data_ = pb_authority_by_slug(PB_AUTHORITY_SLUG_ADMINISTRATOR);
-
-	pb_authority_task_add(array(
-		'auth_id' => $auth_data_['id'],
-		'slug' => "manage_authority",
-		'reg_date' => pb_current_time(),
-	));
-}
-pb_hook_add_action('pb_installed_tables', "_pb_authority_register_task");
+pb_authority_task_add_type('manage_authority', array(
+	'name' => '권한관리',
+	'selectable' => false,
+));
+pb_authority_initial_register(PB_AUTHORITY_SLUG_ADMINISTRATOR, "manage_authority");
 
 ?>

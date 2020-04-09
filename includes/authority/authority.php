@@ -20,6 +20,12 @@ function pb_authority_task_types(){
 	}
 	return $_pb_authority_task_types;
 }
+function pb_authority_task_add_type($task_type_, $data_){
+	$pb_authority_task_types_ = pb_authority_task_types();
+	$pb_authority_task_types_[$task_type_] = $data_;
+	global $_pb_authority_task_types;
+	$_pb_authority_task_types = $pb_authority_task_types_;
+}
 
 global $auth_do;
 $auth_do = pbdb_data_object("auth", array(
@@ -256,6 +262,17 @@ function pb_authority_map($auth_id_){
 		);
 	}
 	return $task_list_;
+}
+
+global $_pb_authority_initial_list;
+$_pb_authority_initial_list = array();
+function pb_authority_initial_register($authority_slug_, $task_){
+	global $_pb_authority_initial_list;
+	if(!isset($_pb_authority_initial_list[$authority_slug_])){
+		$_pb_authority_initial_list[$authority_slug_] = array();
+	}
+
+	$_pb_authority_initial_list[$authority_slug_][] = $task_;
 }
 
 include(PB_DOCUMENT_PATH . 'includes/authority/authority-builtin.php');

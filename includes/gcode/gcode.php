@@ -223,6 +223,13 @@ function pb_query_gcode_dtl_name($code_id_, $column_){
 	return "(SELECT gcode_dtl.code_dnm FROM gcode_dtl WHERE gcode_dtl.code_id = '".pb_database_escape_string($code_id_)."' AND gcode_dtl.code_did = {$column_})";
 }
 
+global $_pb_gcode_initial_list;
+$_pb_gcode_initial_list = array();
+function pb_gcode_initial_register($gcode_, $data_){
+	global $_pb_gcode_initial_list;
+	$_pb_gcode_initial_list[$gcode_] = $data_;
+}
+
 include(PB_DOCUMENT_PATH . 'includes/gcode/gcode-builtin.php');
 include(PB_DOCUMENT_PATH . 'includes/gcode/gcode-adminpage.php');
 
