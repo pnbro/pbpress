@@ -130,6 +130,8 @@ function pb_fileupload_handle($files_, $options_ = array()){
 				break;
 				case IMAGETYPE_PNG : 
 					$image_resource_ = imagecreatefrompng($file_path_);
+					imageAlphaBlending($image_resource_, true);
+					imageSaveAlpha($image_resource_, true);
 				break;
 				case IMAGETYPE_GIF : 
 					$image_resource_ = imagecreatefromgif($file_path_);
