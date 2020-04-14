@@ -14,6 +14,8 @@ if(!$pbdb->exists_table("options")){
 	exit;
 }
 
+ini_set('default_charset', $pb_config->charset);
+
 //check install pbress
 global $pbdb, $pb_config;
 

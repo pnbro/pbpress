@@ -134,10 +134,8 @@ global $_pb_safe_substr_func, $_pb_safe_strlen;
 if(function_exists("mb_substr")){
 	mb_internal_encoding($pb_config->charset);
 	$_pb_safe_substr_func = "mb_substr";
-	$_pb_safe_strlen = "mb_strlen";
-	
+	$_pb_safe_strlen = "mb_strlen";	
 }else if(function_exists("iconv_substr")){
-	iconv_set_encoding($pb_config->charset);
 	$_pb_safe_substr_func = "iconv_substr";
 	$_pb_safe_strlen = "iconv_strlen";
 }else{

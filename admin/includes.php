@@ -14,6 +14,7 @@ if(!$pbdb->exists_table("options")){
 	exit;
 }
 
+ini_set('default_charset', $pb_config->charset);
 
 //check rewrite rule
 if(!pb_exists_rewrite()){
