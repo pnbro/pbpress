@@ -54,7 +54,7 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 			if($value_ !== null){
 				$statement_->bindValue(":pdo_param{$index_}", $value_, $column_type_);	
 			}else{
-				$statement_->bindValue(":pdo_param{$index_}", null, PDO::PARAM_NULL);	
+				$statement_->bindValue(":pdo_param{$index_}", $value_, PDO::PARAM_NULL);
 			}
 		}
 
@@ -82,8 +82,6 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 
 			return false;
 		}
-
-
 
 		return $statement_;
 	}

@@ -173,7 +173,7 @@ class PBDB{
 
 			if($column_value_ === null){
 				$types_[] = PBDB::TYPE_NUMBER;
-				$values_[] = "NULL";
+				$values_[] = null;
 
 				$query_column_str_ .= strtolower($column_name_);
 				$query_type_str_ .= PBDB_PARAM_MAP_STR;
@@ -228,8 +228,8 @@ class PBDB{
 			}
 
 			if($column_value_ === null){
-				$types_[] = PBDB::TYPE_NUMBER;				
-				$values_[] = "NULL";
+				$types_[] = PBDB::TYPE_NUMBER;
+				$values_[] = null;
 			}else{
 				$values_[] = $pb_db_connection->escape_string($column_value_);	
 				$column_type_ = PBDB::TYPE_STRING;
