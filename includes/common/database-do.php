@@ -359,7 +359,13 @@ class PBDB_DO extends ArrayObject{
 		$key_types_ = array();
 
 		foreach($update_data_ as $column_name_ => $column_value_){
-			if(!isset($this->_fields[$column_name_]) || in_array($column_name_, $this->_keys) !== false) continue;
+			if(!isset($this->_fields[$column_name_])) continue;
+
+			if(in_array($column_name_, $this->_keys) !== false){
+				if(!(isset($this->_fields[$column_name_]['updatable']) ? $this->_fields[$column_name_]['updatable'] : false)){
+					continue;
+				}
+			}
 
 			$field_data_ = $this->_fields[$column_name_];
 

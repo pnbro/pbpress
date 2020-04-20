@@ -400,9 +400,10 @@ class PBDB_select_statement{
 	private $_column_name_pattern = "/^([A-Za-z\_0-9])+$/";
 
 	function build($order_by_ = null, $limit_ = null){
-
 		$from_table_ = $this->_from_table;
 		$from_table_alias_ = isset($this->_from_table_alias) ? $this->_from_table_alias : $from_table_;
+
+		$has_group_by_ = strlen($this->_group_by_key);
 		
 		$query_ = "SELECT \n\r";
 
@@ -410,7 +411,9 @@ class PBDB_select_statement{
 		$param_values_ = array();
 		$param_types_ = array();
 
-		foreach($this->_field_list as $column_name_){
+		$filed_list_ = $has_group_by_ ? $this->_group_by_fields : $this->_field_list;
+
+		foreach($filed_list_ as $column_name_){
 			$func_check_ = explode(" ", $column_name_);
 			$func_check_ = preg_match($this->_column_name_pattern, $func_check_[0]);
 			if(!$func_check_){
@@ -420,7 +423,7 @@ class PBDB_select_statement{
 				$fields_array_[] = "{$from_table_alias_}.{$column_name_}";	
 			}
 			
-		}
+		}		
 
 		foreach($this->_join_list as $join_data_){
 
@@ -460,46 +463,52 @@ class PBDB_select_statement{
 				$join_table_statement_fields_ = $join_table_statement_->fields();
 				$join_fields_keys_ = array_keys($join_data_['fields']);
 
-				foreach($join_real_fields_ as $column_index_ => $column_name_){
 
-					$column_name_array_ = explode(" ", $column_name_);
-					$column_alias_ = end($column_name_array_);
+				if(!$has_group_by_){
+					foreach($join_real_fields_ as $column_index_ => $column_name_){
 
-					if(count($column_name_array_) > 1){
+						$column_name_array_ = explode(" ", $column_name_);
+						$column_alias_ = end($column_name_array_);
+
+						if(count($column_name_array_) > 1){
+							if(!preg_match($this->_column_name_pattern, $column_alias_)){
+								$column_alias_ = null;
+							}
+							
+							if(strlen($column_alias_)){
+								array_splice($column_name_array_, count($column_name_array_) - 1);	
+							}
+						}
+							
+						
+						$column_oname_ = implode(' ', $column_name_array_);
+						$column_alias_ = strlen($column_alias_) ? $column_alias_ : $column_oname_;
+						$column_alias_ = $join_table_prefix_.$column_alias_;
+
 						if(!preg_match($this->_column_name_pattern, $column_alias_)){
-							$column_alias_ = null;
+							$column_alias_ = "";
 						}
-						
-						if(strlen($column_alias_)){
-							array_splice($column_name_array_, count($column_name_array_) - 1);	
-						}
+
+						$fields_array_[] = "{$join_table_alias_}.{$column_oname_} {$column_alias_}";
 					}
-						
+					foreach($join_subquery_fields_ as $column_index_ => $t_column_name_){
+						$fields_array_[] = $t_column_name_;	
+					}
+				}
+
 					
-					$column_oname_ = implode(' ', $column_name_array_);
-					$column_alias_ = strlen($column_alias_) ? $column_alias_ : $column_oname_;
-					$column_alias_ = $join_table_prefix_.$column_alias_;
-
-					if(!preg_match($this->_column_name_pattern, $column_alias_)){
-						$column_alias_ = "";
-					}
-
-					$fields_array_[] = "{$join_table_alias_}.{$column_oname_} {$column_alias_}";
-				}
-				foreach($join_subquery_fields_ as $column_index_ => $t_column_name_){
-					$fields_array_[] = $t_column_name_;	
-				}
 
 			}
 		}
 		$query_ .= implode(",\n\r", $fields_array_) ." \n\r"; 
 
-		foreach($this->_legacy_field_filters as $filter_){
-			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_)." \n\r";
+		if(!$has_group_by_){
+			foreach($this->_legacy_field_filters as $filter_){
+				$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_)." \n\r";
+			}
 		}
 
 		$query_ .= " FROM {$from_table_} {$from_table_alias_} \n\r";
-
 
 		foreach($this->_join_list as $join_data_){
 			$join_obj_ = $join_data_['obj'];
@@ -561,6 +570,10 @@ class PBDB_select_statement{
 			$query_ .= call_user_func_array("pb_hook_apply_filters", $filter_)." \n\r";
 		}
 
+		if($has_group_by_){
+			$query_ .= ' GROUP BY '.$this->_group_by_key." \n\r";
+		}
+
 		if(strlen($order_by_)){
 
 			if(stripos($order_by_, "order by") !== FALSE){
@@ -609,6 +622,20 @@ class PBDB_select_statement{
 		$result_ = $this->build($order_by_, $limit_);
 		global $pbdb;
 		return $pbdb->get_first_row($result_['query'], $result_['values'], $result_['types']);
+	}
+
+	private $_group_by_key = null;
+	private $_group_by_fields = null;
+
+	function group_by($key_, $fields_, $orderby_ = null, $limit_ = null){
+		$this->_group_by_key = $key_;
+		$this->_group_by_fields = $fields_;
+		return $this->select($orderby_, $limit_);
+	}
+	function build_group_by($key_, $fields_, $orderby_ = null, $limit_ = null){
+		$this->_group_by_key = $key_;
+		$this->_group_by_fields = $fields_;
+		return $this->build($orderby_, $limit_);
 	}
 }
 
