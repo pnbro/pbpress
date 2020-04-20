@@ -64,7 +64,6 @@ function pb_gcode_install(){
 				'reg_date' => pb_current_time("mysql"),
 			));
 		}
-
 	}
 }
 pb_hook_add_action("pb_installed_tables", "pb_gcode_install");

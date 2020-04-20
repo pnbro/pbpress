@@ -1,4 +1,4 @@
-<?php 	
+<?php
 
 pb_easy_splited_view("pb-gcode-splitted-view", "pb-admin-gcode-table", "pb-admin-gcode-dtl-table", array(
 	'master' => array(
@@ -44,10 +44,12 @@ pb_easy_splited_view("pb-gcode-splitted-view", "pb-admin-gcode-table", "pb-admin
 ));
 
 ?>
-
+<?php pb_hook_do_action('pb-admin-gcode-edit-page-before'); ?>
 <form id="pb-gcode-edit-form">
+	<?php pb_hook_do_action('pb-admin-gcode-edit-form-before'); ?>
 	<table class="pb-form-table " >
 		<tbody>
+			<?php pb_hook_do_action('pb-admin-gcode-edit-form-tr-before'); ?>
 			<tr>
 				<th>코드ID</th>
 				<td>
@@ -64,7 +66,7 @@ pb_easy_splited_view("pb-gcode-splitted-view", "pb-admin-gcode-table", "pb-admin
 				<th>코드명</th>
 				<td>
 					<div class="form-group">
-						<input type="text" name="code_nm" class="form-control" placeholder="코드명 입력" required data-error="레벨명을 입력하세요">
+						<input type="text" name="code_nm" class="form-control" placeholder="코드명 입력" required data-error="코드명을 입력하세요">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>
@@ -129,15 +131,19 @@ pb_easy_splited_view("pb-gcode-splitted-view", "pb-admin-gcode-table", "pb-admin
 					</div>
 				</td>
 			</tr>
+			<?php pb_hook_do_action('pb-admin-gcode-edit-form-tr-after'); ?>
 		</tbody>
 	</table>
+	<?php pb_hook_do_action('pb-admin-gcode-edit-form-after'); ?>
 </form>
 
 
 <form id="pb-gcode-dtl-edit-form">
+	<?php pb_hook_do_action('pb-admin-gcode-dtl-edit-form-before'); ?>
 	<input type="hidden" name="code_id">
 	<table class="pb-form-table " >
 		<tbody>
+			<?php pb_hook_do_action('pb-admin-gcode-dtl-edit-form-tr-before'); ?>
 			<tr>
 				<th>상세코드ID</th>
 				<td>
@@ -154,7 +160,7 @@ pb_easy_splited_view("pb-gcode-splitted-view", "pb-admin-gcode-table", "pb-admin
 				<th>상세코드명</th>
 				<td>
 					<div class="form-group">
-						<input type="text" name="code_dnm" class="form-control" placeholder="코드명 입력" required data-error="레벨명을 입력하세요">
+						<input type="text" name="code_dnm" class="form-control" placeholder="코드명 입력" required data-error="상세코드명을 입력하세요">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>
@@ -230,8 +236,11 @@ pb_easy_splited_view("pb-gcode-splitted-view", "pb-admin-gcode-table", "pb-admin
 					</div>
 				</td>
 			</tr>
+			<?php pb_hook_do_action('pb-admin-gcode-dtl-edit-form-tr-after'); ?>
 			
 		</tbody>
 	</table>
+	<?php pb_hook_do_action('pb-admin-gcode-dtl-edit-form-after'); ?>
 </form>
 <script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/gcode/list.js"></script>
+<?php pb_hook_do_action('pb-admin-gcode-edit-page-after'); ?>

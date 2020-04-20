@@ -35,8 +35,10 @@ pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
 		'class' => 'col-4 text-center',
 		'render' => function($table_, $item_, $row_index_){
 			?>
+			<?php pb_hook_do_action('pb-admin-gcode-table-button-before'); ?>
 			<a href="javascript:_pb_gcode_edit('<?=$item_['code_id']?>');" class="btn btn-default">수정</a>
 			<a href="javascript:_pb_gcode_remove	('<?=$item_['code_id']?>');" class="btn btn-black">삭제</a>
+			<?php pb_hook_do_action('pb-admin-gcode-table-button-after'); ?>
 			<?php
 
 		}
@@ -96,8 +98,10 @@ pb_easytable_register("pb-admin-gcode-dtl-table", function($offset_, $per_page_)
 		'class' => 'col-2 text-center',
 		'render' => function($table_, $item_, $row_index_){
 			?>
+			<?php pb_hook_do_action('pb-admin-gcode-dtl-table-button-before'); ?>
 			<a href="javascript:_pb_gcode_dtl_edit('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-default">수정</a>
 			<a href="javascript:_pb_gcode_dtl_remove('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-black">삭제</a>
+			<?php pb_hook_do_action('pb-admin-gcode-dtl-table-button-after'); ?>
 			<?php
 
 		}

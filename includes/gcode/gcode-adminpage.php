@@ -55,10 +55,7 @@ function _pb_ajax_admin_gcode_insert(){
 
 	$target_data_ = $_REQUEST["target_data"];
 
-	global $pbdb;
-
-
-	$insert_id_ = $pbdb->insert("gcode", array(
+	$insert_id_ = pb_gcode_add(array(
 		'code_id' => $target_data_['code_id'],
 		'code_nm' => $target_data_['code_nm'],
 		'use_yn' => $target_data_['use_yn'],
@@ -71,7 +68,6 @@ function _pb_ajax_admin_gcode_insert(){
 		'reg_date' => pb_current_time(),
 	));
 
-	
 	echo json_encode(array(
 		"success" => true,
 		'key' => $insert_id_,
@@ -94,9 +90,7 @@ function _pb_ajax_admin_gcode_update(){
 	$code_id_ = $_REQUEST["key"];
 	$target_data_ = $_REQUEST["target_data"];
 
-	global $pbdb;
-
-	$pbdb->update("gcode", array(
+	pb_gcode_update($code_id_, array(
 		'code_id' => $target_data_['code_id'],
 		'code_nm' => $target_data_['code_nm'],
 		'use_yn' => $target_data_['use_yn'],
@@ -107,7 +101,7 @@ function _pb_ajax_admin_gcode_update(){
 		'col4' => isset($target_data_['col4']) && strlen($target_data_['col4']) ? $target_data_['col4'] : null,
 
 		'mod_date' => pb_current_time(),
-	), array("code_id" => $code_id_));
+	));
 
 	echo json_encode(array(
 		"success" => true,
@@ -128,9 +122,7 @@ function _pb_ajax_admin_gcode_delete(){
 
 	$key_ = $_REQUEST["key"];
 
-	global $pbdb;
-
-	$pbdb->delete("gcode", array("code_id" => $key_));
+	pb_gcode_delete($key_);
 
 	echo json_encode(array(
 		"success" => true,
@@ -151,8 +143,6 @@ function _pb_ajax_admin_gcode_dtl_load(){
 
 	$code_id_ = $_REQUEST["key"][0];
 	$code_did_ = $_REQUEST["key"][1];
-
-	global $pbdb;
 
 	$code_data_ = pb_gcode_dtl($code_id_, $code_did_);
 	
@@ -176,9 +166,7 @@ function _pb_ajax_admin_gcode_dtl_insert(){
 
 	$target_data_ = $_REQUEST["target_data"];
 
-	global $pbdb;
-
-	$insert_id_ = $pbdb->insert("gcode_dtl", array(
+	$insert_id_ = pb_gcode_dtl_add(array(
 		'code_id' => $target_data_['code_id'],
 		'code_did' => $target_data_['code_did'],
 		'code_dnm' => $target_data_['code_dnm'],
@@ -216,9 +204,7 @@ function _pb_ajax_admin_gcode_dtl_update(){
 	$code_did_ = $_REQUEST["key"][1];
 	$target_data_ = $_REQUEST["target_data"];
 
-	global $pbdb;
-
-	$pbdb->update("gcode_dtl", array(
+	pb_gcode_dtl_update($code_id_, $code_did_, array(
 		'code_did' => $target_data_['code_did'],
 		'code_dnm' => $target_data_['code_dnm'],
 		'use_yn' => $target_data_['use_yn'],
@@ -228,7 +214,7 @@ function _pb_ajax_admin_gcode_dtl_update(){
 		'col4' => isset($target_data_['col4']) && strlen($target_data_['col4']) ? $target_data_['col4'] : null,
 		'sort_char' => $target_data_['sort_char'],
 		'mod_date' => pb_current_time(),
-	), array("code_id" => $code_id_,"code_did" => $code_did_));
+	));
 
 	echo json_encode(array(
 		"success" => true,
@@ -250,9 +236,7 @@ function _pb_ajax_admin_gcode_dtl_delete(){
 	$code_id_ = $_REQUEST["key"][0];
 	$code_did_ = $_REQUEST["key"][1];
 
-	global $pbdb;
-
-	$pbdb->delete("gcode_dtl", array("code_id" => $code_id_,"code_did" => $code_did_));
+	pb_gcode_dtl_delete($code_id_, $code_did_);
 
 	echo json_encode(array(
 		"success" => true,

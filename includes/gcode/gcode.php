@@ -6,7 +6,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 global $gcode_do;
 $gcode_do = pbdb_data_object("gcode", array(
-	'code_id'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 20, "pk" => true, "comment" => "코드ID"),
+	'code_id'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 20, "pk" => true, "updatable" => true, "comment" => "코드ID"),
 	'code_nm'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "comment" => "코드명"),
 	'code_desc'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "코드설명"),
 	'use_yn'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 1, "comment" => "사용여부"),
@@ -54,21 +54,22 @@ function pb_gcode_list($conditions_ = array()){
 function pb_gcode($code_id_){
 	$gcode_ = pb_gcode_list(array("code_id" => $code_id_));
 	if(!isset($gcode_) || count($gcode_) <= 0) return null;
-	return $gcode_[0];
+	return pb_hook_apply_filters('pb_gcode', $gcode_[0]);
 }
 
 function pb_gcode_name($code_id_){
 	$gcode_ = pb_gcode($code_id_);
 	if(!isset($gcode_)) return $gcode_;
-	return $gcode_["CODE_NM"];
+	return pb_hook_apply_filters('pb_gcode_name', $gcode_["code_nm"], $gcode_);
 }
 
 
 function pb_gcode_add($raw_data_){
 	global $gcode_do;
-	$inserted_id_ = $gcode_do->insert($raw_data_);
-	pb_hook_do_action("pb_gcode_added", $inserted_id_);
-	return $inserted_id_;
+	$gcode_do->insert($raw_data_);
+	$code_id_ = $raw_data_['code_id'];
+	pb_hook_do_action("pb_gcode_added", $code_id_);
+	return $code_id_;
 }
 
 function pb_gcode_update($id_, $raw_data_){
@@ -169,36 +170,40 @@ function pb_gcode_dtl($code_id_, $code_did_){
 		"code_did" => $code_did_,
 	));
 	if(!isset($gcode_) || count($gcode_) <= 0) return null;	
-	return $gcode_[0];
+	return pb_hook_apply_filters('pb_gcode_dtl', $gcode_[0]);
 }
 
 function pb_gcode_dtl_name($code_id_, $code_did_){
 	$gcode_dtl_ = pb_gcode_dtl($code_id_,$code_did_);
 	if(!isset($gcode_dtl_)) return null;
-	return $gcode_dtl_['code_dnm'];
+	return pb_hook_apply_filters('pb_gcode_dtl_name', $gcode_dtl_["code_dnm"], $gcode_dtl_);
 }
 
 function pb_gcode_dtl_add($raw_data_){
 	global $gcode_dtl_do;
-	$inserted_id_ = $gcode_dtl_do->insert($raw_data_);
-	pb_hook_do_action("pb_gcode_added", $inserted_id_);
+	$gcode_dtl_do->insert($raw_data_);
+
+	$code_id_ = $raw_data_['code_id'];
+	$code_did_ = $raw_data_['code_did'];
+
+	pb_hook_do_action("pb_gcode_dtl_added", $code_id_, $code_did_);
 	return $inserted_id_;
 }
 
 function pb_gcode_dtl_update($code_id_, $code_did_, $raw_data_){
 	global $gcode_dtl_do;
 	$gcode_dtl_do->update($code_id_, $code_did_, $raw_data_);
-	pb_hook_do_action("pb_gcode_updated", $code_id_, $code_did_);
+	pb_hook_do_action("pb_gcode_dtl_updated", $code_id_, $code_did_);
 }
 
 function pb_gcode_dtl_delete($code_id_, $code_did_){
 	global $gcode_dtl_do;
-	pb_hook_do_action("pb_gcode_delete", $code_id_, $code_did_);
+	pb_hook_do_action("pb_gcode_dtl_delete", $code_id_, $code_did_);
 	$gcode_dtl_do->delete($code_id_, $code_did_);
 }
 
 function pb_gcode_make_options($conditions_, $default_ = null, $echo_ = true){
-	$dtl_list_ = pb_gcode_dtl_list($conditions_);
+	$dtl_list_ = pb_hook_apply_filters('pb_gcode_make_options_list', pb_gcode_dtl_list($conditions_));
 
 	$default_ = isset($default_) ? $default_ : array();
 	if(gettype($default_) === "string") $default_ = array($default_);
@@ -220,7 +225,7 @@ function pb_gcode_make_options($conditions_, $default_ = null, $echo_ = true){
 }
 function pb_query_gcode_dtl_name($code_id_, $column_){
 	global $pbdb;
-	return "(SELECT gcode_dtl.code_dnm FROM gcode_dtl WHERE gcode_dtl.code_id = '".pb_database_escape_string($code_id_)."' AND gcode_dtl.code_did = {$column_})";
+	return pb_hook_apply_filters('pb_query_gcode_dtl_name', "(SELECT gcode_dtl.code_dnm FROM gcode_dtl WHERE gcode_dtl.code_id = '".pb_database_escape_string($code_id_)."' AND gcode_dtl.code_did = {$column_})", $code_id_, $column_);
 }
 
 global $_pb_gcode_initial_list;
