@@ -93,6 +93,7 @@ class PBDB_DO extends ArrayObject{
 	private $_fields = array();
 	private $_keys = array();
 	private $_indexes = array();
+	private $_custom_fks = array();
 
 	function __construct($table_, $fields_, $comment_ = null, $engine_ = "InnoDB"){
 		$this->_table_name = $table_;
@@ -114,6 +115,33 @@ class PBDB_DO extends ArrayObject{
 
 	function add_field($array_){
 		$this->_fields = array_merge($this->_fields, $array_);
+	}
+
+	function add_custom_fk(){
+		$args_ = func_get_args();
+		if(count($args_) <= 0) return;
+
+		if(gettype($args_[0]) === "string"){
+			if(count($args_) < 3) return;
+
+			$target_table_ = $args_[0];
+			$from_ = $args_[1];
+			$to_ = $args_[2];
+			$update_ = isset($args_[3]) ? $args_[3] : PBDB_DO::FK_NOACTION;
+			$delete_ = isset($args_[4]) ? $args_[4] : PBDB_DO::FK_NOACTION;
+
+			$this->_custom_fks[] = array(
+				'table' => $target_table_,
+				'from' => $from_,
+				'to' => $to_,
+				'update' => $update_,
+				'delete' => $delete_,
+			);
+
+
+		}else{
+			$this->_custom_fks[] = $args_[0];
+		}		
 	}
 
 	function _install_tables($querys_){
@@ -184,6 +212,27 @@ class PBDB_DO extends ArrayObject{
 
 			$field_query_[] = trim($field_str_);
 		}
+
+		foreach($this->_custom_fks as $custom_fk_data_){
+			$target_table_ = $custom_fk_data_['table'];
+			$from_columns_ = explode(",", $custom_fk_data_['from']);
+			$to_columns_ = explode(",", $custom_fk_data_['to']);
+
+			$on_update_ = $custom_fk_data_['update'];
+			$on_delete_ = $custom_fk_data_['delete'];
+
+			++$fk_index_;
+
+			foreach($from_columns_ as &$t_column_){
+				$t_column_ = "`{$t_column_}`";
+			}
+			foreach($to_columns_ as &$t_column_){
+				$t_column_ = "`{$t_column_}`";
+			}
+
+			$key_query_[] = "CONSTRAINT `{$this->_table_name}_fk{$fk_index_}` FOREIGN KEY (".implode(",", $from_columns_).") REFERENCES `{$target_table_}` (".implode(",", $to_columns_).") ON DELETE {$on_delete_} ON UPDATE {$on_update_}";
+		}
+
 
 		$query_ .= implode(",\n\r", array_merge($field_query_, $key_query_)). " \n\r";			
 		$query_ .= " ) ENGINE={$this->_engine} COMMENT='{$this->_comment}';";

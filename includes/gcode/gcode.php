@@ -106,7 +106,7 @@ $gcode_dtl_do = pbdb_data_object("gcode_dtl", array(
 
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
-),"권한별 작업범위");
+),"공통코드 - 상세");
 
 function pb_gcode_dtl_statement($conditions_ = array()){
 	global $gcode_do, $gcode_dtl_do;

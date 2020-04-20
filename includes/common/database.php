@@ -360,14 +360,18 @@ class PBDB{
 	}
 
 	function exists_column($table_name_, $column_name_){
-		global $pb_db_connection;
+		global $pb_db_connection, $_pb_database_ignore_print_error;
+		$_pb_database_ignore_print_error = true;
 		$check_ = @$pb_db_connection->query("SELECT {$column_name_} FROM {$table_name_} LIMIT 0, 1");
+		$_pb_database_ignore_print_error = false;
 		return ($check_ !== false);
 	}
 
 	function exists_table($table_name_){
-		global $pb_db_connection;
+		global $pb_db_connection, $_pb_database_ignore_print_error;
+		$_pb_database_ignore_print_error = true;
 		$check_ = @$pb_db_connection->query("SELECT 1 FROM {$table_name_} LIMIT 0, 1");
+		$_pb_database_ignore_print_error = false;
 		return ($check_ !== false);
 	}
 }
@@ -383,6 +387,8 @@ pb_hook_add_action('pb_ended', "_pb_database_close_hook");
 
 if($pb_config->is_show_database_error()){
 	function _pb_database_hook_print_error($last_error_){
+		global $_pb_database_ignore_print_error;
+		if(!!$_pb_database_ignore_print_error) return;
 		echo "[".$last_error_->error_code()."] ".$last_error_->error_message();
 	}
 	pb_hook_add_action('pb_database_error_occurred','_pb_database_hook_print_error');
