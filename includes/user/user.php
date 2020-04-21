@@ -12,7 +12,7 @@ $users_do = pbdb_data_object("users", array(
 	'user_email' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "nn" => true, "index" => true, "comment" => "이메일"),
 	'user_name' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "nn" => true, "comment" => "사용자명"),
 	'status' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "index" => true, "comment" => "상태"),
-	'findpass_vkey' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "index" => true, "comment" => "암호찾기 - 인증키"),
+	'findpass_vkey' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "index" => true, "comment" => "암호찾기 - 인증키"),
 	'findpass_vkey_exp_date' => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "암호찾기 - 키만료일자"),
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
