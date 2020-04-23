@@ -24,11 +24,7 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 		$dsn_ = "mysql:host=".$pb_config->db_host.";port=".$pb_config->db_port.";dbname=".$pb_config->db_name.";charset=".$pb_config->db_charset;
 
 		$this->_connection = new PDO($dsn_, $pb_config->db_username, $pb_config->db_userpass) Or die("Error On DB Connection : PDO");
-
-
-		if($pb_config->is_show_database_error()){
-			$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		}
+		$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
 		return isset($this->_connection);
 	}
@@ -45,6 +41,9 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 			++$param_index_;
 		}
 
+		$this->_last_query = $query_;
+		$this->_last_query_paramters = array('values' => $values_, 'types' => $types_);
+
 		$statement_ = $this->_connection->prepare($query_);
 
 		foreach($values_ as $index_ => $value_){
@@ -58,26 +57,11 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 			}
 		}
 
-		try{
-			$result_ = $statement_->execute();
+		$result_ = $statement_->execute();
 
-			$this->_last_query = $query_;
-			$this->_last_query_paramters = array('values' => $values_, 'types' => $types_);
-
-			if(!$result_){
-				$this->_last_error_no = $this->_connection->errorCode();
-				$this->_last_error_message = $this->_connection->errorInfo();
-				$this->_last_error_message = implode(":", $this->_last_error_message);
-
-				return false;
-			}
-
-		}catch(PDOException $ex_){
-			$this->_last_query = $query_;
-			$this->_last_query_paramters = array('values' => $values_, 'types' => $types_);
-
-			$this->_last_error_no = $ex_->getCode();
-			$this->_last_error_message = $ex_->errorInfo;
+		if(!$result_){
+			$this->_last_error_no = $this->_connection->errorCode();
+			$this->_last_error_message = $this->_connection->errorInfo();
 			$this->_last_error_message = implode(":", $this->_last_error_message);
 
 			return false;

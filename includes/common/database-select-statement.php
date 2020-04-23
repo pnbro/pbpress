@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-class PBDB_SS{
+abstract class PBDB_SS{
 	const COND_COMPARE = 1;
 	const COND_IN = 3;
 	const COND_NOT_IN = 4;
@@ -12,6 +12,17 @@ class PBDB_SS{
 	const COND_ISNULL = 7;
 	const COND_LIKE = 8;
 	const COND_CUSTOM = 9;
+}
+
+//shortcut
+abstract class SS_COND{
+	const COMPARE = PBDB_SS::COND_COMPARE;
+	const IN = PBDB_SS::COND_IN;
+	const NOT_IN = PBDB_SS::COND_NOT_IN;
+	const ISNOTNULL = PBDB_SS::COND_ISNOTNULL;
+	const ISNULL = PBDB_SS::COND_ISNULL;
+	const LIKE = PBDB_SS::COND_LIKE;
+	const CUSTOM = PBDB_SS::COND_CUSTOM;
 }
 
 class PBDB_select_statement_conditions extends ArrayObject{

@@ -107,6 +107,10 @@ class PBDB{
 		global $pb_db_connection;
 		return $pb_db_connection->last_query();
 	}
+	function last_query_parameters(){
+		global $pb_db_connection;
+		return $pb_db_connection->last_query_parameters();
+	}
 
 	function select($query_, $values_ = array(), $types_ = array()){
 		global $pb_db_connection;
