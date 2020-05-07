@@ -377,7 +377,7 @@ class PBDB_DO extends ArrayObject{
 				$insert_types_[] = $legacy_fields_[$column_name_];
 			}
 		}
-
+		
 		$inserted_id_ = $pbdb->insert($this->_table_name, $insert_values_, $insert_types_);
 
 		pb_hook_do_action('pbdb_do_{$this->_table_name}_inserted', $inserted_id_);
@@ -385,11 +385,10 @@ class PBDB_DO extends ArrayObject{
 		return $inserted_id_;
 	}
 
-	private function _update($custom_keys_, $update_data_){
+	private function _update($keys_, $update_data_){
 		$update_values_ = array();
 		$update_types_ = array();
 
-		$key_values_ = array();
 		$key_types_ = array();
 
 		foreach($update_data_ as $column_name_ => $column_value_){
@@ -422,16 +421,15 @@ class PBDB_DO extends ArrayObject{
 			}
 		}
 
-		foreach($custom_keys_ as $column_name_ => $column_value_){
+		foreach($keys_ as $column_name_ => $column_value_){
 			$field_data_ = $this->_fields[$column_name_];
-
 			$type_ = isset($field_data_['type']) ? $field_data_['type'] : PBDB_DO::TYPE_STRING;
-
-			$key_values_[$column_name_] = $column_value_;
 			$key_types_[] = PBDB_DO::convert_to_pbdb_type($type_);
 		}
 
-		$result_ = $pbdb->update($this->_table_name, $update_values_, $key_values_, $update_types_, $key_types_);
+		global $pbdb;
+
+		$result_ = $pbdb->update($this->_table_name, $update_values_, $keys_, $update_types_, $key_types_);
 		
 		$hook_params_ = array_merge(array("pbdb_do_{$this->_table_name}_updated"), $keys_);
 		call_user_func_array('pb_hook_do_action', $hook_params_);
@@ -442,14 +440,18 @@ class PBDB_DO extends ArrayObject{
 		global $pbdb;
 		$arg_count_ = func_num_args();
 
+		$temp_keys_ = array();
 		$keys_ = array();
 		$update_data_ = null;
 
 		for($index_=0;$index_<$arg_count_ - 1;++$index_){
-			$keys_[] = func_get_arg($index_);
+			$temp_keys_[] = func_get_arg($index_);
 		}
-		if(count($this->_keys) != count($keys_)){
+		if(count($this->_keys) != count($temp_keys_)){
 			return new PBError(403, "잘못된 요청", "키갯수가 일치하지 않습니다.");
+		}
+		foreach($this->_keys as $index_ => $key_){
+			$keys_[$key_] = $temp_keys_[$index_];
 		}
 
 		$update_data_ = func_get_arg(($arg_count_ - 1));
@@ -465,36 +467,37 @@ class PBDB_DO extends ArrayObject{
 	}
 
 	private function _delete($keys_){
-		$key_values_ = array();
 		$key_types_ = array();
 
-		foreach($keys_ as $index_ => $column_name_){
+		foreach($keys_ as $column_name_ => $column_value_){
 			$field_data_ = $this->_fields[$column_name_];
-
 			$type_ = isset($field_data_['type']) ? $field_data_['type'] : PBDB_DO::TYPE_STRING;
-
-			$key_values_[$column_name_] = $keys_[$index_];
 			$key_types_[] = PBDB_DO::convert_to_pbdb_type($type_);
 		}
 
+		global $pbdb;
 
-		$result_ = $pbdb->delete($this->_table_name, $key_values_, $key_types_);
+		$result_ = $pbdb->delete($this->_table_name, $keys_, $key_types_);
 		$hook_params_ = array_merge(array("pbdb_do_{$this->_table_name}_delete"), $keys_);
 		call_user_func_array('pb_hook_do_action', $hook_params_);
 		return $result_;
 	}
 	function delete(){
-		global $pbdb;
 		$arg_count_ = func_num_args();
 
+		$temp_keys_ = array();
 		$keys_ = array();
 
 		for($index_=0;$index_<$arg_count_;++$index_){
-			$keys_[] = func_get_arg($index_);
+			$temp_keys_[] = func_get_arg($index_);
 		}
 
-		if(count($this->_keys) != count($keys_)){
+		if(count($this->_keys) != count($temp_keys_)){
 			return new PBError(403, "잘못된 요청", "키갯수가 일치하지 않습니다.");
+		}
+
+		foreach($this->_keys as $index_ => $key_){
+			$keys_[$key_] = $temp_keys_[$index_];
 		}
 
 		return $this->_delete($keys_);

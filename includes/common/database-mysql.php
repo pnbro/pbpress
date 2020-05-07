@@ -38,7 +38,7 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 			$column_value_ = $values_[$param_index_];
 			$column_type_ = $types_[$param_index_];
 
-			if($column_value_ === NULL){
+			if($column_value_ === null || (!strlen($column_value_) && $column_type_ === PBDB::TYPE_NUMBER)){
 				$column_value_ = "NULL";
 				$column_type_ = PBDB::TYPE_NUMBER;
 			}else if($column_type_ === PBDB::TYPE_STRING){
