@@ -16,7 +16,7 @@ $_pb_post_type_label_defaults = array(
 	'button_add' => "글추가",
 	'button_update' => "글수정",
 	'before_delete' => "해당 글을 삭제합니다. 계속하시겠습니까?",
-	'after_delete' => "페이지가 삭제되었습니다.",
+	'after_delete' => "글이 삭제되었습니다.",
 	'no_results' => "검색된 글이 없습니다.",
 );
 
