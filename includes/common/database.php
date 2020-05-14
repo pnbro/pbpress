@@ -22,8 +22,15 @@ abstract class PBDatabase_connection{
 		return $this->_connection_type;
 	}
 
+	public function set_last_query($query_){
+		$this->_last_query = $query_;	
+	}
 	public function last_query(){
 		return $this->_last_query;
+	}
+	
+	public function set_last_query_parameters($params_){
+		$this->_last_query_parameters = $params_;
 	}
 	public function last_query_parameters(){
 		return $this->_last_query_parameters;

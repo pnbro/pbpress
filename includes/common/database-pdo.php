@@ -41,8 +41,8 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 			++$param_index_;
 		}
 
-		$this->_last_query = $query_;
-		$this->_last_query_paramters = array('values' => $values_, 'types' => $types_);
+		$this->set_last_query($query_);
+		$this->set_last_query_parameters(array('values' => $values_, 'types' => $types_));
 
 		$statement_ = $this->_connection->prepare($query_);
 

@@ -56,6 +56,9 @@ class PB_easytable{
 		$first_ = array_splice($this->_data, 0, $index_);
 	  	$this->_data = array_merge($first_, $column_data_, $this->_data);
 	}
+	function remove_column($column_name_){
+		unset($this->_data[$column_name_]);
+	}
 	
 	function last_results($page_index_){
 		if(!isset($this->_last_results)){
