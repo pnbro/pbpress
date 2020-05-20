@@ -7,8 +7,8 @@ if(!defined('PB_DOCUMENT_PATH')){
 global $options_do;
 $options_do = pbdb_data_object("options", array(
 	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
-	'option_name' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "nn" => true, "index" => true, "comment" => "패스워드"),
-	'option_value' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "패스워드"),
+	'option_name' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "nn" => true, "index" => true, "comment" => "옵션명"),
+	'option_value' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "comment" => "옵션값"),
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
 ),"옵션");

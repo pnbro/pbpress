@@ -11,6 +11,7 @@
 			'post_html' => null,
 			'status' => PB_POST_STATUS_PUBLISHED,
 			'slug' => null,
+			'reg_date' => null,
 		);
 		$pbpost_meta_map = array();
 	}
@@ -115,10 +116,17 @@
 							<input type="hidden" name="featured_image_path" data-upload-path="/" id="pb-post-featured-image-picker" value="<?=$pbpost['featured_image_path']?>">
 						</div>
 						
+						<div class="form-group">
+							<label>작성일자</label>
+							<input type="text" name="reg_date" class="form-control" value="<?=$pbpost['reg_date_ymdhi']?>" id="pb-post-reg-date-picker" placeholder="작성일자 선택">
+							<div class="help-block with-errors"></div>
+							<div class="clearfix"></div>
+						</div>
+
 						<?php if(!$is_new_){ ?>
 						<div class="form-group">
 							<label>마지막수정일자</label>
-							<p class="form-control-static"><?=strlen($pbpost['mod_date_ymdhi']) ? $pbpost['mod_date_ymdhi'] : $pbpost['reg_date_ymdhi']?></p>
+							<p class="form-control-static"><?=$pbpost['mod_date_ymdhi']?></p>
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>
 						</div>

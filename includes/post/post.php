@@ -306,6 +306,7 @@ function pb_post_write($data_){
 	$post_html_ = isset($data_['post_html']) ? $data_['post_html'] : null;
 	$status_ = isset($data_['status']) ? $data_['status'] : PB_POST_STATUS_WRITING;
 	$featured_image_path_ = isset($data_['featured_image_path']) ? $data_['featured_image_path'] : null;
+	$reg_date_ = @strlen($data_['reg_date']) ? $data_['reg_date'] : pb_current_time();
 	$slug_ = isset($data_['slug']) ? $data_['slug'] : null;
 	$slug_ = strlen($slug_) ? $slug_ : $post_title_;
 	$slug_ = pb_slugify($slug_);
@@ -323,7 +324,8 @@ function pb_post_write($data_){
 		'featured_image_path' => $featured_image_path_,
 		'slug' => pb_post_rewrite_slug($type_, $slug_),
 		'wrt_id' => pb_current_user_id(),
-		'reg_date' => pb_current_time(),
+		'reg_date' => $reg_date_,
+		'mod_date' => pb_current_time(),
 	);
 
 	$inserted_id_ = pb_post_insert($insert_data_);
@@ -350,6 +352,9 @@ function pb_post_edit($id_, $data_){
 
 	if(isset($data_['status'])){
 		$update_data_['status'] = $data_['status'];
+	}
+	if(isset($data_['reg_date'])){
+		$update_data_['reg_date'] = $data_['reg_date'];
 	}
 
 	if(isset($data_['slug'])){
@@ -412,7 +417,7 @@ function pb_post_featured_image_url($id_ = null){
 	$post_data_ = pb_post($id_);
 	if(!isset($post_data_)) return null;
 	if(!strlen($post_data_['featured_image_path'])) return null;
-	return pb_hook_apply_filters('pb_post_featured_image_url', pb_filebase_url($post_data_['post_html']), $post_data_);
+	return pb_hook_apply_filters('pb_post_featured_image_url', pb_filebase_url($post_data_['featured_image_path']), $post_data_);
 }
 
 function pb_post_url($id_ = null){
