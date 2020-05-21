@@ -110,6 +110,7 @@ function pb_post_statement($conditions_ = array()){
 	}
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
 		$statement_->add_like_condition(pb_hook_apply_filters('pb_post_list_keyword', array(
+			"posts.post_title",
 			"posts.slug",
 			"users.user_login",
 			"users.user_email",
