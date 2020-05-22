@@ -36,12 +36,11 @@ function _pb_post_update_for_post_short($id_){
 
 
 pb_hook_add_action("pb_post_edit_form_control_panel_after", function($pbpost){
-	$post_categories_ = pb_post_category_list(array("type" => $pbpost['type']));	
-	$post_category_values_ = pb_post_category_values($pbpost['id'], true);
-
-	global $pbpost_type_data;
-
+	global $pbpost_type, $pbpost_type_data;
 	if(!$pbpost_type_data['use_category']) return;
+
+	$post_categories_ = pb_post_category_list(array("type" => $pbpost_type));	
+	$post_category_values_ = pb_post_category_values($pbpost['id'], true);
 ?>
 
 <div class="panel panel-default" id="pb-post-edit-form-post-categories">
