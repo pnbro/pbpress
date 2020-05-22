@@ -78,20 +78,6 @@ pb_hook_add_action("pb_post_edit_form_control_panel_after", function($pbpost){
 });
 
 
-pb_hook_add_action("pb_post_inserted", '_pb_post_edit_hook_for_category');
-pb_hook_add_action("pb_post_updated", '_pb_post_edit_hook_for_category');
-function _pb_post_edit_hook_for_category($post_id_){
-	$post_data_ = pb_post($post_id_);
-	$post_data_ = _POST('post_data');
-
-	$category_id_ = $post_data_['category_id'];
-
-	if(gettype($category_id_) === "string"){
-		$category_id_ = strlen($category_id_) ? array($category_id_) : array();
-	}
-	pb_post_category_values_update($post_id_, $category_id_);
-}
-
 pb_hook_add_action('pb_admin_post_list_conditions_group_right_before', function($pbpost_type, $pbpost_type_data){
 	if(!$pbpost_type_data['use_category']) return;
 	$post_categories_ = pb_post_category_list(array("type" => $pbpost_type));	

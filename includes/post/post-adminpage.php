@@ -186,6 +186,18 @@ function _pb_post_ajax_edit(){
 		pb_post_meta_update($post_id_, "actived_editor_id", $post_data_['actived_editor_id']);	
 	}
 
+	$post_types_ = pb_post_types();
+	$post_type_data_ = $post_types_[$post_data_['type']];
+
+	if($post_type_data_['use_category']){
+		$category_id_ = $post_data_['category_id'];	
+		if(gettype($category_id_) !== "array"){
+			$category_id_ = strlen($category_id_) ? array($category_id_) : array();
+		}
+
+		pb_post_category_values_update($post_id_, $category_id_);
+	}
+
 	echo json_encode(array(
 		'success' => true,
 		'post_id' => $post_id_,
