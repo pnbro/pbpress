@@ -17,9 +17,9 @@ pb_gcode_initial_register('PST01', array(
 		),
 ));
 
-pb_hook_add_action('pb_post_inserted', '_pb_post_update_post_short');
-pb_hook_add_action('pb_post_updated', '_pb_post_update_post_short');
-function _pb_post_update_post_short($id_){
+pb_hook_add_action('pb_post_inserted', '_pb_post_update_for_post_short');
+pb_hook_add_action('pb_post_updated', '_pb_post_update_for_post_short');
+function _pb_post_update_for_post_short($id_){
 	$post_data_ = pb_post($id_);
 
 	$post_short_ = strip_tags($post_data_['post_html']);
@@ -33,5 +33,101 @@ function _pb_post_update_post_short($id_){
 
 	$posts_do->update($post_data_['id'], array("post_short" => $post_short_));
 }
+
+
+pb_hook_add_action("pb_post_edit_form_control_panel_after", function($pbpost){
+	$post_categories_ = pb_post_category_list(array("type" => $pbpost['type']));	
+	$post_category_values_ = pb_post_category_values($pbpost['id'], true);
+
+	global $pbpost_type_data;
+
+	if(!$pbpost_type_data['use_category']) return;
+?>
+
+<div class="panel panel-default" id="pb-post-edit-form-post-categories">
+	<div class="panel-heading" role="tab">
+		<h4 class="panel-title">
+			<a role="button" data-toggle="collapse" href="#pb-post-edit-form-post-categories-body" aria-expanded="true" aria-controls="collapseOne">분류</a>
+		</h4>
+	</div>
+	<div id="pb-post-edit-form-post-categories-body" class="panel-collapse collapse in" role="tabpanel">
+		<div class="panel-body">
+			<div class="form-group" data-post-category-frame>
+				<?php foreach($post_categories_ as $category_data_){ ?>
+				<div class="checkbox">
+					<label><input type="checkbox" name="category_id" value="<?=$category_data_['id']?>" <?=in_array($category_data_['id'], $post_category_values_) ? "checked" : ""?>><?=$category_data_['title']?></label>
+				</div>
+				<?php } ?>
+				<?php if(count($post_categories_) <= 0 ){ ?>
+					<div class="help-block" data-no-category-label>등록된 분류가 없습니다.</div>
+				<?php } ?>
+			</div>
+			<hr>
+			<div class="form-group">
+				<label>새로운 분류 추가</label>
+				<p><input type="text" name="new_category_name" class="form-control" placeholder="카테고리명 입력"></p>
+				<div class="text-right">
+					<a href="javascript:pb_post_add_new_category();" class="btn btn-default">분류추가</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<?php
+});
+
+
+pb_hook_add_action("pb_post_inserted", '_pb_post_edit_hook_for_category');
+pb_hook_add_action("pb_post_updated", '_pb_post_edit_hook_for_category');
+function _pb_post_edit_hook_for_category($post_id_){
+	$post_data_ = pb_post($post_id_);
+	$post_data_ = _POST('post_data');
+
+	$category_id_ = $post_data_['category_id'];
+
+	if(gettype($category_id_) === "string"){
+		$category_id_ = strlen($category_id_) ? array($category_id_) : array();
+	}
+	pb_post_category_values_update($post_id_, $category_id_);
+}
+
+pb_hook_add_action('pb_admin_post_list_conditions_group_right_before', function($pbpost_type, $pbpost_type_data){
+	if(!$pbpost_type_data['use_category']) return;
+	$post_categories_ = pb_post_category_list(array("type" => $pbpost_type));	
+
+?>
+	<div class="form-group">
+		<select class="form-control" name="category_id">
+			<option value="">-분류-</option>
+			<?php foreach($post_categories_ as $category_data_){ ?>
+				<option value="<?=$category_data_['id']?>" <?=pb_selected(_GET("category_id"), $category_data_['id'])?>><?=$category_data_['title']?></option>
+			<?php } ?>			
+		</select>
+	</div>
+
+<?php
+
+});
+
+pb_hook_add_filter('pb_admin_post_table_conditions', function($conditions_){
+	global $pbpost_type, $pbpost_type_data;
+	if(!$pbpost_type_data['use_category']) return $conditions_;
+	$conditions_['category_id'] = _GET("category_id");
+	return $conditions_;
+});
+
+pb_hook_add_filter('pb_post_statement', function($statement_, $conditions_){
+	if(isset($conditions_['category_id'])){
+		$statement_->add_custom_condition("
+			posts.id IN (
+				SELECT posts_category_values.post_id
+				FROM   posts_category_values
+				WHERE  ".pb_query_in_fields($conditions_['category_id'], "posts_category_values.category_id")."
+			)
+		");
+	}
+	return $statement_;
+});
 
 ?>

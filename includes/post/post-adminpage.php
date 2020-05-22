@@ -18,6 +18,11 @@ function _pb_post_register_adminpage($results_){
 			'subpath' => null,
 			'sort' => isset($type_data_['adminpage_sort']) ? $type_data_['adminpage_sort'] : 99,
 		);
+
+		if($type_data_['use_category']){
+			$results_["manage-{$key_}"]['directory'] = $key_;
+			$results_["manage-{$key_}"]['sort'] = 30;
+		}
 	}
 
 		

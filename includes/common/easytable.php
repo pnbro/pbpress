@@ -51,12 +51,14 @@ class PB_easytable{
 	}
 
 	function insert_column($index_, $column_name_, $data_){
+		if(is_callable($this->_data)) return false;
 		$column_data_ = array();
 		$column_data_[$column_name_] = $data_;
 		$first_ = array_splice($this->_data, 0, $index_);
 	  	$this->_data = array_merge($first_, $column_data_, $this->_data);
 	}
 	function remove_column($column_name_){
+		if(is_callable($this->_data)) return false;
 		unset($this->_data[$column_name_]);
 	}
 	
@@ -100,7 +102,11 @@ class PB_easytable{
 		<input type="hidden" name="page_index" value="<?=$page_index_?>">
 		<table class="pb-easytable <?=$table_class_?>" id="<?=$this->_id?>" data-ajax="<?=$is_ajax_ ? "Y" : "N"?>" data-loading-indicator="<?=htmlentities($loading_indicator_)?>" data-hide-pagenav="<?=$hide_pagenav_ ? "Y" : "N" ?>">
 			<thead>
-				<?php foreach($this->_data as $key_ => $column_data_){ 
+				<?php 
+
+					$data_ = is_callable($this->_data) ? call_user_func_array($this->_data, array($this)) : $this->_data;
+
+				foreach($data_ as $key_ => $column_data_){ 
 					$class_ = isset($column_data_['head_class']) ? $column_data_['head_class'] : " ";
 					$class_ .= (isset($column_data_['class']) ? $column_data_['class'] : " ");
 					$class_ = trim($class_);
@@ -113,7 +119,7 @@ class PB_easytable{
 
 				<?php if($is_ajax_){ ?>
 					<tr>
-						<td class="no-rowdata first" colspan="<?=count($this->_data)?>"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></td>
+						<td class="no-rowdata first" colspan="<?=count($data_)?>"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></td>
 					</tr>
 				<?php }else{
 					$this->render_body($page_index_);
@@ -150,12 +156,16 @@ class PB_easytable{
 		$total_count_ = $results_['count'];
 		$result_list_ = $results_['list'];
 
+		$data_ = is_callable($this->_data) ? call_user_func_array($this->_data, array($this)) : $this->_data;
+
 		foreach($result_list_ as $row_index_ => $row_data_){ ?>
 			<tr>
 
 				<?php 
 
-				foreach($this->_data as $key_ => $column_data_){
+				
+
+				foreach($data_ as $key_ => $column_data_){
 
 					$class_ = isset($column_data_['body_class']) ? $column_data_['body_class'] : " ";
 					$class_ .= (isset($column_data_['class']) ? $column_data_['class'] : " ");
@@ -194,7 +204,7 @@ class PB_easytable{
 		if(count($result_list_) <= 0){ ?>
 
 			<tr>
-				<td class="no-rowdata" colspan="<?=count($this->_data)?>"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></td>
+				<td class="no-rowdata" colspan="<?=count($data_)?>"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></td>
 			</tr>
 
 		<?php }

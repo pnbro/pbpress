@@ -34,6 +34,7 @@ include(PB_DOCUMENT_PATH . "includes/common/adminpage.php");
 include(PB_DOCUMENT_PATH . "includes/gcode/gcode.php");
 include(PB_DOCUMENT_PATH . "includes/user/user.php");
 include(PB_DOCUMENT_PATH . "includes/page/page.php");
+include(PB_DOCUMENT_PATH . "includes/post-category/post-category.php");
 include(PB_DOCUMENT_PATH . "includes/post/post.php");
 include(PB_DOCUMENT_PATH . "includes/menu/menu.php");
 

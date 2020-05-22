@@ -28,6 +28,7 @@ function pb_post_types(){
 		'post' => array(
 			'name' => '글',
 			'label' => array(),
+			'use_category' => true,
 			'adminpage_sort' => 8,
 		),
 	));
@@ -36,8 +37,8 @@ function pb_post_types(){
 
 	foreach($_pb_post_types as $key_ => &$type_data_){
 		if(!isset($type_data_['label'])) $type_data_['label'] = array();
-
 		$type_data_['label'] = array_merge($_pb_post_type_label_defaults, $type_data_['label']);
+		$type_data_['use_category'] = isset($type_data_['use_category']) ? !!$type_data_['use_category'] : true;
 	}
 
 	return $_pb_post_types;
@@ -108,6 +109,7 @@ function pb_post_statement($conditions_ = array()){
 	if(isset($conditions_['wrt_id'])){
 		$statement_->add_in_condition("posts.wrt_id", $conditions_['wrt_id']);
 	}
+
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
 		$statement_->add_like_condition(pb_hook_apply_filters('pb_post_list_keyword', array(
 			"posts.post_title",
@@ -259,7 +261,6 @@ function pb_next_post_title($id_ = null){
 	return $next_post_data_['post_title'];
 }
 
-
 function pb_post_insert($raw_data_){
 	global $posts_do;
 	$insert_id_ = $posts_do->insert($raw_data_);
@@ -309,6 +310,7 @@ function pb_post_write($data_){
 	$featured_image_path_ = isset($data_['featured_image_path']) ? $data_['featured_image_path'] : null;
 	$reg_date_ = @strlen($data_['reg_date']) ? $data_['reg_date'] : pb_current_time();
 	$slug_ = isset($data_['slug']) ? $data_['slug'] : null;
+	$category_id_ = isset($data_['category_id']) ? $data_['category_id'] : null;
 	$slug_ = strlen($slug_) ? $slug_ : $post_title_;
 	$slug_ = pb_slugify($slug_);
 
@@ -330,7 +332,22 @@ function pb_post_write($data_){
 	);
 
 	$inserted_id_ = pb_post_insert($insert_data_);
+
+	if(gettype($category_id_) === "string"){
+		$category_id_ = strlen($category_id_) ? array($category_id_) : array();
+	}
+
+	global $posts_category_values_do;
+
+	foreach($category_id_ as $temp_){
+		$posts_category_values_do->insert(array(
+			'post_id' => $inserted_id_,
+			'category_id' => $temp_,
+		));	
+	}
+
 	pb_hook_do_action('pb_post_writed', $inserted_id_);
+
 	return $inserted_id_;
 }
 
@@ -368,6 +385,11 @@ function pb_post_edit($id_, $data_){
 	}
 
 	pb_post_update($id_, $update_data_);
+
+	if(isset($data_['category_id'])){
+		
+	}
+
 	pb_hook_do_action('pb_post_edited', $id_);	
 	return $id_;
 }
@@ -434,6 +456,59 @@ function pb_post_url($id_ = null){
 	if(!isset($post_data_)) return null;
 	$post_url_ = pb_home_url($post_data_['type'].'/'.$post_data_['slug']);
 	return pb_hook_apply_filters('pb_post_url', $post_url_, $post_data_);
+}
+
+global $posts_category_values_do;
+$posts_category_values_do = pbdb_data_object("posts_category_values", array(
+	'post_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "pk" => true, "fk" => array(
+		'table' => 'posts',
+		'column' => 'id',
+		'delete' => PBDB_DO::FK_CASCADE,
+		'update' => PBDB_DO::FK_CASCADE,
+	), 'nn' => true, "comment" => "글ID"),
+	'category_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "pk" => true, "fk" => array(
+		'table' => 'post_categories',
+		'column' => 'id',
+		'delete' => PBDB_DO::FK_CASCADE,
+		'update' => PBDB_DO::FK_CASCADE,
+	), 'nn' => true, "comment" => "분류ID"),
+),"글 - 분류");
+
+function pb_post_category_values($post_id_, $only_id_ = false){
+	global $post_categories_do, $posts_category_values_do;
+
+	$statement_ = $posts_category_values_do->statement();
+	$statement_->add_join("left outer join", $post_categories_do->statement(), "post_categories", array(
+		array(PBDB_SS::COND_COMPARE, "post_categories.id", "posts_category_values.category_id", "=")
+	), array(
+		"post_categories.title category_title"
+	));
+
+	$statement_->add_in_condition("posts_category_values.post_id", $post_id_);
+	$statement_ = pb_hook_apply_filters('pb_post_category_values_statement', $statement_, $post_id_);
+	if($only_id_){
+		return $statement_->serialize_column("category_id");
+	}else{
+		return pb_hook_apply_filters('pb_post_category_values', $statement_->select(), $post_id_);
+	}
+}
+function pb_post_category_values_update($post_id_, $category_ids_){
+	if(gettype($category_ids_) === "string"){
+		$category_ids_ = strlen($category_ids_) ? array($category_ids_) : array();
+	}
+
+	global $posts_category_values_do;
+
+	$posts_category_values_do->delete_by(array("post_id" => $post_id_));
+
+	foreach($category_ids_ as $category_id_){
+		$posts_category_values_do->insert(array(
+			'post_id' => $post_id_,
+			'category_id' => $category_id_,
+		));
+	}
+
+	pb_hook_do_action('pb_post_category_values_updated', $post_id_);
 }
 
 include(PB_DOCUMENT_PATH . 'includes/post/post-builtin.php');
