@@ -333,18 +333,11 @@ function pb_post_write($data_){
 
 	$inserted_id_ = pb_post_insert($insert_data_);
 
-	if(gettype($category_id_) === "string"){
+	if(gettype($category_id_) !== "array"){
 		$category_id_ = strlen($category_id_) ? array($category_id_) : array();
 	}
 
-	global $posts_category_values_do;
-
-	foreach($category_id_ as $temp_){
-		$posts_category_values_do->insert(array(
-			'post_id' => $inserted_id_,
-			'category_id' => $temp_,
-		));	
-	}
+	pb_post_category_values_update($inserted_id_, $category_id_);
 
 	pb_hook_do_action('pb_post_writed', $inserted_id_);
 
@@ -386,9 +379,11 @@ function pb_post_edit($id_, $data_){
 
 	pb_post_update($id_, $update_data_);
 
-	if(isset($data_['category_id'])){
-		
+	if(gettype($category_id_) !== "array"){
+		$category_id_ = strlen($category_id_) ? array($category_id_) : array();
 	}
+
+	pb_post_category_values_update($id_, $category_id_);
 
 	pb_hook_do_action('pb_post_edited', $id_);	
 	return $id_;

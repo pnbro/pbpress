@@ -190,7 +190,7 @@ function _pb_post_ajax_edit(){
 	$post_type_data_ = $post_types_[$post_data_['type']];
 
 	if($post_type_data_['use_category']){
-		$category_id_ = $post_data_['category_id'];	
+		$category_id_ = isset($post_data_['category_id']) ? $post_data_['category_id'] : null;	
 		if(gettype($category_id_) !== "array"){
 			$category_id_ = strlen($category_id_) ? array($category_id_) : array();
 		}
