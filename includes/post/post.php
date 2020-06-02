@@ -339,7 +339,7 @@ function pb_post_write($data_){
 
 	pb_post_category_values_update($inserted_id_, $category_id_);
 
-	pb_hook_do_action('pb_post_writed', $inserted_id_);
+	pb_hook_do_action('pb_post_writed', $inserted_id_, $data_);
 
 	return $inserted_id_;
 }
@@ -379,13 +379,14 @@ function pb_post_edit($id_, $data_){
 
 	pb_post_update($id_, $update_data_);
 
-	if(gettype($category_id_) !== "array"){
-		$category_id_ = strlen($category_id_) ? array($category_id_) : array();
+	if(isset($data_['category_id'])){
+		if(gettype($data_['category_id']) !== "array"){
+			$data_['category_id'] = strlen($data_['category_id']) ? array($data_['category_id']) : array();
+		}
+		pb_post_category_values_update($id_, $data_['category_id']);
 	}
 
-	pb_post_category_values_update($id_, $category_id_);
-
-	pb_hook_do_action('pb_post_edited', $id_);	
+	pb_hook_do_action('pb_post_edited', $id_, $data_);
 	return $id_;
 }
 
