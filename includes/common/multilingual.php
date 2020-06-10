@@ -125,11 +125,8 @@ function _pb_setup_pblang_script_to_head(){
 ?><script type="text/javascript" src="<?=pb_lang_pblang_url()?>"></script><?php
 }
 
-function _pb_init_for_pblang_script(){
-	pb_hook_add_action('pb_head', '_pb_setup_pblang_script_to_head');
-	pb_hook_add_action('pb_admin_head', '_pb_setup_pblang_script_to_head');
-}
-pb_hook_add_action('pb_init', '_pb_init_for_pblang_script');
+pb_hook_add_action('pb_head', '_pb_setup_pblang_script_to_head');
+pb_hook_add_action('pb_admin_head', '_pb_setup_pblang_script_to_head');
 
 pb_lang_load_translations(PBDOMAIN, PB_DOCUMENT_PATH . 'lang');
 
