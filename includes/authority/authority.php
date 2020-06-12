@@ -7,7 +7,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 function pb_authority_task_types(){
 	global $_pb_authority_task_types;
 	if(!isset($_pb_authority_task_types)){
-		$_pb_authority_task_types = pb_hook_apply_filters("pb_authority_task_types", array(
+		$_pb_authority_task_types = array(
 			'access_adminpage' => array(
 				'name' => '관리자페이지접근',
 				'selectable' => false,
@@ -16,9 +16,9 @@ function pb_authority_task_types(){
 				'name' => '사이트관리',
 				'selectable' => false,
 			),
-		));
+		);
 	}
-	return $_pb_authority_task_types;
+	return pb_hook_apply_filters("pb_authority_task_types", $_pb_authority_task_types);
 }
 function pb_authority_task_add_type($task_type_, $data_){
 	$pb_authority_task_types_ = pb_authority_task_types();
