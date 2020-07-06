@@ -1,6 +1,6 @@
 <?php
 
-define('PB_VERSION', '1.28.4');
+define('PB_VERSION', '1.28.5');
 
 //check exists config file
 if(!file_exists(dirname( __FILE__ )."/pb-config.php")){
@@ -13,7 +13,6 @@ if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
 }elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on'){
 	$https_ = true;
 }
-
 
 define("PB_DOCUMENT_PATH", dirname( __FILE__ )."/");
 define("PB_DOCUMENT_URL", ($https_ ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH));
