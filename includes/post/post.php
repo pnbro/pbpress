@@ -21,10 +21,7 @@ $_pb_post_type_label_defaults = array(
 );
 
 function pb_post_types(){
-	global $_pb_post_types;
-	if(isset($_pb_post_types)) return $_pb_post_types;
-
-	$_pb_post_types = pb_hook_apply_filters('pb_post_types', array(
+	$pb_post_types_ = pb_hook_apply_filters('pb_post_types', array(
 		'post' => array(
 			'name' => '글',
 			'label' => array(),
@@ -35,13 +32,13 @@ function pb_post_types(){
 
 	global $_pb_post_type_label_defaults;
 
-	foreach($_pb_post_types as $key_ => &$type_data_){
+	foreach($pb_post_types_ as $key_ => &$type_data_){
 		if(!isset($type_data_['label'])) $type_data_['label'] = array();
 		$type_data_['label'] = array_merge($_pb_post_type_label_defaults, $type_data_['label']);
 		$type_data_['use_category'] = isset($type_data_['use_category']) ? !!$type_data_['use_category'] : true;
 	}
 
-	return $_pb_post_types;
+	return $pb_post_types_;
 }
 
 global $posts_do;

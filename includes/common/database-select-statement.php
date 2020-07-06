@@ -410,11 +410,11 @@ class PBDB_select_statement{
 
 	private $_column_name_pattern = "/^([A-Za-z\_0-9])+$/";
 
-	function build($order_by_ = null, $limit_ = null){
+	function build($order_by_ = null, $limit_ = null, $group_by_key_ = "", $group_by_fields_ = array()){
 		$from_table_ = $this->_from_table;
 		$from_table_alias_ = isset($this->_from_table_alias) ? $this->_from_table_alias : $from_table_;
 
-		$has_group_by_ = strlen($this->_group_by_key);
+		$has_group_by_ = strlen($group_by_key_);
 		
 		$query_ = "SELECT \n\r";
 
@@ -422,7 +422,7 @@ class PBDB_select_statement{
 		$param_values_ = array();
 		$param_types_ = array();
 
-		$filed_list_ = $has_group_by_ ? $this->_group_by_fields : $this->_field_list;
+		$filed_list_ = $has_group_by_ ? $group_by_fields_ : $this->_field_list;
 
 		foreach($filed_list_ as $column_name_){
 			$func_check_ = explode(" ", $column_name_);
@@ -582,7 +582,7 @@ class PBDB_select_statement{
 		}
 
 		if($has_group_by_){
-			$query_ .= ' GROUP BY '.$this->_group_by_key." \n\r";
+			$query_ .= ' GROUP BY '.$group_by_key_." \n\r";
 		}
 
 		if(strlen($order_by_)){
@@ -635,18 +635,13 @@ class PBDB_select_statement{
 		return $pbdb->get_first_row($result_['query'], $result_['values'], $result_['types']);
 	}
 
-	private $_group_by_key = null;
-	private $_group_by_fields = null;
-
-	function group_by($key_, $fields_, $orderby_ = null, $limit_ = null){
-		$this->_group_by_key = $key_;
-		$this->_group_by_fields = $fields_;
-		return $this->select($orderby_, $limit_);
-	}
 	function build_group_by($key_, $fields_, $orderby_ = null, $limit_ = null){
-		$this->_group_by_key = $key_;
-		$this->_group_by_fields = $fields_;
-		return $this->build($orderby_, $limit_);
+		return $this->build($order_by_, $limit_, $key_, $fields_);
+	}
+	function group_by($key_, $fields_, $orderby_ = null, $limit_ = null){
+		$result_ = $this->build_group_by($key_, $fields_, $order_by_, $limit_);
+		global $pbdb;
+		return $pbdb->select($result_['query'], $result_['values'], $result_['types']);
 	}
 }
 
