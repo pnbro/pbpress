@@ -64,9 +64,6 @@ class PB_easylist{
 	function row_seq($page_index_, $row_index_){
 		$per_page_ = isset($this->_options['per_page']) ? $this->_options['per_page'] : 15;
 		return ($page_index_ * $per_page_) + 1 + $row_index_;
-
-		return ($is_first_ ? 0 : ($args_["page_index"] * $args_["per_page"])) + 1;
-		$this->display_r_row_number = ($is_first_ ? 0 : ($args_["total_count"] - ($args_["page_index"] * $args_["per_page"])) );
 	}
 	function row_rseq($page_index_, $row_index_){
 		$row_seq_ = $this->row_seq($page_index_, $row_index_);

@@ -109,7 +109,7 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 	);
 
 	if(!$pbpost_type_data['use_category']){
-		unset($data_['ctg_name']);
+		unset($data_['category_names']);
 	}
 
 	return $data_;

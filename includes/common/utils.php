@@ -202,5 +202,30 @@ function _GET($key_, $default_ = null, $type_ = PB_PARAM_PLAIN){
 function _POST($key_, $default_ = null, $type_ = PB_PARAM_PLAIN){
 	return _pb_param_from_($_POST, $key_, $default_, $type_);	
 }
+function _REQUEST($key_, $default_ = null, $type_ = PB_PARAM_PLAIN){
+	return _pb_param_from_($_REQUEST, $key_, $default_, $type_);
+}
+function _INPUT($key_, $default_ = null, $type_ = PB_PARAM_PLAIN){
+	global $_PB_INPUT;
+	if(isset($_PB_INPUT)){
+		return $_PB_INPUT;
+	}
+	parse_str(file_get_contents("php://input"), $_PB_INPUT);
+
+	return _pb_param_from_($_PB_INPUT, $key_, $default_, $type_);	
+}
+
+function pb_remove_protocol_from_url($url_){
+	$parsed_url_ = parse_url($url_);
+	$host_     = isset($parsed_url_['host']) ? $parsed_url_['host'] : '';
+	$port_     = isset($parsed_url_['port']) ? ':' . $parsed_url_['port'] : '';
+	$user_     = isset($parsed_url_['user']) ? $parsed_url_['user'] : '';
+	$pass_     = isset($parsed_url_['pass']) ? ':' . $parsed_url_['pass']  : '';
+	$pass_     = ($user_ || $pass_) ? "$pass_@" : '';
+	$path_     = isset($parsed_url_['path']) ? $parsed_url_['path'] : '';
+	$query_    = isset($parsed_url_['query']) ? '?' . $parsed_url_['query'] : '';
+	$fragment_ = isset($parsed_url_['fragment']) ? '#' . $parsed_url_['fragment'] : '';
+	return "$user_$pass_$host_$port_$path_$query_$fragment_";
+}
 	
 ?>
