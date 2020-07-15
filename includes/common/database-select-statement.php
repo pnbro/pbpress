@@ -635,10 +635,10 @@ class PBDB_select_statement{
 		return $pbdb->get_first_row($result_['query'], $result_['values'], $result_['types']);
 	}
 
-	function build_group_by($key_, $fields_, $orderby_ = null, $limit_ = null){
+	function build_group_by($key_, $fields_, $order_by_ = null, $limit_ = null){
 		return $this->build($order_by_, $limit_, $key_, $fields_);
 	}
-	function group_by($key_, $fields_, $orderby_ = null, $limit_ = null){
+	function group_by($key_, $fields_, $order_by_ = null, $limit_ = null){
 		$result_ = $this->build_group_by($key_, $fields_, $order_by_, $limit_);
 		global $pbdb;
 		return $pbdb->select($result_['query'], $result_['values'], $result_['types']);
