@@ -5,6 +5,7 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 	private $_connection = null;
 	private $_last_error_no = 0;
 	private $_last_error_message = null;
+	private $_last_error_trace = null;
 
 	function __construct(){
 		parent::__construct("mysqli");
@@ -51,6 +52,7 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 
 		$this->_last_error_no = mysqli_errno($this->_connection);
 		$this->_last_error_message = mysqli_error($this->_connection);
+		$this->_last_error_trace = $this->_last_error_no === 0 ? null : debug_backtrace();
 
 		return $result_;
 	}
@@ -60,6 +62,10 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 	public function last_error(){
 		if($this->_last_error_no === 0) return false;
 		return new PBError($this->_last_error_no, 'MYSQLi ERROR',$this->_last_error_message);	
+	}
+	public function last_error_trace(){
+		if($this->_last_error_no === 0) return null;
+		return $this->_last_error_trace;
 	}
 
 	public function num_rows($resource_){

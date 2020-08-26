@@ -4,6 +4,7 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 	private $_connection = null;
 	private $_last_error_no = "00000";
 	private $_last_error_message = null;
+	private $_last_error_trace = null;
 
 	public $data_types = array(
 		PBDB::TYPE_STRING => PDO::PARAM_STR,
@@ -24,7 +25,7 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 		$dsn_ = "mysql:host=".$pb_config->db_host.";port=".$pb_config->db_port.";dbname=".$pb_config->db_name.";charset=".$pb_config->db_charset;
 
 		$this->_connection = new PDO($dsn_, $pb_config->db_username, $pb_config->db_userpass) Or die("Error On DB Connection : PDO");
-		$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+		$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		return isset($this->_connection);
 	}
@@ -57,13 +58,19 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 			}
 		}
 
-		$result_ = $statement_->execute();
+		try{
+			$this->_last_error_no = "00000";
+			$this->_last_error_message = null;
+			$this->_last_error_trace = null;
 
-		if(!$result_){
-			$this->_last_error_no = $this->_connection->errorCode();
-			$this->_last_error_message = $this->_connection->errorInfo();
-			$this->_last_error_message = implode(":", $this->_last_error_message);
 
+			$result_ = $statement_->execute();
+
+			return $statement_;
+		}catch(Exception $ex_){
+			$this->_last_error_no = $ex_->getCode();
+			$this->_last_error_message = $ex_->getMessage();
+			$this->_last_error_trace = debug_backtrace();
 			return false;
 		}
 
@@ -75,6 +82,10 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 	public function last_error(){
 		if($this->_last_error_no === "00000") return false;
 		return new PBError($this->_last_error_no, 'PDO ERROR',$this->_last_error_message);	
+	}
+	public function last_error_trace(){
+		if($this->_last_error_no === "00000") return null;
+		return $this->_last_error_trace;
 	}
 
 	public function num_rows($resource_){

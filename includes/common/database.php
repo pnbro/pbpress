@@ -42,6 +42,7 @@ abstract class PBDatabase_connection{
 	abstract protected function query($query_, $values_ = array(), $types_ = array());
 	abstract protected function inserted_id();
 	abstract protected function last_error();
+	abstract protected function last_error_trace();
 
 	abstract protected function num_rows($resource_);
 	abstract protected function fetch_array($resource_);
@@ -331,6 +332,10 @@ class PBDB{
 		global $pb_db_connection;
 		return $pb_db_connection->last_error();	
 	}
+	function last_error_trace(){
+		global $pb_db_connection;
+		return $pb_db_connection->last_error_trace();	
+	}
 
 	function autocommit($bool_){
 		global $pb_db_connection;
@@ -400,7 +405,14 @@ if($pb_config->is_show_database_error()){
 	function _pb_database_hook_print_error($last_error_){
 		global $_pb_database_ignore_print_error;
 		if(!!$_pb_database_ignore_print_error) return;
-		echo "[".$last_error_->error_code()."] ".$last_error_->error_message();
+		echo "[".$last_error_->error_code()."] ".$last_error_->error_message()."\r\n";
+
+		global $pbdb;
+		foreach($pbdb->last_error_trace() as $index_ => $trace_data_){
+			if(isset($trace_data_['file']))
+				echo $trace_data_['file']." [line:".$trace_data_['line']."] - ".$trace_data_['function']."\r\n";
+			else echo $trace_data_['function']."\r\n";
+		}
 	}
 	pb_hook_add_action('pb_database_error_occurred','_pb_database_hook_print_error');
 }

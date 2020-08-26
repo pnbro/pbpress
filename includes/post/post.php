@@ -118,10 +118,10 @@ function pb_post_statement($conditions_ = array()){
 	}
 
 	if(isset($conditions_['_prev_sibling_from_id'])){
-		$statement_->add_custom_condition(PBDB_P.".".PBDB_P." < ".PBDB_P." AND posts.id != ".PBDB_P, array($conditions_['_prev_sibling_from_prefix'], $conditions_['_prev_sibling_from_column'], $conditions_['_prev_sibling_from_column_value'], $conditions_['_prev_sibling_from_id']), array("%d", "%d", "%s", "%d"));
+		$statement_->add_custom_condition($conditions_['_prev_sibling_from_prefix'].".".$conditions_['_prev_sibling_from_column']." < ".PBDB_P." AND posts.id != ".PBDB_P, array($conditions_['_prev_sibling_from_column_value'], $conditions_['_prev_sibling_from_id']), array("%s", "%d"));
 	}
 	if(isset($conditions_['_next_sibling_from_id'])){
-		$statement_->add_custom_condition(PBDB_P.".".PBDB_P." > ".PBDB_P." AND posts.id != ".PBDB_P, array($conditions_['_next_sibling_from_prefix'], $conditions_['_next_sibling_from_column'], $conditions_['_next_sibling_from_column_value'], $conditions_['_next_sibling_from_id']), array("%d", "%d", "%s", "%d"));
+		$statement_->add_custom_condition($conditions_['_next_sibling_from_prefix'].".".$conditions_['_next_sibling_from_column']." > ".PBDB_P." AND posts.id != ".PBDB_P, array($conditions_['_next_sibling_from_column_value'], $conditions_['_next_sibling_from_id']), array("%s", "%d"));
 	}
 
 	return pb_hook_apply_filters('pb_post_statement', $statement_, $conditions_);
@@ -170,7 +170,7 @@ function pb_sibling_post($id_, $column_ = "id", $prefix_ = "posts", $sibling_ = 
 	$conditions_['_'.$sibling_.'_sibling_from_column'] = $column_;
 	$conditions_['_'.$sibling_.'_sibling_from_column_value'] = $post_data_[$column_];
 	$statement_ = pb_post_statement(pb_hook_apply_filters('pb_'.$sibling_.'_post_conditions', $conditions_));
-	$results_ = $statement_->select(pb_hook_apply_filters('pb_'.$sibling_.'_post_orderby', "{$column_} ".($sibling_ === "next" ? "ASC" : "DESC")), array(0, 1));
+	$results_ = $statement_->select(pb_hook_apply_filters('pb_'.$sibling_.'_post_orderby', "{$prefix_}.{$column_} ".($sibling_ === "next" ? "ASC" : "DESC")), array(0, 1));
 
 	if(count($results_) <= 0) return null;
 	return pb_hook_apply_filters('pb_'.$sibling_.'_post', $results_[0]);
