@@ -82,7 +82,7 @@ function pb_rewrite_path(){
 	global $pb_rewrite_path;
 	$pb_rewrite_path = $subpath_map_;
 	
-	return $pb_rewrite_path;
+	return pb_hook_apply_filters('pb_rewrite_path', $pb_rewrite_path);
 }
 
 function pb_current_slug(){
@@ -99,7 +99,7 @@ function pb_current_rewrite(){
 
 	$rewrite_list_ = pb_rewrite_list();
 	if(!isset($rewrite_list_[$target_slug_])) return null;
-	return $rewrite_list_[$target_slug_];
+	return pb_hook_apply_filters('pb_current_rewrite', $rewrite_list_[$target_slug_]);
 }
 
 function pb_is_current_slug($slug_){

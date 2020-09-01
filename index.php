@@ -12,7 +12,7 @@ if(strlen($current_slug_)){
 	$rewrite_handler_ = isset($rewrite_["rewrite_handler"]) ? $rewrite_["rewrite_handler"] : pb_hook_apply_filters("pb_rewrite_common_handler", "pb_rewrite_common_handler");
 	$current_path_ = call_user_func_array($rewrite_handler_, array(pb_rewrite_path(), $rewrite_));
 
-	if(isset($rewrite_)){
+	if(isset($current_path_)){
 		if(pb_is_error($current_path_)){
 			pb_redirect_error($current_path_->error_code(), $current_path_->error_message(), $current_path_->error_title());
 			pb_end();

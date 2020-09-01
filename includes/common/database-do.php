@@ -516,7 +516,6 @@ function pbdb_data_object($table_, $fields_, $comment_ = null, $engine_ = "InnoD
 	return new PBDB_DO($table_, $fields_, $comment_, $engine_);
 }
 
-
 define('PBDO_FK_CASCADE', PBDB_DO::FK_CASCADE);
 define('PBDO_FK_SETNULL', PBDB_DO::FK_SETNULL);
 define('PBDO_FK_NOACTION', PBDB_DO::FK_NOACTION);

@@ -15,6 +15,11 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 				'label' => '최대넓이',
 			),
 			array(
+				'name' => 'alt',
+				'type' => 'text',
+				'label' => '설명',
+			),
+			array(
 				'name' => 'image_align',
 				'type' => 'select',
 				'label' => '정렬',
@@ -37,10 +42,11 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 
 		$max_width_ = isset($element_data_['max_width']) && strlen($element_data_['max_width']) ? $element_data_['max_width'] : null;
 		$image_align_ = isset($element_data_['image_align']) && strlen($element_data_['image_align']) ? $element_data_['image_align'] : "center";
+		$alt_ = isset($element_data_['alt']) && strlen($element_data_['alt']) ? $element_data_['alt'] : null;
 		
 		?>
 		<div class="pb-image-group <?=$class_?> <?=$unique_class_name_?> align-<?=$image_align_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>>
-			<img class="pb-image " src="<?=pb_home_url("uploads/".$src_)?>" style="<?=strlen($max_width_) ? "max-width:".$max_width_ : "" ?>">
+			<img class="pb-image " src="<?=pb_home_url("uploads/".$src_)?>" style="<?=strlen($max_width_) ? "max-width:".$max_width_ : "" ?>" alt="<?=$alt_?>">
 		</div>
 		
 		<?php
