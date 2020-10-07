@@ -33,7 +33,7 @@
 			<div class="form-group post-title-form-group">
 				<input type="text" name="post_title" placeholder="<?=pb_hook_apply_filters('pb_post_edit_form_placeholder', "제목 입력")?>" value="<?=$pbpost['post_title']?>" class="form-control input-lg" required data-error="제목을 입력하세요">
 
-				<div class="url-slug-group <?=$is_new_ ? "only-editing" : ""?>" id="pb-post-edit-form-url-slug-group">
+				<div class="url-slug-group <?=$is_new_ ? "only-editing" : ""?> <?=!$pbpost_type_data['use_single_post'] ? "hidden" : ""?>" id="pb-post-edit-form-url-slug-group">
 					<div class="input-group input-group-sm">
 						<span class="input-group-addon"><?=pb_home_url($pbpost_type.'/')?></span>
 						<input type="text" name="slug" class="form-control" placeholder="URL슬러그 입력" value="<?=$pbpost['slug']?>" data-original-slug="<?=$pbpost['slug']?>">

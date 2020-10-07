@@ -18,6 +18,8 @@ pb_rewrite_register('other-page', array(
 pb_hook_add_filter('pb_post_types', function($results_){
 	$results_['blog'] = array(
 		'name' => '블로그',
+		// 'use_category' => false,
+		// 'use_single_post' => false,
 		'label' => array(
 			'list' => "블로그내역",
 			'add' => "블로그추가",

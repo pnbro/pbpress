@@ -26,6 +26,7 @@ function pb_post_types(){
 			'name' => '글',
 			'label' => array(),
 			'use_category' => true,
+			'use_single_post' => true,
 			'adminpage_sort' => 8,
 		),
 	));
@@ -36,6 +37,7 @@ function pb_post_types(){
 		if(!isset($type_data_['label'])) $type_data_['label'] = array();
 		$type_data_['label'] = array_merge($_pb_post_type_label_defaults, $type_data_['label']);
 		$type_data_['use_category'] = isset($type_data_['use_category']) ? !!$type_data_['use_category'] : true;
+		$type_data_['use_single_post'] = isset($type_data_['use_single_post']) ? !!$type_data_['use_single_post'] : true;
 	}
 
 	return $pb_post_types_;

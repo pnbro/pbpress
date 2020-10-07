@@ -66,7 +66,9 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 					<?php pb_hook_do_action("pb_manage_post_listtable_post_title_after", $item_) ?>
 					<?php pb_hook_do_action("pb_manage_post_{$post_type_}_listtable_post_title_after", $item_) ?>
 				</div>
-				<div class="url-link"><a href="<?=$post_url_?>" target="_blank"><?=$post_url_?></a></div>
+				<?php if($pbpost_type_data['use_single_post']){ ?>
+					<div class="url-link"><a href="<?=$post_url_?>" target="_blank"><?=$post_url_?></a></div>
+				<?php } ?>
 				<div class="subaction-frame">
 					<a href="<?=pb_admin_url("manage-{$post_type_}/edit/".$item_['id'])?>">수정</a>
 					<?php pb_hook_do_action("pb_manage_post_listtable_subaction", $item_) ?>

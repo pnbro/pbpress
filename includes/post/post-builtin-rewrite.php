@@ -14,6 +14,12 @@ function _pb_post_hook_for_rewrite_handler($rewrite_path_){
 		return new PBError(404, "요청 글이 없습니다.", "404");
 	}
 
+	$post_types_ = pb_post_types();
+
+	if(!isset($post_types_[$post_type_]) || !$post_types_[$post_type_]['use_single_post']){
+		return new PBError(404, "요청 글이 없습니다.", "404");	
+	}
+
 	$current_slug_ = urldecode($rewrite_path_[1]);
 
 	$post_data_ = null;
