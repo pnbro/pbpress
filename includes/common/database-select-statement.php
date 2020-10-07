@@ -378,6 +378,9 @@ class PBDB_select_statement{
 	function add_in_condition($a_, $array_, $array_types_ = null){
 		$this->_cond_list->add_in($a_, $array_, $array_types_);
 	}
+	function add_not_in_condition($a_, $array_, $array_types_ = null){
+		$this->_cond_list->add_not_in($a_, $array_, $array_types_);
+	}
 	function add_custom_condition($text_, $value_ = null, $types_ = array()){
 		$this->_cond_list->add_custom($text_, $value_, $types_);
 	}

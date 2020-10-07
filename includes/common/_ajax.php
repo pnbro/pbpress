@@ -32,10 +32,15 @@ function pb_ajax_success($data_ = array()){
 	echo json_encode($results_);
 	pb_end();
 }
-function pb_ajax_error($error_title_ = null, $error_message_ = null){
+function pb_ajax_error($arg_ = null, $error_message_ = null){
+	if(pb_is_error($arg_)){
+		$error_message_ = $arg_->error_message();
+		$arg_ = $arg_->error_title();
+	}
+
 	echo json_encode(array(
 		'success' => false,
-		'error_title' => $error_title_,
+		'error_title' => $arg_,
 		'error_message' => $error_message_,
 	));
 	pb_end();
