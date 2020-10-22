@@ -21,6 +21,15 @@ function pb_current_locale($short_ = false){
 
 define('PBDOMAIN', 'pbpress');
 
+pb_hook_add_filter('pb-head-pbvar', function($var_){
+	$var_['locale_domain'] = PBDOMAIN;
+	return $var_;
+});
+pb_hook_add_filter('pb-admin-head-pbvar', function($var_){
+	$var_['locale_domain'] = PBDOMAIN;
+	return $var_;
+});
+
 global $pb_lang_domain_maps;
 $pb_lang_domain_maps = array();
 
