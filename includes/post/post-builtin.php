@@ -39,7 +39,7 @@ pb_hook_add_action("pb_post_edit_form_control_panel_after", function($pbpost){
 	global $pbpost_type, $pbpost_type_data;
 	if(!$pbpost_type_data['use_category']) return;
 
-	$post_categories_ = pb_post_category_list(array("type" => $pbpost_type));	
+	$post_categories_ = pb_post_category_tree(array("type" => $pbpost_type));	
 	$post_category_values_ = pb_post_category_values($pbpost['id'], true);
 ?>
 
@@ -51,9 +51,11 @@ pb_hook_add_action("pb_post_edit_form_control_panel_after", function($pbpost){
 	</div>
 	<div id="pb-post-edit-form-post-categories-body" class="panel-collapse collapse in" role="tabpanel">
 		<div class="panel-body">
-			<div class="form-group" data-post-category-frame>
-				<?php foreach($post_categories_ as $category_data_){ ?>
-				<div class="checkbox">
+			<div class="form-group category-list-group" data-post-category-frame>
+				<?php foreach($post_categories_ as $category_data_){
+					$level_ = $category_data_['level'];
+				?>
+				<div class="checkbox" style="padding-left: <?=($level_-1) * 10?>px;">
 					<label><input type="checkbox" name="category_id" value="<?=$category_data_['id']?>" <?=in_array($category_data_['id'], $post_category_values_) ? "checked" : ""?>><?=$category_data_['title']?></label>
 				</div>
 				<?php } ?>

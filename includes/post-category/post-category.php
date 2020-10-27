@@ -10,6 +10,13 @@ $post_categories_do = pbdb_data_object("post_categories", array(
 	'type'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, 'nn' => true, 'index' => true, "comment" => "글구분"),
 	'slug'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, 'nn' => true, 'index' => true, "comment" => "슬러그"),
 	'title'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 200, "nn" => true, "comment" => "분류명"),
+
+	'parent_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
+		'table' => 'posts',
+		'column' => 'id',
+		'delete' => PBDB_DO::FK_SETNULL,
+		'update' => PBDB_DO::FK_SETNULL,
+	), "comment" => "상위ID", "check_exists" => true),
 	
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
@@ -30,6 +37,12 @@ function pb_post_category_statement($conditions_ = array()){
 
 	if(isset($conditions_['id'])){
 		$statement_->add_in_condition("post_categories.id", $conditions_['id']);
+	}
+	if(isset($conditions_['parent_id'])){
+		$statement_->add_in_condition("post_categories.parent_id", $conditions_['parent_id']);
+	}
+	if(isset($conditions_['only_root']) && @@$conditions_['only_root']){
+		$statement_->add_is_null_condition("post_categories.parent_id");
 	}
 	if(isset($conditions_['type'])){
 		$statement_->add_in_condition("post_categories.type", $conditions_['type']);
@@ -58,6 +71,54 @@ function pb_post_category_list($conditions_ = array()){
 	}
 
 	return pb_hook_apply_filters("pb_post_category_list", $statement_->select($orderby_, $limit_));
+}
+
+function _pb_post_category_tree_recv($results_, $conditions_, $parent_id_, $level_, $orderby_unit_){
+	$statement_ = pb_post_category_statement(array_merge($conditions_, array(
+		'parent_id' => $parent_id_,
+	)));
+
+	$temp_childrens_ = $statement_->select("id {$orderby_unit_}");
+	foreach($temp_childrens_ as $child_data_){
+		$results_[] = array_merge($child_data_, array(
+			'level' => $level_ + 1,
+			'sortchar' => count($results_) + 1,
+		));
+
+		$results_ = _pb_post_category_tree_recv($results_, $conditions_, $child_data_['id'], $level_ + 1, $orderby_unit_);
+	}
+
+	return $results_;
+}
+
+function pb_post_category_tree($conditions_ = array(), $offset_ = 0, $limit_ = null, $desc_ = false){
+	$statement_ = pb_post_category_statement(array_merge($conditions_, array(
+		'only_root' => true,
+	)));
+
+	$orderby_unit_ = $desc_ ? "DESC" : "ASC";
+	$cond_limit_ = null;
+
+	if(isset($limit_)){
+		$cond_limit_ = array(0, $offset_ + $limit_);
+	}
+
+	$temp_roots_ = $statement_->select("id {$orderby_unit_}", $cond_limit_);
+	$results_ = array();
+
+	foreach($temp_roots_ as $root_data_){
+		$results_[] = array_merge($root_data_, array(
+			'level' => 1,
+			'sortchar' => count($results_) + 1,
+		));
+
+		$results_ = _pb_post_category_tree_recv($results_, $conditions_, $root_data_['id'], 1, $orderby_unit_);
+	}
+
+	$limit_ = isset($limit_) ? $limit_ : count($results_);
+	$results_ = array_splice($results_, $offset_, $limit_);
+
+	return pb_hook_apply_filters("pb_post_category_tree", $results_);
 }
 
 function pb_post_category($id_){
@@ -122,6 +183,7 @@ function pb_post_category_write($data_){
 	$slug_ = isset($data_['slug']) ? $data_['slug'] : null;
 	$slug_ = strlen($slug_) ? $slug_ : $title_;
 	$slug_ = pb_slugify($slug_);
+	$parent_id_ = @strlen($data_['parent_id']) ? $data_['parent_id'] : null;
 
 	$post_types_ = pb_post_types();
 	
@@ -132,6 +194,7 @@ function pb_post_category_write($data_){
 		'title' => $title_,
 		'type' => $type_,
 		'slug' => pb_post_category_rewrite_slug($type_, $slug_),
+		'parent_id' => $parent_id_,
 		'reg_date' => $reg_date_,
 	);
 
@@ -156,6 +219,10 @@ function pb_post_category_edit($id_, $data_){
 		$update_data_['slug'] = pb_post_category_rewrite_slug($before_data_['type'], $update_data_['slug'], $id_);
 
 		if(!strlen($update_data_['slug'])) return new PBError(403, "슬러그가 잘못되었습니다.", "잘못된 슬러그");
+	}
+
+	if(array_key_exists('parent_id', $data_)){
+		$update_data_['parent_id'] = @strlen($data_['parent_id']) ? $data_['parent_id'] : null;
 	}
 
 	pb_post_category_update($id_, $update_data_);

@@ -5,14 +5,19 @@ pb_easytable_register("pb-admin-post-category-table", function($offset_, $per_po
 	
 	$keyword_ = _GET('keyword', null);
 
-	$statement_ = pb_post_category_statement(pb_hook_apply_filters("pb_admin_post_category_table_conditions", array(
+	$pb_post_category_tree_ = pb_post_category_tree(array(
 		'keyword' => $keyword_,
 		'type' => $pbpost_type,
-	)));
+	), $offset_, $per_post_);
+
+	$statement_ = pb_post_category_statement(array(
+		'keyword' => $keyword_,
+		'type' => $pbpost_type,
+	));
 
 	return array(
 		'count' => $statement_->count(),
-		'list' => $statement_->select("id desc", array($offset_, $per_post_)),
+		'list' => $pb_post_category_tree_,
 	);
 
 }, array(
@@ -26,18 +31,24 @@ pb_easytable_register("pb-admin-post-category-table", function($offset_, $per_po
 		'class' => 'col-6 link-action',
 		'render' => function($table_, $item_, $post_index_){
 			$post_type_ = $item_['type'];
+			$level_ = $item_['level'];
 
 			$ctg_title_ = pb_hook_apply_filters('pb_manage_post_category_listtable_title', $item_['title']);
 			$ctg_title_ = pb_hook_apply_filters('pb_manage_post_category_{$post_type_}_listtable_title', $ctg_title_);
 			
 			?>
 			<div class="title-frame post-category-title-frame">
-				<a href="javascript:pb_manage_post_category_edit('<?=$item_['id']?>');" ><?=$ctg_title_?></a>
+				<?php for($pad_index_=0;$pad_index_<$level_-1;++$pad_index_){ ?>
+					<span class="level-pad"></span>
+				<?php } ?>
+				<a href="javascript:pb_manage_post_category_edit('<?=$item_['id']?>');" >
+					<?=$ctg_title_?>
+				</a>
 			</div>
 			<div class="subaction-frame">
-				<a href="javascript:pb_manage_post_category_edit('<?=$item_['id']?>');">수정</a>
+				<a href="javascript:pb_manage_post_category_edit('<?=$item_['id']?>');"><?=__('수정')?></a>
 				<?php pb_hook_do_action("pb_manage_post_category_listtable_subaction", $item_) ?>
-				<a href="javascript:pb_manage_post_category_remove('<?=$item_['id']?>');" class="text-danger">삭제</a>
+				<a href="javascript:pb_manage_post_category_remove('<?=$item_['id']?>');" class="text-danger"><?=__('삭제')?></a>
 			</div>
 
 			<div class="xs-visiable-info">
@@ -60,7 +71,7 @@ pb_easytable_register("pb-admin-post-category-table", function($offset_, $per_po
 ), array(
 	'class' => 'pb-admin-post-category-table',
 	"no_rowdata" => "검색된 분류가 없습니다.",
-	'per_post' => 15,
+	'per_page' => 15,
 ));
 
 
