@@ -216,12 +216,14 @@ class PBDB_select_statement_conditions extends ArrayObject{
 				break;
 
 				case PBDB_SS::COND_ISNOTNULL :
+					$a_ = $data_['a'];
 
 					$query_[] = "{$a_} IS NOT NULL \n\r";
 
 				break;
 
 				case PBDB_SS::COND_ISNULL :
+					$a_ = $data_['a'];
 
 					$query_[] = "{$a_} IS NULL \n\r";
 

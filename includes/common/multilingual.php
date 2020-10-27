@@ -69,10 +69,11 @@ function pb_lang_load_translations_json($domain_, $locale_){
 	if(!isset($pb_lang_domain_maps[$domain_]['locales'][$locale_])) return false;
 
 	if(!$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded']){
-		$translations_data_ = @include($pb_lang_domain_maps[$domain_]['path'].$locale_.'.php');
-		
-		if(!isset($translations_data_)){
-			return false;
+
+		try{
+			$translations_data_ = include($pb_lang_domain_maps[$domain_]['path'].$locale_.'.php');
+		}catch(Exception $ex_){
+			return pb_error(500, __("에러발생"), $ex_->getMessage());
 		}
 
 		$pb_lang_domain_maps[$domain_]['locales'][$locale_]['translations'] = $translations_data_;
@@ -80,7 +81,7 @@ function pb_lang_load_translations_json($domain_, $locale_){
 		return $pb_lang_domain_maps[$domain_]['locales'][$locale_];
 	}
 
-	return false;
+	return pb_error(500, __("불러오기 실패"), __("번역본을 불러오기에 실패하였습니다."));
 }
 
 function __($text_, $domain_ = PBDOMAIN){
@@ -91,7 +92,7 @@ function __($text_, $domain_ = PBDOMAIN){
 	if(!isset($pb_lang_domain_maps[$domain_]['locales'][$current_locale_])) return $text_;
 
 	if(!$pb_lang_domain_maps[$domain_]['locales'][$current_locale_]['loaded']){
-		if(!pb_lang_load_translations_json($domain_, $current_locale_)) return false;
+		if(pb_is_error(pb_lang_load_translations_json($domain_, $current_locale_))) return $text_;
 	}
 
 	$translations_ = $pb_lang_domain_maps[$domain_]['locales'][$current_locale_]['translations'];
@@ -144,5 +145,102 @@ if($current_locale_ === "C"){
 	global $pb_config;
 	pb_locale_update($pb_config->default_locale());	
 }
+
+
+/*
+function _pb_search_translation_target_file($dir_, &$results_ = array()){
+	$files_ = scandir($dir_);
+
+	foreach($files_ as $key_ => $value_){
+		$path_ = realpath($dir_ . DIRECTORY_SEPARATOR . $value_);
+
+		if(!is_dir($path_)){
+
+			$file_info_ = pathinfo($path_);
+			if(@$file_info_['extension'] === "php"){
+				$results_[] = $path_;
+			}
+		}else if($value_ !== "." && $value_ !== "..") {
+			_pb_search_translation_target_file($path_, $results_);
+		}
+	}
+
+	return $results_;
+
+}
+
+function pb_gen_translate_maps(){
+	$temp_ = _pb_search_translation_target_file(PB_DOCUMENT_PATH);
+	$results_ = array();
+
+	foreach($temp_ as $path_){
+		$searched_ = null;
+		$target_file_txt_ = file_get_contents($path_);
+
+		preg_match_all('/\_\_\([\'][\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\"\=]{1,}[\'][\,][\s]{0,}PBDOMAIN\)/i', $target_file_txt_, $searched_);
+
+		foreach($searched_[0] as $searched_txt_){
+			$target_key_ = @preg_replace("/(\_\_\([\'])([\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\"\=]{1,})([\'][\,][\s]{0,}PBDOMAIN\))/i", "$2", $searched_txt_);
+			$results_[$target_key_] = array("value" => null, "q" => "single");
+		}
+
+		preg_match_all('/\_\_\([\"][\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\'\=]{1,}[\"][\,][\s]{0,}PBDOMAIN\)/i', $target_file_txt_, $searched_);
+
+		foreach($searched_[0] as $searched_txt_){
+			$target_key_ = preg_replace("/(\_\_\([\"])([\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\'\=]{1,})([\"][\,][\s]{0,}PBDOMAIN\))/i", "$2", $searched_txt_);
+			$results_[$target_key_] = array("value" => null, "q" => "double");
+		}
+	}
+
+	$available_theme_locales_ = pb_available_theme_locales();
+	unset($available_theme_locales_['ko_KR']);
+
+	foreach($available_theme_locales_ as $locale_ => $name_){
+		$before_data_ = null;
+
+		if(pb_lang_load_translations_json(PBDOMAIN, $locale_)){
+			global $pb_lang_domain_maps;
+			if(isset($pb_lang_domain_maps[PBDOMAIN]['locales'][$locale_])){
+				$before_data_ = $pb_lang_domain_maps[PBDOMAIN]['locales'][$locale_];
+			}
+		}
+		$before_data_ = isset($before_data_) ? $before_data_['translations'] : array();
+
+		ob_start();
+?>return array(
+<?php
+
+foreach($results_ as $key_ => $value_){
+	$value_ = isset($before_data_[$key_]) ? $before_data_[$key_] : "";
+	$q_txt_ = $results_[$key_]["q"] === "single" ? "'" : '"';
+
+	if(strlen($value_)){
+		?>	<?=$q_txt_?><?=$key_?><?=$q_txt_?> => <?=$q_txt_?><?=$value_?><?=$q_txt_?>,<?=PHP_EOL?><?php	
+	}else{
+		?>	<?=$q_txt_?><?=$key_?><?=$q_txt_?> => null,<?=PHP_EOL?><?php
+	}
+}
+?>
+);<?php
+
+		$translate_map_txt_ = ob_get_clean();
+		$translate_map_txt_ = "<?php {$translate_map_txt_} ?>";
+
+		@mkdir(PB_DOCUMENT_PATH."lang", 0777, true);
+		@unlink(PB_DOCUMENT_PATH."lang/{$locale_}.php");
+
+		$translate_map_file_ = fopen(PB_DOCUMENT_PATH."lang/{$locale_}.php", "w") or die("Unable to open file!");
+		fwrite($translate_map_file_, $translate_map_txt_);
+		fclose($translate_map_file_);
+	}
+
+	return array(
+		"locale_count" => count($available_theme_locales_),
+		"created_count" => count($results_),
+	);
+	
+}*/
+
+
 
 ?>
