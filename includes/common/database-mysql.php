@@ -11,15 +11,24 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 		parent::__construct("mysql");
 	}
 
-	public function connect(){
+	public function connect($options_ = array()){
 		if(!function_exists("mysql_connect")){
 			die("MySQL not supported");
 		}
 
 		global $pb_config;
-		$this->_connection = @mysql_connect($pb_config->db_host.":".$pb_config->db_port, $pb_config->db_username, $pb_config->db_userpass, true) Or die("Error On DB Connection : MYSQL");
 
-		mysql_select_db($pb_config->db_name) Or die("Error On Select DB : MYSQL");
+		$host_ = @strlen($options_['host']) ? $options_['host'] : $pb_config->db_host;
+		$port_ = @strlen($options_['port']) ? $options_['port'] : $pb_config->db_port;
+		$db_name_ = @strlen($options_['db_name']) ? $options_['db_name'] : $pb_config->db_name;
+		$charset_ = @strlen($options_['charset']) ? $options_['charset'] : $pb_config->db_charset;
+		$username_ = @strlen($options_['username']) ? $options_['username'] : $pb_config->db_username;
+		$userpass_ = @strlen($options_['userpass']) ? $options_['userpass'] : $pb_config->db_userpass;
+
+		$this->_connection = @mysql_connect($host_.":".$port_, $username_, $userpass_, true) Or die("Error On DB Connection : MYSQL");
+
+		mysql_select_db($db_name_) Or die("Error On Select DB : MYSQL");
+		mysql_set_charset($charset_, $this->_connection);
 
 		return isset($this->_connection);
 	}

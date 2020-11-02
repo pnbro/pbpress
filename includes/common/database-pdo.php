@@ -15,16 +15,23 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 		parent::__construct("pdo");
 	}
 
-	public function connect(){
+	public function connect($options_ = array()){
 		global $pb_config;
 
 		if(!class_exists("PDO")){
 			die("PDO not supported");
 		}
 
-		$dsn_ = "mysql:host=".$pb_config->db_host.";port=".$pb_config->db_port.";dbname=".$pb_config->db_name.";charset=".$pb_config->db_charset;
+		$host_ = @strlen($options_['host']) ? $options_['host'] : $pb_config->db_host;
+		$port_ = @strlen($options_['port']) ? $options_['port'] : $pb_config->db_port;
+		$db_name_ = @strlen($options_['db_name']) ? $options_['db_name'] : $pb_config->db_name;
+		$charset_ = @strlen($options_['charset']) ? $options_['charset'] : $pb_config->db_charset;
+		$username_ = @strlen($options_['username']) ? $options_['username'] : $pb_config->db_username;
+		$userpass_ = @strlen($options_['userpass']) ? $options_['userpass'] : $pb_config->db_userpass;
 
-		$this->_connection = new PDO($dsn_, $pb_config->db_username, $pb_config->db_userpass) Or die("Error On DB Connection : PDO");
+		$dsn_ = "mysql:host=".$host_.";port=".$port_.";dbname=".$db_name_.";charset=".$charset_;
+
+		$this->_connection = new PDO($dsn_, $username_, $userpass_) Or die("Error On DB Connection : PDO");
 		$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		return isset($this->_connection);

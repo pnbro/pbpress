@@ -90,16 +90,24 @@ class PBDB_DO extends ArrayObject{
 	private $_table_name;
 	private $_engine;
 	private $_comment;
+	private $_pbdb;
 	private $_fields = array();
 	private $_keys = array();
 	private $_indexes = array();
 	private $_custom_fks = array();
 
-	function __construct($table_, $fields_, $comment_ = null, $engine_ = "InnoDB"){
+	function __construct($table_, $fields_, $comment_ = null, $engine_ = "InnoDB", $pbdb_ = null){
 		$this->_table_name = $table_;
 		$this->_fields = $fields_;
 		$this->_comment = $comment_;
 		$this->_engine = $engine_;
+
+		if(!isset($pbdb_)){
+			global $pbdb;
+			$pbdb_  = $pbdb;
+		}
+
+		$this->_pbdb = $pbdb_;
 
 		foreach($this->_fields as $column_name_ => $field_data_){
 			if(isset($field_data_['pk']) && !!$field_data_['pk']){
@@ -244,8 +252,6 @@ class PBDB_DO extends ArrayObject{
 	}
 
 	function _installed_tables(){
-		global $pbdb;
-
 		$fk_last_index_ = 0;
 		foreach($this->_fields as $column_name_ => $field_data_){
 			if(isset($field_data_['check_exists'])) continue;
@@ -302,7 +308,7 @@ class PBDB_DO extends ArrayObject{
 
 					}
 
-					$pbdb->query($query_);
+					$this->_pbdb->query($query_);
 				}
 
 			}
@@ -311,12 +317,10 @@ class PBDB_DO extends ArrayObject{
 	}
 
 	function is_exists(){
-		global $pbdb;
-		return $pbdb->exists_table($this->_table_name);
+		return $this->_pbdb->exists_table($this->_table_name);
 	}
 	function is_column_exists($column_value_){
-		global $pbdb;
-		return $pbdb->exists_column($this->_table_name, $column_value_);
+		return $this->_pbdb->exists_column($this->_table_name, $column_value_);
 	}
 
 	function table_name(){
@@ -331,7 +335,7 @@ class PBDB_DO extends ArrayObject{
 	}
 
 	function statement(){
-		$statment_ = pbdb_ss($this->_table_name);
+		$statment_ = pbdb_ss($this->_table_name, null, $this->_pbdb);
 
 		foreach($this->_fields as $column_name_ => $field_data_){
 			$statment_->add_field($column_name_);
@@ -347,8 +351,6 @@ class PBDB_DO extends ArrayObject{
 	}
 
 	function insert($data_){
-		global $pbdb;
-
 		$insert_values_ = array();
 		$insert_types_ = array();
 
@@ -378,7 +380,7 @@ class PBDB_DO extends ArrayObject{
 			}
 		}
 		
-		$inserted_id_ = $pbdb->insert($this->_table_name, $insert_values_, $insert_types_);
+		$inserted_id_ = $this->_pbdb->insert($this->_table_name, $insert_values_, $insert_types_);
 
 		pb_hook_do_action('pbdb_do_{$this->_table_name}_inserted', $inserted_id_);
 
@@ -427,9 +429,7 @@ class PBDB_DO extends ArrayObject{
 			$key_types_[] = PBDB_DO::convert_to_pbdb_type($type_);
 		}
 
-		global $pbdb;
-
-		$result_ = $pbdb->update($this->_table_name, $update_values_, $keys_, $update_types_, $key_types_);
+		$result_ = $this->_pbdb->update($this->_table_name, $update_values_, $keys_, $update_types_, $key_types_);
 		
 		$hook_params_ = array_merge(array("pbdb_do_{$this->_table_name}_updated"), $keys_);
 		call_user_func_array('pb_hook_do_action', $hook_params_);
@@ -437,7 +437,6 @@ class PBDB_DO extends ArrayObject{
 		return $result_;
 	}
 	function update(){
-		global $pbdb;
 		$arg_count_ = func_num_args();
 
 		$temp_keys_ = array();
@@ -475,9 +474,7 @@ class PBDB_DO extends ArrayObject{
 			$key_types_[] = PBDB_DO::convert_to_pbdb_type($type_);
 		}
 
-		global $pbdb;
-
-		$result_ = $pbdb->delete($this->_table_name, $keys_, $key_types_);
+		$result_ = $this->_pbdb->delete($this->_table_name, $keys_, $key_types_);
 		$hook_params_ = array_merge(array("pbdb_do_{$this->_table_name}_delete"), $keys_);
 		call_user_func_array('pb_hook_do_action', $hook_params_);
 		return $result_;

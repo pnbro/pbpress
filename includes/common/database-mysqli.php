@@ -11,15 +11,22 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 		parent::__construct("mysqli");
 	}
 
-	public function connect(){
-		global $pb_config;
-
+	public function connect($options_ = array()){
 		if(!function_exists("mysqli_connect")){
 			die("MySQLi not supported");
 		}
 
-		$this->_connection = @mysqli_connect($pb_config->db_host, $pb_config->db_username, $pb_config->db_userpass, $pb_config->db_name,$pb_config->db_port) Or die("Error On DB Connection : MYSQLI");
+		global $pb_config;
 
+		$host_ = @strlen($options_['host']) ? $options_['host'] : $pb_config->db_host;
+		$port_ = @strlen($options_['port']) ? $options_['port'] : $pb_config->db_port;
+		$db_name_ = @strlen($options_['db_name']) ? $options_['db_name'] : $pb_config->db_name;
+		$charset_ = @strlen($options_['charset']) ? $options_['charset'] : $pb_config->db_charset;
+		$username_ = @strlen($options_['username']) ? $options_['username'] : $pb_config->db_username;
+		$userpass_ = @strlen($options_['userpass']) ? $options_['userpass'] : $pb_config->db_userpass;
+
+		$this->_connection = @mysqli_connect($host_, $username_, $userpass_, $db_name_, $port_) Or die("Error On DB Connection : MYSQLI");
+		mysqli_set_charset($this->_connection, $charset_);
 		return isset($this->_connection);
 	}
 

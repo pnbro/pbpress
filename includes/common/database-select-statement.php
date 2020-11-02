@@ -315,6 +315,7 @@ class PBDB_select_statement{
 
 	private $_from_table;
 	private $_from_table_alias;
+	private $_pbdb;
 
 	private $_field_list = array();
 	private $_join_list = array();
@@ -324,10 +325,17 @@ class PBDB_select_statement{
 		return @get_class($obj_) === "PBDB_select_statement";
 	}
 
-	function __construct($from_table_, $from_table_alias_ = null){
+	function __construct($from_table_, $from_table_alias_ = null, $pbdb_ = null){
 		$this->_from_table = $from_table_;
 		$this->_from_table_alias = $from_table_alias_;
 		$this->_cond_list = new PBDB_select_statement_conditions();
+
+		if(!isset($pbdb_)){
+			global $pbdb;
+			$pbdb_  = $pbdb;
+		}
+
+		$this->_pbdb = $pbdb_;
 	}
 
 	function from_table(){
@@ -612,13 +620,11 @@ class PBDB_select_statement{
 
 	function count(){
 		$result_ = $this->build();
-		global $pbdb;
-		return $pbdb->get_var("SELECT COUNT(*) FROM (".$result_['query'].") TMP", $result_['values'], $result_['types']);
+		return $this->_pbdb->get_var("SELECT COUNT(*) FROM (".$result_['query'].") TMP", $result_['values'], $result_['types']);
 	}
 	function select($order_by_ = null, $limit_ = null){
 		$result_ = $this->build($order_by_, $limit_);
-		global $pbdb;
-		return $pbdb->select($result_['query'], $result_['values'], $result_['types']);
+		return $this->_pbdb->select($result_['query'], $result_['values'], $result_['types']);
 	}
 	function serialize_column($column_name_, $order_by_ = null, $limit_ = null){
 		$temp_ = $this->select($order_by_, $limit_);
@@ -631,13 +637,11 @@ class PBDB_select_statement{
 	}
 	function get_var($order_by_ = null, $limit_ = null){
 		$result_ = $this->build($order_by_, $limit_);
-		global $pbdb;
-		return $pbdb->get_var($result_['query'], $result_['values'], $result_['types']);
+		return $this->_pbdb->get_var($result_['query'], $result_['values'], $result_['types']);
 	}
 	function get_first_row($order_by_ = null, $limit_ = null){
 		$result_ = $this->build($order_by_, $limit_);
-		global $pbdb;
-		return $pbdb->get_first_row($result_['query'], $result_['values'], $result_['types']);
+		return $this->_pbdb->get_first_row($result_['query'], $result_['values'], $result_['types']);
 	}
 
 	function build_group_by($key_, $fields_, $order_by_ = null, $limit_ = null){
@@ -645,16 +649,15 @@ class PBDB_select_statement{
 	}
 	function group_by($key_, $fields_, $order_by_ = null, $limit_ = null){
 		$result_ = $this->build_group_by($key_, $fields_, $order_by_, $limit_);
-		global $pbdb;
-		return $pbdb->select($result_['query'], $result_['values'], $result_['types']);
+		return $this->_pbdb->select($result_['query'], $result_['values'], $result_['types']);
 	}
 }
 
-function pb_database_select_statement($table_, $alias_ = null){
-	return new PBDB_select_statement($table_, $alias_);
+function pb_database_select_statement($table_, $alias_ = null, $pbdb_ = null){
+	return new PBDB_select_statement($table_, $alias_, $pbdb_);
 }
-function pbdb_ss($table_, $alias_ = null){
-	return pb_database_select_statement($table_, $alias_);
+function pbdb_ss($table_, $alias_ = null, $pbdb_ = null){
+	return pb_database_select_statement($table_, $alias_, $pbdb_);
 }
 function pb_database_is_statement($statement_){
 	return PBDB_select_statement::is_statement($statement_);

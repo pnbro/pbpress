@@ -38,7 +38,7 @@ abstract class PBDatabase_connection{
 
 	abstract protected function escape_string($str);
 
-	abstract protected function connect();
+	abstract protected function connect($options_ = array());
 	abstract protected function query($query_, $values_ = array(), $types_ = array());
 	abstract protected function inserted_id();
 	abstract protected function last_error();
@@ -95,13 +95,18 @@ global $pbdb;
 
 class PBDB{
 
+	private $_db_connection;
+
 	const TYPE_STRING = "%s";
 	const TYPE_NUMBER = "%d";
 	const TYPE_FLOAT = "%f";
 
+	function __construct($db_connection_){
+		$this->_db_connection = $db_connection_;
+	}
+
 	function query($query_, $values_ = array(), $types_ = array()){
-		global $pb_config, $pb_db_connection;
-		$result_ = pb_hook_apply_filters("pb_database_query",$pb_db_connection->query($query_, $values_, $types_));
+		$result_ = pb_hook_apply_filters("pb_database_query",$this->_db_connection->query($query_, $values_, $types_));
 		$last_error_ = $this->last_error();
 
 		if(pb_is_error($last_error_)){
@@ -112,23 +117,19 @@ class PBDB{
 	}
 
 	function last_query(){
-		global $pb_db_connection;
-		return $pb_db_connection->last_query();
+		return $this->_db_connection->last_query();
 	}
 	function last_query_parameters(){
-		global $pb_db_connection;
-		return $pb_db_connection->last_query_parameters();
+		return $this->_db_connection->last_query_parameters();
 	}
 
 	function select($query_, $values_ = array(), $types_ = array()){
-		global $pb_db_connection;
-
 		$resources_ = $this->query($query_, $values_, $types_);
 
 		if(!isset($resources_)) return null;
 
     	$results_ = array();
-    	while($row_data_ = $pb_db_connection->fetch_array($resources_, PB_MYSQL_ASSOC)){
+    	while($row_data_ = $this->_db_connection->fetch_array($resources_, PB_MYSQL_ASSOC)){
 			$results_[] = $row_data_;
     	}
 
@@ -136,13 +137,11 @@ class PBDB{
 	}
 
 	function get_first_row($query_, $values_ = array(), $types_ = array()){
-		global $pb_db_connection;
-
 		$resources_ = $this->query($query_, $values_, $types_);
 
 		if(!isset($resources_)) return null;
 
-    	while($row_data_ = $pb_db_connection->fetch_array($resources_, PB_MYSQL_ASSOC)){
+    	while($row_data_ = $this->_db_connection->fetch_array($resources_, PB_MYSQL_ASSOC)){
 			return $row_data_;
     	}
 
@@ -150,13 +149,11 @@ class PBDB{
 	}
 
 	function get_var($query_, $values_ = array(), $types_ = array()){
-		global $pb_db_connection;
-
 		$resources_ = $this->query($query_, $values_, $types_);
 
 		if(!isset($resources_)) return null;
 
-    	while($row_data_ = $pb_db_connection->fetch_array($resources_, PB_MYSQL_NUM)){
+    	while($row_data_ = $this->_db_connection->fetch_array($resources_, PB_MYSQL_NUM)){
 			return $row_data_[0];
     	}
 
@@ -164,8 +161,6 @@ class PBDB{
 	}
 
 	function insert($table_name_, $insert_data_, $insert_data_types_ = array()){
-		global $pb_db_connection;
-
 		$insert_query_ = "INSERT into {$table_name_}( ";
 		$query_column_str_ = "";
 		$query_type_str_ = "";
@@ -190,7 +185,7 @@ class PBDB{
 				$query_column_str_ .= strtolower($column_name_);
 				$query_type_str_ .= PBDB_PARAM_MAP_STR;
 			}else{
-				$values_[] = $pb_db_connection->escape_string($column_value_);
+				$values_[] = $this->_db_connection->escape_string($column_value_);
 
 				$query_column_str_ .= strtolower($column_name_);
 				if(isset($insert_data_types_[$col_index_])){
@@ -216,12 +211,10 @@ class PBDB{
 			return $result_;
 		}
 
-		return $pb_db_connection->inserted_id($pb_db_connection);
+		return $this->_db_connection->inserted_id($this->_db_connection);
 	}
 
 	function update($table_name_, $update_data_, $key_data_, $update_data_types_ = array(), $update_key_types_ = array()){
-		global $pb_db_connection;
-
 		$update_query_ = "UPDATE {$table_name_} SET ";
 
 		$column_value_str_ = "";
@@ -243,7 +236,7 @@ class PBDB{
 				$types_[] = PBDB::TYPE_NUMBER;
 				$values_[] = null;
 			}else{
-				$values_[] = $pb_db_connection->escape_string($column_value_);	
+				$values_[] = $this->_db_connection->escape_string($column_value_);	
 				$column_type_ = PBDB::TYPE_STRING;
 				if(isset($update_data_types_[$col_index_])){
 					$column_type_ = $update_data_types_[$col_index_];
@@ -261,7 +254,7 @@ class PBDB{
 		$col_index_ = 0;
 
 		foreach($key_data_ as $column_name_ => $column_value_){
-			$values_[] = $pb_db_connection->escape_string($column_value_);
+			$values_[] = $this->_db_connection->escape_string($column_value_);
 
 			$where_value_str_ .= "AND ";
 
@@ -289,8 +282,6 @@ class PBDB{
 	}
 
 	function delete($table_name_, $key_data_, $delete_key_types_ = array()){
-		global $pb_db_connection;
-
 		$delete_query_ = "DELETE FROM {$table_name_} ";
 
 		$values_ = array();
@@ -301,7 +292,7 @@ class PBDB{
 		$col_index_ = 0;
 
 		foreach($key_data_ as $column_name_ => $column_value_){
-			$values_[] = $pb_db_connection->escape_string($column_value_);
+			$values_[] = $this->_db_connection->escape_string($column_value_);
 
 			$where_value_str_ .= "AND ";
 
@@ -324,37 +315,28 @@ class PBDB{
 		return $result_;
 	}
 	function inserted_id(){
-		global $pb_db_connection;
-		return $pb_db_connection->inserted_id();
+		return $this->_db_connection->inserted_id();
 	}
 
 	function last_error(){
-		global $pb_db_connection;
-		return $pb_db_connection->last_error();	
+		return $this->_db_connection->last_error();	
 	}
 	function last_error_trace(){
-		global $pb_db_connection;
-		return $pb_db_connection->last_error_trace();	
+		return $this->_db_connection->last_error_trace();	
 	}
 
 	function autocommit($bool_){
-		global $pb_db_connection;
-		$pb_db_connection->autocommit($bool_);
+		$this->_db_connection->autocommit($bool_);
 	}
 
 	function commit(){
-		global $pb_db_connection;
-		$pb_db_connection->commit();
+		$this->_db_connection->commit();
 	}
 	function rollback(){
-		global $pb_db_connection;
-		$pb_db_connection->rollback();
+		$this->_db_connection->rollback();
 	}
 
 	function install_tables(){
-		global $pb_db_connection;
-
-
 		$query_list_ = pb_hook_apply_filters("pb_install_tables", array());
 
 		$this->autocommit(false);
@@ -376,28 +358,32 @@ class PBDB{
 	}
 
 	function exists_column($table_name_, $column_name_){
-		global $pb_db_connection, $_pb_database_ignore_print_error;
+		global $_pb_database_ignore_print_error;
 		$_pb_database_ignore_print_error = true;
-		$check_ = @$pb_db_connection->query("SELECT {$column_name_} FROM {$table_name_} LIMIT 0, 1");
+		$check_ = @$this->_db_connection->query("SELECT {$column_name_} FROM {$table_name_} LIMIT 0, 1");
 		$_pb_database_ignore_print_error = false;
 		return ($check_ !== false);
 	}
 
 	function exists_table($table_name_){
-		global $pb_db_connection, $_pb_database_ignore_print_error;
+		global $_pb_database_ignore_print_error;
 		$_pb_database_ignore_print_error = true;
-		$check_ = @$pb_db_connection->query("SELECT 1 FROM {$table_name_} LIMIT 0, 1");
+		$check_ = @$this->_db_connection->query("SELECT 1 FROM {$table_name_} LIMIT 0, 1");
 		$_pb_database_ignore_print_error = false;
 		return ($check_ !== false);
+	}
+
+	function close_connection(){
+		$this->_db_connection->close_connection();	
 	}
 }
 
 
-$pbdb = new PBDB();
+$pbdb = new PBDB($pb_db_connection);
 
 function _pb_database_close_hook(){
-	global $pbdb,$pb_db_connection;
-	$pb_db_connection->close_connection();
+	global $pbdb;
+	$pbdb->close_connection();
 }
 pb_hook_add_action('pb_ended', "_pb_database_close_hook");
 
