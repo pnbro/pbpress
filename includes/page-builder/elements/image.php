@@ -46,7 +46,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 		
 		?>
 		<div class="pb-image-group <?=$class_?> <?=$unique_class_name_?> align-<?=$image_align_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>>
-			<img class="pb-image " src="<?=pb_home_url("uploads/".$src_)?>" style="<?=strlen($max_width_) ? "max-width:".$max_width_ : "" ?>" alt="<?=$alt_?>">
+			<img class="pb-image " src="<?=pb_filebase_url($src_)?>" style="<?=strlen($max_width_) ? "max-width:".$max_width_ : "" ?>" alt="<?=$alt_?>">
 		</div>
 		
 		<?php
@@ -61,7 +61,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 		<div class="form-group">
 			<label>이미지선택</label>
 			<input type="hidden" name="thumbnail_src" value="<?=$thumbnail_src_?>" id="<?=$temp_form_id_?>-thumbnail">
-			<input type="text" name="src" value="<?=$src_?>" class="hidden" id="<?=$temp_form_id_?>" data-upload-path="/" data-thumbnail-ipnut="#<?=$temp_form_id_?>-thumbnail">
+			<input type="text" name="src" value="<?=$src_?>" class="hidden" id="<?=$temp_form_id_?>" data-upload-path="" data-thumbnail-ipnut="#<?=$temp_form_id_?>-thumbnail">
 			<div class="clearfix"></div>
 		</div>
 

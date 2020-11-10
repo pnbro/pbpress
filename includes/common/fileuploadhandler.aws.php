@@ -36,7 +36,7 @@ class PBPressFileUPloadAWSHandler extends PBPressFileUPloadHandler{
 
 	function filebase_url($file_path_ = null, $params_ = array()){
 		if(defined("PB_FILE_UPLOAD_AWS_FILEBASE_URL")){
-			return pb_append_url(PB_FILE_UPLOAD_AWS_FILEBASE_URL, $file_path_);
+			return trim(pb_append_url(PB_FILE_UPLOAD_AWS_FILEBASE_URL, trim($file_path_, "/")), "/");
 		}else{
 			return "//".PB_FILE_UPLOAD_AWS_BUCKET.".s3.".PB_FILE_UPLOAD_AWS_CLIENT_REGION.".amazonaws.com/{$file_path_}";	
 		}
@@ -109,10 +109,18 @@ class PBPressFileUPloadAWSHandler extends PBPressFileUPloadHandler{
 				$row_data_['thumbnail'] = $upload_path_.$yyymmdd_.$renamed_file_name_;
 			}
 
+			 $this->_client->putObject(array( 
+               'Bucket' => PB_FILE_UPLOAD_AWS_BUCKET,
+               'Key'    => $upload_path_.$yyymmdd_,
+               'Body'   => "",
+               'ACL'    => 'public-read'
+             ));
+
 			$uploader_ = new MultipartUploader($this->_client, $origianl_file_path_, [
 				'bucket' => PB_FILE_UPLOAD_AWS_BUCKET,
 				'Key' => $upload_path_.$yyymmdd_.$renamed_file_name_,
 				'acl' => 'public-read',
+				'ACL'    => 'public-read'
 			]);
 
 			try {
