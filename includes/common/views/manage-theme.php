@@ -14,11 +14,11 @@
 	
 <div class="manage-theme-frame"><form id="pb-manage-theme-form" method="POST">
 
-	<h3>테마설정</h3>
+	<h3><?=__('테마설정')?></h3>
 
 	<div class="manage-form-panel panel panel-default manage-theme-panel" id="pb-manage-theme-panel">
 		<div class="panel-heading">
-			<h3 class="panel-title">테마설정</h3>
+			<h3 class="panel-title"><?=__('테마설정')?></h3>
 		</div>
 		<div class="panel-body">
 			<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_manage_theme")?>">
@@ -59,7 +59,7 @@
 	
 	<hr>
 	<div class="text-center">
-		<button type="submit" class="btn btn-primary btn-lg">변경사항 저장</button>
+		<button type="submit" class="btn btn-primary btn-lg"><?=__('변경사항 저장')?></button>
 	</div>
 	
 

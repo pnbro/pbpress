@@ -67,7 +67,7 @@ function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ 
 
 function _pb_mail_hook_register_manage_site_menu_list($results_){
 	$results_['mail'] = array(
-		'name' => '메일설정',
+		'name' => __('메일설정'),
 		'renderer' => '_pb_mail_hook_render_manage_site',
 	);
 	return $results_;
@@ -81,14 +81,14 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 
 	<div class="manage-site-form-panel panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">메일설정</h3>
+			<h3 class="panel-title"><?=__('메일설정')?></h3>
 		</div>
 		<div class="panel-body">
 				
 				<div class="row">
 					<div class="col-xs-12 col-sm-6">
 						<div class="form-group">
-							<label for="pb-manage-site-form-mail_sender">발송메일주소</label>
+							<label for="pb-manage-site-form-mail_sender"><?=__('발송메일주소')?></label>
 							<input type="email" name="mail_sender" placeholder="메일주소 입력" id="pb-manage-site-form-mail_sender" class="form-control" value="<?=pb_option_value("mail_sender")?>">
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>
@@ -96,7 +96,7 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 					</div>
 					<div class="col-xs-12 col-sm-6">
 						<div class="form-group">
-							<label for="pb-manage-site-form-mail_receipt">수신메일주소</label>
+							<label for="pb-manage-site-form-mail_receipt"><?=__('수신메일주소')?></label>
 							<input type="email" name="mail_receipt" placeholder="메일주소 입력" id="pb-manage-site-form-mail_receipt" class="form-control" value="<?=pb_option_value("mail_receipt")?>">
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>
@@ -112,11 +112,11 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 
 					<div class="row">
 						<div class="col-xs-7">
-							<label for="pb-manage-site-form-mail_smtp_host">SMTP 호스트</label>
+							<label for="pb-manage-site-form-mail_smtp_host"><?=__('SMTP 호스트')?></label>
 							<input type="text" name="mail_smtp_host" placeholder="호스트 입력" id="pb-manage-site-form-mail_smtp_host" class="form-control" value="<?=pb_option_value("mail_smtp_host")?>">
 						</div>
 						<div class="col-xs-5">
-							<label for="pb-manage-site-form-mail_smtp_port">SMTP 포트</label>
+							<label for="pb-manage-site-form-mail_smtp_port"><?=__('SMTP 포트')?></label>
 							<input type="text" name="mail_smtp_port" placeholder="포트번호 입력" id="pb-manage-site-form-mail_smtp_port" class="form-control" value="<?=pb_option_value("mail_smtp_port")?>">
 						</div>
 					</div>
@@ -126,9 +126,9 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 				</div>
 
 				<div class="form-group">
-					<label for="pb-manage-site-form-mail_smtp_secure">SMTP 보안</label>
+					<label for="pb-manage-site-form-mail_smtp_secure"><?=__('SMTP 보안')?></label>
 					<select class="form-control" name="mail_smtp_secure">
-						<option value="">사용하지 않음</option>
+						<option value=""><?=__('사용하지 않음')?></option>
 						<option value="ssl" <?=pb_selected(pb_option_value("mail_smtp_secure"), "ssl")?>>SSL</option>
 						<option value="tls" <?=pb_selected(pb_option_value("mail_smtp_secure"), "tls")?>>TLS</option>
 					</select>
@@ -137,11 +137,11 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 				</div>
 
 				<div class="form-group">
-					<label for="pb-manage-site-form-mail_smtp_auth">SMTP 인증사용</label>
+					<label for="pb-manage-site-form-mail_smtp_auth"><?=__('SMTP 인증사용')?></label>
 					
 					<div>
-						<label class="radio-inline"><input type="radio" name="mail_smtp_auth" value="Y" <?= pb_checked(pb_option_value("mail_smtp_auth"), "Y") ?>> 사용</label>
-						<label class="radio-inline"><input type="radio" name="mail_smtp_auth" value="N" <?= pb_checked(pb_option_value("mail_smtp_auth"), "N") ?>> 미사용</label>
+						<label class="radio-inline"><input type="radio" name="mail_smtp_auth" value="Y" <?= pb_checked(pb_option_value("mail_smtp_auth"), "Y") ?>> <?=__('사용')?></label>
+						<label class="radio-inline"><input type="radio" name="mail_smtp_auth" value="N" <?= pb_checked(pb_option_value("mail_smtp_auth"), "N") ?>> <?=__('미사용')?></label>
 					</div>
 						
 										
@@ -155,7 +155,7 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 					<div class="row">
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group">
-								<label for="pb-manage-site-form-mail_smtp_user_id">SMTP 사용자ID</label>
+								<label for="pb-manage-site-form-mail_smtp_user_id"><?=__('SMTP 사용자ID')?></label>
 								<input type="text" name="mail_smtp_user_id" placeholder="사용자ID 입력" id="pb-manage-site-form-mail_smtp_user_id" class="form-control" value="<?=pb_option_value("mail_smtp_user_id")?>">
 								<div class="help-block with-errors"></div>
 								<div class="clearfix"></div>
@@ -163,7 +163,7 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 						</div>
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group">
-								<label for="pb-manage-site-form-mail_smtp_user_pass">SMTP 사용자 비밀번호</label>
+								<label for="pb-manage-site-form-mail_smtp_user_pass"><?=__('SMTP 사용자 비밀번호')?></label>
 								<input type="password" name="mail_smtp_user_pass" placeholder="사용자ID 입력" id="pb-manage-site-form-mail_smtp_user_pass" class="form-control" value="<?=pb_option_value("mail_smtp_user_pass")?>">
 								<div class="help-block with-errors"></div>
 								<div class="clearfix"></div>
@@ -176,13 +176,13 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 				</div>
 
 				<div class="form-group">
-					<label>메일서식</label>
+					<label><?=__('메일서식')?></label>
 					<textarea id="pb-manage-site-form-mail_template" name="mail_template"><?=stripslashes(pb_clob_option_value('mail_template', "{content}"))?></textarea>
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
 				<div class="form-group">
-					<label>메일서식업로드<br/><small class="help-block">*메일서식을 업로드 시, 위 메일서식을 대체합니다.</small></label>
+					<label><?=__('메일서식업로드')?><br/><small class="help-block"><?=__('*메일서식을 업로드 시, 위 메일서식을 대체합니다.')?></small></label>
 
 					<input type="text" name="mail_template_upload" value="<?=pb_option_value("mail_template_upload", "")?>" class="hidden" id="pb-manage-site-form-mail_template_upload_r_name" >
 					

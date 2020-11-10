@@ -6,7 +6,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 function _pb_plugin_register_authority_task_types($results_){
 	$results_['manage_plugins'] = array(
-		'name' => '플러그인관리',
+		'name' => __('플러그인관리'),
 		'selectable' => true,
 	);
 
@@ -30,7 +30,7 @@ pb_hook_add_action('pb_installed_tables', "_pb_authority_register_task_for_plugi
 
 function _pb_plugin_hook_register_adminpage_list($results_){
 	$results_['manage-plugin'] = array(
-		'name' => '플러그인설정',
+		'name' => __('플러그인설정'),
 		'type' => 'menu',
 		'directory' => 'common',
 		'page' => PB_DOCUMENT_PATH."includes/common/views/manage-plugins.php",
@@ -57,8 +57,8 @@ function _pb_plugin_ajax_active(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_plugins")){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '권한없음',
-			'error_message' => '플러그인관리 권한이 없습니다.',
+			'error_title' => __('권한없음'),
+			'error_message' => __('플러그인관리 권한이 없습니다.'),
 		));
 		pb_end();	
 	}
@@ -72,8 +72,8 @@ function _pb_plugin_ajax_active(){
 	if(!isset($slugs_)){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '에러발생',
-			'error_message' => '요청값이 잘못되었습니다.',
+			'error_title' => __('에러발생'),
+			'error_message' => __('요청값이 잘못되었습니다.'),
 		));
 		pb_end();	
 	}
@@ -81,8 +81,8 @@ function _pb_plugin_ajax_active(){
 	if(!pb_verify_request_token("pbpress_manage_plugins", $request_chip_)){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '에러발생',
-			'error_message' => '요청토큰이 잘못되었습니다.',
+			'error_title' => __('에러발생'),
+			'error_message' => __('요청토큰이 잘못되었습니다.'),
 		));
 		pb_end();	
 	}
@@ -101,8 +101,8 @@ function _pb_plugin_ajax_deactive(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_plugins")){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '권한없음',
-			'error_message' => '플러그인관리 권한이 없습니다.',
+			'error_title' => __('권한없음'),
+			'error_message' => __('플러그인관리 권한이 없습니다.'),
 		));
 		pb_end();	
 	}
@@ -116,8 +116,8 @@ function _pb_plugin_ajax_deactive(){
 	if(!isset($slugs_)){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '에러발생',
-			'error_message' => '요청값이 잘못되었습니다.',
+			'error_title' => __('에러발생'),
+			'error_message' => __('요청값이 잘못되었습니다.'),
 		));
 		pb_end();	
 	}
@@ -125,8 +125,8 @@ function _pb_plugin_ajax_deactive(){
 	if(!pb_verify_request_token("pbpress_manage_plugins", $request_chip_)){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '에러발생',
-			'error_message' => '요청토큰이 잘못되었습니다.',
+			'error_title' => __('에러발생'),
+			'error_message' => __('요청토큰이 잘못되었습니다.'),
 		));
 		pb_end();	
 	}

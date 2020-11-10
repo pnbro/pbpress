@@ -89,7 +89,7 @@ function pb_page_revision_delete($id_){
 function pb_page_revision_write_from($page_id_){
 	$page_data_ = pb_page($page_id_);
 	if(!isset($page_data_)){
-		return new PBError(-1, "잘못된 요청", "페이지정보가 존재하지 않습니다.");
+		return new PBError(-1, __("잘못된 요청"), __("페이지정보가 존재하지 않습니다."));
 	}
 
 	pb_page_revision_insert(array(
@@ -102,13 +102,13 @@ function pb_page_revision_write_from($page_id_){
 function pb_page_restore_from_revision($page_id_, $revision_id_){
 	$page_data_ = pb_page($page_id_);
 	if(!isset($page_data_)){
-		return new PBError(-1, "잘못된 요청", "페이지정보가 존재하지 않습니다.");
+		return new PBError(-1, __("잘못된 요청"), __("페이지정보가 존재하지 않습니다."));
 	}
 
 	$revision_data_ = pb_page_revision($revision_id_);
 
 	if(!isset($revision_data_)){
-		return new PBError(-1, "잘못된 요청", "리비젼정보가 존재하지 않습니다.");
+		return new PBError(-1, __("잘못된 요청"), __("리비젼정보가 존재하지 않습니다."));
 	}	
 
 	pb_page_revision_write_from($page_id_);

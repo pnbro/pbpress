@@ -10,7 +10,7 @@ class PBMailSender_older extends PBMailSender{
 	}
 
 	if(!strlen($options_['from'])){
-		return new PBError(-1, "SMTP정보없음", "SMT정보가 없습니다.");
+		return new PBError(-1, __("SMTP정보없음"), __("SMT정보가 없습니다."));
 	}
 	
 	$mail_receipt_ = pb_option_value('mail_receipt');
@@ -88,7 +88,7 @@ class PBMailSender_older extends PBMailSender{
 	$result_ = @$phpmailer_->send();
 
 	if(!$result_){
-		return new PBError(-1, "메일발송실패", $phpmailer_->ErrorInfo);
+		return new PBError(-1, __("메일발송실패"), $phpmailer_->ErrorInfo);
 	}
 
 	return true;

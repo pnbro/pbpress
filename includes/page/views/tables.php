@@ -21,7 +21,7 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
 		'seq' => true,
 	),
 	"page_title" => array(
-		'name' => '페이지명',
+		'name' => __('페이지명'),
 		'class' => 'col-8 link-action',
 		'render' => function($table_, $item_, $page_index_){
 			$is_front_page_ = pb_front_page_id() === (string)$item_['id'];
@@ -33,19 +33,19 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
 				<a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>" ><?=pb_hook_apply_filters('pb_manage_page_listtable_page_title', $item_['page_title'])?></a>
 				<?php pb_hook_do_action("pb_manage_page_listtable_page_title_after", $item_) ?>
 				<?php if($is_front_page_){ ?>
-					<small class="fontpage-text"> - 홈화면</small>
+					<small class="fontpage-text"> - <?=__('홈화면')?></small>
 				<?php } ?>
 			</div>
 			<div class="url-link"><a href="<?=$page_url_?>" target="_blank"><?=$page_url_?></a></div>
 			<div class="subaction-frame">
-				<a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>">수정</a>
+				<a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>"><?=__('수정')?></a>
 				<?php if(!$is_front_page_){ ?>
-					<a href="javascript:pb_manage_page_register_front_page('<?=$item_['id']?>');" class="">홈화면 지정</a>
+					<a href="javascript:pb_manage_page_register_front_page('<?=$item_['id']?>');" class=""><?=__('홈화면 지정')?></a>
 				<?php }else{ ?>
-					<a href="javascript:pb_manage_page_unregister_front_page();" class="">홈화면 지정해제</a>
+					<a href="javascript:pb_manage_page_unregister_front_page();" class=""><?=__('홈화면 지정해제')?></a>
 				<?php } ?>
 				<?php pb_hook_do_action("pb_manage_page_listtable_subaction", $item_) ?>
-				<a href="javascript:pb_manage_page_remove('<?=$item_['id']?>');" class="text-danger">삭제</a>
+				<a href="javascript:pb_manage_page_remove('<?=$item_['id']?>');" class="text-danger"><?=__('삭제')?></a>
 			
 				
 			</div>
@@ -64,7 +64,7 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
 		}
 	),
 	"status_name" => array(
-		'name' => '상태',
+		'name' => __('상태'),
 		'class' => 'col-1 text-center hidden-xs',
 		'render' => function($table_, $item_, $page_index_){
 			?>
@@ -82,7 +82,7 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
 	),
 ), array(
 	'class' => 'pb-admin-page-table',
-	"no_rowdata" => "검색된 페이지가 없습니다.",
+	"no_rowdata" => __("검색된 페이지가 없습니다."),
 	'per_page' => 15,
 ));
 

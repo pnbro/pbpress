@@ -14,8 +14,8 @@ function _pb_authority_insert_defaults(){
 
 	$auth_id_ = pb_authority_add(array(
 		'slug' => PB_AUTHORITY_SLUG_ADMINISTRATOR,
-		'auth_name' => '관리자',
-		'auth_desc' => '사이트를 관리할 수 있는 권한',
+		'auth_name' => __('관리자'),
+		'auth_desc' => __('사이트를 관리할 수 있는 권한'),
 		'reg_date' => pb_current_time(),
 	));
 	
@@ -52,7 +52,7 @@ function _pb_installed_tables_for_initial_authority(){
 pb_hook_add_action('pb_installed_tables', '_pb_installed_tables_for_initial_authority');
 
 pb_authority_task_add_type('manage_authority', array(
-	'name' => '권한관리',
+	'name' => __('권한관리'),
 	'selectable' => false,
 ));
 pb_authority_initial_register(PB_AUTHORITY_SLUG_ADMINISTRATOR, "manage_authority");

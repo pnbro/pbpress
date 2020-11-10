@@ -109,14 +109,14 @@ class PB_easytable{
 					$class_ = trim($class_);
 
 				?>
-					<th class="<?=$key_?> <?=$class_?>"><?=isset($column_data_['name']) ? $column_data_['name'] : ""?></th>
+					<th class="<?=$key_?> <?=$class_?>"><?=isset($column_data_['name']) ? __($column_data_['name']) : ""?></th>
 				<?php } ?>
 			</thead>
 			<tbody>
 
 				<?php if($is_ajax_){ ?>
 					<tr>
-						<td class="no-rowdata first" colspan="<?=count($data_)?>"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></td>
+						<td class="no-rowdata first" colspan="<?=count($data_)?>"><?=isset($options_['no_rowdata']) ? __($options_['no_rowdata']) : null?></td>
 					</tr>
 				<?php }else{
 					$this->render_body($page_index_);
@@ -285,7 +285,7 @@ function _pb_ajax_easytable_load_html(){
 	$page_index_ = _GET('page_index', 0, PB_PARAM_INT);
 
 	if(!isset($pb_easytable_map[$table_id_])){
-		pb_ajax_error('잘못된 접근','잘못된 접근입니다.');
+		pb_ajax_error(__('잘못된 접근'),__('잘못된 접근입니다.'));
 	}
 
 	$easytable_ = $pb_easytable_map[$table_id_];

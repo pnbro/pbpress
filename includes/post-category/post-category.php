@@ -12,7 +12,7 @@ $post_categories_do = pbdb_data_object("post_categories", array(
 	'title'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 200, "nn" => true, "comment" => "분류명"),
 
 	'parent_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
-		'table' => 'posts',
+		'table' => 'post_categories',
 		'column' => 'id',
 		'delete' => PBDB_DO::FK_SETNULL,
 		'update' => PBDB_DO::FK_SETNULL,
@@ -187,8 +187,8 @@ function pb_post_category_write($data_){
 
 	$post_types_ = pb_post_types();
 	
-	if(!strlen($type_) || !isset($post_types_[$type_])) return new PBError(403, "글형식이 잘못되었습니다.", "잘못된 글형식");
-	if(!strlen($slug_)) return new PBError(403, "슬러그가 잘못되었습니다.", "잘못된 슬러그");
+	if(!strlen($type_) || !isset($post_types_[$type_])) return new PBError(403, __("글형식이 잘못되었습니다."), __("잘못된 글형식"));
+	if(!strlen($slug_)) return new PBError(403, __("슬러그가 잘못되었습니다."), __("잘못된 슬러그"));
 
 	$insert_data_ = array(
 		'title' => $title_,
@@ -218,7 +218,7 @@ function pb_post_category_edit($id_, $data_){
 		$update_data_['slug'] = pb_slugify((strlen($data_['slug']) ? $data_['slug'] : $title_));
 		$update_data_['slug'] = pb_post_category_rewrite_slug($before_data_['type'], $update_data_['slug'], $id_);
 
-		if(!strlen($update_data_['slug'])) return new PBError(403, "슬러그가 잘못되었습니다.", "잘못된 슬러그");
+		if(!strlen($update_data_['slug'])) return new PBError(403, __("슬러그가 잘못되었습니다."), __("잘못된 슬러그"));
 	}
 
 	if(array_key_exists('parent_id', $data_)){

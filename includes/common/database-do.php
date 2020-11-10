@@ -459,7 +459,7 @@ class PBDB_DO extends ArrayObject{
 	}
 	function update_by($custom_keys_, $update_data_){
 		if(count($custom_keys_) == 0){
-			return new PBError(403, "잘못된 요청", "삭제할 키가 없습니다.");
+			return new PBError(403, __("잘못된 요청"), __("삭제할 키가 없습니다."));
 		}
 
 		return $this->_update($custom_keys_, $update_data_);
@@ -490,7 +490,7 @@ class PBDB_DO extends ArrayObject{
 		}
 
 		if(count($this->_keys) != count($temp_keys_)){
-			return new PBError(403, "잘못된 요청", "키갯수가 일치하지 않습니다.");
+			return new PBError(403, __("잘못된 요청"), __("키갯수가 일치하지 않습니다."));
 		}
 
 		foreach($this->_keys as $index_ => $key_){
@@ -502,7 +502,7 @@ class PBDB_DO extends ArrayObject{
 	}
 	function delete_by($custom_keys_){
 		if(count($custom_keys_) == 0){
-			return new PBError(403, "잘못된 요청", "삭제할 키가 없습니다.");
+			return new PBError(403, __("잘못된 요청"), __("삭제할 키가 없습니다."));
 		}
 
 		return $this->_delete($custom_keys_);

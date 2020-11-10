@@ -19,7 +19,7 @@ function _pb_adminpage_manage_page_rewrite_handler_for_revision($path_, $sub_act
 		$pbpage = pb_page($page_id_);
 
 		if(!isset($pbpage)){
-			return new PBError(503, "잘못된 접근", "존재하지 않는 페이지입니다.");
+			return new PBError(503, __("잘못된 접근"), __("존재하지 않는 페이지입니다."));
 		}
 
 		global $pbpage_meta_map;
@@ -78,7 +78,7 @@ function _pb_rewrite_handler_for_page_revision_iframe($rewrite_path_){
 function _pb_manage_page_listtable_subaction_hook_for_revision($item_){
 	?>
 
-	<a href="<?=pb_admin_url("manage-page/revision/".$item_['id'])?>">리비젼</a>
+	<a href="<?=pb_admin_url("manage-page/revision/".$item_['id'])?>"><?=__('리비젼')?></a>
 
 	<?php
 
@@ -96,13 +96,13 @@ function _pb_page_edit_form_after_hook_for_revision($page_data_){
 	<div class="panel panel-default" id="pb-page-edit-form-revision-panel">
 		<div class="panel-heading" role="tab">
 			<h4 class="panel-title">
-				<a role="button" data-toggle="collapse" href="#pb-page-edit-form-revision-panel-body" aria-expanded="true" aria-controls="collapseOne">리비젼</a>
+				<a role="button" data-toggle="collapse" href="#pb-page-edit-form-revision-panel-body" aria-expanded="true" aria-controls="collapseOne"><?=__('리비젼')?></a>
 			</h4>
 		</div>
 		<div id="pb-page-edit-form-revision-panel-body" class="panel-collapse collapse in" role="tabpanel">
 			<div class="panel-body">
-				<label ><?=number_format($revision_statement_->count())?>개의 리비젼</label>
-				<div><a href="<?=pb_admin_url("manage-page/revision/".$page_data_['id'])?>" class="btn btn-block btn-default">리비젼보기</a></div>
+				<label ><?=sprintf(__('%s개의 리비젼'), number_format($revision_statement_->count()))?></label>
+				<div><a href="<?=pb_admin_url("manage-page/revision/".$page_data_['id'])?>" class="btn btn-block btn-default"><?=__('리비젼보기')?></a></div>
 			</div>
 		</div>
 	</div>

@@ -7,10 +7,9 @@ if(!defined('PB_DOCUMENT_PATH')){
 // define('PB_DEV', true);
 // define('PB_SHOW_DATABASE_ERROR', PB_DEV);
 
-// define('PB_DB_CONNECTION_TYPE', 'mysqli'); //mysql, mysqli, pdo
-
 define('PB_CHARSET', 'UTF-8');
 
+define('PB_DB_CONNECTION_TYPE', 'pdo'); //mysql, mysqli, pdo
 define('PB_DB_HOST', '');
 define('PB_DB_PORT', '');
 define('PB_DB_USERNAME', '');
@@ -29,6 +28,15 @@ define("PB_CRYPT_PASSWORD", "~W.7bNa[~$+aeP>u");
 // define("PB_UPLOAD_MAX_IMAGE_WIDTH", 2000);
 // define("PB_UPLOAD_MAX_IMAGE_HEIGHT", 2000);
 
-// define("PB_WYSIWYG_EDITOR", "summernote"); // trumbowyg or summernote
+define("PB_WYSIWYG_EDITOR", "summernote"); // trumbowyg or summernote
+define("PB_FILE_UPLOAD_HANDLER", "default"); //default, aws or class name
+
+/*define("PB_FILE_UPLOAD_AWS_CLIENT_KEY", "*** Your Access Key ***");
+define("PB_FILE_UPLOAD_AWS_CLIENT_SECRET", "*** Your Access Secret ***");
+define("PB_FILE_UPLOAD_AWS_CLIENT_VERSION", "");
+define("PB_FILE_UPLOAD_AWS_CLIENT_REGION", "");
+define("PB_FILE_UPLOAD_AWS_BUCKET", "");
+define("PB_FILE_UPLOAD_AWS_FILEBASE_URL", "");
+*/
 
 ?>

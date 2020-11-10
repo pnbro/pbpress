@@ -16,7 +16,7 @@ function pb_install_rewrite(){
 	$rewrite_file_ = fopen(PB_DOCUMENT_PATH.".htaccess", "w");
 
 	if(!isset($rewrite_file_)){
-		return new PBError(-1, "에러발생", "Rewrite를 생성할 수 없습니다. 파일권한을 확인하세요.");
+		return new PBError(-1, __("에러발생"), __("Rewrite를 생성할 수 없습니다. 파일권한을 확인하세요."));
 	}
 
 	fwrite($rewrite_file_, "RewriteEngine On
@@ -113,11 +113,11 @@ function pb_is_home(){
 
 function pb_rewrite_common_handler($rewrite_path_, $rewrite_data_){
 	if(!isset($rewrite_data_)){
-		return new PBError(503, "잘못된 접근", "잘못된 접근입니다.");
+		return new PBError(503, __("잘못된 접근"), __("잘못된 접근입니다."));
 	}
 
 	if(count($rewrite_path_) > 1){
-		return new PBError(404, "잘못된 접근", "잘못된 접근입니다.");
+		return new PBError(503, __("잘못된 접근"), __("잘못된 접근입니다."));
 	}
 
 	return $rewrite_data_['page'];

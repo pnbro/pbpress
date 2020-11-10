@@ -4,13 +4,13 @@ pb_easy_splited_view("pb-gcode-splitted-view", "pb-admin-gcode-table", "pb-admin
 	'master' => array(
 		'loader' => 'pb-admin-gcode-load',
 		'header' => function(){ ?>
-			<h3>공통코드내역 <a href="javascript:_pb_gcode_add();" class="btn btn-primary btn-sm">코드추가</a></h3>
+			<h3><?=__('공통코드내역')?> <a href="javascript:_pb_gcode_add();" class="btn btn-primary btn-sm"><?=__('코드추가')?></a></h3>
 			<div class="pb-easytable-conditions">
 				<div class="right-frame">
 					<div class="input-group">
-						<input type="text" class="form-control" placeholder="코드명" name="keyword" >
+						<input type="text" class="form-control" placeholder="<?=__('코드명')?>" name="keyword" >
 						<span class="input-group-btn">
-							<button type="submit" class="btn btn-default" type="button">검색하기</button>
+							<button type="submit" class="btn btn-default" type="button"><?=__('검색하기')?></button>
 						</span>
 					</div>
 				</div>
@@ -18,15 +18,15 @@ pb_easy_splited_view("pb-gcode-splitted-view", "pb-admin-gcode-table", "pb-admin
 		<?php },
 
 		'preview_html' => function(){ ?>
-			<h3>코드정보</h3>
+			<h3><?=__('코드정보')?></h3>
 			<table class="pb-form-table">
 				<tbody>
 					<tr>
-						<th>ID</th>
+						<th><?=__('ID')?></th>
 						<td>{{code_id}}</td>
-						<th>코드명</th>
+						<th><?=__('코드명')?></th>
 						<td>{{code_nm}}</td>
-						<th>사용여부</th>
+						<th><?=__('사용여부')?></th>
 						<td>{{use_yn}}</td>
 					</tr>
 				
@@ -37,7 +37,7 @@ pb_easy_splited_view("pb-gcode-splitted-view", "pb-admin-gcode-table", "pb-admin
 
 	'detail' => array(
 		'header' => function(){ ?>
-			<h3>상세코드내역 <a href="javascript:_pb_gcode_dtl_add();" class="btn btn-primary btn-sm">상세추가</a></h3>
+			<h3><?=__('상세코드내역')?> <a href="javascript:_pb_gcode_dtl_add();" class="btn btn-primary btn-sm"><?=__('상세추가')?></a></h3>
 		<?php },
 	),
 	'placeholder' => "좌측에서 공통코드를 선택하세요",

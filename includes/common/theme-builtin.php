@@ -18,7 +18,7 @@ pb_hook_add_action('pb_installed_tables', "_pb_theme_install_tables");
 
 function _pb_theme_hook_register_adminpage_list($results_){
 	$results_['manage-theme'] = array(
-		'name' => '테마설정',
+		'name' => __('테마설정'),
 		'type' => 'menu',
 		'directory' => 'common',
 		'page' => PB_DOCUMENT_PATH."includes/common/views/manage-theme.php",
@@ -34,8 +34,8 @@ function _pb_theme_ajax_do_update(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_site")){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '권한없음',
-			'error_message' => '사이트관리 권한이 없습니다.',
+			'error_title' => __('권한없음'),
+			'error_message' => __('사이트관리 권한이 없습니다.'),
 		));
 		pb_end();	
 	}
@@ -48,8 +48,8 @@ function _pb_theme_ajax_do_update(){
 	if(!isset($theme_data_)){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '에러발생',
-			'error_message' => '요청값이 잘못되었습니다.',
+			'error_title' => __('에러발생'),
+			'error_message' => __('요청값이 잘못되었습니다.'),
 		));
 		pb_end();	
 	}
@@ -57,8 +57,8 @@ function _pb_theme_ajax_do_update(){
 	if(!pb_verify_request_token("pbpress_manage_theme", $theme_data_['_request_chip'])){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '에러발생',
-			'error_message' => '요청토큰이 잘못되었습니다.',
+			'error_title' => __('에러발생'),
+			'error_message' => __('요청토큰이 잘못되었습니다.'),
 		));
 		pb_end();	
 	}

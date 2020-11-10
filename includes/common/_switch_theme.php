@@ -16,7 +16,7 @@ function _pb_exceptions_switch_theme_error_handler($severity_, $message_, $filen
 	header("Content-Type:application/json; charset=".$pb_config->charset);
 	echo json_encode(array(
 		'success' => false,
-		'error_title' => "에러발생",
+		'error_title' => __("에러발생"),
 		'error_message' => "[".$filename_.", line : ".$lineno_."]".$message_,
 	));
 	pb_option_update(PB_OPTION_THEME_NAME, null);
@@ -29,8 +29,8 @@ $request_token_ = _POST('request_token');
 if(!strlen($theme_) || (pb_option_value("_theme_switch_key_") !== $request_token_)){
 	echo json_encode(array(
 		'success' => false,
-		'error_title' => "에러발생",
-		'error_message' => "잘못된 요청입니다.",
+		'error_title' => __("에러발생"),
+		'error_message' => __("잘못된 요청입니다."),
 		
 	));
 	pb_end();

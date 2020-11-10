@@ -88,7 +88,7 @@ class PB_easylist{
 			
 
 				<?php if($is_ajax_){ ?>
-					<div class="no-rowdata first"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></div>
+					<div class="no-rowdata first"><?=isset($options_['no_rowdata']) ? __($options_['no_rowdata']) : null?></div>
 				<?php }else{
 					$this->render($page_index_);
 				} ?>
@@ -213,7 +213,7 @@ function _pb_ajax_easylist_load_html(){
 	$page_index_ = _GET('page_index', 0, PB_PARAM_INT);
 
 	if(!isset($pb_easylist_map[$table_id_])){
-		pb_ajax_error('잘못된 접근','잘못된 접근입니다.');
+		pb_ajax_error(__('잘못된 접근'),__('잘못된 접근입니다.'));
 	}
 
 	$easylist_ = $pb_easylist_map[$table_id_];

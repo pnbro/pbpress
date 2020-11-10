@@ -24,6 +24,7 @@ class PBConfig{
 	public $crypt_bits = 2048;
 
 	public $wysiwyg_editor;
+	public $file_upload_handler = "default";
 
 	private $default_locale = "ko_KR";
 
@@ -54,7 +55,8 @@ class PBConfig{
 		$this->crypt_algorithm = (defined("PB_CRYPT_ALGORITHM")) ? PB_CRYPT_ALGORITHM : "sha256";
 		$this->crypt_bits = (defined("PB_CRYPT_BITS")) ? PB_CRYPT_BITS : 2048;
 
-		$this->wysiwyg_editor = (defined("PB_WYSIWYG_EDITOR")) ? PB_WYSIWYG_EDITOR : "trumbowyg";
+		$this->wysiwyg_editor = (defined("PB_WYSIWYG_EDITOR")) ? PB_WYSIWYG_EDITOR : "summernote";
+		$this->file_upload_handler = (defined("PB_FILE_UPLOAD_HANDLER")) ? PB_FILE_UPLOAD_HANDLER : "default";
 
 		$this->default_locale = (defined("PB_DEFAULT_LOCALE")) ? PB_DEFAULT_LOCALE : "ko_KR";
 

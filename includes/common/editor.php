@@ -129,14 +129,14 @@ function pb_wysiwyg_editor($name_, $content_, $data_){
 	$wysiwyg_editor_renderers_ = pb_wysiwyg_editor_renderers();
 
 	if(!isset($wysiwyg_editor_renderers_[$pb_config->wysiwyg_editor])){
-		echo "{$pb_config->wysiwyg_editor} 에디터가 존재하지 않습니다.";
+		echo sprintf(__("%s 에디터가 존재하지 않습니다."), $pb_config->wysiwyg_editor);
 		return false;
 	}
 
 	$render_ = $wysiwyg_editor_renderers_[$pb_config->wysiwyg_editor];
 
 	if(!is_callable($render_)){
-		echo "{$pb_config->wysiwyg_editor} 에디터 렌더러가 존재하지 않습니다.";
+		echo sprintf(__("%s 에디터 렌더러가 존재하지 않습니다."), $pb_config->wysiwyg_editor);
 		return false;
 	}
 

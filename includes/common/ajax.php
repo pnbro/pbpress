@@ -38,9 +38,9 @@ pb_hook_add_filter('pb-admin-head-pbvar', "_pb_ajax_add_to_header_pbvar");
 pb_hook_add_filter('pb-head-pbvar', "_pb_ajax_add_to_header_pbvar");
 
 function _pb_ajax_rewrite_handler($rewrite_path_, $page_data_){
-	if(count($rewrite_path_) > 2) return new PBError(404, "잘못된 접근", "요청값이 잘못되었습니다.");
+	if(count($rewrite_path_) > 2) return new PBError(404, __("잘못된 접근"), __("요청값이 잘못되었습니다."));
 	if(!isset($rewrite_path_[1]) || !strlen($rewrite_path_[1])){
-		return new PBError(404, "잘못된 접근", "요청값이 잘못되었습니다.");
+		return new PBError(404, __("잘못된 접근"), __("요청값이 잘못되었습니다."));
 	}
 	return PB_DOCUMENT_PATH."includes/common/_ajax.php";
 }

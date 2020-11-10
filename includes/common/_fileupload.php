@@ -12,12 +12,6 @@ if(!pb_hook_apply_filters('pb_fileupload_before', true)){
 	pb_end();
 }
 
-//prevent injection
-if(!file_exists(PB_DOCUMENT_PATH."uploads/.htaccess")){
-	_pb_install_rewrite_for_upload_directory();
-}
-
-
 if(empty($_FILES)){
 	echo json_encode(array(
 		'success' => false,

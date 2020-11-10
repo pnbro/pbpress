@@ -17,12 +17,12 @@ function pb_adminpage_list(){
 
 	$pb_adminpage_list = pb_hook_apply_filters("pb_adminpage_list", array(
 		'common' => array(
-			'name' => '사이트관리',
+			'name' => __('사이트관리'),
 			'type' => 'directory',
 			'sort' => 1,
 		),
 		'manage-site' => array(
-			'name' => '사이트설정',
+			'name' => __('사이트설정'),
 			'type' => 'menu',
 			'directory' => 'common',
 			'page' => PB_DOCUMENT_PATH."admin/manage-site.php",
@@ -142,7 +142,7 @@ function pb_is_adminpage(){
 
 function pb_adminpage_rewrite_common_handler($rewrite_path_, $adminpage_data_){
 	if(isset($rewrite_path_) && count($rewrite_path_) > 1){
-		return new PBError(503, "잘못된 접근", "잘못된 접근입니다.");
+		return new PBError(503, __("잘못된 접근"), __("잘못된 접근입니다."));
 	}
 
 	if(!isset($rewrite_path_) || count($rewrite_path_) <= 0){
@@ -150,7 +150,7 @@ function pb_adminpage_rewrite_common_handler($rewrite_path_, $adminpage_data_){
 	}
 
 	if(isset($adminpage_data_['authority_task']) && !pb_user_has_authority_task(pb_current_user_id(), $adminpage_data_['authority_task'])){
-		return new PBError(403, "권한없음", "접근권한이 없습니다.");
+		return new PBError(403, __("권한없음"), __("접근권한이 없습니다."));
 	}
 
 	return $adminpage_data_['page'];

@@ -9,11 +9,11 @@ define('PB_PAGE_STATUS_PUBLISHED', '00003');
 define('PB_PAGE_STATUS_UNPUBLISHED', '00009');
 
 pb_gcode_initial_register('PAG01', array(
-	'name' => '페이지등록상태',
+	'name' => __('페이지등록상태'),
 	'data' => array(
-		PB_PAGE_STATUS_WRITING => "작성중",
-		PB_PAGE_STATUS_PUBLISHED => "공개",
-		PB_PAGE_STATUS_UNPUBLISHED => "비공개",
+		PB_PAGE_STATUS_WRITING => __("작성중"),
+		PB_PAGE_STATUS_PUBLISHED => __("공개"),
+		PB_PAGE_STATUS_UNPUBLISHED => __("비공개"),
 	),
 ));
 

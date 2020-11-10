@@ -19,7 +19,7 @@ function _pb_page_hook_for_rewrite_handler(){
 	$pbpage = $page_data_;
 
 	if($pbpage['status'] !== PB_PAGE_STATUS_PUBLISHED && ((int)$pbpage['wrt_id']) !== (int)pb_current_user_id()){
-		return new PBError(404, "페이지를 찾을 수 없습니다.", "404");
+		return new PBError(404, __("페이지를 찾을 수 없습니다."), __("404"));
 	}
 
 	if($pbpage['id'] === pb_front_page_id()){
@@ -52,7 +52,7 @@ function _pb_front_page_hook_for_rewrite_handler(){
 	$pbpage = $page_data_;
 
 	if($pbpage['status'] !== PB_PAGE_STATUS_PUBLISHED && ((int)$pbpage['wrt_id']) !== (int)pb_current_user_id()){
-		return new PBError(404, "페이지를 찾을 수 없습니다.", "404");
+		return new PBError(404, __("페이지를 찾을 수 없습니다."), __("404"));
 	}
 
 	$pbpage_meta_map = pb_page_meta_map($pbpage['id']);
