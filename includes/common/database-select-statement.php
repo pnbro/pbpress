@@ -70,7 +70,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 		);
 	}
 
-	function add_like($a_ = array(), $keyword_, $full_search_ = false){
+	function add_like($a_ = array(), $keyword_, $full_search_ = false, $case_ignore_ = false){
 		if(gettype($a_) !== "array") $a_ = array($a_);
 
 		$this[] = array(
@@ -78,6 +78,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 			'a' => $a_,
 			'keyword' => $keyword_,
 			'full' => $full_search_,
+			'case_ignore' => $case_ignore_,
 		);
 	}
 	function add_custom($text_, $values_ = null, $types_ = array()){
@@ -120,8 +121,9 @@ class PBDB_select_statement_conditions extends ArrayObject{
 				$a_ = $condition_[0];
 				$b_ = isset($condition_[1]) ? $condition_[1] : "";
 				$full_search_ = isset($condition_[2]) ? $condition_[2] : false;
+				$case_ignore_ = isset($condition_[3]) ? $condition_[3] : false;
 
-				call_user_func_array(array($this, 'add_like'), array($a_, $b_, $full_search_));
+				call_user_func_array(array($this, 'add_like'), array($a_, $b_, $full_search_, $case_ignore_));
 			break;
 			case PBDB_SS::COND_ISNOTNULL :
 				$a_ = $condition_[0];
@@ -230,8 +232,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 				break;
 
 				case PBDB_SS::COND_LIKE :
-
-					$query_[] = pb_query_keyword_search($data_['a'], $data_['keyword'], $data_['full']);
+					$query_[] = pb_query_keyword_search($data_['a'], $data_['keyword'], $data_['full'], $data_['case_ignore']);
 
 				break;
 
@@ -298,9 +299,10 @@ class PBDB_select_statement_conditions extends ArrayObject{
 				break;
 				case PBDB_SS::COND_LIKE :
 					$a_ = $condition_[0];
-					$full_search_ = isset($condition_[2]) ? $condition_[1] : false;
+					$full_search_ = isset($condition_[1]) ? $condition_[1] : false;
+					$case_ignore_ = isset($condition_[2]) ? $condition_[2] : false;
 
-					call_user_func_array(array($this, 'add_like'), array($a_, $data_[$key_], $full_search_));
+					call_user_func_array(array($this, 'add_like'), array($a_, $data_[$key_], $full_search_, $case_ignore_));
 				break;
 			}
 		}
@@ -400,8 +402,8 @@ class PBDB_select_statement{
 	function add_is_null_condition($a_){
 		$this->_cond_list->add_is_null($a_);
 	}
-	function add_like_condition($a_, $keyword_, $full_search_ = false){
-		$this->_cond_list->add_like($a_, $keyword_, $full_search_);
+	function add_like_condition($a_, $keyword_, $full_search_ = false, $case_ignore_ = false){
+		$this->_cond_list->add_like($a_, $keyword_, $full_search_, $case_ignore_);
 	}
 	function add_conditions_from_data($data_ = array(), $conditions_ = array()){
 		$this->_cond_list->add_from_data($data_, $conditions_);

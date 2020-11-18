@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-function pb_query_keyword_search($fields_, $keyword_, $full_search_ = true){
+function pb_query_keyword_search($fields_, $keyword_, $full_search_ = true, $case_ignore_ = false){
 	$query_where_keyword_ = "";
 	$keyword_first_ = true;
 	foreach($fields_ as $field_){
@@ -12,7 +12,12 @@ function pb_query_keyword_search($fields_, $keyword_, $full_search_ = true){
 			$query_where_keyword_ .= " OR ";
 		}
 
-		$query_where_keyword_ .= " {$field_} LIKE '".($full_search_ ? "%" : "").pb_database_escape_string($keyword_)."%'  ";
+		if($case_ignore_){
+			$query_where_keyword_ .= " LOWER({$field_}) LIKE '".($full_search_ ? "%" : "").pb_database_escape_string(strtolower($keyword_))."%'  ";
+		}else{
+			$query_where_keyword_ .= " {$field_} LIKE '".($full_search_ ? "%" : "").pb_database_escape_string($keyword_)."%'  ";
+		}
+		
 		$keyword_first_ = false;
 	}
 

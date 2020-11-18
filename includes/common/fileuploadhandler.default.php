@@ -18,8 +18,6 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 
 			fwrite($rewrite_file_, "RemoveType .phtml .php3 .htm .html .php .asp .jsp\n\rRemoveHandler .phtml .php3 .htm .html .php .asp .jsp");
 			fclose($rewrite_file_);
-
-			
 		}
 
 		return true;

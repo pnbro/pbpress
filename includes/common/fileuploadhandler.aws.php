@@ -47,6 +47,7 @@ class PBPressFileUPloadAWSHandler extends PBPressFileUPloadHandler{
 		$total_file_count_ = count($files_['name']);
 
 		$upload_path_ = isset($options_['upload_dir']) ? $options_['upload_dir'] : "";
+		$upload_path_ = trim($upload_path_, "/");
 
 		$results_ = array();
 
@@ -101,12 +102,12 @@ class PBPressFileUPloadAWSHandler extends PBPressFileUPloadHandler{
 
 				'upload_path' => "",
 				
-				'o_name' => $upload_path_.$yyymmdd_.$original_file_name_,
-				'r_name' => $upload_path_.$yyymmdd_.$renamed_file_name_,
+				'o_name' => "/".$upload_path_.$yyymmdd_.$original_file_name_,
+				'r_name' => "/".$upload_path_.$yyymmdd_.$renamed_file_name_,
 			);	
 
 			if($is_image_){
-				$row_data_['thumbnail'] = $upload_path_.$yyymmdd_.$renamed_file_name_;
+				$row_data_['thumbnail'] = "/".$upload_path_.$yyymmdd_.$renamed_file_name_;
 			}
 
 			 $this->_client->putObject(array( 
