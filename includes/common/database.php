@@ -10,7 +10,6 @@ define("PB_MYSQL_BOTH", 3);
 
 abstract class PBDatabase_connection{
 
-	private $_connection_type;
 	private $_last_query = null;
 	private $_last_query_parameters = null;
 	
@@ -51,6 +50,12 @@ abstract class PBDatabase_connection{
 	abstract protected function commit();
 	abstract protected function rollback();
 	abstract protected function close_connection();
+
+	public function __destruct(){
+		pb_hook_do_action('pb_db_connection_before_close', $this);
+		$this->close_connection();
+		pb_hook_do_action('pb_db_connection_before_closed', $this);
+	}
 }
 
 include(PB_DOCUMENT_PATH . "includes/common/database-mysql.php");
@@ -376,16 +381,15 @@ class PBDB{
 	function close_connection(){
 		$this->_db_connection->close_connection();	
 	}
+
+	function is_default_connection($target_){
+		global $pb_db_connection;
+		return $pb_db_connection === $target_;
+	}
 }
 
 
 $pbdb = new PBDB($pb_db_connection);
-
-function _pb_database_close_hook(){
-	global $pbdb;
-	$pbdb->close_connection();
-}
-pb_hook_add_action('pb_ended', "_pb_database_close_hook");
 
 if($pb_config->is_show_database_error()){
 	function _pb_database_hook_print_error($last_error_){

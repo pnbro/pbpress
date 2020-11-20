@@ -27,9 +27,11 @@ class PBConfig{
 	public $file_upload_handler = "default";
 
 	private $default_locale = "ko_KR";
-
 	private $use_https = false;
 
+	private $session_manager = null;
+	private $session_save_path = null;
+	private $session_max_time = null;
 
 	function __construct(){
 		$this->devmode = (defined("PB_DEV") && PB_DEV === true);
@@ -62,6 +64,10 @@ class PBConfig{
 
 		$this->use_https = (defined("PB_HTTPS")) ? PB_HTTPS : false;
 		
+		$this->session_manager = (defined("PB_SESSION_MANAGER")) ? PB_SESSION_MANAGER : "default";
+		$this->session_save_path = (defined("PB_SESSION_SAVE_PATH")) ? PB_SESSION_SAVE_PATH : session_save_path();
+		$this->session_save_path = rtrim($this->session_save_path)."/";
+		$this->session_max_time = (defined("PB_SESSION_MAX_TIME")) ? PB_SESSION_MAX_TIME : 60 * 60 * 3;
 	}
 
 	public function is_devmode(){
@@ -77,6 +83,18 @@ class PBConfig{
 
 	public function use_https(){
 		return $this->use_https;
+	}
+
+	public function session_manager(){
+		return $this->session_manager;
+	}
+
+	public function session_save_path(){
+		return $this->session_save_path;
+	}
+
+	public function session_max_time(){
+		return $this->session_max_time;
 	}
 }
 
