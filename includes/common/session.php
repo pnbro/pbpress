@@ -62,7 +62,6 @@ function pb_cookie_remove($key_, $path_ = "/"){
     return setcookie($key_, '', -1, $path_);
 }
 
-
 @session_start();
 
 ?>

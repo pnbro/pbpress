@@ -40,7 +40,7 @@ define("PB_FILE_UPLOAD_HANDLER", "default"); //default, aws or class name
 // define("PB_FILE_UPLOAD_AWS_FILEBASE_URL", "");
 
 define("PB_SESSION_MANAGER", "default"); //default, database or class name;
-define("PB_SESSION_SAVE_PATH", "/tmp");
 define("PB_SESSION_MAX_TIME", 60 * 60 * 3);
+// define("PB_SESSION_SAVE_PATH", "/tmp");
 
 ?>

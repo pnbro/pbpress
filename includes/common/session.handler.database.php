@@ -22,7 +22,7 @@ class PBSessionHandlerDatabase extends PBSessionHandler{
 		global $pbdb;
 
 		if($pbdb->is_default_connection($connection_)){
-			session_write_close();	
+			@session_write_close();	
 		}
 		
 	}
