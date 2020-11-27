@@ -10,7 +10,12 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 		//prevent injection
 		if(!file_exists(PB_DOCUMENT_PATH."uploads/.htaccess")){
 			$rewrite_base_ = str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH."uploads/");
-			$rewrite_file_ = @fopen(PB_DOCUMENT_PATH."uploads/.htaccess", "w");
+
+			if(!is_dir($rewrite_base_)){
+				mkdir(PB_DOCUMENT_PATH."uploads", 0755, true);
+			}
+
+			$rewrite_file_ = @fopen(PB_DOCUMENT_PATH."uploads/.htaccess", "w+b");
 
 			if(!isset($rewrite_file_)){
 				return new PBError(-1, __("에러발생"), __("Rewrite를 생성할 수 없습니다. 파일권한을 확인하세요."));
