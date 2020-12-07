@@ -12,7 +12,7 @@ $sessions_do = pbdb_data_object("sessions", array(
 	'expire_time' => array("type" => PBDB_DO::TYPE_INT, "length" => 10, "comment" => "마지막활성일자"),
 ),"세션");
 
-class PBSessionHandlerDatabase extends PBSessionHandler{
+class PBSessionHandlerDatabase implements SessionHandlerInterface{
 
 	function __construct(){
 		pb_hook_add_action('pb_db_connection_before_close', array($this, '_hook_for_close_database'));
@@ -104,7 +104,7 @@ class PBSessionHandlerDatabase extends PBSessionHandler{
 		$sessions_do->delete($id_);
 		return true;
 	}
-	function clean_up($timeout_){
+	function gc($timeout_){
 		global $pbdb;
 		$pbdb->query("DELETE FROM sessions WHERE sessions.expire_time < ".time());
 		return true;

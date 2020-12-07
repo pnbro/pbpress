@@ -24,14 +24,7 @@ if($session_manager_class_ === "default"){
 	$pb_session_manager = new PBSessionHandlerFile();
 }
 
-session_set_save_handler(
-	array($pb_session_manager, "open"),
-	array($pb_session_manager, "close"),
-	array($pb_session_manager, "read"),
-	array($pb_session_manager, "write"),
-	array($pb_session_manager, "destroy"),
-	array($pb_session_manager, "clean_up")
-);
+session_set_save_handler($pb_session_manager);
 
 ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
 ini_set('session.save_path',$pb_config->session_save_path());
