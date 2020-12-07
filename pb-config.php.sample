@@ -30,8 +30,10 @@ define("PB_CRYPT_PASSWORD", "~W.7bNa[~$+aeP>u");
 
 define("PB_WYSIWYG_EDITOR", "summernote"); // trumbowyg or summernote
 
-define("PB_FILE_UPLOAD_HANDLER", "default"); //default, aws or class name
+// define("PB_FILE_UPLOAD_HANDLER", "default"); //default or class name
 
+// if you will use AWS S3 Fileupload Handler plugin,
+// define("PB_FILE_UPLOAD_HANDLER", "aws");
 // define("PB_FILE_UPLOAD_AWS_CLIENT_KEY", "*** Your Access Key ***");
 // define("PB_FILE_UPLOAD_AWS_CLIENT_SECRET", "*** Your Access Secret ***");
 // define("PB_FILE_UPLOAD_AWS_CLIENT_VERSION", "");
