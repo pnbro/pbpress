@@ -9,7 +9,7 @@ function pb_fileupload_url($params_ = array()){
 }
 function pb_filebase_url($file_path_ = null, $params_ = array(), $handler_ = null){
 	$file_upload_handler_ = pb_fileupload_handler($handler_);
-	if(!isset($file_upload_handler_)) return null;
+	if(!isset($file_upload_handler_) || pb_is_error($file_upload_handler_)) return null;
 	return pb_hook_apply_filters('pb_filebase_url', $file_upload_handler_->filebase_url($file_path_, $params_), $file_path_, $params_);
 }
 
@@ -30,7 +30,6 @@ pb_hook_add_filter('pb-admin-head-pbvar', "_pb_fileupload_add_to_header_pbvar");
 pb_hook_add_filter('pb-head-pbvar', "_pb_fileupload_add_to_header_pbvar");
 
 define('PB_FILE_UPLOAD_HANDLER_DEFAULT', "PBPressFileUPloadDefaultHandler");
-define('PB_FILE_UPLOAD_HANDLER_AWS', "PBPressFileUPloadAWSHandler");
 
 function pb_fileupload_handler($handler_ = null){
 	global $pb_config, $pb_fileupload_handler;
@@ -48,9 +47,6 @@ function pb_fileupload_handler($handler_ = null){
 	switch($file_upload_handler_){
 		case "default" : $file_upload_handler_ = PB_FILE_UPLOAD_HANDLER_DEFAULT;
 			require(PB_DOCUMENT_PATH . 'includes/common/fileuploadhandler.default.php');
-			break;
-		case "aws" : $file_upload_handler_ = PB_FILE_UPLOAD_HANDLER_AWS;
-			require(PB_DOCUMENT_PATH . 'includes/common/fileuploadhandler.aws.php');
 			break;
 	}
 
@@ -70,6 +66,7 @@ function pb_fileupload_handle($files_, $options_ = array()){
 	
 	return pb_hook_apply_filters('pb_fileupload_handle_results', $handler_->handle($files_, $options_));
 }
+
 
 abstract class PBPressFileUPloadHandler{
 	abstract function initialize();
