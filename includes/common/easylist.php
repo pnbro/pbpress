@@ -88,7 +88,7 @@ class PB_easylist{
 			
 
 				<?php if($is_ajax_){ ?>
-					<div class="no-rowdata first"><?=isset($options_['no_rowdata']) ? __($options_['no_rowdata']) : null?></div>
+					<div class="no-rowdata first"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></div>
 				<?php }else{
 					$this->render($page_index_);
 				} ?>

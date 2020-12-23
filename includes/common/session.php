@@ -26,35 +26,78 @@ if($session_manager_class_ === "default"){
 
 session_set_save_handler($pb_session_manager);
 
-ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
-ini_set('session.save_path',$pb_config->session_save_path());
+class PBSession{
+	function __construct(){
+		global $pb_config;
+		ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
+		ini_set('session.save_path',$pb_config->session_save_path());
+		@session_start();
+	}
+
+	function update($key_, $value_){
+		$_SESSION[$key_] = $value_;
+    	return $_SESSION[$key_];
+	}
+	function get($key_){
+		if(!isset($_SESSION[$key_])) return null;
+    	return $_SESSION[$key_];
+	}
+	function remove($key_){
+		if(!isset($_SESSION[$key_])) return null;
+	    unset($_SESSION[$key_]);
+	    return $_SESSION;
+	}
+}
+
+class PBCookie{
+	private $_expire_time;
+	function __construct(){
+		global $pb_config;
+		$this->_expire_time = $pb_config->session_max_time();		
+	}
+	function expire_time(){
+		return $this->_expire_time;
+	}
+
+	function update($key_, $value_){
+		return setcookie($key_, $value_, (time() + ($this->_expire_time * $expire_)), $path_);
+	}
+	function get($key_){
+		return (isset($_COOKIE[$key_]) ? $_COOKIE[$key_] : null);
+	}
+	function remove($key_){
+		return setcookie($key_, '', -1, $path_);
+	}
+}
+
+global $pb_session, $pb_cookie;
+	$pb_session = new PBSession();
+	$pb_cookie = new PBCookie();
 
 function pb_session_put($key_, $value_){
-    $_SESSION[$key_] = $value_;
-    return $_SESSION[$key_];
+	global $pb_session;
+	return $pb_session->update($key_, $value_);
 }
 function pb_session_get($key_){
-    if(!isset($_SESSION[$key_])) return null;
-    return $_SESSION[$key_];
+	global $pb_session;
+	return $pb_session->get($key_);
 }
 function pb_session_remove($key_){
-    if(!isset($_SESSION[$key_])) return null;
-    unset($_SESSION[$key_]);
-    return $_SESSION;
+	global $pb_session;
+	return $pb_session->remove($key_);
 }
 
-define("PB_COOKIE_DAY", $pb_config->session_max_time());
-
-function pb_cookie_put($key_, $value_, $expire_ = 7, $path_ = "/"){
-    return setcookie($key_, $value_, (time() + (PB_COOKIE_DAY * $expire_)), $path_);
+function pb_cookie_put($key_, $value_){
+	global $pb_cookie;
+	return $pb_cookie->update($key_, $value_);
 }
 function pb_cookie_get($key_){
-    return (isset($_COOKIE[$key_]) ? $_COOKIE[$key_] : null);
+	global $pb_cookie;
+	return $pb_cookie->get($key_);
 }
-function pb_cookie_remove($key_, $path_ = "/"){
-    return setcookie($key_, '', -1, $path_);
+function pb_cookie_remove($key_){
+	global $pb_cookie;
+	return $pb_cookie->remove($key_);
 }
-
-@session_start();
 
 ?>

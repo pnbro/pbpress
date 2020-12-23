@@ -109,14 +109,14 @@ class PB_easytable{
 					$class_ = trim($class_);
 
 				?>
-					<th class="<?=$key_?> <?=$class_?>"><?=isset($column_data_['name']) ? __($column_data_['name']) : ""?></th>
+					<th class="<?=$key_?> <?=$class_?>"><?=isset($column_data_['name']) ? $column_data_['name'] : ""?></th>
 				<?php } ?>
 			</thead>
 			<tbody>
 
 				<?php if($is_ajax_){ ?>
 					<tr>
-						<td class="no-rowdata first" colspan="<?=count($data_)?>"><?=isset($options_['no_rowdata']) ? __($options_['no_rowdata']) : null?></td>
+						<td class="no-rowdata first" colspan="<?=count($data_)?>"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></td>
 					</tr>
 				<?php }else{
 					$this->render_body($page_index_);

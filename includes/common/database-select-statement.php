@@ -232,7 +232,28 @@ class PBDB_select_statement_conditions extends ArrayObject{
 				break;
 
 				case PBDB_SS::COND_LIKE :
-					$query_[] = pb_query_keyword_search($data_['a'], $data_['keyword'], $data_['full'], $data_['case_ignore']);
+					$query_where_keyword_ = "";
+					$keyword_first_ = true;
+					foreach($data_['a'] as $field_){
+						if(!$keyword_first_){
+							$query_where_keyword_ .= " OR ";
+						}
+
+						if($data_['case_ignore']){
+							$query_where_keyword_ .= " LOWER({$field_}) LIKE ".PBDB_PARAM_MAP_STR." ";
+							$param_values_[] = ($data_['full'] ? '%' : '').pb_database_escape_string(strtolower($data_['keyword'])).'%';
+							$param_types_[] = PBDB::TYPE_STRING;
+						}else{
+							$query_where_keyword_ .= " {$field_} LIKE ".PBDB_PARAM_MAP_STR." ";
+							$param_values_[] = ($data_['full'] ? '%' : '').pb_database_escape_string($data_['keyword']).'%';
+							$param_types_[] = PBDB::TYPE_STRING;
+						}
+						
+						$keyword_first_ = false;
+					}
+
+					$query_[] = "({$query_where_keyword_}) \n\r";
+
 
 				break;
 

@@ -124,13 +124,13 @@ function pb_post_category_tree($conditions_ = array(), $offset_ = 0, $limit_ = n
 function pb_post_category($id_){
 	$post_ = pb_post_category_list(array("id" => $id_));
 	if(!isset($post_) || count($post_) <= 0) return null;
-	return $post_[0];
+	return pb_hook_apply_filters('pb_post_category', $post_[0]);
 }
 
 function pb_post_category_by_slug($type_, $slug_){
 	$post_ = pb_post_category_list(array("type" => $type_, "slug" => $slug_));
 	if(!isset($post_) || count($post_) <= 0) return null;
-	return $post_[0];
+	return pb_hook_apply_filters('pb_post_category', $post_[0]);
 }
 
 function pb_post_category_insert($raw_data_){
@@ -245,7 +245,7 @@ function pb_post_category_map($type_){
 		);
 	}
 
-	return $pb_post_category_map[$type_];
+	return pb_hook_apply_filters('pb_post_category_map', $pb_post_category_map[$type_]);
 }
 
 include(PB_DOCUMENT_PATH . 'includes/post-category/post-category-adminpage.php');
