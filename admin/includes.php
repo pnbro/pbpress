@@ -7,6 +7,8 @@ require(dirname( __FILE__ ) . '/function.php');
 
 global $pbdb, $pb_config;
 
+pb_hook_do_action("pb_before_admin_init");
+
 //check install
 if(!$pbdb->exists_table("options")){
 	pb_redirect(PB_DOCUMENT_URL."admin/install.php");
@@ -48,5 +50,6 @@ if(file_exists($current_theme_path_."functions.php")){
 }
 
 pb_hook_do_action("pb_admin_init");
+pb_hook_do_action("pb_after_admin_init");
 
 ?>

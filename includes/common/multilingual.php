@@ -147,6 +147,19 @@ if($current_locale_ === "C"){
 }
 
 
+pb_hook_add_action('pb_before_init', '_pb_lang_rewrite_hook');
+// pb_hook_add_action('pb_before_admin_init', '_pb_lang_rewrite_hook');
+function _pb_lang_rewrite_hook(){
+	$rewrite_path_ = pb_rewrite_path();
+	
+	if(@$rewrite_path_[0] !== PB_LANG_PBLANG_SLUG){
+		return;
+	}
+
+	pb_register_rewrite_handler_lang_pblang_script();
+	pb_end();
+}
+
 /*
 function _pb_search_translation_target_file($dir_, &$results_ = array()){
 	$files_ = scandir($dir_);

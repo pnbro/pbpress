@@ -7,6 +7,8 @@ if(!defined('PB_DOCUMENT_PATH')){
 //load common modules
 require(PB_DOCUMENT_PATH . 'includes/includes.php');
 
+pb_hook_do_action("pb_before_init");
+
 //check install
 if(!$pbdb->exists_table("options")){
 	pb_redirect(PB_DOCUMENT_URL."admin/install.php");
@@ -52,5 +54,6 @@ if(file_exists($current_theme_path_."functions.php")){
 
 header("Content-Type: text/html; CharSet=".$pb_config->charset);
 pb_hook_do_action("pb_init");
+pb_hook_do_action("pb_after_init");
 
 ?>

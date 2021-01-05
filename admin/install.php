@@ -1,6 +1,5 @@
 <?php 		
 
-		
 	require(dirname( __FILE__ ) . '/../defined.php');
 	require(PB_DOCUMENT_PATH . 'includes/includes.php');
 	require(dirname( __FILE__ ) . '/admin-hook.php');
@@ -19,6 +18,8 @@
 		pb_hook_do_action('pb_ended');
 		exit;
 	}
+
+	pb_hook_do_action("pb_admin_install_init");
 
 	global $pbdb;
 	if($pbdb->exists_table("options")){

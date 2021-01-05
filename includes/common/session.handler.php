@@ -8,7 +8,9 @@ class PBSessionHandlerFile implements SessionHandlerInterface{
 
 	private $_session_save_path;
 
-	function __construct(){}
+	function __construct(){
+		register_shutdown_function('session_write_close');
+	}
 	
 	function open($save_path_, $id_){
 		$this->_session_save_path = rtrim($save_path_)."/";

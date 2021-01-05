@@ -15,19 +15,6 @@ $sessions_do = pbdb_data_object("sessions", array(
 class PBSessionHandlerDatabase implements SessionHandlerInterface{
 
 	function __construct(){
-		pb_hook_add_action('pb_db_connection_before_close', array($this, '_hook_for_close_database'));
-	}
-
-	function _hook_for_close_database($connection_){
-		global $pbdb;
-
-		if($pbdb->is_default_connection($connection_)){
-			@session_write_close();	
-		}
-		
-	}
-	
-	function open($save_path_, $id_){
 		global $sessions_do;
 
 		if(!$sessions_do->is_exists()){
@@ -37,7 +24,9 @@ class PBSessionHandlerDatabase implements SessionHandlerInterface{
 
 			$pbdb->query($query_);
 		}
-
+	}
+	
+	function open($save_path_, $id_){
 		return true;
 	}
 	function close(){
@@ -89,12 +78,16 @@ class PBSessionHandlerDatabase implements SessionHandlerInterface{
 				'ip_addr' => $ipaddress_,
 				'expire_time' => time() + $pb_config->session_max_time(),
 			));
+			$check_data_ = $this->session_data($id_);
+			$result_ = isset($check_data_);
 		}else{
 			$result_ = $sessions_do->update($id_, array(
 				'session_data' => $data_,
 				'ip_addr' => $ipaddress_,
 				'expire_time' => time() + $pb_config->session_max_time(),
 			));
+
+			$result_ = (bool)$result_;
 		}
 
 		return $result_;
