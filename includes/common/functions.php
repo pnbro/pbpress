@@ -86,5 +86,22 @@ function pb_end(){
 	exit;	
 }
 
+global $_pb_includes_for_after_init;
+$_pb_includes_for_after_init = array();
+
+function pb_include_after_init($include_){
+	global $_pb_includes_for_after_init;
+	$_pb_includes_for_after_init[] = $include_;
+}
+
+pb_hook_add_action('pb_init', '_p_hook_includes_for_after_init');
+pb_hook_add_action('pb_admin_init', '_p_hook_includes_for_after_init');
+
+function _p_hook_includes_for_after_init(){
+	global $_pb_includes_for_after_init;
+	foreach($_pb_includes_for_after_init as $include_){
+		include($include_);
+	}
+}
 
 ?>

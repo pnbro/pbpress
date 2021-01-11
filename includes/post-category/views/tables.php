@@ -27,7 +27,7 @@ pb_easytable_register("pb-admin-post-category-table", function($offset_, $per_po
 		'seq' => true,
 	),
 	"title" => array(
-		'name' => '분류명',
+		'name' => __('분류명'),
 		'class' => 'col-6 link-action',
 		'render' => function($table_, $item_, $post_index_){
 			$post_type_ = $item_['type'];
@@ -61,16 +61,16 @@ pb_easytable_register("pb-admin-post-category-table", function($offset_, $per_po
 		}
 	),
 	"slug" => array(
-		'name' => '슬러그',
+		'name' => __('슬러그'),
 		'class' => 'col-4 text-center hidden-xs',
 	),
 	"reg_date_ymdhi" => array(
-		'name' => '등록일자',
+		'name' => __('등록일자'),
 		'class' => 'col-2 text-center hidden-xs',
 	),
 ), array(
 	'class' => 'pb-admin-post-category-table',
-	"no_rowdata" => "검색된 분류가 없습니다.",
+	"no_rowdata" => __("검색된 분류가 없습니다."),
 	'per_page' => 15,
 ));
 

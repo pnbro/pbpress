@@ -7,7 +7,6 @@
 	$page_index_ = _GET('page_index', 0, PB_PARAM_INT);
 	$keyword_ = _GET('keyword');
 
-
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-post-category/list.css">
 <h3><?=sprintf(__('%s 분류 관리'), $pbpost_type_data['name'])?></h3>
@@ -44,6 +43,7 @@
 <form id="pb-post-category-edit-form">
 	<table class="table pb-form-table">
 		<tbody>
+			<?php pb_hook_do_action('pb_admin_post_category_before_edit_form'); ?>
 			<tr>
 				<th><?=__('분류명')?></th>
 				<td>
@@ -89,6 +89,7 @@
 					</div>
 				</td>
 			</tr>
+			<?php pb_hook_do_action('pb_admin_post_category_after_edit_form'); ?>
 		</tbody>
 	</table>
 	

@@ -40,15 +40,20 @@ global $pb_config;
 	<meta name="format-detection" content="telephone=no">
 
 	<?php pb_admin_head(); ?>
-	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/adminpage.css">
-	<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/adminpage.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?=pb_hook_apply_filters('adminpage_stylesheet_url', PB_LIBRARY_URL."css/pages/admin/adminpage.css")?>">
+	<script type="text/javascript" src="<?=pb_hook_apply_filters('adminpage_script_url', PB_LIBRARY_URL."js/pages/admin/adminpage.js")?>"></script>
 </head>
 
 <body class="page-pbpress-adminpage page-<?=$current_adminpage_slug_?>">
+	<?php pb_hook_do_action('adminpage_before_header')?>
 	<?php include(PB_DOCUMENT_PATH."admin/header.php"); ?>
+	<?php pb_hook_do_action('adminpage_after_header')?>
+	<?php pb_hook_do_action('adminpage_before_aside')?>
 	<?php include(PB_DOCUMENT_PATH."admin/aside.php"); ?>
+	<?php pb_hook_do_action('adminpage_after_aside')?>
 	
 	<div class="adminpage-content-frame">
+		<?php pb_hook_do_action('adminpage_content_frame_start')?>
 		<?php
 			if(pb_is_error($current_adminpage_path_)){
 				pb_adminpage_draw_error(503, $current_adminpage_path_->error_message(), $current_adminpage_path_->error_title());
@@ -57,10 +62,13 @@ global $pb_config;
 			}
 
 		?>
+		<?php pb_hook_do_action('adminpage_content_frame_end')?>
 	</div>
 	<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?></div>
 	
+	<?php pb_hook_do_action('adminpage_before_footer')?>
 	<?php pb_admin_foot(); ?>
+	<?php pb_hook_do_action('adminpage_after_footer')?>
 </body>
 </html>
 <?php pb_admin_end(); ?>

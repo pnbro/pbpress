@@ -62,7 +62,7 @@ function _page_rewrite_handler_for_live_edit_previewer(){
 	return PB_DOCUMENT_PATH . 'includes/page/views/live-edit-previewer.php';
 }
 
-include(PB_DOCUMENT_PATH . "includes/page/views/tables.php");
+pb_include_after_init(PB_DOCUMENT_PATH . "includes/page/views/tables.php");
 
 function _pb_page_rewrite_handler_for_adminpage($rewrite_path_){
 	
