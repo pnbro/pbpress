@@ -20,7 +20,7 @@ function _pb_gcode_register_adminpage($results_){
 }
 pb_hook_add_filter('pb_adminpage_list', '_pb_gcode_register_adminpage');
 
-pb_include_after_init(PB_DOCUMENT_PATH . "includes/gcode/views/tables.php");
+__iinclude(PB_DOCUMENT_PATH . "includes/gcode/views/tables.php");
 		
 function _pb_ajax_admin_gcode_load(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_site")){

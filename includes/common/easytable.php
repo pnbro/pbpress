@@ -22,6 +22,7 @@ class PB_easytable{
 	private $_data;
 	private $_options;
 	private $_last_results;
+	private $__added_fields = array();
 
 	function __construct($id_, $loader_, $data_, $options_ = array()){
 		$this->_id = $id_;
@@ -35,6 +36,19 @@ class PB_easytable{
 			'pagenav_before_html' => '<i class="icon material-icons">keyboard_arrow_left</i>',
 			'pagenav_after_html' => '<i class="icon material-icons">keyboard_arrow_right</i>',
 		),$options_);
+
+		pb_hook_add_filter('pb_easytable_fields_'.$this->_id, function($data_, $table_){
+			$added_fields_ = $table_->_added_fields();
+
+			foreach($added_fields_ as $column_name_ => $t_column_data_){
+				$column_data_ = array();
+				$column_data_[$column_name_] = $t_column_data_['data'];
+				$first_ = array_splice($data_, 0, $t_column_data_['index']);
+				$data_ = array_merge($first_, $column_data_, $data_);	
+			}
+
+			return $data_;
+		});
 	}
 
 	function loader(){
@@ -50,16 +64,26 @@ class PB_easytable{
 		$this->_options[$key_] = $value_;
 	}
 
+	function data(){
+		$data_ = is_callable($this->_data) ? call_user_func_array($this->_data, array($this)) : $this->_data;
+		return pb_hook_apply_filters('pb_easytable_fields_'.$this->_id, $data_, $this);
+	}
+
+	function _added_fields(){
+		return $this->__added_fields;
+	}
+
 	function insert_column($index_, $column_name_, $data_){
-		if(is_callable($this->_data)) return false;
-		$column_data_ = array();
-		$column_data_[$column_name_] = $data_;
-		$first_ = array_splice($this->_data, 0, $index_);
-	  	$this->_data = array_merge($first_, $column_data_, $this->_data);
+		trigger_error("PB_easytable->insert_column has Deprecated. please use 'pb_easytable_fields_".$this->_id."' hook", E_USER_NOTICE);
+		
+		$this->__added_fields[$column_name_] = array(
+			'index' => $index_,
+			'data' => $data_,
+		);
 	}
 	function remove_column($column_name_){
-		if(is_callable($this->_data)) return false;
-		unset($this->_data[$column_name_]);
+		trigger_error("PB_easytable->remove_column has Deprecated.", E_USER_NOTICE);
+		unset($this->__added_fields[$column_name_]);
 	}
 	
 	function last_results($page_index_){
@@ -101,8 +125,7 @@ class PB_easytable{
 			<thead>
 				<?php 
 
-					$data_ = is_callable($this->_data) ? call_user_func_array($this->_data, array($this)) : $this->_data;
-
+				$data_ = $this->data();
 				foreach($data_ as $key_ => $column_data_){ 
 					$class_ = isset($column_data_['head_class']) ? $column_data_['head_class'] : " ";
 					$class_ .= (isset($column_data_['class']) ? $column_data_['class'] : " ");
@@ -153,15 +176,13 @@ class PB_easytable{
 		$total_count_ = $results_['count'];
 		$result_list_ = $results_['list'];
 
-		$data_ = is_callable($this->_data) ? call_user_func_array($this->_data, array($this)) : $this->_data;
+		$data_ = $this->data();
 
 		foreach($result_list_ as $row_index_ => $row_data_){ ?>
 			<tr>
 
 				<?php 
-
-				
-
+	
 				foreach($data_ as $key_ => $column_data_){
 
 					$class_ = isset($column_data_['body_class']) ? $column_data_['body_class'] : " ";

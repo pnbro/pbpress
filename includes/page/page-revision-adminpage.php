@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-pb_include_after_init(PB_DOCUMENT_PATH . "includes/page/views/revision-tables.php");
+__iinclude(PB_DOCUMENT_PATH . "includes/page/views/revision-tables.php");
 
 function _pb_admin_ajax_page_revision_load_master(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){

@@ -89,9 +89,12 @@ function pb_end(){
 global $_pb_includes_for_after_init;
 $_pb_includes_for_after_init = array();
 
-function pb_include_after_init($include_){
+function __iinclude($include_){
 	global $_pb_includes_for_after_init;
 	$_pb_includes_for_after_init[] = $include_;
+}
+function pb_include_after_init($include_){
+	__iinclude($include_);
 }
 
 pb_hook_add_action('pb_init', '_p_hook_includes_for_after_init');

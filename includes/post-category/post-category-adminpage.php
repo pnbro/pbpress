@@ -33,8 +33,7 @@ function _pb_post_category_register_adminpage($results_){
 }
 pb_hook_add_filter('pb_adminpage_list', '_pb_post_category_register_adminpage');
 
-pb_include_after_init(PB_DOCUMENT_PATH . "includes/post-category/views/tables.php");
-
+__iinclude(PB_DOCUMENT_PATH . "includes/post-category/views/tables.php");
 
 function _pb_post_category_rewrite_handler_for_adminpage($rewrite_path_){
 

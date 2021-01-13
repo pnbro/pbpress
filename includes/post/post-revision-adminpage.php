@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-pb_include_after_init(PB_DOCUMENT_PATH . "includes/post/views/revision-tables.php");
+__iinclude(PB_DOCUMENT_PATH . "includes/post/views/revision-tables.php");
 
 function _pb_admin_ajax_post_revision_load_master(){
 	$revision_id_ = $_REQUEST["key"];
