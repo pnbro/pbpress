@@ -118,7 +118,7 @@
 						
 						<div class="form-group">
 							<label>작성일자</label>
-							<input type="text" name="reg_date" class="form-control" value="<?=$pbpost['reg_date_ymdhi']?>" id="pb-post-reg-date-picker" placeholder="작성일자 선택">
+							<input type="text" name="reg_date" class="form-control" value="<?=$pbpost['reg_date']?>" id="pb-post-reg-date-picker" placeholder="작성일자 선택">
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>
 						</div>
