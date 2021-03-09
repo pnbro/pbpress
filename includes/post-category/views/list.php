@@ -38,7 +38,6 @@
 	<?php 
 		$post_category_table_->display($page_index_);
 	?>
-		
 </form>
 <form id="pb-post-category-edit-form">
 	<table class="table pb-form-table">
@@ -92,7 +91,6 @@
 			<?php pb_hook_do_action('pb_admin_post_category_after_edit_form'); ?>
 		</tbody>
 	</table>
-	
 </form>
 
 <script type="text/javascript">

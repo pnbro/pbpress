@@ -476,7 +476,8 @@ function pb_post_category_values($post_id_, $only_id_ = false){
 	$statement_->add_join("left outer join", $post_categories_do->statement(), "post_categories", array(
 		array(PBDB_SS::COND_COMPARE, "post_categories.id", "posts_category_values.category_id", "=")
 	), array(
-		"post_categories.title category_title"
+		"post_categories.title category_title",
+		"post_categories.parent_id parent_id",
 	));
 
 	$statement_->add_in_condition("posts_category_values.post_id", $post_id_);

@@ -113,7 +113,7 @@ function pb_is_home(){
 
 function pb_rewrite_common_handler($rewrite_path_, $rewrite_data_){
 	if(!isset($rewrite_data_)){
-		return new PBError(503, __("잘못된 접근"), __("잘못된 접근입니다."));
+		return new PBError(404, __("잘못된 접근"), __("잘못된 접근입니다."));
 	}
 
 	if(count($rewrite_path_) > 1){

@@ -187,7 +187,6 @@ function pb_gcode_dtl_add($raw_data_){
 	$code_did_ = $raw_data_['code_did'];
 
 	pb_hook_do_action("pb_gcode_dtl_added", $code_id_, $code_did_);
-	return $inserted_id_;
 }
 
 function pb_gcode_dtl_update($code_id_, $code_did_, $raw_data_){

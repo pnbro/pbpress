@@ -26,12 +26,16 @@ if($session_manager_class_ === "default"){
 
 session_set_save_handler($pb_session_manager);
 
+ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
+ini_set('session.save_path',$pb_config->session_save_path());
+
+register_shutdown_function('session_write_close');
+
+@session_start();
+
 class PBSession{
 	function __construct(){
 		global $pb_config;
-		ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
-		ini_set('session.save_path',$pb_config->session_save_path());
-		@session_start();
 	}
 
 	function update($key_, $value_){
@@ -47,6 +51,8 @@ class PBSession{
 	    unset($_SESSION[$key_]);
 	    return $_SESSION;
 	}
+
+
 }
 
 class PBCookie{

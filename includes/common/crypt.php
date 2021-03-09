@@ -11,7 +11,7 @@ function pb_crypt_shared_keys(){
 	$shared_key_ = pb_session_get(PB_CRYPT_SHARED_KEY);
 
 	if(isset($shared_key_)){
-		return $shared_key_;
+		return pb_hook_apply_filters('pb_crypt_shared_keys', $shared_key_);
 	}
 
 	global $pb_config;
@@ -36,7 +36,7 @@ function pb_crypt_shared_keys(){
 	);
 
 	pb_session_put(PB_CRYPT_SHARED_KEY, $shared_key_);
-	return $shared_key_;
+	return pb_hook_apply_filters('pb_crypt_shared_keys', $shared_key_);
 }
 
 // RSA 공개키를 사용하여 문자열을 암호화
@@ -72,14 +72,14 @@ function pb_crypt_decrypt($ciphertext_, $private_key_ = null, $password_ = null)
 
 	$shared_key_ = pb_crypt_shared_keys();
 
-	$ciphertext_ = @base64_decode($ciphertext_, true);
+	$ciphertext_ = base64_decode($ciphertext_, true);
 	if($ciphertext_ === false) return false;
 
-	$privkey_decoded_ = @openssl_pkey_get_private($private_key_, $password_);
+	$privkey_decoded_ = openssl_pkey_get_private($private_key_, $password_);
 	if($privkey_decoded_ === false) return false;
 
 	$plaintext_ = false;
-	$status_ = @openssl_private_decrypt($ciphertext_, $plaintext_, $privkey_decoded_);
+	$status_ = openssl_private_decrypt($ciphertext_, $plaintext_, $privkey_decoded_);
 	if(!$status_ || $plaintext_ === false) return false;
 	
 	return $plaintext_;

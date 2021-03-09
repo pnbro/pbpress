@@ -10,6 +10,15 @@ $_pb_hook_action_map = array();
 $_pb_hook_filter_map = array();
 
 function pb_hook_add_action($action_name_, $func_, $priority_ = 10){
+	if(strpos($action_name_, "|") !== false){
+		$action_name_ = explode("|", $action_name_);
+		foreach($action_name_ as $a_){
+			pb_hook_add_action($a_, $func_, $priority_);
+		}
+
+		return;
+	}
+
 	global $_pb_hook_action_map;
 
 	if(!isset($_pb_hook_action_map[$action_name_])) $_pb_hook_action_map[$action_name_] = array();
@@ -44,6 +53,15 @@ function pb_hook_do_action($action_name_){
 }
 
 function pb_hook_add_filter($fitler_name_, $func_, $priority_ = 10){
+	if(strpos($fitler_name_, "|") !== false){
+		$fitler_name_ = explode("|", $fitler_name_);
+		foreach($fitler_name_ as $a_){
+			pb_hook_add_filter($a_, $func_, $priority_);
+		}
+
+		return;
+	}
+	
 	global $_pb_hook_filter_map;
 
 	if(!isset($_pb_hook_filter_map[$fitler_name_])) $_pb_hook_filter_map[$fitler_name_] = array();

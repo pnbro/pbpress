@@ -97,6 +97,7 @@ class PBSessionHandlerDatabase implements SessionHandlerInterface{
 		$sessions_do->delete($id_);
 		return true;
 	}
+
 	function gc($timeout_){
 		global $pbdb;
 		$pbdb->query("DELETE FROM sessions WHERE sessions.expire_time < ".time());
