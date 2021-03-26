@@ -29,6 +29,7 @@ session_set_save_handler($pb_session_manager);
 
 if(PHP_VERSION_ID < 70300){
 	$cookie_save_path_ = '/;SameSite='.$pb_config->session_cookie_samesite();
+
 	session_set_cookie_params(
 		$pb_config->session_max_time(),
 		$cookie_save_path_,

@@ -74,7 +74,7 @@ class PBConfig{
 
 		if(!strlen($this->session_cookie_domain)){
 			$document_url_ = parse_url(PB_DOCUMENT_URL);
-			$document_url_ = $document_url_['host'].(@$document_url_['path']);
+			$document_url_ = $document_url_['host'];
 
 			$cookie_domain_ = (strpos($document_url_,"www.") !==false)? ".".preg_replace("/www./i","",$document_url_):".".$document_url_;
 			$cookie_domain_ = preg_replace("/:[0-9]+$/i","",$cookie_domain_);
@@ -90,7 +90,7 @@ class PBConfig{
 		$this->session_cookie_httponly = (defined("PB_SESSION_COOKIE_HTTPONLY")) ? PB_SESSION_COOKIE_HTTPONLY : null;
 
 		$this->session_save_path = (defined("PB_SESSION_SAVE_PATH")) ? PB_SESSION_SAVE_PATH : session_save_path();
-		$this->session_save_path = rtrim($this->session_save_path)."/";
+		$this->session_save_path = rtrim($this->session_save_path,"/")."/";
 		$this->session_max_time = (defined("PB_SESSION_MAX_TIME")) ? PB_SESSION_MAX_TIME : 60 * 60 * 60 * 3;
 	}
 
