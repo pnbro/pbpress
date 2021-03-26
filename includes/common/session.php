@@ -28,7 +28,7 @@ if($session_manager_class_ === "default"){
 session_set_save_handler($pb_session_manager);
 
 if(PHP_VERSION_ID < 70300){
-	$cookie_save_path_ = $pb_config->session_save_path().';SameSite='.$pb_config->session_cookie_samesite();
+	$cookie_save_path_ = '/;SameSite='.$pb_config->session_cookie_samesite();
 	session_set_cookie_params(
 		$pb_config->session_max_time(),
 		$cookie_save_path_,
@@ -39,7 +39,7 @@ if(PHP_VERSION_ID < 70300){
 }else{
 	session_set_cookie_params(array(
 		'lifetime' => $pb_config->session_max_time(),
-		'path' => $cookie_save_path_,
+		'path' => '/',
 		'domain' => $pb_config->session_cookie_domain(),
 		'samesite' => $pb_config->session_cookie_samesite(),
 		'secure' => $pb_config->session_cookie_secure(),

@@ -85,9 +85,9 @@ class PBConfig{
 
 		$this->session_cookie_domain = trim($this->session_cookie_domain,"/");
 
-		$this->session_cookie_samesite = (defined("SESSION_COOKIE_SAMESITE")) ? SESSION_COOKIE_SAMESITE : 'Lax';
-		$this->session_cookie_secure = (defined("SESSION_COOKIE_SECURE")) ? SESSION_COOKIE_SECURE : null;
-		$this->session_cookie_httponly = (defined("SESSION_COOKIE_HTTPONLY")) ? SESSION_COOKIE_HTTPONLY : null;
+		$this->session_cookie_samesite = (defined("PB_SESSION_COOKIE_SAMESITE")) ? PB_SESSION_COOKIE_SAMESITE : 'Lax';
+		$this->session_cookie_secure = (defined("PB_SESSION_COOKIE_SECURE")) ? PB_SESSION_COOKIE_SECURE : null;
+		$this->session_cookie_httponly = (defined("PB_SESSION_COOKIE_HTTPONLY")) ? PB_SESSION_COOKIE_HTTPONLY : null;
 
 		$this->session_save_path = (defined("PB_SESSION_SAVE_PATH")) ? PB_SESSION_SAVE_PATH : session_save_path();
 		$this->session_save_path = rtrim($this->session_save_path)."/";
