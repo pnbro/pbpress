@@ -126,6 +126,6 @@ function pb_post_restore_from_revision($post_id_, $revision_id_){
 }
 
 include(PB_DOCUMENT_PATH . 'includes/post/post-revision-builtin.php');
-include(PB_DOCUMENT_PATH . 'includes/post/post-revision-adminpage.php');
+__iinclude(PB_DOCUMENT_PATH . 'includes/post/post-revision-adminpage.php');
 
 ?>

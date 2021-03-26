@@ -90,8 +90,14 @@ global $_pb_includes_for_after_init;
 $_pb_includes_for_after_init = array();
 
 function __iinclude($include_){
-	global $_pb_includes_for_after_init;
-	$_pb_includes_for_after_init[] = $include_;
+	global $_pb_includes_for_after_initialized, $_pb_includes_for_after_init;
+
+	if(!$_pb_includes_for_after_initialized){
+		$_pb_includes_for_after_init[] = $include_;	
+	}else{
+		include($include_);
+	}
+	
 }
 function pb_include_after_init($include_){
 	__iinclude($include_);
@@ -101,7 +107,8 @@ pb_hook_add_action('pb_init', '_p_hook_includes_for_after_init');
 pb_hook_add_action('pb_admin_init', '_p_hook_includes_for_after_init');
 
 function _p_hook_includes_for_after_init(){
-	global $_pb_includes_for_after_init;
+	global $_pb_includes_for_after_initialized, $_pb_includes_for_after_init;
+	$_pb_includes_for_after_initialized = true;
 	foreach($_pb_includes_for_after_init as $include_){
 		include($include_);
 	}

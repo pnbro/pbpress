@@ -295,6 +295,6 @@ function _pb_page_builder_head_hook_for_css_map(){
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-element.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-ajax.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-builtin.php');
-include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-adminpage.php');
+__iinclude(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-adminpage.php');
 
 ?>

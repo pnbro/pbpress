@@ -511,6 +511,6 @@ include(PB_DOCUMENT_PATH . 'includes/post/post-builtin.php');
 include(PB_DOCUMENT_PATH . 'includes/post/post-builtin-rewrite.php');
 include(PB_DOCUMENT_PATH . 'includes/post/post-meta.php');
 include(PB_DOCUMENT_PATH . 'includes/post/post-revision.php');
-include(PB_DOCUMENT_PATH . 'includes/post/post-adminpage.php');
+__iinclude(PB_DOCUMENT_PATH . 'includes/post/post-adminpage.php');
 
 ?>

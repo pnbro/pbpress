@@ -649,7 +649,7 @@ pb_hook_add_filter('pb_menu_tree_for_render', '_pb_menu_tree_for_render_level_ho
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-item.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-item-meta.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-builtin.php');
-include(PB_DOCUMENT_PATH . 'includes/menu/menu-adminpage.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/class.menu-walker.php');
+__iinclude(PB_DOCUMENT_PATH . 'includes/menu/menu-adminpage.php');
 
 ?>

@@ -30,6 +30,11 @@ class PBConfig{
 	private $use_https = false;
 
 	private $session_manager = null;
+	private $session_cookie_domain = null;
+	private $session_cookie_samesite;
+	private $session_cookie_secure;
+	private $session_cookie_httponly;
+
 	private $session_save_path = null;
 	private $session_max_time = null;
 
@@ -65,9 +70,28 @@ class PBConfig{
 		$this->use_https = (defined("PB_HTTPS")) ? PB_HTTPS : false;
 		
 		$this->session_manager = (defined("PB_SESSION_MANAGER")) ? PB_SESSION_MANAGER : "default";
+		$this->session_cookie_domain = (defined("PB_SESSION_COOKIE_DOMAIN")) ? PB_SESSION_COOKIE_DOMAIN : null;
+
+		if(!strlen($this->session_cookie_domain)){
+			$document_url_ = parse_url(PB_DOCUMENT_URL);
+			$document_url_ = $document_url_['host'].(@$document_url_['path']);
+
+			$cookie_domain_ = (strpos($document_url_,"www.") !==false)? ".".preg_replace("/www./i","",$document_url_):".".$document_url_;
+			$cookie_domain_ = preg_replace("/:[0-9]+$/i","",$cookie_domain_);
+			$cookie_domain_ = trim($cookie_domain_, ".");
+
+			$this->session_cookie_domain = $cookie_domain_;
+		}
+
+		$this->session_cookie_domain = trim($this->session_cookie_domain,"/");
+
+		$this->session_cookie_samesite = (defined("SESSION_COOKIE_SAMESITE")) ? SESSION_COOKIE_SAMESITE : 'Lax';
+		$this->session_cookie_secure = (defined("SESSION_COOKIE_SECURE")) ? SESSION_COOKIE_SECURE : null;
+		$this->session_cookie_httponly = (defined("SESSION_COOKIE_HTTPONLY")) ? SESSION_COOKIE_HTTPONLY : null;
+
 		$this->session_save_path = (defined("PB_SESSION_SAVE_PATH")) ? PB_SESSION_SAVE_PATH : session_save_path();
 		$this->session_save_path = rtrim($this->session_save_path)."/";
-		$this->session_max_time = (defined("PB_SESSION_MAX_TIME")) ? PB_SESSION_MAX_TIME : 60 * 60 * 3;
+		$this->session_max_time = (defined("PB_SESSION_MAX_TIME")) ? PB_SESSION_MAX_TIME : 60 * 60 * 60 * 3;
 	}
 
 	public function is_devmode(){
@@ -87,6 +111,20 @@ class PBConfig{
 
 	public function session_manager(){
 		return $this->session_manager;
+	}
+
+	public function session_cookie_domain(){
+		return $this->session_cookie_domain;
+	}
+
+	public function session_cookie_samesite(){
+		return $this->session_cookie_samesite;
+	}
+	public function session_cookie_secure(){
+		return $this->session_cookie_secure;
+	}
+	public function session_cookie_httponly(){
+		return $this->session_cookie_httponly;
 	}
 
 	public function session_save_path(){

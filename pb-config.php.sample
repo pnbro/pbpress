@@ -41,8 +41,12 @@ define("PB_WYSIWYG_EDITOR", "summernote"); // trumbowyg or summernote
 // define("PB_FILE_UPLOAD_AWS_BUCKET", "");
 // define("PB_FILE_UPLOAD_AWS_FILEBASE_URL", "");
 
+define("PB_SESSION_COOKIE_DOMAIN", null);
+define("PB_SESSION_COOKIE_SAMESITE", 'Lax');
+define("PB_SESSION_COOKIE_SECURE", null);
+define("PB_SESSION_COOKIE_HTTPONLY", null);
 define("PB_SESSION_MANAGER", "default"); //default, database or class name;
-define("PB_SESSION_MAX_TIME", 60 * 60 * 3);
+define("PB_SESSION_MAX_TIME", 60 * 60 * 60 * 3);
 // define("PB_SESSION_SAVE_PATH", "/tmp");
 
 ?>

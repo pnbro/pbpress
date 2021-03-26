@@ -248,6 +248,6 @@ function pb_post_category_map($type_){
 	return pb_hook_apply_filters('pb_post_category_map', $pb_post_category_map[$type_]);
 }
 
-include(PB_DOCUMENT_PATH . 'includes/post-category/post-category-adminpage.php');
+__iinclude(PB_DOCUMENT_PATH . 'includes/post-category/post-category-adminpage.php');
 
 ?>

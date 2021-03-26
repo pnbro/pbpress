@@ -4,6 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
     die( '-1' );
 }
 
+// include(PB_DOCUMENT_PATH . "includes/common/session.cors.php");
 include(PB_DOCUMENT_PATH . "includes/common/session.handler.php");
 
 global $pb_config, $pb_session_manager;
@@ -26,8 +27,25 @@ if($session_manager_class_ === "default"){
 
 session_set_save_handler($pb_session_manager);
 
-ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
-ini_set('session.save_path',$pb_config->session_save_path());
+if(PHP_VERSION_ID < 70300){
+	$cookie_save_path_ = $pb_config->session_save_path().';SameSite='.$pb_config->session_cookie_samesite();
+	session_set_cookie_params(
+		$pb_config->session_max_time(),
+		$cookie_save_path_,
+		$pb_config->session_cookie_domain(),
+		$pb_config->session_cookie_secure(),
+		$pb_config->session_cookie_httponly()
+	);
+}else{
+	session_set_cookie_params(array(
+		'lifetime' => $pb_config->session_max_time(),
+		'path' => $cookie_save_path_,
+		'domain' => $pb_config->session_cookie_domain(),
+		'samesite' => $pb_config->session_cookie_samesite(),
+		'secure' => $pb_config->session_cookie_secure(),
+		'httponly' => $pb_config->session_cookie_httponly(),
+	));
+}
 
 register_shutdown_function('session_write_close');
 

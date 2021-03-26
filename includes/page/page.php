@@ -250,6 +250,6 @@ include(PB_DOCUMENT_PATH . 'includes/page/page-builtin.php');
 include(PB_DOCUMENT_PATH . 'includes/page/page-builtin-rewrite.php');
 include(PB_DOCUMENT_PATH . 'includes/page/page-meta.php');
 include(PB_DOCUMENT_PATH . 'includes/page/page-revision.php');
-include(PB_DOCUMENT_PATH . 'includes/page/page-adminpage.php');
+__iinclude(PB_DOCUMENT_PATH . 'includes/page/page-adminpage.php');
 
 ?>

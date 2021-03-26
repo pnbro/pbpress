@@ -235,6 +235,6 @@ function pb_gcode_initial_register($gcode_, $data_){
 }
 
 include(PB_DOCUMENT_PATH . 'includes/gcode/gcode-builtin.php');
-include(PB_DOCUMENT_PATH . 'includes/gcode/gcode-adminpage.php');
+__iinclude(PB_DOCUMENT_PATH . 'includes/gcode/gcode-adminpage.php');
 
 ?>

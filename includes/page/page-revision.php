@@ -120,6 +120,6 @@ function pb_page_restore_from_revision($page_id_, $revision_id_){
 }
 
 include(PB_DOCUMENT_PATH . 'includes/page/page-revision-builtin.php');
-include(PB_DOCUMENT_PATH . 'includes/page/page-revision-adminpage.php');
+__iinclude(PB_DOCUMENT_PATH . 'includes/page/page-revision-adminpage.php');
 
 ?>

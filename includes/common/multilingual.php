@@ -143,7 +143,7 @@ pb_lang_load_translations(PBDOMAIN, PB_DOCUMENT_PATH . 'lang');
 $current_locale_ = pb_current_locale();
 if($current_locale_ === "C"){
 	global $pb_config;
-	pb_locale_update($pb_config->default_locale());	
+	pb_locale_update($pb_config->default_locale());
 }
 
 
@@ -190,23 +190,25 @@ function pb_gen_translate_maps(){
 		$searched_ = null;
 		$target_file_txt_ = file_get_contents($path_);
 
-		preg_match_all('/\_\_\([\'][\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\"\=]{1,}[\'][\,][\s]{0,}PBDOMAIN\)/i', $target_file_txt_, $searched_);
+		preg_match_all('/\_\_\([\'][\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\"\=]{1,}[\']\)/i', $target_file_txt_, $searched_);
 
 		foreach($searched_[0] as $searched_txt_){
-			$target_key_ = @preg_replace("/(\_\_\([\'])([\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\"\=]{1,})([\'][\,][\s]{0,}PBDOMAIN\))/i", "$2", $searched_txt_);
+			$target_key_ = @preg_replace("/(\_\_\([\'])([\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\"\=]{1,})([\']\))/i", "$2", $searched_txt_);
 			$results_[$target_key_] = array("value" => null, "q" => "single");
 		}
 
-		preg_match_all('/\_\_\([\"][\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\'\=]{1,}[\"][\,][\s]{0,}PBDOMAIN\)/i', $target_file_txt_, $searched_);
+		preg_match_all('/\_\_\([\"][\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\'\=]{1,}[\"]\)/i', $target_file_txt_, $searched_);
 
 		foreach($searched_[0] as $searched_txt_){
-			$target_key_ = preg_replace("/(\_\_\([\"])([\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\'\=]{1,})([\"][\,][\s]{0,}PBDOMAIN\))/i", "$2", $searched_txt_);
+			$target_key_ = preg_replace("/(\_\_\([\"])([\w가-힣\s\.\_\,\-\!\?\-\(\)\%\$\@\~\-\+\<\>\/\'\=]{1,})([\"]\))/i", "$2", $searched_txt_);
 			$results_[$target_key_] = array("value" => null, "q" => "double");
 		}
 	}
 
-	$available_theme_locales_ = pb_available_theme_locales();
-	unset($available_theme_locales_['ko_KR']);
+	// print_r($results_);
+
+	$available_theme_locales_ = array('en_US' => 'English');
+	// unset($available_theme_locales_['ko_KR']);
 
 	foreach($available_theme_locales_ as $locale_ => $name_){
 		$before_data_ = null;
@@ -250,10 +252,8 @@ foreach($results_ as $key_ => $value_){
 	return array(
 		"locale_count" => count($available_theme_locales_),
 		"created_count" => count($results_),
-	);
-	
-}*/
-
-
+	);	
+}
+*/
 
 ?>

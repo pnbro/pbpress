@@ -276,6 +276,6 @@ function pb_authority_initial_register($authority_slug_, $task_){
 }
 
 include(PB_DOCUMENT_PATH . 'includes/authority/authority-builtin.php');
-include(PB_DOCUMENT_PATH . 'includes/authority/authority-adminpage.php');
+__iinclude(PB_DOCUMENT_PATH . 'includes/authority/authority-adminpage.php');
 
 ?>
