@@ -99,7 +99,7 @@ function pb_adminpage_tree($apply_authority_ = true){
 
 function pb_adminpage_rewrite_path(){
 	global $pb_adminpage_rewrite_path;
-	if(isset($pb_adminpage_rewrite_path)) return $pb_adminpage_rewrite_path;
+	if(isset($pb_adminpage_rewrite_path)) return pb_hook_apply_filters('pb_adminpage_rewrite_path', $pb_adminpage_rewrite_path);
 
 	if(!isset($_SERVER['REDIRECT_URL'])) return null;
 	if(strpos($_SERVER['REQUEST_URI'], PB_ADMINPAGE_REWRITE_BASE) === false) return null;
@@ -117,7 +117,7 @@ function pb_adminpage_rewrite_path(){
 	global $pb_adminpage_rewrite_path;
 	$pb_adminpage_rewrite_path = $admin_subpath_map_;
 	
-	return $pb_adminpage_rewrite_path;
+	return pb_hook_apply_filters('pb_adminpage_rewrite_path', $pb_adminpage_rewrite_path);
 }
 
 function pb_current_adminpage_slug(){

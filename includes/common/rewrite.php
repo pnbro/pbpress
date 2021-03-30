@@ -67,7 +67,7 @@ function pb_rewrite_unregister($key_){
 
 function pb_rewrite_path(){
 	global $pb_rewrite_path;
-	if(isset($pb_rewrite_path)) return $pb_rewrite_path;
+	if(isset($pb_rewrite_path)) return pb_hook_apply_filters('pb_rewrite_path', $pb_rewrite_path);
 
 	if(!isset($_SERVER['REDIRECT_URL'])) return null;
 	if(strpos($_SERVER['REQUEST_URI'], PB_REWRITE_BASE) === false) return null;
