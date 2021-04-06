@@ -4,8 +4,6 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-// if(!pb_is_adminpage()) return;
-
 function _pb_authority_register_adminpage($results_){
 	$results_['manage-authority'] = array(
 		'name' => __('권한관리'),
@@ -42,15 +40,9 @@ function _pb_ajax_admin_authority_insert(){
 	}
 
 	$target_data_ = $_REQUEST["target_data"];
-
-	global $pbdb;
-
-
-	$insert_id_ = pb_authority_add(array(
-		'auth_name' => $target_data_['auth_name'],
-		'slug' => $target_data_['slug'],
-		'reg_date' => pb_current_time(),
-	));
+	$target_data_['reg_date'] = pb_current_time();
+	
+	$insert_id_ = pb_authority_add($target_data_);
 
 	pb_ajax_success(array(
 		'key' => $insert_id_,
@@ -66,14 +58,11 @@ function _pb_ajax_admin_authority_update(){
 	
 	$auth_id_ = $_REQUEST["key"];
 	$target_data_ = $_REQUEST["target_data"];
+	$target_data_['mod_date'] = pb_current_time();
 
 	global $pbdb;
 
-	pb_authority_update($auth_id_, array(
-		'auth_name' => $target_data_['auth_name'],
-		'slug' => $target_data_['slug'],
-		'MOD_DATE' => pb_current_time(),
-	));
+	pb_authority_update($auth_id_, $target_data_);
 
 	pb_ajax_success();
 }
