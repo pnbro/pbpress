@@ -150,7 +150,7 @@ $auth_task_do = pbdb_data_object("auth_task", array(
 
 $auth_task_do->add_legacy_field_filter("pb_authority_task_parse_fields", array()); // for legacy
 
-function pb_authority_task_list($conditions_ = array()){
+function pb_authority_task_statement($conditions_ = array()){
 	global $auth_do, $auth_task_do;
 
 	$statement_ = $auth_task_do->statement();
@@ -187,6 +187,11 @@ function pb_authority_task_list($conditions_ = array()){
 	if(isset($conditions_['auth_id']) && strlen($conditions_['auth_id'])){
 		$statement_->add_compare_condition("auth_task.auth_id", $conditions_['auth_id'], "=", PBDB::TYPE_NUMBER);
 	}
+
+	return pb_hook_apply_filters('pb_authority_task_statement', $statement_, $conditions_);
+}
+function pb_authority_task_list($conditions_ = array()){
+	$statement_ = pb_authority_task_statement($conditions_);
 
 	if(isset($conditions_['justcount']) && $conditions_['justcount'] === true){
 		return $statement_->count();
