@@ -99,7 +99,10 @@ function pb_clob_options_value($option_name_, $default_ = null, $cache_ = true){
 function pb_clob_option_update($option_name_, $option_value_){
 	global $pbdb;
 
-	$before_value_ = pb_clob_option_value($option_name_);
+	$before_data_ = pb_clob_option_statement(array('option_name' => $option_name_));
+	$before_data_ = $before_data_->get_first_row();
+
+	$option_id_ = null;
 
 	if($option_value_ === null){
 		$update_data_ = array(
@@ -107,40 +110,49 @@ function pb_clob_option_update($option_name_, $option_value_){
 			'mod_date' => pb_current_time(),
 		);
 
-		$pbdb->update("clob_options", $update_data_, array(
-			'option_name' => $option_name_,
-		));
-
+		if(isset($before_data_)){
+			$pbdb->delete("clob_options", array(
+				'id' => $before_data_['id'],
+			));
+			pb_hook_do_action('pb_clob_option_deleted', $before_data_);
+			$option_id_ = $before_data_['id'];
+		}
 	}else{
 		$option_value_ = serialize($option_value_);
 
-		if($before_value_ !== null){
+		if(isset($before_data_)){
 			$update_data_ = array(
 				'option_value' => $option_value_,
 				'mod_date' => pb_current_time(),
 			);
 
 			$pbdb->update("clob_options", $update_data_, array(
-				'option_name' => $option_name_,
+				'id' => $before_data_['id'],
 			));
+
+			$option_id_ = $before_data_['id'];
 		}else{
-			$insert_data_ = array(
+			$insert_data_ = pb_hook_apply_filters('pb_clob_option_insert', array(
 				'option_name' => $option_name_,
 				'option_value' => $option_value_,
 				'reg_date' => pb_current_time(),
-			);
+			));
 
-			$pbdb->insert("clob_options", $insert_data_);
+			$option_id_ = $pbdb->insert("clob_options", $insert_data_);
 		}	
 	}
 
+	global $_pb_clob_option_map;
 
-	global $_pb_clob_options_map;
-
-	if(isset($_pb_clob_options_map) && isset($_pb_clob_options_map[$option_name_])){
-		unset($_pb_clob_options_map[$option_name_]);
+	if(isset($_pb_clob_option_map) && isset($_pb_clob_option_map[$option_name_])){
+		unset($_pb_clob_option_map[$option_name_]);
 	}
-	pb_hook_do_action('pb_clob_option_updated', $option_name_);
+
+	if(strlen($option_id_)){
+		pb_hook_do_action('pb_clob_option_updated', $option_id_);	
+	}
+
+	return $option_id_;
 }
 //Deprecated
 function pb_clob_options_update($option_name_, $option_value_){

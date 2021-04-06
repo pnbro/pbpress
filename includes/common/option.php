@@ -93,36 +93,46 @@ function pb_option_exists($option_name_){
 function pb_option_update($option_name_, $option_value_){
 	global $pbdb;
 
+	$before_data_ = pb_option_statement(array('option_name' => $option_name_));
+	$before_data_ = $before_data_->get_first_row();
+
+	$option_id_ = null;
+
 	if($option_value_ === null){
 		$update_data_ = array(
 			'option_value' => null,
 			'mod_date' => pb_current_time(),
 		);
 
-		$pbdb->update("options", $update_data_, array(
-			'option_name' => $option_name_,
-		));
-
+		if(isset($before_data_)){
+			$pbdb->delete("options", array(
+				'id' => $before_data_['id'],
+			));
+			pb_hook_do_action('pb_option_deleted', $before_data_);
+			$option_id_ = $before_data_['id'];
+		}
 	}else{
 		$option_value_ = serialize($option_value_);
 
-		if(pb_option_exists($option_name_)){
+		if(isset($before_data_)){
 			$update_data_ = array(
 				'option_value' => $option_value_,
 				'mod_date' => pb_current_time(),
 			);
 
 			$pbdb->update("options", $update_data_, array(
-				'option_name' => $option_name_,
+				'id' => $before_data_['id'],
 			));
+
+			$option_id_ = $before_data_['id'];
 		}else{
-			$insert_data_ = array(
+			$insert_data_ = pb_hook_apply_filters('pb_option_insert', array(
 				'option_name' => $option_name_,
 				'option_value' => $option_value_,
 				'reg_date' => pb_current_time(),
-			);
+			));
 
-			$pbdb->insert("options", $insert_data_);
+			$option_id_ = $pbdb->insert("options", $insert_data_);
 		}	
 	}
 
@@ -131,7 +141,12 @@ function pb_option_update($option_name_, $option_value_){
 	if(isset($_pb_option_map) && isset($_pb_option_map[$option_name_])){
 		unset($_pb_option_map[$option_name_]);
 	}
-	pb_hook_do_action('pb_option_updated', $option_name_);
+
+	if(strlen($option_id_)){
+		pb_hook_do_action('pb_option_updated', $option_id_);	
+	}
+
+	return $option_id_;
 }
 
 include(PB_DOCUMENT_PATH . 'includes/common/option-builtin.php');
