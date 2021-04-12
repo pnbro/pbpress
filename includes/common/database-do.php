@@ -254,8 +254,6 @@ class PBDB_DO extends ArrayObject{
 	function _installed_tables(){
 		$fk_last_index_ = 0;
 		foreach($this->_fields as $column_name_ => $field_data_){
-			if(isset($field_data_['check_exists'])) continue;
-
 			if(isset($field_data_['fk'])){
 				++$fk_last_index_;
 			}
