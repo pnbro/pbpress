@@ -464,7 +464,7 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 		<?php break;
 		case 'text' :
 		default : ?>
-			<input type="text" name="<?=$name_?>" value="<?=stripslashes($input_value_)?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>" class="form-control">
+			<input type="text" name="<?=$name_?>" value="<?=htmlentities($input_value_)?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>" class="form-control">
 		<?php break;
 	}
 
