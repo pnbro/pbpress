@@ -7,7 +7,7 @@ function pb_admin_head(){
 	global $pb_config;
 	?>
 
-<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pb-admin.css">
+<link rel="stylesheet" type="text/css" href="<?=pb_hook_apply_filters('adminpage-default-css', PB_LIBRARY_URL."css/pb-admin.css")?>">
 
 <script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/jquery.js"></script>
 <script type="text/javascript">window.PBVAR = <?=json_encode($pbvar_)?>;</script>

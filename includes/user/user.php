@@ -299,7 +299,7 @@ function pb_user_remove_findpass_validation_key($user_id_){
 	));
 }
 
-
+include(PB_DOCUMENT_PATH . 'includes/user/user-meta.php');
 include(PB_DOCUMENT_PATH . 'includes/user/user-builtin.php');
 include(PB_DOCUMENT_PATH . 'includes/user/user-authority.php');
 __iinclude(PB_DOCUMENT_PATH . 'includes/user/user-adminpage.php');
