@@ -112,6 +112,7 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 
 	if(!$pbpost_type_data['use_category']){
 		unset($data_['category_names']);
+		$data_['post_title']['class'] = 'col-8 link-action';
 	}
 
 	return $data_;
