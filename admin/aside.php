@@ -29,7 +29,7 @@
 					</ul>
 				</li>
 				<?php }else{ ?>
-					<li class="<?=$menu_data_['active'] ? "active" : ""?>">
+					<li class="adminpage-menu-item adminpage-menu-item-<?=$slug_?> <?=$menu_data_['active'] ? "active" : ""?>">
 						<a href="<?=pb_admin_url("{$slug_}")?>"><?=$menu_data_['name']?></a>
 					</li>
 				<?php } ?>
