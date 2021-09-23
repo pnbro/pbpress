@@ -15,8 +15,8 @@ function pb_current_locale($short_ = false){
 	}
 	global $pb_config;
 	
-	if($short_) return substr($current_locale_, 0, strpos($current_locale_, "_"));
-	return $current_locale_;
+	if($short_) return pb_hook_apply_filters('pb_current_locale', substr($current_locale_, 0, strpos($current_locale_, "_")));
+	return pb_hook_apply_filters('pb_current_locale', $current_locale_);
 }
 
 define('PBDOMAIN', 'pbpress');
