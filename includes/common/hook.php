@@ -93,10 +93,14 @@ function pb_hook_apply_filters($fitler_name_){
 	$filter_list_ = isset($_pb_hook_filter_map[$fitler_name_]) ? $_pb_hook_filter_map[$fitler_name_] : array();
 
 	foreach($filter_list_ as $filter_data_){
-		$args_[0] = call_user_func_array($filter_data_['func'], $args_);
+		if(is_callable($filter_data_['func'])){
+			$args_[0] = call_user_func_array($filter_data_['func'], $args_);	
+		}else{
+			$args_[0] = $filter_data_['func'];
+		}
 	}
 
 	return $args_[0];
 }
-	
+
 ?>

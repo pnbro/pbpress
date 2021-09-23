@@ -84,8 +84,9 @@ class PBCookie{
 		return $this->_expire_time;
 	}
 
-	function update($key_, $value_){
-		return setcookie($key_, $value_, (time() + ($this->_expire_time * $expire_)), $path_);
+	function update($key_, $value_, $expire_ = null, $path_ = "/"){
+		$expire_ = strlen($expire_) ? $expire_ : $this->_expire_time;
+		return setcookie($key_, $value_, (time() + $expire_), $path_);
 	}
 	function get($key_){
 		return (isset($_COOKIE[$key_]) ? $_COOKIE[$key_] : null);
