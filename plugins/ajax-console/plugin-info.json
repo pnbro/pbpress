@@ -1,0 +1,8 @@
+{
+	"name" : "AJAX콘솔",
+	"desc" : "화면에 항상 AJAX콘솔을 표시합니다.",
+	"version" : "1.0.0",
+	"author" : "Paul&Bro",
+	"author_email" : "help@pnbro.com",
+	"author_url" : "http://pnbro.com"
+}

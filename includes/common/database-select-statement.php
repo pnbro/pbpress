@@ -429,6 +429,10 @@ class PBDB_select_statement{
 	function add_conditions_from_data($data_ = array(), $conditions_ = array()){
 		$this->_cond_list->add_from_data($data_, $conditions_);
 	}
+
+	function reset_conditions(){
+		$this->_cond_list = new PBDB_select_statement_conditions();	
+	}
 	
 	private $_legacy_field_filters = array();
 	private $_legacy_join_fileds = array();
@@ -446,7 +450,7 @@ class PBDB_select_statement{
 
 	private $_column_name_pattern = "/^([A-Za-z\_0-9])+$/";
 
-	function build($order_by_ = null, $limit_ = null, $group_by_key_ = "", $group_by_fields_ = array()){
+	function build($order_by_ = null, $limit_ = null, $group_by_key_ = "", $group_by_fields_ = array(), $group_by_having_ = null){
 		$from_table_ = $this->_from_table;
 		$from_table_alias_ = isset($this->_from_table_alias) ? $this->_from_table_alias : $from_table_;
 
@@ -619,6 +623,30 @@ class PBDB_select_statement{
 
 		if($has_group_by_){
 			$query_ .= ' GROUP BY '.$group_by_key_." \n\r";
+			$query_ .= ' HAVING 1 ';
+
+			if(gettype($group_by_having_) === "array"){
+				$t_group_by_having_ = pbdb_ss_conditions();
+
+				foreach($group_by_having_ as $cond_args_){
+					call_user_func_array(array($t_group_by_having_, "add"), $cond_args_);
+				}
+
+				$group_by_having_ = $t_group_by_having_;
+			}
+
+
+			if($group_by_having_ instanceof PBDB_select_statement_conditions){
+				if(count($group_by_having_) > 0){
+					$having_where_cond_ = $group_by_having_->build();
+					foreach($having_where_cond_['values'] as $wv_index_ => $wv_){
+						$param_values_[] = $wv_;
+						$param_types_[] = $having_where_cond_['types'][$wv_index_];
+					}
+
+					$query_ .= " AND ".$having_where_cond_['query']." \n\r";	
+				}
+			}
 		}
 
 		if(strlen($order_by_)){
@@ -667,11 +695,11 @@ class PBDB_select_statement{
 		return $this->_pbdb->get_first_row($result_['query'], $result_['values'], $result_['types']);
 	}
 
-	function build_group_by($key_, $fields_, $order_by_ = null, $limit_ = null){
-		return $this->build($order_by_, $limit_, $key_, $fields_);
+	function build_group_by($key_, $fields_, $having_ = array(), $order_by_ = null, $limit_ = null){
+		return $this->build($order_by_, $limit_, $key_, $fields_, $having_);
 	}
-	function group_by($key_, $fields_, $order_by_ = null, $limit_ = null){
-		$result_ = $this->build_group_by($key_, $fields_, $order_by_, $limit_);
+	function group_by($key_, $fields_, $having_ = array(), $order_by_ = null, $limit_ = null){
+		$result_ = $this->build_group_by($key_, $fields_, $having_, $order_by_, $limit_);
 		return $this->_pbdb->select($result_['query'], $result_['values'], $result_['types']);
 	}
 }
