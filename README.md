@@ -88,7 +88,6 @@ you can make a theme that you want, and just put your theme you made into 'theme
 
 ### Backend
 	phpmailer : https://github.com/PHPMailer/PHPMailer
-	AWS SDK : https://github.com/aws/aws-sdk-php
 
 ### Font
 	NotoSansKR Webfont(Converted by theeluwin) : https://github.com/theeluwin/NotoSansKR-Hestia
