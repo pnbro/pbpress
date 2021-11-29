@@ -31,7 +31,7 @@
 			<div class="form-group">
 				<select class="form-control" name="search_status">
 					<option value="">-등록상태-</option>
-					<?= pb_gcode_make_options(array("code_id" => "PST01"), $status_); ?>
+					<?=PB_POST_STATUS::make_options($status_)?>
 				</select>
 			</div>
 			<div class="input-group">

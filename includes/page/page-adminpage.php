@@ -136,7 +136,7 @@ function _pb_page_ajax_edit(){
 	}
 
 	if(isset($page_data_['actived_editor_id'])){
-		pb_page_meta_update($page_id_, "actived_editor_id", $page_data_['actived_editor_id']);	
+		pb_user_meta_update(pb_current_user_id(), "page_actived_editor_id_".$page_id_, $page_data_['actived_editor_id']);	
 	}
 
 	pb_ajax_success(array(

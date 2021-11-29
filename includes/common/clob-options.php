@@ -8,6 +8,7 @@ global $clob_options_do;
 $clob_options_do = pbdb_data_object("clob_options", array(
 	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
 	'option_name' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "nn" => true, "index" => true, "comment" => "패스워드"),
+	'crypted_yn' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 1, "default" => 'N', "index" => true, "comment" => "암호화여부", "check_exists" => true),
 	'option_value' => array("type" => PBDB_DO::TYPE_LONGTEXT, "comment" => "패스워드"),
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
@@ -75,18 +76,24 @@ function pb_clob_option_value($option_name_, $default_ = null, $cache_ = true){
 		"option_name" => $option_name_,
 	));
 
-	$results_ = null;
+	$temp_data_ = @$temp_[0];
 
-	foreach($temp_ as $row_data_){
-		$results_ = $row_data_['option_value'];
-		break;
+	if(!isset($temp_data_)){
+		return $default_;
+		
 	}
+
+	$results_ = $temp_data_['option_value'];
 
 	if(!isset($results_)){
 		return $default_;
 	}
 
 	$_pb_clob_options_map[$option_name_] = unserialize($results_);
+
+	if($temp_data_['crypted_yn'] === "Y"){
+		$_pb_clob_options_map[$option_name_] = pb_crypt_decrypt($_pb_clob_options_map[$option_name_]);
+	}
 
 	return $_pb_clob_options_map[$option_name_];
 }
@@ -96,7 +103,7 @@ function pb_clob_options_value($option_name_, $default_ = null, $cache_ = true){
 	return pb_clob_option_value($option_name_, $default_, $cache_);
 }
 
-function pb_clob_option_update($option_name_, $option_value_){
+function pb_clob_option_update($option_name_, $option_value_, $crypt_ = false){
 	global $pbdb;
 
 	$before_data_ = pb_clob_option_statement(array('option_name' => $option_name_));
@@ -118,11 +125,16 @@ function pb_clob_option_update($option_name_, $option_value_){
 			$option_id_ = $before_data_['id'];
 		}
 	}else{
+
+		if($crypt_){
+			$option_value_ = pb_crypt_encrypt($option_value_);
+		}
 		$option_value_ = serialize($option_value_);
 
 		if(isset($before_data_)){
 			$update_data_ = array(
 				'option_value' => $option_value_,
+				'crypted_yn' => $crypt_ ? "Y" : "N",
 				'mod_date' => pb_current_time(),
 			);
 
@@ -135,6 +147,7 @@ function pb_clob_option_update($option_name_, $option_value_){
 			$insert_data_ = pb_hook_apply_filters('pb_clob_option_insert', array(
 				'option_name' => $option_name_,
 				'option_value' => $option_value_,
+				'crypted_yn' => $crypt_ ? "Y" : "N",
 				'reg_date' => pb_current_time(),
 			));
 

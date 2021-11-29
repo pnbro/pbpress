@@ -48,6 +48,9 @@ if(PHP_VERSION_ID < 70300){
 	));
 }
 
+ini_set('session.cache_expire', $pb_config->session_max_time());
+ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
+
 register_shutdown_function('session_write_close');
 
 @session_start();

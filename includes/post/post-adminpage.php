@@ -183,7 +183,7 @@ function _pb_post_ajax_edit(){
 	}
 
 	if(isset($post_data_['actived_editor_id'])){
-		pb_post_meta_update($post_id_, "actived_editor_id", $post_data_['actived_editor_id']);	
+		pb_user_meta_update(pb_current_user_id(), "post_actived_editor_id_".$post_id_, $post_data_['actived_editor_id']);	
 	}
 
 	$post_types_ = pb_post_types();

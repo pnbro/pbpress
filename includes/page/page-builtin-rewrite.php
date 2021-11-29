@@ -18,7 +18,7 @@ function _pb_page_hook_for_rewrite_handler(){
 	global $pbpage, $pbpage_meta_map;
 	$pbpage = $page_data_;
 
-	if($pbpage['status'] !== PB_PAGE_STATUS_PUBLISHED && ((int)$pbpage['wrt_id']) != (int)pb_current_user_id()){
+	if($pbpage['status'] !== PB_PAGE_STATUS::PUBLISHED && ((int)$pbpage['wrt_id']) != (int)pb_current_user_id()){
 		return new PBError(404, __("페이지를 찾을 수 없습니다."), __("404"));
 	}
 
@@ -51,7 +51,7 @@ function _pb_front_page_hook_for_rewrite_handler(){
 	global $pbpage, $pbpage_meta_map;
 	$pbpage = $page_data_;
 
-	if($pbpage['status'] !== PB_PAGE_STATUS_PUBLISHED && ((int)$pbpage['wrt_id']) !== (int)pb_current_user_id()){
+	if($pbpage['status'] !== PB_PAGE_STATUS::PUBLISHED && ((int)$pbpage['wrt_id']) !== (int)pb_current_user_id()){
 		return new PBError(404, __("페이지를 찾을 수 없습니다."), __("404"));
 	}
 

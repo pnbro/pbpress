@@ -1,5 +1,7 @@
 <?php
 
+require(PB_DOCUMENT_PATH . 'includes/common/PBConstClass.php');
+
 require(PB_DOCUMENT_PATH . 'includes/common/config.php');
 include(PB_DOCUMENT_PATH . "includes/common/utils.php");
 include(PB_DOCUMENT_PATH . "includes/common/error.php");

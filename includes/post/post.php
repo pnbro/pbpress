@@ -71,7 +71,7 @@ function pb_post_statement($conditions_ = array()){
 
 	$statement_ = $posts_do->statement();
 	$statement_->add_field(
-		pb_query_gcode_dtl_name("PST01", "posts.status")." status_name",
+		PB_POST_STATUS::subquery("posts.status", 'status_name'),
 		"DATE_FORMAT(posts.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
 		"DATE_FORMAT(posts.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
 		"DATE_FORMAT(posts.reg_date, '%Y.%m.%d') reg_date_ymd",
@@ -165,7 +165,7 @@ function pb_sibling_post($id_, $column_ = "id", $prefix_ = "posts", $sibling_ = 
 
 	$conditions_ = array(
 		'type' => $post_data_['type'],
-		'status' => PB_POST_STATUS_PUBLISHED,
+		'status' => PB_POST_STATUS::PUBLISHED,
 	);
 	$conditions_['_'.$sibling_.'_sibling_from_id'] = $id_;
 	$conditions_['_'.$sibling_.'_sibling_from_prefix'] = $prefix_;
@@ -305,7 +305,7 @@ function pb_post_write($data_){
 	$type_ = isset($data_['type']) ? $data_['type'] : null;
 	$post_title_ = isset($data_['post_title']) ? $data_['post_title'] : null;
 	$post_html_ = isset($data_['post_html']) ? $data_['post_html'] : null;
-	$status_ = isset($data_['status']) ? $data_['status'] : PB_POST_STATUS_WRITING;
+	$status_ = isset($data_['status']) ? $data_['status'] : PB_POST_STATUS::WRITING;
 	$featured_image_path_ = isset($data_['featured_image_path']) ? $data_['featured_image_path'] : null;
 	$reg_date_ = @strlen($data_['reg_date']) ? $data_['reg_date'] : pb_current_time();
 	$slug_ = isset($data_['slug']) ? $data_['slug'] : null;

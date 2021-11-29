@@ -7,7 +7,7 @@
 
 
 ?>
-<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-site.css">
+<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-site.css?v=<?=PB_SCRIPT_VERSION?>">
 	
 
 <div class="manage-site-tab"><form id="pb-manage-site-form" method="POST">
@@ -58,6 +58,7 @@
 						</div>
 
 						<?php pb_hook_do_action('pb_admin_manage_site_form_after')?>					
+
 				</div>
 			</div>
 		</div>
@@ -72,10 +73,13 @@
 	<hr>
 	<div class="text-center">
 		<button type="submit" class="btn btn-primary btn-lg">변경사항 저장</button>
+		<div><small class="help-block">PBPress v<?=PB_VERSION?></small></div>
 	</div>
+
+
 	
 
 </form></div>
 	
 				
-<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/manage-site.js"></script>
+<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/manage-site.js?v=<?=PB_SCRIPT_VERSION?>"></script>

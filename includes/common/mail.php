@@ -164,7 +164,7 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group">
 								<label for="pb-manage-site-form-mail_smtp_user_pass"><?=__('SMTP 사용자 비밀번호')?></label>
-								<input type="password" name="mail_smtp_user_pass" placeholder="사용자ID 입력" id="pb-manage-site-form-mail_smtp_user_pass" class="form-control" value="<?=pb_option_value("mail_smtp_user_pass")?>">
+								<input type="password" name="mail_smtp_user_pass" placeholder="사용자ID 입력" id="pb-manage-site-form-mail_smtp_user_pass" class="form-control" value="<?=pb_clob_option_value("mail_smtp_user_pass", pb_option_value("mail_smtp_user_pass"))?>" data-crypt-field="Y">
 								<div class="help-block with-errors"></div>
 								<div class="clearfix"></div>
 							</div>
@@ -230,7 +230,7 @@ function _pb_mail_hook_update_site_settings($settings_data_){
 	pb_option_update("mail_smtp_auth", isset($settings_data_['mail_smtp_auth']) ? $settings_data_['mail_smtp_auth'] : "N");
 
 	pb_option_update("mail_smtp_user_id", isset($settings_data_['mail_smtp_user_id']) ? $settings_data_['mail_smtp_user_id'] : null);
-	pb_option_update("mail_smtp_user_pass", isset($settings_data_['mail_smtp_user_pass']) ? $settings_data_['mail_smtp_user_pass'] : null);
+	pb_clob_option_update("mail_smtp_user_pass", isset($settings_data_['mail_smtp_user_pass']) ? $settings_data_['mail_smtp_user_pass'] : null, true);
 	pb_option_update("mail_smtp_secure", $settings_data_['mail_smtp_secure']);
 
 	pb_clob_option_update("mail_template", $settings_data_['mail_template']);

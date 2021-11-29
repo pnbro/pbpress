@@ -8,7 +8,7 @@
 			'id' => null,
 			'page_title' => null,
 			'page_html' => null,
-			'status' => PB_PAGE_STATUS_PUBLISHED,
+			'status' => PB_PAGE_STATUS::PUBLISHED,
 			'slug' => null,
 		);
 		$pbpage_meta_map = array();
@@ -83,7 +83,7 @@
 				pb_editor("page_html", $pbpage['page_html'], array(
 					"min_height" => 400,
 					"id" => "pb-page-html-editor",
-					"editor" => isset($pbpage_meta_map['actived_editor_id']) ? $pbpage_meta_map['actived_editor_id'] : null,
+					"editor" => pb_user_meta_value(pb_current_user_id(), 'page_actived_editor_id_'.$pbpage['id']),
 				));
 				pb_hook_do_action("pb_page_edit_form_page_html_after", $pbpage);
 			?>
@@ -104,7 +104,7 @@
 						<div class="form-group">
 							<label>페이지상태</label>
 							<select class="form-control" name="status" required data-error="상태를 선택하세요">
-								<?=pb_gcode_make_options(array("code_id" => "PAG01"), $pbpage['status'])?>
+								<?=PB_PAGE_STATUS::make_options($pbpage['status'])?>
 							</select>
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>

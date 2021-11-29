@@ -29,7 +29,7 @@ function pb_page_statement($conditions_ = array()){
 
 	$statement_ = $pages_do->statement();
 	$statement_->add_field(
-		pb_query_gcode_dtl_name("PAG01", "pages.status")." status_name",
+		PB_PAGE_STATUS::subquery("pages.status", 'status_name'),
 		"DATE_FORMAT(pages.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
 		"DATE_FORMAT(pages.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
 		"DATE_FORMAT(pages.reg_date, '%Y.%m.%d') reg_date_ymd",
@@ -131,7 +131,7 @@ function pb_page_rewrite_slug($slug_, $excluded_page_id_ = null){
 function pb_page_write($data_){
 	$page_title_ = isset($data_['page_title']) ? $data_['page_title'] : null;
 	$page_html_ = isset($data_['page_html']) ? $data_['page_html'] : null;
-	$status_ = isset($data_['status']) ? $data_['status'] : PB_PAGE_STATUS_WRITING;
+	$status_ = isset($data_['status']) ? $data_['status'] : PB_PAGE_STATUS::WRITING;
 	$slug_ = isset($data_['slug']) ? $data_['slug'] : null;
 	$slug_ = strlen($slug_) ? $slug_ : $page_title_;
 	$slug_ = pb_slugify($slug_);

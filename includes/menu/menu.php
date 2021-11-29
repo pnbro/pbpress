@@ -342,7 +342,7 @@ function pb_menu_target_list(){
 		}
 
 		foreach($page_list_ as $page_data_){
-			if($page_data_['status'] !== PB_PAGE_STATUS_PUBLISHED){
+			if($page_data_['status'] !== PB_PAGE_STATUS::PUBLISHED){
 				continue;
 			} 
 

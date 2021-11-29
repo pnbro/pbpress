@@ -4,18 +4,25 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_STATUS_WRITING', '00001');
-define('PB_PAGE_STATUS_PUBLISHED', '00003');
-define('PB_PAGE_STATUS_UNPUBLISHED', '00009');
+abstract class PB_PAGE_STATUS extends PBConstClass{
+	const WRITING = "00001";
+	const PUBLISHED = "00003";
+	const UNPUBLISHED = "00009";
 
-pb_gcode_initial_register('PAG01', array(
-	'name' => __('페이지등록상태'),
-	'data' => array(
-		PB_PAGE_STATUS_WRITING => __("작성중"),
-		PB_PAGE_STATUS_PUBLISHED => __("공개"),
-		PB_PAGE_STATUS_UNPUBLISHED => __("비공개"),
-	),
-));
+	static public function names(){
+
+		global $_pb_page_status_names;
+		if(isset($_pb_page_status_names)) return $_pb_page_status_names;
+
+		$_pb_page_status_names = array(
+			PB_PAGE_STATUS::WRITING => __('작성중'),
+			PB_PAGE_STATUS::PUBLISHED => __('공개'),
+			PB_PAGE_STATUS::UNPUBLISHED => __('비공개'),
+		);
+
+		return $_pb_page_status_names;
+	}
+}
 
 pb_authority_task_add_type('manage_page', array(
 	'name' => '페이지관리',

@@ -36,11 +36,18 @@ if(!pb_verify_request_token("pbpress_manage_site", $settings_data_['_request_chi
 	pb_admin_end();	
 }
 
+$crypted_columns_ = _POST('crypted_columns', array());
+
+foreach($crypted_columns_ as $crypted_column_){
+	$settings_data_[$crypted_column_] = pb_crypt_decrypt($settings_data_[$crypted_column_]);
+}
+
 $site_name_ = $settings_data_['site_name'];
 $site_desc_ = $settings_data_['site_desc'];
 
 pb_option_update("site_name", $site_name_);
 pb_option_update("site_desc", $site_desc_);
+
 
 pb_hook_do_action('pb-admin-update-site-settings', $settings_data_);
 

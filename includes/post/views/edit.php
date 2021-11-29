@@ -9,7 +9,7 @@
 			'featured_image_path' => null,
 			'post_title' => null,
 			'post_html' => null,
-			'status' => PB_POST_STATUS_PUBLISHED,
+			'status' => PB_POST_STATUS::PUBLISHED,
 			'slug' => null,
 			'reg_date' => null,
 		);
@@ -81,7 +81,7 @@
 				pb_editor("post_html", $pbpost['post_html'], array(
 					"min_height" => 400,
 					"id" => "pb-post-html-editor",
-					"editor" => isset($pbpost_meta_map['actived_editor_id']) ? $pbpost_meta_map['actived_editor_id'] : null,
+					"editor" => pb_user_meta_value(pb_current_user_id(), 'post_actived_editor_id_'.$pbpost['id']),
 					"editors" => pb_hook_apply_filters('pb_post_{$pbpost_type}_editors', pb_hook_apply_filters('pb_post_editors', $editors_)),
 				));
 				pb_hook_do_action("pb_post_edit_form_post_html_after", $pbpost);
@@ -105,7 +105,7 @@
 						<div class="form-group">
 							<label>글상태</label>
 							<select class="form-control" name="status" required data-error="상태를 선택하세요">
-								<?=pb_gcode_make_options(array("code_id" => "PST01"), $pbpost['status'])?>
+								<?=PB_POST_STATUS::make_options($pbpost['status'])?>
 							</select>
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>

@@ -22,7 +22,7 @@ class PBMailSender_newer extends PBMailSender{
 	$mail_smtp_port_ = pb_option_value('mail_smtp_port');
 	$mail_smtp_auth_ = pb_option_value('mail_smtp_auth');
 	$mail_smtp_user_id_ = pb_option_value('mail_smtp_user_id');
-	$mail_smtp_user_pass_ = pb_option_value('mail_smtp_user_pass');
+	$mail_smtp_user_pass_ = pb_clob_option_value('mail_smtp_user_pass', pb_option_value('mail_smtp_user_pass'));
 	$mail_smtp_secure_ = pb_option_value('mail_smtp_secure');
 
 	$phpmailer_ = new PHPMailer;

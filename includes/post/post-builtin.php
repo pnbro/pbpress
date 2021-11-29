@@ -4,18 +4,25 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_POST_STATUS_WRITING', '00001');
-define('PB_POST_STATUS_PUBLISHED', '00003');
-define('PB_POST_STATUS_UNPUBLISHED', '00009');
+abstract class PB_POST_STATUS extends PBConstClass{
+	const WRITING = "00001";
+	const PUBLISHED = "00003";
+	const UNPUBLISHED = "00009";
 
-pb_gcode_initial_register('PST01', array(
-	'name' => '글등록상태',
-		'data' => array(
-			PB_POST_STATUS_WRITING => "작성중",
-			PB_POST_STATUS_PUBLISHED => "공개",
-			PB_POST_STATUS_UNPUBLISHED => "비공개",
-		),
-));
+	static public function names(){
+
+		global $_pb_post_status_names;
+		if(isset($_pb_post_status_names)) return $_pb_post_status_names;
+
+		$_pb_post_status_names = array(
+			PB_POST_STATUS::WRITING => __('작성중'),
+			PB_POST_STATUS::PUBLISHED => __('공개'),
+			PB_POST_STATUS::UNPUBLISHED => __('비공개'),
+		);
+
+		return $_pb_post_status_names;
+	}
+}
 
 pb_hook_add_action('pb_post_inserted', '_pb_post_update_for_post_short');
 pb_hook_add_action('pb_post_updated', '_pb_post_update_for_post_short');

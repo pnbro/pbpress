@@ -82,7 +82,7 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 					<div class="subinfo"><i class="icon material-icons">access_time</i> <span class="text"><?=$item_['reg_date_ymdhi']?></span></div>
 					<div class="subinfo">
 						<select class="form-control input-sm display-inline" data-post-status="<?=$item_['id']?>">
-							<?= pb_gcode_make_options(array("code_id" => "PST01"), $item_['status']); ?>
+							<?=PB_POST_STATUS::make_options($item_['status'])?>
 						</select>
 					</div>
 				</div>
@@ -98,7 +98,7 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 				?>
 
 				<select class="form-control input-sm" data-post-status="<?=$item_['id']?>">
-					<?= pb_gcode_make_options(array("code_id" => "PST01"), $item_['status']); ?>
+					<?=PB_POST_STATUS::make_options($item_['status'])?>
 				</select>
 
 				<?php

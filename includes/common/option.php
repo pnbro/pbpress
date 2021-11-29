@@ -70,18 +70,20 @@ function pb_option_value($option_name_, $default_ = null, $cache_ = true){
 		"option_name" => $option_name_,
 	));
 
-	$results_ = null;
+	$temp_data_ = @$temp_[0];
 
-	foreach($temp_ as $row_data_){
-		$results_ = $row_data_['option_value'];
-		break;
+	if(!isset($temp_data_)){
+		return $default_;
+		
 	}
+
+	$results_ = $temp_data_['option_value'];
 
 	if(!isset($results_)){
 		return $default_;
 	}
 
-	$_pb_option_map[$option_name_] = unserialize($results_);
+	$_pb_option_map[$option_name_] = @unserialize($results_);
 
 	return $_pb_option_map[$option_name_];
 }
@@ -112,6 +114,7 @@ function pb_option_update($option_name_, $option_value_){
 			$option_id_ = $before_data_['id'];
 		}
 	}else{
+
 		$option_value_ = serialize($option_value_);
 
 		if(isset($before_data_)){

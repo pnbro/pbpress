@@ -40,8 +40,8 @@ global $pb_config;
 	<meta name="format-detection" content="telephone=no">
 
 	<?php pb_admin_head(); ?>
-	<link rel="stylesheet" type="text/css" href="<?=pb_hook_apply_filters('adminpage_stylesheet_url', PB_LIBRARY_URL."css/pages/admin/adminpage.css")?>">
-	<script type="text/javascript" src="<?=pb_hook_apply_filters('adminpage_script_url', PB_LIBRARY_URL."js/pages/admin/adminpage.js")?>"></script>
+	<link rel="stylesheet" type="text/css" href="<?=pb_hook_apply_filters('adminpage_stylesheet_url', PB_LIBRARY_URL."css/pages/admin/adminpage.css?v=".PB_SCRIPT_VERSION)?>">
+	<script type="text/javascript" src="<?=pb_hook_apply_filters('adminpage_script_url', PB_LIBRARY_URL."js/pages/admin/adminpage.js?v=".PB_SCRIPT_VERSION)?>"></script>
 </head>
 
 <body class="page-pbpress-adminpage page-<?=$current_adminpage_slug_?>">
