@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "1.8.1");
+define('PB_PAGE_BUILDER_VERSION', "1.9.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "1.0.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', PB_PAGE_BUILDER_VERSION);
 
@@ -120,6 +120,15 @@ function pb_page_builder($content_ = null, $data_ = array()){
 
 	$builder_id_ = isset($data_['id']) ? $data_['id'] : "pb-page-builder-".pb_random_string(5);
 	$elements_ = isset($data_['elements']) ? $data_['elements'] : null;
+
+	if(empty($elements_)){
+		$elements_ = array();
+		$temp_elements_ = pb_page_builder_elements();
+
+		foreach($temp_elements_ as $key_ => $element_data_){
+			$elements_[] = $key_;
+		}
+	}
 
 	if(!$pb_page_builder_admin_initialized){ 
 		$element_map_ = pb_page_builder_elements();
