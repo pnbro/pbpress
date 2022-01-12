@@ -65,7 +65,8 @@ abstract class PBPageBuilderElement{
 	}
 	public function _render($data_ = array(), $content_ = null){
 		$data_ = pb_hook_apply_filters('pb_page_builder_element_render', $data_, $content_);
-		return $this->render($data_, $content_);
+		$render_func_ = pb_hook_apply_filters('pb_page_builder_element_render_function', array($this, 'render'), $data_, $content_);
+		return call_user_func_array($render_func_, array($data_, $content_));
 	}
 
 	abstract function initialize();

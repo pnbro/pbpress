@@ -1,0 +1,114 @@
+@import (reference) "../../pb-admin.less";
+
+body{
+	padding: 0px;
+	margin: 0px;
+}
+
+.pb-page-live-builder{
+	position: relative;
+	display: block;
+	padding-top: 46px;
+	border: 1px solid @brand-primary;
+	background-color: white;
+
+	.page-builder-navbar{
+		position: absolute;
+		display: block;
+		width: 100%;
+		top: 0px;
+		left: 0px;
+
+		> .wrap{
+			position: relative;
+			display: table;
+			table-layout: fixed;
+			width: 100%;
+			padding: 7px 10px;
+			background-color: @brand-primary;
+			color: white;
+
+			
+
+			> .col-left,
+			> .col-right{
+				position: relative;
+				display: table-cell;
+				vertical-align: middle;
+			}
+
+			> .col-left{
+				width: 60px;
+
+				> .logo-image{
+					display: block;
+					height: 30px;
+					opacity: 0.5;
+				}
+			}
+
+			> .col-right{
+				text-align: right;
+				a{
+					position: relative;
+					display: inline-block;
+					vertical-align: middle;
+
+					& + a{
+						margin-left: 10px;
+					}
+				}
+
+				a.add-element-btn{
+					border-radius: 20px;
+					color: white;
+					background-color: #1e5d9c;
+					border-color: #1c4b79;
+					font-size: 14px;
+					padding: 3px 15px 3px 3px;
+
+					&:hover{
+						background-color: #154c84;
+					}
+
+					> .icon{
+						vertical-align: top;
+					}
+				}
+
+				a.icon-link{
+					&.has-data{
+						&:after{
+							position: absolute;
+							display: block;
+							content: "";
+							width: 3px;
+							height: 3px;
+							background-color: @brand-danger;
+							border-radius: 50%;
+							right: 0px;
+							top: 0px;
+						}
+					}
+				}
+
+				a.fullscreen-btn{
+					> .off{
+						display: none;
+					}
+				}
+
+				a:not(.btn){
+					color: white;
+					
+					> .icon{
+						vertical-align: top;
+						font-size: 30px;
+					}
+
+					
+				}
+			}
+		}
+	}
+}

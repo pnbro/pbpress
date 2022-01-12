@@ -385,7 +385,7 @@ class PBDB_select_statement{
 		}
 	}
 
-	function &add_join($join_type_, $obj_, $alias_ = null, $on_ = null, $fields_ = null, $column_prefix_ = ""){
+	function &add_join($join_type_, $obj_, $alias_ = null, $on_ = array(), $fields_ = array(), $column_prefix_ = ""){
 		if(!isset($on_)){
 			$on_ = new PBDB_select_statement_conditions();
 		}
@@ -401,7 +401,7 @@ class PBDB_select_statement{
 
 		return $on_;
 	}
-	function &add_join_statement($join_type_, $statement_, $alias_ = null, $on_ = null, $fields_ = null, $column_prefix_ = ""){
+	function &add_join_statement($join_type_, $statement_, $alias_ = null, $on_ = array(), $fields_ = array(), $column_prefix_ = ""){
 		return $this->add_join($join_type_, $statement_, $alias_, $on_, $fields_, $column_prefix_);
 	}
 
@@ -593,12 +593,16 @@ class PBDB_select_statement{
 			}
 
 			$join_cond_ = $join_cond_->build();
-			foreach($join_cond_['values'] as $jv_index_ => $jv_){
-				$param_values_[] = $jv_;
-				$param_types_[] = $join_cond_['types'][$jv_index_];
+			
+			if(count($join_cond_['values']) > 0){
+				foreach($join_cond_['values'] as $jv_index_ => $jv_){
+					$param_values_[] = $jv_;
+					$param_types_[] = $join_cond_['types'][$jv_index_];
+				}
 			}
 
-			$query_ .= " AND ".$join_cond_['query']." \n\r";
+			$query_ .= " AND ".(strlen($join_cond_['query']) ? $join_cond_['query'] : "1")." \n\r";
+	
 		}
 
 		foreach($this->_legacy_join_fileds as $filter_){
@@ -614,7 +618,7 @@ class PBDB_select_statement{
 				$param_types_[] = $where_cond_['types'][$wv_index_];
 			}
 
-			$query_ .= " AND ".$where_cond_['query']." \n\r";	
+			$query_ .= " AND ".(strlen($where_cond_['query']) ? $where_cond_['query'] : "1")." \n\r";	
 		}
 
 		foreach($this->_legacy_where_fileds as $filter_){
@@ -644,7 +648,7 @@ class PBDB_select_statement{
 						$param_types_[] = $having_where_cond_['types'][$wv_index_];
 					}
 
-					$query_ .= " AND ".$having_where_cond_['query']." \n\r";	
+					$query_ .= " AND ".(strlen($having_where_cond_['query']) ? $having_where_cond_['query'] : "1")." \n\r";	
 				}
 			}
 		}

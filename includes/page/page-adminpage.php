@@ -36,7 +36,7 @@ function _page_rewrite_handler_for_live_edit(){
 
 	if(count($rewrite_path_) !== 2) return new PBError(503, __("잘못된 접근"), __("잘못된 요청입니다.")); 
 
-	global $pbdb;
+	global $pbdb, $pbpage;
 
 	$page_id_ = isset($rewrite_path_[1]) ? $rewrite_path_[1] : -1;
 	$pbpage = pb_page($page_id_);
@@ -48,7 +48,7 @@ function _page_rewrite_handler_for_live_edit(){
 	global $pbpage_meta_map;
 	$pbpage_meta_map = pb_page_meta_map($pbpage['id']);
 
-	return PB_DOCUMENT_PATH . 'includes/page/views/live-edit.php';
+	return PB_DOCUMENT_PATH . 'includes/page/live-editor/edit.php';
 }
 
 pb_rewrite_register('__page-live-edit-preview', array(
