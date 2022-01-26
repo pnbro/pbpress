@@ -15,11 +15,15 @@ define('PB_DB_PORT', '');
 define('PB_DB_USERNAME', '');
 define('PB_DB_USERPASS', '');
 define('PB_DB_NAME', '');
-define('PB_DB_CHARSET', 'utf8');
+define('PB_DB_CHARSET', 'utf8mb4');
 
 define("PB_CRYPT_PASSWORD", "~W.7bNa[~$+aeP>u");
 // define("PB_CRYPT_ALGORITHM", "");
 // define("PB_CRYPT_BITS", "");
+
+// define("PB_CRYPT_STATIC_KEY_SIZE", "32");
+// define("PB_CRYPT_STATIC_IV_SIZE", "16");
+// define("PB_CRYPT_STATIC_CIPHER_MODE", "AES-256-CBC");
 
 // define("PB_DEFAULT_LOCALE", 'ko_KR');
 

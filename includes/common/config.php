@@ -23,6 +23,10 @@ class PBConfig{
 	public $crypt_algorithm = "sha256";
 	public $crypt_bits = 2048;
 
+	public $crypt_static_key_size = 32;
+	public $crypt_static_iv_size = 16;
+	public $crypt_static_cipher_mode = 'AES-256-CBC';
+
 	public $wysiwyg_editor;
 	public $file_upload_handler = "default";
 
@@ -61,6 +65,10 @@ class PBConfig{
 		$this->crypt_password = (defined("PB_CRYPT_PASSWORD")) ? PB_CRYPT_PASSWORD : null;
 		$this->crypt_algorithm = (defined("PB_CRYPT_ALGORITHM")) ? PB_CRYPT_ALGORITHM : "sha256";
 		$this->crypt_bits = (defined("PB_CRYPT_BITS")) ? PB_CRYPT_BITS : 2048;
+
+		$this->pb_crypt_static_key_size = (defined("PB_CRYPT_STATIC_KEY_SIZE")) ? PB_CRYPT_STATIC_KEY_SIZE : 32;
+		$this->pb_crypt_static_iv_size = (defined("PB_CRYPT_STATIC_IV_SIZE")) ? PB_CRYPT_STATIC_IV_SIZE : 16;
+		$this->pb_crypt_static_cipher_mode = (defined("PB_CRYPT_STATIC_CIPHER_MODE")) ? PB_CRYPT_STATIC_CIPHER_MODE : 'AES-256-CBC';
 
 		$this->wysiwyg_editor = (defined("PB_WYSIWYG_EDITOR")) ? PB_WYSIWYG_EDITOR : "summernote";
 		$this->file_upload_handler = (defined("PB_FILE_UPLOAD_HANDLER")) ? PB_FILE_UPLOAD_HANDLER : "default";

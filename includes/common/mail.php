@@ -77,6 +77,7 @@ pb_hook_add_filter('pb-admin-manage-site-menu-list', "_pb_mail_hook_register_man
 function _pb_mail_hook_render_manage_site($menu_data_){
 
 	global $pb_config;
+
 	?>
 
 	<div class="manage-site-form-panel panel panel-default">

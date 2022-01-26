@@ -9,6 +9,7 @@ $clob_options_do = pbdb_data_object("clob_options", array(
 	'id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "ai" => true, "pk" => true, "comment" => "ID"),
 	'option_name' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 100, "nn" => true, "index" => true, "comment" => "패스워드"),
 	'crypted_yn' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 1, "default" => 'N', "index" => true, "comment" => "암호화여부", "check_exists" => true),
+	'iv' => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 50, "comment" => "암호화IV", "check_exists" => true),
 	'option_value' => array("type" => PBDB_DO::TYPE_LONGTEXT, "comment" => "패스워드"),
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
@@ -24,6 +25,7 @@ function pb_clob_option_statement($conditions_ = array()){
 		"DATE_FORMAT(clob_options.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
 		"DATE_FORMAT(clob_options.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
 		"DATE_FORMAT(clob_options.reg_date, '%Y.%m.%d') reg_date_ymd",
+
 		"DATE_FORMAT(clob_options.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
 		"DATE_FORMAT(clob_options.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
 		"DATE_FORMAT(clob_options.mod_date, '%Y.%m.%d') mod_date_ymd"
@@ -79,8 +81,7 @@ function pb_clob_option_value($option_name_, $default_ = null, $cache_ = true){
 	$temp_data_ = @$temp_[0];
 
 	if(!isset($temp_data_)){
-		return $default_;
-		
+		return $default_;	
 	}
 
 	$results_ = $temp_data_['option_value'];
@@ -92,7 +93,7 @@ function pb_clob_option_value($option_name_, $default_ = null, $cache_ = true){
 	$_pb_clob_options_map[$option_name_] = unserialize($results_);
 
 	if($temp_data_['crypted_yn'] === "Y"){
-		$_pb_clob_options_map[$option_name_] = pb_crypt_decrypt($_pb_clob_options_map[$option_name_]);
+		$_pb_clob_options_map[$option_name_] = pb_static_crypt_decrypt($_pb_clob_options_map[$option_name_], $temp_data_['iv']);
 	}
 
 	return $_pb_clob_options_map[$option_name_];
@@ -126,8 +127,11 @@ function pb_clob_option_update($option_name_, $option_value_, $crypt_ = false){
 		}
 	}else{
 
+		$iv_ = null;
 		if($crypt_){
-			$option_value_ = pb_crypt_encrypt($option_value_);
+			$temp_ = pb_static_crypt_encrypt($option_value_);
+			$option_value_ = $temp_['data'];
+			$iv_ = $temp_['iv'];
 		}
 		$option_value_ = serialize($option_value_);
 
@@ -135,6 +139,7 @@ function pb_clob_option_update($option_name_, $option_value_, $crypt_ = false){
 			$update_data_ = array(
 				'option_value' => $option_value_,
 				'crypted_yn' => $crypt_ ? "Y" : "N",
+				'iv' => $iv_,
 				'mod_date' => pb_current_time(),
 			);
 
@@ -148,6 +153,7 @@ function pb_clob_option_update($option_name_, $option_value_, $crypt_ = false){
 				'option_name' => $option_name_,
 				'option_value' => $option_value_,
 				'crypted_yn' => $crypt_ ? "Y" : "N",
+				'iv' => $iv_,
 				'reg_date' => pb_current_time(),
 			));
 
@@ -167,6 +173,8 @@ function pb_clob_option_update($option_name_, $option_value_, $crypt_ = false){
 
 	return $option_id_;
 }
+pb_clob_option_update("mail_smtp_user_pass", 'Adminqaz1!', true);
+
 //Deprecated
 function pb_clob_options_update($option_name_, $option_value_){
 	return pb_clob_option_update($option_name_, $option_value_);

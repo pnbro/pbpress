@@ -85,13 +85,43 @@ function pb_crypt_decrypt($ciphertext_, $private_key_ = null, $password_ = null)
 	return $plaintext_;
 }
 
+function pb_static_crypt_encrypt($plaintext_, $password_ = null){
+	global $pb_config;
+
+	if(!strlen($password_)){
+		$password_ = $pb_config->crypt_password;
+	}
+
+	$iv_ = pb_random_string($pb_config->pb_crypt_static_iv_size);
+	
+	$length_ = $pb_config->pb_crypt_static_iv_size - strlen($plaintext_) % $pb_config->pb_crypt_static_iv_size;
+    $pad_data_ =  $plaintext_ . str_repeat(chr($length_), $length_);
+
+	$encrypted_data_ = openssl_encrypt($pad_data_,$pb_config->pb_crypt_static_cipher_mode,$password_,0,$iv_);
+
+	return array(
+		'data' => $encrypted_data_,
+		'iv' => $iv_,
+	);
+}
+
+function pb_static_crypt_decrypt($encrypted_data_, $iv_, $password_ = null){
+	global $pb_config;
+
+	if(!strlen($password_)){
+		$password_ = $pb_config->crypt_password;
+	}
+
+	$result_ = openssl_decrypt($encrypted_data_, $pb_config->pb_crypt_static_cipher_mode, $password_, 0, $iv_);
+
+	return $result_;
+}
 
 function _pb_crypt_load_scripts(){
 	$shared_key_ = pb_crypt_shared_keys();
 	
 	?>
 	<script type="text/plain" id="pb-crypt-public-key"><?=$shared_key_['public_key']?></script>
-
 	<?php
 }
 pb_hook_add_action("pb_head","_pb_crypt_load_scripts");
