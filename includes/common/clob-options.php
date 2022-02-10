@@ -173,7 +173,6 @@ function pb_clob_option_update($option_name_, $option_value_, $crypt_ = false){
 
 	return $option_id_;
 }
-pb_clob_option_update("mail_smtp_user_pass", 'Adminqaz1!', true);
 
 //Deprecated
 function pb_clob_options_update($option_name_, $option_value_){
