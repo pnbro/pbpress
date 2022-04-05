@@ -222,6 +222,11 @@ class PBDB_DO extends ArrayObject{
 			WHERE table_schema= '".$this->_pbdb->db_connection()->db_name()."' AND table_name='".$this->_table_name."'
 		", "index_name");
 
+		$exists_fks_ = $this->_pbdb->serialize_column("
+			SELECT constraint_name FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+			WHERE table_schema= '".$this->_pbdb->db_connection()->db_name()."' AND table_name='".$this->_table_name."'
+		", "constraint_name");
+
 		foreach($this->_fields as $column_name_ => $field_data_){
 			if(isset($field_data_['check_exists']) && !!$field_data_['check_exists']){
 
@@ -301,17 +306,17 @@ class PBDB_DO extends ArrayObject{
 
 		foreach($fk_maps_ as $fk_data_){
 			$fk_name_ = "{$this->_table_name}_fk".($fk_last_index_+1);
-			if(in_array($fk_name_, $exists_indexes_) !== false) continue;
+			if(in_array($fk_name_, $exists_fks_) !== false) continue;
 
 			++$fk_last_index_;
 			
 			$target_table_ = $fk_data_['table'];
-			$from_column_ = $fk_data_['from'];
-			$target_column_ = $fk_data_['to'];
+			$from_column_ = explode(",", $fk_data_['from']);
+			$target_column_ = explode(",", $fk_data_['to']);
 			$on_delete_ = isset($fk_data_['delete']) ? $fk_data_['delete'] : PBDB_DO::FK_NOACTION;
 			$on_update_ = isset($fk_data_['update']) ? $fk_data_['update'] : PBDB_DO::FK_NOACTION;
 
-			$fk_queries_[$fk_name_] = "ADD CONSTRAINT `{$fk_name_}` FOREIGN KEY (`{$from_column_}`) REFERENCES `{$target_table_}` (`{$target_column_}`) ON DELETE {$on_delete_} ON UPDATE {$on_update_}";
+			$fk_queries_[$fk_name_] = "ADD CONSTRAINT `{$fk_name_}` FOREIGN KEY (`" . implode("`,`", $from_column_) . "`) REFERENCES `{$target_table_}` (`" . implode("`,`", $target_column_) . "`) ON DELETE {$on_delete_} ON UPDATE {$on_update_}";
 		}
 
 		if(count($alter_queries_) > 0){
