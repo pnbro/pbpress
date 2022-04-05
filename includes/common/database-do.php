@@ -268,6 +268,7 @@ class PBDB_DO extends ArrayObject{
 			if(isset($field_data_['fk'])){
 				$fk_data_ = $field_data_['fk'];
 				$fk_data_['from'] = isset($fk_data_['from']) ? $fk_data_['from'] : $column_name_;
+				$fk_data_['to'] = $fk_data_['column'];
 				$fk_maps_[] = $fk_data_;
 			}
 
@@ -305,8 +306,8 @@ class PBDB_DO extends ArrayObject{
 			++$fk_last_index_;
 			
 			$target_table_ = $fk_data_['table'];
-			$from_column_ = isset($fk_data_['from']) ? $fk_data_['from'] : $column_name_;
-			$target_column_ = $fk_data_['column'];
+			$from_column_ = $fk_data_['from'];
+			$target_column_ = $fk_data_['to'];
 			$on_delete_ = isset($fk_data_['delete']) ? $fk_data_['delete'] : PBDB_DO::FK_NOACTION;
 			$on_update_ = isset($fk_data_['update']) ? $fk_data_['update'] : PBDB_DO::FK_NOACTION;
 
