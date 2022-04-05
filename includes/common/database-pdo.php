@@ -6,6 +6,32 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 	private $_last_error_message = null;
 	private $_last_error_trace = null;
 
+	private $_host = null;
+	private $_port = null;
+	private $_db_name = null;
+	private $_charset = null;
+	private $_username = null;
+	private $_userpass = null;
+
+	public function host(){
+		return $this->_host;
+	}
+	public function port(){
+		return $this->_port;
+	}
+	public function db_name(){
+		return $this->_db_name;
+	}
+	public function charset(){
+		return $this->_charset;
+	}
+	public function username(){
+		return $this->_username;
+	}
+	public function userpass(){
+		return $this->_userpass;
+	}
+
 	public $data_types = array(
 		PBDB::TYPE_STRING => PDO::PARAM_STR,
 		PBDB::TYPE_NUMBER => PDO::PARAM_INT,
@@ -22,16 +48,16 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 			die("PDO not supported");
 		}
 
-		$host_ = @strlen($options_['host']) ? $options_['host'] : $pb_config->db_host;
-		$port_ = @strlen($options_['port']) ? $options_['port'] : $pb_config->db_port;
-		$db_name_ = @strlen($options_['db_name']) ? $options_['db_name'] : $pb_config->db_name;
-		$charset_ = @strlen($options_['charset']) ? $options_['charset'] : $pb_config->db_charset;
-		$username_ = @strlen($options_['username']) ? $options_['username'] : $pb_config->db_username;
-		$userpass_ = @strlen($options_['userpass']) ? $options_['userpass'] : $pb_config->db_userpass;
+		$this->_host = @strlen($options_['host']) ? $options_['host'] : $pb_config->db_host;
+		$this->_port = @strlen($options_['port']) ? $options_['port'] : $pb_config->db_port;
+		$this->_db_name = @strlen($options_['db_name']) ? $options_['db_name'] : $pb_config->db_name;
+		$this->_charset = @strlen($options_['charset']) ? $options_['charset'] : $pb_config->db_charset;
+		$this->_username = @strlen($options_['username']) ? $options_['username'] : $pb_config->db_username;
+		$this->_userpass = @strlen($options_['userpass']) ? $options_['userpass'] : $pb_config->db_userpass;
 
-		$dsn_ = "mysql:host=".$host_.";port=".$port_.";dbname=".$db_name_.";charset=".$charset_;
+		$dsn_ = "mysql:host=".$this->_host.";port=".$this->_port.";dbname=".$this->_db_name.";charset=".$this->_charset;
 
-		$this->_connection = new PDO($dsn_, $username_, $userpass_) Or die("Error On DB Connection : PDO");
+		$this->_connection = new PDO($dsn_, $this->_username, $this->_userpass) Or die("Error On DB Connection : PDO");
 		$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		return isset($this->_connection);

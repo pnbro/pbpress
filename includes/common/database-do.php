@@ -93,7 +93,6 @@ class PBDB_DO extends ArrayObject{
 	private $_pbdb;
 	private $_fields = array();
 	private $_keys = array();
-	private $_indexes = array();
 	private $_custom_fks = array();
 
 	function __construct($table_, $fields_, $comment_ = null, $engine_ = "InnoDB", $pbdb_ = null){
@@ -112,8 +111,6 @@ class PBDB_DO extends ArrayObject{
 		foreach($this->_fields as $column_name_ => $field_data_){
 			if(isset($field_data_['pk']) && !!$field_data_['pk']){
 				$this->_keys[] = $column_name_;
-			}else if(isset($field_data_['index']) && !!$field_data_['index']){
-				$this->_indexes[] = $column_name_;
 			}
 		}
 
@@ -166,17 +163,7 @@ class PBDB_DO extends ArrayObject{
 
 			$key_query_[] = "PRIMARY KEY (".implode(",", $pk_str_).")";
 		}
-		if(count($this->_indexes) > 0){
-			$index_str_ = [];
-			foreach($this->_indexes as $column_name_){
-				$key_query_[] = "INDEX `{$this->_table_name}_index_{$column_name_}` (`{$column_name_}`)";
-			}
-
-			
-		}
-
-		$fk_index_ = 0;
-
+		
 		foreach($this->_fields as $column_name_ => $field_data_){
 			$type_ = isset($field_data_['type']) ? $field_data_['type'] : PBDB_DO::TYPE_VARCHAR;
 			$length_ = isset($field_data_['length']) ? $field_data_['length'] : null;
@@ -206,40 +193,9 @@ class PBDB_DO extends ArrayObject{
 				$field_str_ .= 	"COMMENT '{$comment_}' ";
 			}
 
-			if(isset($field_data_['fk'])){
-
-				$target_table_ = $field_data_['fk']['table'];
-				$target_column_ = $field_data_['fk']['column'];
-				$on_delete_ = isset($field_data_['fk']['delete']) ? $field_data_['fk']['delete'] : PBDB_DO::FK_NOACTION;
-				$on_update_ = isset($field_data_['fk']['update']) ? $field_data_['fk']['update'] : PBDB_DO::FK_NOACTION;
-
-				++$fk_index_;
-
-				$key_query_[] = "CONSTRAINT `{$this->_table_name}_fk{$fk_index_}` FOREIGN KEY (`{$column_name_}`) REFERENCES `{$target_table_}` (`{$target_column_}`) ON DELETE {$on_delete_} ON UPDATE {$on_update_}";
-			}
-
 			$field_query_[] = trim($field_str_);
 		}
 
-		foreach($this->_custom_fks as $custom_fk_data_){
-			$target_table_ = $custom_fk_data_['table'];
-			$from_columns_ = explode(",", $custom_fk_data_['from']);
-			$to_columns_ = explode(",", $custom_fk_data_['to']);
-
-			$on_update_ = $custom_fk_data_['update'];
-			$on_delete_ = $custom_fk_data_['delete'];
-
-			++$fk_index_;
-
-			foreach($from_columns_ as &$t_column_){
-				$t_column_ = "`{$t_column_}`";
-			}
-			foreach($to_columns_ as &$t_column_){
-				$t_column_ = "`{$t_column_}`";
-			}
-
-			$key_query_[] = "CONSTRAINT `{$this->_table_name}_fk{$fk_index_}` FOREIGN KEY (".implode(",", $from_columns_).") REFERENCES `{$target_table_}` (".implode(",", $to_columns_).") ON DELETE {$on_delete_} ON UPDATE {$on_update_}";
-		}
 
 
 		$query_ .= implode(",\n\r", array_merge($field_query_, $key_query_)). " \n\r";			
@@ -253,11 +209,18 @@ class PBDB_DO extends ArrayObject{
 
 	function _installed_tables(){
 		$fk_last_index_ = 0;
-		foreach($this->_fields as $column_name_ => $field_data_){
-			if(isset($field_data_['fk'])){
-				++$fk_last_index_;
-			}
-		}
+		$idx_last_index_ = 0;
+
+		$alter_queries_ = array();
+		$index_queries_ = array();
+		
+		$fk_maps_ = array();
+		$fk_queries_ = array();
+
+		$exists_indexes_ = $this->_pbdb->serialize_column("
+			SELECT index_name FROM INFORMATION_SCHEMA.STATISTICS
+			WHERE table_schema= '".$this->_pbdb->db_connection()->db_name()."' AND table_name='".$this->_table_name."'
+		", "index_name");
 
 		foreach($this->_fields as $column_name_ => $field_data_){
 			if(isset($field_data_['check_exists']) && !!$field_data_['check_exists']){
@@ -271,10 +234,11 @@ class PBDB_DO extends ArrayObject{
 					$pk_ = isset($field_data_['pk']) ? $field_data_['pk'] : false;
 					$default_ = isset($field_data_['default']) ? $field_data_['default'] : null;
 					$auto_increment_ = isset($field_data_['ai']) ? $field_data_['ai'] : false;
+					$add_index_ = isset($field_data_['index']) ? $field_data_['index'] : false;
 
 					if(!!$pk_) continue;
 
-					$query_ = "ALTER TABLE {$this->_table_name} ADD `{$column_name_}` {$type_}".(strlen($length_) ? "({$length_})" : "")." ";
+					$query_ = "ADD `{$column_name_}` {$type_}".(strlen($length_) ? "({$length_})" : "")." ";
 
 					if($not_null_ || $pk_){
 						$query_ .= "NOT NULL ";
@@ -294,22 +258,71 @@ class PBDB_DO extends ArrayObject{
 						$query_ .= 	"COMMENT '{$comment_}' ";
 					}
 
-					if(isset($field_data_['fk'])){
-						++$fk_last_index_;
 
-						$target_table_ = $field_data_['fk']['table'];
-						$target_column_ = $field_data_['fk']['column'];
-						$on_delete_ = isset($field_data_['fk']['delete']) ? $field_data_['fk']['delete'] : PBDB_DO::FK_NOACTION;
-						$on_update_ = isset($field_data_['fk']['update']) ? $field_data_['fk']['update'] : PBDB_DO::FK_NOACTION;
-
-						$query_ .= 	", ADD CONSTRAINT `{$this->_table_name}_fk{$fk_last_index_}` FOREIGN KEY (`{$column_name_}`) REFERENCES `{$target_table_}` (`{$target_column_}`) ON DELETE {$on_delete_} ON UPDATE {$on_update_}";
-
-					}
-
-					$this->_pbdb->query($query_);
+					$alter_queries_[] = $query_;
 				}
 
 			}
+
+			//fk 생성
+			if(isset($field_data_['fk'])){
+				$fk_data_ = $field_data_['fk'];
+				$fk_data_['from'] = isset($fk_data_['from']) ? $fk_data_['from'] : $column_name_;
+				$fk_maps_[] = $fk_data_;
+			}
+
+			//index 생성
+			if(isset($field_data_['index'])){
+				$index_name_ = "{$this->_table_name}_idx".($idx_last_index_ + 1);
+
+				if(in_array($index_name_, $exists_indexes_) !== false) continue;
+
+				++$idx_last_index_;
+
+				
+				$use_btree_ = false;
+				$sort_ = "ASC";
+				$keysize_ = null;
+				$parser_ = null;
+
+				if(gettype($field_data_['index']) === "array"){
+					$use_btree_ = isset($field_data_['index']['use_btree']) ? $field_data_['index']['use_btree'] : false;
+					$sort_ = isset($field_data_['index']['sort']) ? $field_data_['index']['sort'] : "ASC";
+					$keysize_ = isset($field_data_['index']['keysize']) ? $field_data_['index']['keysize'] : null;
+					$parser_ = isset($field_data_['index']['parser']) ? $field_data_['index']['parser'] : null;
+				}
+
+				$index_queries_[$index_name_] = "ADD INDEX `{$index_name_}` ".($use_btree_ ? "USING BTREE" : "")." (`{$column_name_}` {$sort_}) ".(strlen($keysize_) ? "KEY_BLOCK_SIZE=".$keysize_ : "")." ".(strlen($parser_) ? "PARSER ".$parser_ : "")." ";
+			}
+		}
+
+		$fk_maps_ = array_merge($fk_maps_, $this->_custom_fks);
+
+		foreach($fk_maps_ as $fk_data_){
+			$fk_name_ = "{$this->_table_name}_fk".($fk_last_index_+1);
+			if(in_array($fk_name_, $exists_indexes_) !== false) continue;
+
+			++$fk_last_index_;
+			
+			$target_table_ = $fk_data_['table'];
+			$from_column_ = isset($fk_data_['from']) ? $fk_data_['from'] : $column_name_;
+			$target_column_ = $fk_data_['column'];
+			$on_delete_ = isset($fk_data_['delete']) ? $fk_data_['delete'] : PBDB_DO::FK_NOACTION;
+			$on_update_ = isset($fk_data_['update']) ? $fk_data_['update'] : PBDB_DO::FK_NOACTION;
+
+			$fk_queries_[$fk_name_] = "ADD CONSTRAINT `{$fk_name_}` FOREIGN KEY (`{$from_column_}`) REFERENCES `{$target_table_}` (`{$target_column_}`) ON DELETE {$on_delete_} ON UPDATE {$on_update_}";
+		}
+
+		if(count($alter_queries_) > 0){
+			$this->_pbdb->query("ALTER TABLE `".$this->_table_name."` ".implode(",", $alter_queries_)." ");	
+		}
+
+		if(count($fk_queries_) > 0){
+			$this->_pbdb->query("ALTER TABLE `".$this->_table_name."` ".implode(",", $fk_queries_)." ");
+		}
+
+		if(count($index_queries_) > 0){
+			$this->_pbdb->query("ALTER TABLE `".$this->_table_name."` ".implode(",", $index_queries_)." ");
 		}
 
 	}

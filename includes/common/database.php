@@ -12,6 +12,13 @@ abstract class PBDatabase_connection{
 
 	private $_last_query = null;
 	private $_last_query_parameters = null;
+
+	abstract public function host();
+	abstract public function port();
+	abstract public function db_name();
+	abstract public function charset();
+	abstract public function username();
+	abstract public function userpass();
 	
 	function __construct($connection_type_){
 		$this->_connection_type = $connection_type_;
@@ -110,6 +117,10 @@ class PBDB{
 		$this->_db_connection = $db_connection_;
 	}
 
+	function db_connection(){
+		return $this->_db_connection;
+	}
+
 	function query($query_, $values_ = array(), $types_ = array()){
 		$result_ = pb_hook_apply_filters("pb_database_query",$this->_db_connection->query($query_, $values_, $types_));
 		$last_error_ = $this->last_error();
@@ -163,6 +174,19 @@ class PBDB{
     	}
 
 		return null;
+	}
+
+	function serialize_column($query_, $column_name_, $values_ = array(), $types_ = array()){
+		$resources_ = $this->query($query_, $values_, $types_);
+
+		if(!isset($resources_)) return null;
+
+		$results_ = array();
+    	while($row_data_ = $this->_db_connection->fetch_array($resources_, PB_MYSQL_ASSOC)){
+			$results_[] = $row_data_[$column_name_];
+    	}
+
+		return $results_;
 	}
 
 	function insert($table_name_, $insert_data_, $insert_data_types_ = array()){

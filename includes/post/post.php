@@ -53,7 +53,7 @@ $posts_do = pbdb_data_object("posts", array(
 	'post_short'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => PB_POST_SHORT_LENGTH, "comment" => "글(줄임)"),
 	'featured_image_path'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 500, "comment" => "대표이미지"),
 
-	'status'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "comment" => "글상태(PA001)"),
+	'status'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "index" => true, "comment" => "글상태(PA001)"),
 	'wrt_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
 		'table' => 'users',
 		'column' => 'id',

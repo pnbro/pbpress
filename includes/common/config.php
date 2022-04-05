@@ -23,10 +23,6 @@ class PBConfig{
 	public $crypt_algorithm = "sha256";
 	public $crypt_bits = 2048;
 
-	public $crypt_static_key_size = 32;
-	public $crypt_static_iv_size = 16;
-	public $crypt_static_cipher_mode = 'AES-256-CBC';
-
 	public $wysiwyg_editor;
 	public $file_upload_handler = "default";
 
@@ -66,10 +62,6 @@ class PBConfig{
 		$this->crypt_algorithm = (defined("PB_CRYPT_ALGORITHM")) ? PB_CRYPT_ALGORITHM : "sha256";
 		$this->crypt_bits = (defined("PB_CRYPT_BITS")) ? PB_CRYPT_BITS : 2048;
 
-		$this->pb_crypt_static_key_size = (defined("PB_CRYPT_STATIC_KEY_SIZE")) ? PB_CRYPT_STATIC_KEY_SIZE : 32;
-		$this->pb_crypt_static_iv_size = (defined("PB_CRYPT_STATIC_IV_SIZE")) ? PB_CRYPT_STATIC_IV_SIZE : 16;
-		$this->pb_crypt_static_cipher_mode = (defined("PB_CRYPT_STATIC_CIPHER_MODE")) ? PB_CRYPT_STATIC_CIPHER_MODE : 'AES-256-CBC';
-
 		$this->wysiwyg_editor = (defined("PB_WYSIWYG_EDITOR")) ? PB_WYSIWYG_EDITOR : "summernote";
 		$this->file_upload_handler = (defined("PB_FILE_UPLOAD_HANDLER")) ? PB_FILE_UPLOAD_HANDLER : "default";
 
@@ -93,8 +85,15 @@ class PBConfig{
 
 		$this->session_cookie_domain = trim($this->session_cookie_domain,"/");
 
+		$https_ = false;
+		if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
+			$https_ = true;
+		}elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on'){
+			$https_ = true;
+		}
+
 		$this->session_cookie_samesite = (defined("PB_SESSION_COOKIE_SAMESITE")) ? PB_SESSION_COOKIE_SAMESITE : 'Lax';
-		$this->session_cookie_secure = (defined("PB_SESSION_COOKIE_SECURE")) ? PB_SESSION_COOKIE_SECURE : null;
+		$this->session_cookie_secure = (defined("PB_SESSION_COOKIE_SECURE")) ? PB_SESSION_COOKIE_SECURE : $https_;
 		$this->session_cookie_httponly = (defined("PB_SESSION_COOKIE_HTTPONLY")) ? PB_SESSION_COOKIE_HTTPONLY : null;
 
 		$this->session_save_path = (defined("PB_SESSION_SAVE_PATH")) ? PB_SESSION_SAVE_PATH : session_save_path();

@@ -41,9 +41,6 @@ $(document).ajaxComplete(function(event_, xhr_, settings_){
 	}else{
 		console.log(response_text_);
 	}
-	
-
-	
 });
 </script>
 	<?php

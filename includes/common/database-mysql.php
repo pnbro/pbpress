@@ -7,6 +7,33 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 	private $_last_error_message = null;
 	private $_last_error_trace = null;
 
+	private $_host = null;
+	private $_port = null;
+	private $_db_name = null;
+	private $_charset = null;
+	private $_username = null;
+	private $_userpass = null;
+
+	public function host(){
+		return $this->_host;
+	}
+	public function port(){
+		return $this->_port;
+	}
+	public function db_name(){
+		return $this->_db_name;
+	}
+	public function charset(){
+		return $this->_charset;
+	}
+	public function username(){
+		return $this->_username;
+	}
+	public function userpass(){
+		return $this->_userpass;
+	}
+
+
 	function __construct(){
 		parent::__construct("mysql");
 	}
@@ -18,17 +45,17 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 
 		global $pb_config;
 
-		$host_ = @strlen($options_['host']) ? $options_['host'] : $pb_config->db_host;
-		$port_ = @strlen($options_['port']) ? $options_['port'] : $pb_config->db_port;
-		$db_name_ = @strlen($options_['db_name']) ? $options_['db_name'] : $pb_config->db_name;
-		$charset_ = @strlen($options_['charset']) ? $options_['charset'] : $pb_config->db_charset;
-		$username_ = @strlen($options_['username']) ? $options_['username'] : $pb_config->db_username;
-		$userpass_ = @strlen($options_['userpass']) ? $options_['userpass'] : $pb_config->db_userpass;
+		$this->_host = @strlen($options_['host']) ? $options_['host'] : $pb_config->db_host;
+		$this->_port = @strlen($options_['port']) ? $options_['port'] : $pb_config->db_port;
+		$this->_db_name = @strlen($options_['db_name']) ? $options_['db_name'] : $pb_config->db_name;
+		$this->_charset = @strlen($options_['charset']) ? $options_['charset'] : $pb_config->db_charset;
+		$this->_username = @strlen($options_['username']) ? $options_['username'] : $pb_config->db_username;
+		$this->_userpass = @strlen($options_['userpass']) ? $options_['userpass'] : $pb_config->db_userpass;
 
-		$this->_connection = @mysql_connect($host_.":".$port_, $username_, $userpass_, true) Or die("Error On DB Connection : MYSQL");
+		$this->_connection = @mysql_connect($this->_host.":".$this->_port, $this->_username, $this->_userpass, true) Or die("Error On DB Connection : MYSQL");
 
-		mysql_select_db($db_name_) Or die("Error On Select DB : MYSQL");
-		mysql_set_charset($charset_, $this->_connection);
+		mysql_select_db($this->_db_name) Or die("Error On Select DB : MYSQL");
+		mysql_set_charset($this->_charset, $this->_connection);
 
 		return isset($this->_connection);
 	}

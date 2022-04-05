@@ -7,6 +7,9 @@ if(!defined('PB_DOCUMENT_PATH')){
 //load common modules
 require(PB_DOCUMENT_PATH . 'includes/includes.php');
 
+//check install pbress
+global $pbdb, $pb_config;
+
 pb_hook_do_action("pb_before_init");
 
 //check install
@@ -17,9 +20,6 @@ if(!$pbdb->exists_table("options")){
 }
 
 ini_set('default_charset', $pb_config->charset);
-
-//check install pbress
-global $pbdb, $pb_config;
 
 //check rewrite rule
 if(!pb_exists_rewrite()){

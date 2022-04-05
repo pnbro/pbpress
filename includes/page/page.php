@@ -11,7 +11,7 @@ $pages_do = pbdb_data_object("pages", array(
 	'page_title'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 200, "nn" => true, "comment" => "페이지명"),
 	'page_html'		 => array("type" => PBDB_DO::TYPE_LONGTEXT, "comment" => "페이지HTML"),
 
-	'status'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "comment" => "페이지상태(PA001)"),
+	'status'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "index" => true, "comment" => "페이지상태(PA001)"),
 	'wrt_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
 		'table' => 'users',
 		'column' => 'id',

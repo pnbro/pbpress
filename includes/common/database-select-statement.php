@@ -682,13 +682,8 @@ class PBDB_select_statement{
 		return $this->_pbdb->select($result_['query'], $result_['values'], $result_['types']);
 	}
 	function serialize_column($column_name_, $order_by_ = null, $limit_ = null){
-		$temp_ = $this->select($order_by_, $limit_);
-		$results_ = array();
-
-		foreach($temp_ as $row_data_){
-			$results_[] = $row_data_[$column_name_];
-		}
-		return $results_;
+		$result_ = $this->build($order_by_, $limit_);
+		return $this->_pbdb->serialize_column($result_['query'], $column_name_, $result_['values'], $result_['types']);
 	}
 	function get_var($order_by_ = null, $limit_ = null){
 		$result_ = $this->build($order_by_, $limit_);
