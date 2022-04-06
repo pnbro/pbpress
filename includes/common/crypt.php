@@ -92,15 +92,11 @@ function pb_static_crypt_encrypt($plaintext_, $password_ = null){
 		$password_ = $pb_config->crypt_password;
 	}
 
-	$iv_ = pb_random_string($pb_config->pb_crypt_static_iv_size);
-	
-	$length_ = $pb_config->pb_crypt_static_iv_size - strlen($plaintext_) % $pb_config->pb_crypt_static_iv_size;
-    $pad_data_ =  $plaintext_ . str_repeat(chr($length_), $length_);
-
-	$encrypted_data_ = openssl_encrypt($pad_data_,$pb_config->pb_crypt_static_cipher_mode,$password_,0,$iv_);
-
+	$encryption_key_ = base64_decode($password_);
+	$iv_ = pb_random_string($pb_config->crypt_static_iv_size);
+	$encrypted_data_ = openssl_encrypt($plaintext_, $pb_config->crypt_static_cipher_mode, $encryption_key_, 0, $iv_);
 	return array(
-		'data' => $encrypted_data_,
+		'data' => base64_encode($encrypted_data_),
 		'iv' => $iv_,
 	);
 }
@@ -112,9 +108,10 @@ function pb_static_crypt_decrypt($encrypted_data_, $iv_, $password_ = null){
 		$password_ = $pb_config->crypt_password;
 	}
 
-	$result_ = openssl_decrypt($encrypted_data_, $pb_config->pb_crypt_static_cipher_mode, $password_, 0, $iv_);
+	$encryption_key_ = base64_decode($password_);
+	$encrypted_data_ = base64_decode($encrypted_data_);
 
-	return $result_;
+	return openssl_decrypt($encrypted_data_, $pb_config->crypt_static_cipher_mode, $encryption_key_, 0, $iv_);
 }
 
 function _pb_crypt_load_scripts(){
