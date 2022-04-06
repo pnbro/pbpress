@@ -53,8 +53,6 @@ ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
 
 register_shutdown_function('session_write_close');
 
-@session_start();
-
 class PBSession{
 	function __construct(){
 		global $pb_config;
@@ -128,5 +126,9 @@ function pb_cookie_remove($key_){
 	global $pb_cookie;
 	return $pb_cookie->remove($key_);
 }
+
+pb_hook_add_action('pb_init|pb_admin_init', function(){
+	session_start();
+});
 
 ?>
