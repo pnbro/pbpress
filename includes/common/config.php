@@ -33,7 +33,9 @@ class PBConfig{
 	private $use_https = false;
 
 	private $session_manager = null;
-	private $session_cookie_domain = null;
+	
+	private $session_cookie_max_time;
+	private $session_cookie_domain;
 	private $session_cookie_samesite;
 	private $session_cookie_secure;
 	private $session_cookie_httponly;
@@ -91,6 +93,8 @@ class PBConfig{
 
 		$this->session_cookie_domain = trim($this->session_cookie_domain,"/");
 
+		
+		$this->session_cookie_max_time = (defined("PB_SESSION_COOKIE_MAX_TIME")) ? PB_SESSION_COOKIE_MAX_TIME : 60 * 60 * 60 * 3;
 		$this->session_cookie_samesite = (defined("PB_SESSION_COOKIE_SAMESITE")) ? PB_SESSION_COOKIE_SAMESITE : 'Lax';
 		$this->session_cookie_secure = (defined("PB_SESSION_COOKIE_SECURE")) ? PB_SESSION_COOKIE_SECURE : null;
 		$this->session_cookie_httponly = (defined("PB_SESSION_COOKIE_HTTPONLY")) ? PB_SESSION_COOKIE_HTTPONLY : null;
@@ -119,10 +123,12 @@ class PBConfig{
 		return $this->session_manager;
 	}
 
+	public function session_cookie_max_time(){
+		return $this->session_cookie_max_time;
+	}
 	public function session_cookie_domain(){
 		return $this->session_cookie_domain;
 	}
-
 	public function session_cookie_samesite(){
 		return $this->session_cookie_samesite;
 	}

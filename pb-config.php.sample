@@ -49,6 +49,7 @@ define("PB_WYSIWYG_EDITOR", "summernote"); // trumbowyg or summernote
 // define("PB_SESSION_COOKIE_SAMESITE", 'Lax');
 // define("PB_SESSION_COOKIE_SECURE", null);
 // define("PB_SESSION_COOKIE_HTTPONLY", null);
+// define("PB_SESSION_COOKIE_MAX_TIME", 60 * 60 * 60 * 3);
 
 define("PB_SESSION_MANAGER", "default"); //default, database or class name;
 define("PB_SESSION_MAX_TIME", 60 * 60 * 60 * 3);

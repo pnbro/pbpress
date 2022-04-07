@@ -31,7 +31,7 @@ if(PHP_VERSION_ID < 70300){
 	$cookie_save_path_ = '/;SameSite='.$pb_config->session_cookie_samesite();
 
 	session_set_cookie_params(
-		$pb_config->session_max_time(),
+		$pb_config->session_cookie_max_time(),
 		$cookie_save_path_,
 		$pb_config->session_cookie_domain(),
 		$pb_config->session_cookie_secure(),
@@ -39,7 +39,7 @@ if(PHP_VERSION_ID < 70300){
 	);
 }else{
 	session_set_cookie_params(array(
-		'lifetime' => $pb_config->session_max_time(),
+		'lifetime' => $pb_config->session_cookie_max_time(),
 		'path' => '/',
 		'domain' => $pb_config->session_cookie_domain(),
 		'samesite' => $pb_config->session_cookie_samesite(),
@@ -47,9 +47,6 @@ if(PHP_VERSION_ID < 70300){
 		'httponly' => $pb_config->session_cookie_httponly(),
 	));
 }
-
-ini_set('session.cache_expire', $pb_config->session_max_time());
-ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
 
 register_shutdown_function('session_write_close');
 
@@ -71,8 +68,6 @@ class PBSession{
 	    unset($_SESSION[$key_]);
 	    return $_SESSION;
 	}
-
-
 }
 
 class PBCookie{
@@ -127,8 +122,7 @@ function pb_cookie_remove($key_){
 	return $pb_cookie->remove($key_);
 }
 
-pb_hook_add_action('pb_init|pb_admin_init', function(){
-	session_start();
-});
+ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
+session_start();
 
 ?>
