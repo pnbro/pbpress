@@ -6,19 +6,19 @@
 	$keyword_ = _GET('keyword');
 ?>
 
-<h3>사용자내역</h3>
+<h3><?=__('사용자내역')?></h3>
 
 <form method="GET" id="pb-user-listtable-form" class="pb-easytable-group">
 
 	<div class="pb-easytable-conditions">
 		<div class="left-frame">
-			<a href="<?=pb_admin_url("manage-user/add")?>" class="btn btn-default">사용자 추가</a>
+			<a href="<?=pb_admin_url("manage-user/add")?>" class="btn btn-default"><?=__('사용자 추가')?></a>
 		</div>
 		<div class="right-frame">
 			<div class="input-group">
-				<input type="text" class="form-control" placeholder="통합검색" name="keyword" value="<?=$keyword_?>">
+				<input type="text" class="form-control" placeholder="<?=__('통합검색')?>" name="keyword" value="<?=$keyword_?>">
 				<span class="input-group-btn">
-					<button type="submit" class="btn btn-default" type="button">검색하기</button>
+					<button type="submit" class="btn btn-default" type="button"><?=__('검색하기')?></button>
 				</span>
 			</div>
 		</div>

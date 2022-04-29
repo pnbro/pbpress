@@ -31,7 +31,7 @@ class PBPageBuilderElement_row extends PBPageBuilderElement{
 		?>
 
 		<div class="form-group">
-			<label>컬럼누나기</label>
+			<label><?=__('컬럼나누기')?></label>
 			<input type="text" name="columns" class="form-control" value="<?=$columns_?>" id="<?=$temp_form_id_?>">
 			<div class="help-block">
 				<a href="javascript:_pb_update_row_column('#<?=$temp_form_id_?>', '3:3:3:3')" class="badge">3:3:3:3</a>
@@ -42,11 +42,11 @@ class PBPageBuilderElement_row extends PBPageBuilderElement{
 			</div>
 		</div>
 		<div class="form-group">
-			<label>수직정렬</label>
+			<label><?=__('수직정렬')?></label>
 			<select class="form-control" name="valign">
-				<option value="top" <?=pb_selected($valign_, "top")?>>위로</option>
-				<option value="middle" <?=pb_selected($valign_, "middle")?>>중간으로</option>
-				<option value="bottom" <?=pb_selected($valign_, "bottom")?>>아래로</option>
+				<option value="top" <?=pb_selected($valign_, "top")?>><?=__('위로')?></option>
+				<option value="middle" <?=pb_selected($valign_, "middle")?>><?=__('중간으로')?></option>
+				<option value="bottom" <?=pb_selected($valign_, "bottom")?>><?=__('아래로')?></option>
 			</select>
 		</div>
 
@@ -96,31 +96,31 @@ class PBPageBuilderElement_column extends PBPageBuilderElement{
 
 		
 
-			<h3>컬럼크기</h3>
+			<h3><?=__('컬럼크기')?></h3>
 			<div class="row">
 				<div class="col-xs-6 col-sm-3"><div class="form-group">
-					<label>기본</label>
+					<label><?=__('기본')?></label>
 					<input type="text" readonly value="<?=$element_data_['column_width']?>" class="form-control" name="column_width">
 				</div></div>
 				<div class="col-xs-6 col-sm-3"><div class="form-group">
-					<label>작은PC화면</label>
+					<label><?=__('작은PC화면')?></label>
 					<select class="form-control" name="column_width_md">
-						<option value="">생략</option>
+						<option value=""><?=__('생략')?></option>
 						<?php _pb_draw_column_options($column_width_md_); ?>
 					</select>
 				</div></div>
 				<div class="col-xs-6 col-sm-3"><div class="form-group">
-					<label>태블릿</label>
+					<label><?=__('태블릿')?></label>
 					<select class="form-control" name="column_width_sm">
-						<option value="">생략</option>
+						<option value=""><?=__('생략')?></option>
 						<?php _pb_draw_column_options($column_width_sm_); ?>
 					</select>
 				</div></div>
 				<div class="col-xs-6 col-sm-3"><div class="form-group">
 					<div class="form-margin-xs visible-xs"></div>
-					<label>모바일</label>
+					<label><?=__('모바일')?></label>
 					<select class="form-control" name="column_width_xs">
-						<option value="">생략</option>
+						<option value=""><?=__('생략')?></option>
 						<?php _pb_draw_column_options($column_width_xs_); ?>
 					</select>
 				</div></div>
@@ -135,8 +135,8 @@ class PBPageBuilderElement_column extends PBPageBuilderElement{
 }
 
 pb_page_builder_add_element("row", array(
-	'name' => "행",
-	'desc' => "기본적인 행 요소",
+	'name' => __("행"),
+	'desc' => __("기본적인 행 요소"),
 	'icon' => PB_LIBRARY_URL."img/page-builder/row.jpg",
 	'element_object' => "PBPageBuilderElement_row",
 	'edit_categories' => array("common", "styles"),
@@ -154,18 +154,18 @@ pb_page_builder_add_element("row", array(
 			'name' => 'valign',
 			'type' => 'select',
 			'values' => array(
-				'top' => '수직정렬 : 위쪽',
-				'middle' => '수직정렬 : 중앙',
-				'bottom' => '수직정렬 : 아래쪽',
+				'top' => __('수직정렬 : 위쪽'),
+				'middle' => __('수직정렬 : 중앙'),
+				'bottom' => __('수직정렬 : 아래쪽'),
 			),
 			'display' => 'inline',
 		)
 	),
-	'category' => "기본",
+	'category' => __("기본"),
 ));
 
 pb_page_builder_add_element("column", array(
-	'name' => "컬럼",
+	'name' => __("컬럼"),
 	'icon' => PB_LIBRARY_URL."img/page-builder/row.jpg",
 	'element_object' => "PBPageBuilderElement_column",
 	'edit_categories' => array("common", "styles"),
@@ -174,7 +174,7 @@ pb_page_builder_add_element("column", array(
 	'children' => array("*", "!container"),
 	'parent' => array("row"),
 	'only_in_parent' => true,
-	'category' => "기본",
+	'category' => __("기본"),
 ));
 
 ?>

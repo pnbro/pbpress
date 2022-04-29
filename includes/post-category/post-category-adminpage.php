@@ -11,13 +11,13 @@ function _pb_post_category_register_adminpage($results_){
 	foreach($post_types_ as $key_ => $type_data_){
 		if($type_data_['use_category']){
 			$results_["{$key_}"] = array(
-				'name' => "{$type_data_['name']} 관리",
+				'name' => sprintf(__("%s 관리"), $type_data_['name']),
 				'type' => 'directory',
 				'sort' => isset($type_data_['adminpage_sort']) ? $type_data_['adminpage_sort'] : 99,
 			);
 
 			$results_["manage-{$key_}-categories"] = array(
-				'name' => "{$type_data_['name']} 분류 관리",
+				'name' => sprintf(__("%s 분류 관리"), $type_data_['name']),
 				'type' => 'menu',
 				'directory' => $key_,
 				'post_type' => $key_,
@@ -48,14 +48,14 @@ function _pb_post_category_rewrite_handler_for_adminpage($rewrite_path_){
 	$pbpost_type_data = isset($post_types_[$post_type_]) ? $post_types_[$post_type_] : null;
 
 	if(!isset($pbpost_type_data)){
-		return new PBError(503, "잘못된 접근", "존재하지 않는 글형식입니다.");
+		return new PBError(503, __("잘못된 접근"), __("존재하지 않는 글형식입니다."));
 	}
 	
 	if(count($rewrite_path_) < 2){
 		return PB_DOCUMENT_PATH."includes/post-category/views/list.php";
 	}
 
-	return new PBError(503, "잘못된 접근", "요청정보가 잘못됬습니다.");
+	return new PBError(503, __("잘못된 접근"), __("요청정보가 잘못됬습니다."));
 }
 
 pb_add_ajax('pb-admin-post-category-load', function(){
@@ -63,7 +63,7 @@ pb_add_ajax('pb-admin-post-category-load', function(){
 	$target_data_ = pb_post_category($ctg_id_);
 
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_".$target_data_['type'])){
-		pb_ajax_error("권한없음", "접근권한이 없습니다.");
+		pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
 	}
 	
 	pb_ajax_success(array(
@@ -75,7 +75,7 @@ pb_add_ajax('pb-admin-post-category-insert', function(){
 	$target_data_ = _POST("target_data");
 	
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_".$target_data_['type'])){
-		pb_ajax_error("권한없음", "접근권한이 없습니다.");
+		pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
 	}
 
 	$target_data_['reg_date'] = pb_current_time();
@@ -94,7 +94,7 @@ pb_add_ajax('pb-admin-post-category-update', function(){
 	$before_data_ = pb_post_category($ctg_id_);
 
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_".$before_data_['type'])){
-		pb_ajax_error("권한없음", "접근권한이 없습니다.");
+		pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
 	}
 
 	pb_post_category_edit($ctg_id_, $target_data_);
@@ -109,7 +109,7 @@ pb_add_ajax('pb-admin-post-category-delete', function(){
 	$before_data_ = pb_post_category($ctg_id_);
 
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_".$before_data_['type'])){
-		pb_ajax_error("권한없음", "접근권한이 없습니다.");
+		pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
 	}
 
 	pb_post_category_delete($ctg_id_);

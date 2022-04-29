@@ -1,4 +1,6 @@
 pb-config.php
+plugins/ajax-console
+plugins/multilingual-mapper
 uploads
 extensions
 node_modules

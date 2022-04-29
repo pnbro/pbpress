@@ -18,7 +18,7 @@
 window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 </script>
 <script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/manage-menu/edit.js"></script>
-<h3>메뉴 수정하기</h3>
+<h3><?=__('메뉴 수정하기')?></h3>
 
 
 <div class="pb-menu-item-edit-modal modal fade" tabindex="-1" role="dialog" id="pb-menu-item-edit-modal"><div class="modal-dialog" role="document">
@@ -26,7 +26,7 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 	<div class="modal-content">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title">메뉴항목수정하기</h4>
+			<h4 class="modal-title"><?=__('메뉴항목수정하기')?></h4>
 		</div>
 		<div class="modal-body" data-menu-item-edit-body>
 			<form id="pb-menu-item-edit-modal-form" method="POST"></form>
@@ -34,8 +34,8 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 
 		</div>
 		<div class="modal-footer">
-			<a href="" class="btn btn-default" data-dismiss="modal">취소</a>
-			<button type="button" class="btn btn-primary" data-submit-btn>변경사항 저장</button>
+			<a href="" class="btn btn-default" data-dismiss="modal"><?=__('취소')?></a>
+			<button type="button" class="btn btn-primary" data-submit-btn><?=__('변경사항 저장')?></button>
 		</div>
 	</div>
 </div></div>
@@ -49,13 +49,13 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<select class="form-control input-lg" name="menu_id" data-menu-selector>
-						<optgroup label="등록된 메뉴" data-menu-list-option-group>
+						<optgroup label="<?=__('등록된 메뉴')?>" data-menu-list-option-group>
 							<?php foreach($menu_list_ as $menu_data_){ ?>
 									<option value="<?=$menu_data_['id']?>" <?=pb_selected($last_menu_id_,$menu_data_['id'])?>><?=$menu_data_['title']?></option>
 							<?php } ?>
 						</optgroup>
-						<optgroup label="새로운 메뉴 등록">
-							<option value="-9" data-add-new-menu-option="Y">새로운 메뉴 등록하기</option>
+						<optgroup label="<?=__('새로운 메뉴 등록')?>">
+							<option value="-9" data-add-new-menu-option="Y"><?=__('새로운 메뉴 등록하기')?></option>
 						</optgroup>
 						
 						
@@ -68,8 +68,8 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 						<div class="row">
 							<div class="col-xs-12 col-sm-6">
 								<div class="form-group">
-									<label>메뉴명</label>
-									<input type="text" name="menu_title" placeholder="메뉴명 입력" class="form-control" required data-error="메뉴명을 입력하세요">
+									<label><?=__('메뉴명')?></label>
+									<input type="text" name="menu_title" placeholder="<?=__('메뉴명 입력')?>" class="form-control" required data-error="<?=__('메뉴명을 입력하세요')?>">
 
 									<div class="help-block with-errors"></div>
 									<div class="clearfix"></div>
@@ -77,8 +77,8 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 							</div>
 							<div class="col-xs-12 col-sm-6">
 								<div class="form-group">
-									<label>메뉴슬러그</label>
-									<input type="text" name="menu_slug" placeholder="슬러그 입력" class="form-control">
+									<label><?=__('메뉴슬러그')?></label>
+									<input type="text" name="menu_slug" placeholder="<?=__('슬러그 입력')?>" class="form-control">
 
 									<div class="help-block with-errors"></div>
 									<div class="clearfix"></div>
@@ -87,16 +87,16 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 						</div>
 								
 						
-						<label>메뉴항목</label>
+						<label><?=__('메뉴항목')?></label>
 						<div class="menu-list-frame">
-							<div class="empty-text">우측에서 항목을 선택하여 추가하세요</div>
+							<div class="empty-text"><?=__('우측에서 항목을 선택하여 추가하세요')?></div>
 							<ul class="pb-menu-list" data-menu-list></ul>
 
 							
 						</div>
 					</div>
 					<div class="empty-frame">
-						위에서 수정할 메뉴를 먼저 선택하세요
+						<?=__('위에서 수정할 메뉴를 먼저 선택하세요')?>
 					</div>
 					<div class="loading-frame">
 						<div class="pb-loading-indicator"></div>

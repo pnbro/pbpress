@@ -7,13 +7,13 @@ if(!defined('PB_DOCUMENT_PATH')){
 function _pb_user_register_adminpage($results_){
 
 	$results_['user'] = array(
-		'name' => '사용자관리',
+		'name' => __('사용자관리'),
 		'type' => 'directory',
 		'sort' => 3,
 	);
 		
 	$results_['manage-user'] = array(
-		'name' => '사용자관리',
+		'name' => __('사용자관리'),
 		'type' => 'menu',
 		'directory' => 'user',
 		'page' => PB_DOCUMENT_PATH."includes/user/views/handler.php",
@@ -38,14 +38,14 @@ function _user_adminpage_rewrite_handler($rewrite_path_){
 
 			$user_id_ = isset($rewrite_path_[2]) ? $rewrite_path_[2] : null;
 			if(!isset($user_id_)){
-				return new PBError(503, "잘못된 접근", "잘못된 요청입니다.");
+				return new PBError(503, __("잘못된 접근"), __("잘못된 요청입니다."));
 			}
 
 			global $user_data;
 			$user_data = pb_user($user_id_);
 
 			if(!isset($user_data)){
-				return new PBError(503, "잘못된 접근", "존재하지 않는 사용자입니다.");
+				return new PBError(503, __("잘못된 접근"), __("존재하지 않는 사용자입니다."));
 			}
 
 			return (PB_DOCUMENT_PATH."includes/user/views/edit.php");
@@ -57,7 +57,7 @@ function _user_adminpage_rewrite_handler($rewrite_path_){
 			break;
 		default :
 
-			return new PBError(503, "잘못된 접근", "잘못된 요청입니다.");
+			return new PBError(503, __("잘못된 접근"), __("잘못된 요청입니다."));
 
 		break;
 	}
@@ -67,8 +67,8 @@ function _pb_ajax_admin_user_check_login(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_user")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -99,8 +99,8 @@ function _pb_ajax_admin_user_check_email(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_user")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -131,8 +131,8 @@ function _pb_ajax_admin_user_update(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_user")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -142,8 +142,8 @@ function _pb_ajax_admin_user_update(){
 	if(!pb_verify_request_token("pbpress_manage_user", $request_data_['_request_chip'])){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '에러발생',
-			'error_message' => '요청토큰이 잘못되었습니다.',
+			'error_title' => __('에러발생'),
+			'error_message' => __('요청토큰이 잘못되었습니다.'),
 		));
 		pb_end();	
 	}
@@ -198,8 +198,8 @@ function _pb_ajax_admin_user_add(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_user")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -209,8 +209,8 @@ function _pb_ajax_admin_user_add(){
 	if(!pb_verify_request_token("pbpress_manage_user", $request_data_['_request_chip'])){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => '에러발생',
-			'error_message' => '요청토큰이 잘못되었습니다.',
+			'error_title' => __('에러발생'),
+			'error_message' => __('요청토큰이 잘못되었습니다.'),
 		));
 		pb_end();	
 	}

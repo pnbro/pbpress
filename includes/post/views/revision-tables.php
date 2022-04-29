@@ -19,7 +19,7 @@ pb_easytable_register("pb-admin-post-revision-table", function($offset_, $per_po
 		'rseq' => true,
 	),
 	"reg_date_ymdhi" => array(
-		'name' => '리비젼일자',
+		'name' => __('리비젼일자'),
 		'class' => 'col-8',
 		'render' => function($table_, $item_, $post_index_){
 			?>
@@ -32,13 +32,13 @@ pb_easytable_register("pb-admin-post-revision-table", function($offset_, $per_po
 		'class' => 'col-2',
 		'render' => function($table_, $item_, $post_index_){
 			?>
-			<a href="javascript:pb_admin_revision_delete(<?=$item_['id']?>)" class="btn btn-default btn-sm">삭제</a>
+			<a href="javascript:pb_admin_revision_delete(<?=$item_['id']?>)" class="btn btn-default btn-sm"><?=__('삭제')?></a>
 			<?php
 		}
 	),
 ), array(
 	'class' => 'pb-admin-post-revision-table',
-	"no_rowdata" => "등록된 리비젼이 없습니다.",
+	"no_rowdata" => __("등록된 리비젼이 없습니다."),
 	'per_post' => 15,
 ));
 

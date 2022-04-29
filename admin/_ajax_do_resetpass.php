@@ -9,8 +9,8 @@ $request_data_ = _POST('request_data');
 if(!isset($request_data_)){
 	echo json_encode(array(
 		'success' => false,
-		'error_title' => '에러발생',
-		'error_message' => '요청값이 잘못되었습니다.',
+		'error_title' => __('에러발생'),
+		'error_message' => __('요청값이 잘못되었습니다.'),
 	));
 	pb_admin_end();	
 }
@@ -18,8 +18,8 @@ if(!isset($request_data_)){
 if(!pb_verify_request_token("pbpress_admin_resetpass", $request_data_['_request_chip'])){
 	echo json_encode(array(
 		'success' => false,
-		'error_title' => '에러발생',
-		'error_message' => '요청토큰이 잘못되었습니다.',
+		'error_title' => __('에러발생'),
+		'error_message' => __('요청토큰이 잘못되었습니다.'),
 	));
 	pb_admin_end();	
 }
@@ -33,8 +33,8 @@ $user_data_ = pb_user_by_user_email($user_email_);
 if(!isset($user_data_)){
 	echo json_encode(array(
 		'success' => false,
-		'error_title' => "비밀번호 재설정 실패",
-		'error_message' => "회원정보가 없습니다.",
+		'error_title' => __("비밀번호 재설정 실패"),
+		'error_message' => __("회원정보가 없습니다."),
 	));
 	pb_admin_end();	
 }

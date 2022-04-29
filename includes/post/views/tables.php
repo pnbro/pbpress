@@ -41,11 +41,11 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 			'seq' => true,
 		),
 		'category_names' => array(
-			'name' => '분류',
+			'name' => __('분류'),
 			'class' => 'col-2 text-center hidden-xs',
 		),
 		"post_title" => array(
-			'name' => '제목',
+			'name' => __('제목'),
 			'class' => 'col-6 link-action',
 			'render' => function($table_, $item_, $post_index_){
 				$post_url_ = pb_post_url($item_['id']);
@@ -70,9 +70,9 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 					<div class="url-link"><a href="<?=$post_url_?>" target="_blank"><?=$post_url_?></a></div>
 				<?php } ?>
 				<div class="subaction-frame">
-					<a href="<?=pb_admin_url("manage-{$post_type_}/edit/".$item_['id'])?>">수정</a>
+					<a href="<?=pb_admin_url("manage-{$post_type_}/edit/".$item_['id'])?>"><?=__('수정')?></a>
 					<?php pb_hook_do_action("pb_manage_post_listtable_subaction", $item_) ?>
-					<a href="javascript:pb_manage_post_remove('<?=$item_['id']?>');" class="text-danger">삭제</a>
+					<a href="javascript:pb_manage_post_remove('<?=$item_['id']?>');" class="text-danger"><?=__('삭제')?></a>
 				</div>
 
 				<div class="xs-visiable-info">
@@ -92,7 +92,7 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 			}
 		),
 		"status_name" => array(
-			'name' => '상태',
+			'name' => __('상태'),
 			'class' => 'col-1 text-center hidden-xs',
 			'render' => function($table_, $item_, $post_index_){
 				?>
@@ -119,7 +119,7 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 
 }, array(
 	'class' => 'pb-admin-post-table',
-	"no_rowdata" => "검색된 항목이 없습니다.",
+	"no_rowdata" => __("검색된 항목이 없습니다."),
 	'per_post' => 15,
 ));
 

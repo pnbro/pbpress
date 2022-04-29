@@ -15,8 +15,8 @@ if(!pb_hook_apply_filters('pb_fileupload_before', true)){
 if(empty($_FILES)){
 	echo json_encode(array(
 		'success' => false,
-		'error_title' =>"업로드실패",
-		'error_message' =>"업로드 파일이 비어있습니다.",
+		'error_title' =>__("업로드실패"),
+		'error_message' => __("업로드 파일이 비어있습니다."),
 	));
 	pb_end();
 }

@@ -95,7 +95,7 @@ function pb_post_revision_delete($id_){
 function pb_post_revision_write_from($post_id_){
 	$post_data_ = pb_post($post_id_);
 	if(!isset($post_data_)){
-		return new PBError(-1, "잘못된 요청", "글정보가 존재하지 않습니다.");
+		return new PBError(-1, __("잘못된 요청"), __("글정보가 존재하지 않습니다."));
 	}
 
 	pb_post_revision_insert(array(
@@ -108,13 +108,13 @@ function pb_post_revision_write_from($post_id_){
 function pb_post_restore_from_revision($post_id_, $revision_id_){
 	$post_data_ = pb_post($post_id_);
 	if(!isset($post_data_)){
-		return new PBError(-1, "잘못된 요청", "글정보가 존재하지 않습니다.");
+		return new PBError(-1, __("잘못된 요청"), __("글정보가 존재하지 않습니다."));
 	}
 
 	$revision_data_ = pb_post_revision($revision_id_);
 
 	if(!isset($revision_data_)){
-		return new PBError(-1, "잘못된 요청", "리비젼정보가 존재하지 않습니다.");
+		return new PBError(-1, __("잘못된 요청"), __("리비젼정보가 존재하지 않습니다."));
 	}	
 
 	pb_post_revision_write_from($post_id_);

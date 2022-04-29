@@ -81,19 +81,11 @@ class PBConfig{
 		$this->session_cookie_domain = (defined("PB_SESSION_COOKIE_DOMAIN")) ? PB_SESSION_COOKIE_DOMAIN : null;
 
 		if(!strlen($this->session_cookie_domain)){
-			$document_url_ = parse_url(PB_DOCUMENT_URL);
-			$document_url_ = $document_url_['host'];
-
-			$cookie_domain_ = (strpos($document_url_,"www.") !==false)? ".".preg_replace("/www./i","",$document_url_):".".$document_url_;
-			$cookie_domain_ = preg_replace("/:[0-9]+$/i","",$cookie_domain_);
-			$cookie_domain_ = trim($cookie_domain_, ".");
-
-			$this->session_cookie_domain = $cookie_domain_;
+			$this->session_cookie_domain = '.'.PB_DOCUMENT_DOMAIN;
 		}
 
 		$this->session_cookie_domain = trim($this->session_cookie_domain,"/");
 
-		
 		$this->session_cookie_max_time = (defined("PB_SESSION_COOKIE_MAX_TIME")) ? PB_SESSION_COOKIE_MAX_TIME : 60 * 60 * 60 * 3;
 		$this->session_cookie_samesite = (defined("PB_SESSION_COOKIE_SAMESITE")) ? PB_SESSION_COOKIE_SAMESITE : 'Lax';
 		$this->session_cookie_secure = (defined("PB_SESSION_COOKIE_SECURE")) ? PB_SESSION_COOKIE_SECURE : null;

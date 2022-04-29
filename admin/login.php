@@ -4,7 +4,7 @@ include(dirname( __FILE__ ) . "/includes.php");
 
 $redirect_url_ = _GET('redirect_url', pb_admin_url());
 
-$admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', "PBPress 로그인");
+$admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', __("PBPress 로그인"));
 
 ?><!DOCTYPE html>
 <html>
@@ -38,23 +38,23 @@ $admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', "PBPress �
 					<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_admin_login")?>">
 
 					<div class="form-group">
-						<label for="pb-login-form-user_login">ID 또는 이메일 <sup class="text-primary">*</sup></label>
-						<input type="text" name="user_login" placeholder="사용자ID 입력" id="pb-login-form-site_login" class="form-control" required data-error="사용자ID를 입력하세요">
+						<label for="pb-login-form-user_login"><?=__('ID 또는 이메일')?> <sup class="text-primary">*</sup></label>
+						<input type="text" name="user_login" placeholder="사용자ID 입력" id="pb-login-form-site_login" class="form-control" required data-error="<?=__('사용자ID를 입력하세요')?>">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>
 
 					<div class="form-group">
-						<label for="pb-login-form-user_pass">비밀번호 <sup class="text-primary">*</sup></label>
-						<input type="password" name="user_pass" placeholder="비밀번호 입력" id="pb-login-form-user_pass" class="form-control" required data-error="비밀번호 입력하세요">
+						<label for="pb-login-form-user_pass"><?=__('비밀번호')?> <sup class="text-primary">*</sup></label>
+						<input type="password" name="user_pass" placeholder="<?=__('비밀번호 입력')?>" id="pb-login-form-user_pass" class="form-control" required data-error="<?=__('비밀번호 입력하세요')?>">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>
 
 					<hr>
-					<button type="submit" class="btn btn-primary btn-block btn-lg">로그인</button>
+					<button type="submit" class="btn btn-primary btn-block btn-lg"><?=__('로그인')?></button>
 					<div class="bottom-frame text-center">
-						<a href="" data-toggle="modal" data-target="#pb-admin-login-findpass-modal">비밀번호 찾기</a>
+						<a href="" data-toggle="modal" data-target="#pb-admin-login-findpass-modal"><?=__('비밀번호 찾기')?></a>
 					</div>
 				</form>
 			</div>
@@ -65,22 +65,22 @@ $admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', "PBPress �
 		<div class="modal-dialog " role="document"><div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">비밀번호 찾기</h4>
+				<h4 class="modal-title"><?=__('비밀번호 찾기')?></h4>
 			</div>
 			<div class="modal-body"><form id="pb-admin-login-findpass-form" method="POST" >
 				
 				<div class="form-group">
 
-					<input type="mail" class="form-control" id="pb-admin-login-findpass-form-user-email" placeholder="가입하신 이메일 입력" name="user_email" required >
+					<input type="mail" class="form-control" id="pb-admin-login-findpass-form-user-email" placeholder="<?=__('가입하신 이메일 입력')?>" name="user_email" required >
 					<div class="help-block with-errors"></div>
-					<p class="help-block text-center">가입하신 이메일로 <br class="visible-xs" />암호를 재설정할 수 있습니다.</p>
+					<p class="help-block text-center"><?=__('가입하신 이메일로 암호를 재설정할 수 있습니다.')?></p>
 				
 				</div>
 
 				<hr>
 
 				<div class="form-margin-xs"></div>
-				<button type="submit" class="btn btn-primary btn-block btn-lg">전송하기</button>
+				<button type="submit" class="btn btn-primary btn-block btn-lg"><?=__('전송하기')?></button>
 				</div>
 			</form></div>
 			

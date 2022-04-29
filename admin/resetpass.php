@@ -2,7 +2,7 @@
 	
 include(dirname( __FILE__ ) . "/includes.php");
 
-$user_email_ = _GET('user_email'):
+$user_email_ = _GET('user_email');
 $vkey_ = _GET('vkey');
 
 if(!strlen($user_email_) || !strlen($vkey_)){
@@ -22,7 +22,7 @@ if(pb_is_error($check_vkey_)){
 ?><!DOCTYPE html>
 <html>
 <head>
-	<title>PBPress 비밀번호 재설정</title>
+	<title><?=__('PBPress 비밀번호 재설정')?></title>
 
 	<meta charset="utf8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,7 +43,7 @@ if(pb_is_error($check_vkey_)){
 
 		<div class="resetpass-form-panel panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title">PBPress 비밀번호 재설정</h3>
+				<h3 class="panel-title"><?=__('PBPress 비밀번호 재설정')?></h3>
 			</div>
 			<div class="panel-body">
 				<form id="pb-resetpass-form" method="POST">
@@ -52,20 +52,20 @@ if(pb_is_error($check_vkey_)){
 					<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_admin_resetpass")?>">
 
 					<div class="form-group">
-						<label for="pb-resetpass-form-user_pass">변경할 비밀번호 입력</label>
-						<input type="password" name="user_pass" placeholder="비밀번호 입력" id="pb-resetpass-form-user_pass" class="form-control" required data-error="비밀번호를 입력하세요">
+						<label for="pb-resetpass-form-user_pass"><?=__('변경할 비밀번호 입력')?></label>
+						<input type="password" name="user_pass" placeholder="<?=__('비밀번호 입력')?>" id="pb-resetpass-form-user_pass" class="form-control" required data-error="<?=__('비밀번호를 입력하세요')?>">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>
 
 					<hr>
-					<button type="submit" class="btn btn-primary btn-block btn-lg">비밀번호 재설정</button>
+					<button type="submit" class="btn btn-primary btn-block btn-lg"><?=__('비밀번호 재설정')?></button>
 				</form>
 			</div>
 		</div>
 	</div>
 
-	<div class="copyrights">© 2019 Paul&Bro Company All Rights Reserved.</div>
+	<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?></div>
 
 	<?php pb_admin_foot(); ?>
 	<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/resetpass.js"></script>

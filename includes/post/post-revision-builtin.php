@@ -19,7 +19,7 @@ function _pb_adminpage_manage_post_rewrite_handler_for_revision($path_, $sub_act
 		$pbpost = pb_post($post_id_);
 
 		if(!isset($pbpost)){
-			return new PBError(503, "잘못된 접근", "존재하지 않는 글입니다.");
+			return new PBError(503, __("잘못된 접근"), __("존재하지 않는 글입니다."));
 		}
 
 		global $pbpost_meta_map;
@@ -80,7 +80,7 @@ function _pb_manage_post_listtable_subaction_hook_for_revision($item_){
 	$post_type_ = $item_['type'];
 	?>
 
-	<a href="<?=pb_admin_url("manage-{$post_type_}/revision/".$item_['id'])?>">리비젼</a>
+	<a href="<?=pb_admin_url("manage-{$post_type_}/revision/".$item_['id'])?>"><?=__('리비젼')?></a>
 
 	<?php
 
@@ -99,13 +99,13 @@ function _pb_post_edit_form_after_hook_for_revision($post_data_){
 	<div class="panel panel-default" id="pb-post-edit-form-revision-panel">
 		<div class="panel-heading" role="tab">
 			<h4 class="panel-title">
-				<a role="button" data-toggle="collapse" href="#pb-post-edit-form-revision-panel-body" aria-expanded="true" aria-controls="collapseOne">리비젼</a>
+				<a role="button" data-toggle="collapse" href="#pb-post-edit-form-revision-panel-body" aria-expanded="true" ><?=__('리비젼')?></a>
 			</h4>
 		</div>
 		<div id="pb-post-edit-form-revision-panel-body" class="panel-collapse collapse in" role="tabpanel">
 			<div class="panel-body">
-				<label ><?=number_format($revision_statement_->count())?>개의 리비젼</label>
-				<div><a href="<?=pb_admin_url("manage-{$post_type_}/revision/".$post_data_['id'])?>" class="btn btn-block btn-default">리비젼보기</a></div>
+				<label ><?=sprintf(__('%s개의 리비젼'), number_format($revision_statement_->count()))?></label>
+				<div><a href="<?=pb_admin_url("manage-{$post_type_}/revision/".$post_data_['id'])?>" class="btn btn-block btn-default"><?=__('리비젼보기')?></a></div>
 			</div>
 		</div>
 	</div>

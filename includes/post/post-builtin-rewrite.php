@@ -11,13 +11,13 @@ function _pb_post_hook_for_rewrite_handler($rewrite_path_){
 	$post_type_ = urldecode(pb_current_slug());
 
 	if(count($rewrite_path_) < 2){
-		return new PBError(404, "요청 글이 없습니다.", "404");
+		return new PBError(404, __("요청 글이 없습니다."), "404");
 	}
 
 	$post_types_ = pb_post_types();
 
 	if(!isset($post_types_[$post_type_]) || !$post_types_[$post_type_]['use_single_post']){
-		return new PBError(404, "요청 글이 없습니다.", "404");	
+		return new PBError(404, __("요청 글이 없습니다."), "404");	
 	}
 
 	$current_slug_ = urldecode($rewrite_path_[1]);
@@ -26,14 +26,14 @@ function _pb_post_hook_for_rewrite_handler($rewrite_path_){
 	$post_data_ = pb_post_by_slug($post_type_, $current_slug_);
 
 	if(!isset($post_data_)){
-		return new PBError(404, "글을 찾을 수 없습니다.", "404");
+		return new PBError(404, __("글을 찾을 수 없습니다."), "404");
 	}
 
 	global $pbpost, $pbpost_meta_map;
 	$pbpost = $post_data_;
 
 	if($pbpost['status'] !== PB_POST_STATUS::PUBLISHED && ((int)$pbpost['wrt_id']) != (int)pb_current_user_id()){
-		return new PBError(404, "글을 찾을 수 없습니다.", "404");
+		return new PBError(404, __("글을 찾을 수 없습니다."), "404");
 	}
 
 	$pbpost_meta_map = pb_post_meta_map($pbpost['id']);

@@ -7,7 +7,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 function _pb_menu_register_adminpage($results_){
 
 	$results_['manage-menu'] = array(
-		'name' => '메뉴관리',
+		'name' => __('메뉴관리'),
 		'type' => 'menu',
 		'directory' => 'common',
 		'page' => PB_DOCUMENT_PATH."includes/menu/views/edit.php",
@@ -23,8 +23,8 @@ function _pb_ajax_menu_editor_load_edit_form(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_menu")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -45,16 +45,16 @@ function _pb_ajax_menu_editor_load_edit_form(){
 	ob_start();
 ?>
 
-<h3>기본정보</h3>
+<h3><?=__('기본정보')?></h3>
 <input type="hidden" name="category" value="<?=$category_?>">
 <input type="hidden" name="id" value="<?=isset($item_data_['id']) ? $item_data_['id'] : null?>">
 <table class="table pb-form-table">
 	<tbody>
 		<tr>
-			<th>메뉴항목명</th>
+			<th><?=__('메뉴항목명')?></th>
 			<td>
 				<div class="form-group">
-					<input type="text" name="title" value="<?=isset($item_data_['title']) ? $item_data_['title'] : ""?>" required data-error="메뉴항목명을 입력하세요" class="form-control" placeholder="메뉴명입력">
+					<input type="text" name="title" value="<?=isset($item_data_['title']) ? $item_data_['title'] : ""?>" required data-error="<?=__('메뉴항목명을 입력하세요')?>" class="form-control" placeholder="<?=__('메뉴명입력')?>">
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
@@ -71,10 +71,10 @@ function _pb_ajax_menu_editor_load_edit_form(){
 	ob_start();
 
 	?>
-<h3>추가정보</h3>
+<h3><?=__('추가정보')?></h3>
 <table class="table pb-form-table"><tbody>
 	<tr>
-		<th>ID</th>
+		<th><?=__('ID')?></th>
 		<td>
 			<div class="form-group">
 				<input type="text" name="item_id" value="<?=isset($item_meta_data_['item_id']) ? $item_meta_data_['item_id'] : null?>" class="form-control">
@@ -84,7 +84,7 @@ function _pb_ajax_menu_editor_load_edit_form(){
 		</td>
 	</tr>
 	<tr>
-		<th>클래스</th>
+		<th><?=__('클래스')?></th>
 		<td>
 			<div class="form-group">
 				<input type="text" name="item_class" value="<?=isset($item_meta_data_['item_class']) ? $item_meta_data_['item_class'] : null?>" class="form-control">
@@ -94,11 +94,11 @@ function _pb_ajax_menu_editor_load_edit_form(){
 		</td>
 	</tr>
 	<tr>
-		<th>새창으로 열기</th>
+		<th><?=__('새창으로 열기')?></th>
 		<td>
 			<div>
-				<label class="radio-inline"><input type="radio" name="open_new_window" value="Y" <?=pb_checked($open_new_window_, "Y")?>> 예</label>
-				<label class="radio-inline"><input type="radio" name="open_new_window" value="N" <?=pb_checked($open_new_window_, "N")?>> 아니오</label>
+				<label class="radio-inline"><input type="radio" name="open_new_window" value="Y" <?=pb_checked($open_new_window_, "Y")?>> <?=__('예')?></label>
+				<label class="radio-inline"><input type="radio" name="open_new_window" value="N" <?=pb_checked($open_new_window_, "N")?>> <?=__('아니오')?></label>
 			</div>
 
 		</td>
@@ -164,8 +164,8 @@ function _pb_ajax_menu_editor_do_update(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_menu")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -184,8 +184,8 @@ function _pb_ajax_menu_editor_do_update(){
 		if(!isset($check_data_)){
 			echo json_encode(array(
 				"success" => false,
-				"error_title" => "잘못된 요청",
-				"error_message" => "메뉴정보가 존재하지 않습니다.",
+				"error_title" => __("잘못된 요청"),
+				"error_message" => __("메뉴정보가 존재하지 않습니다."),
 			));
 			pb_end();
 		}
@@ -237,8 +237,8 @@ function _pb_ajax_menu_editor_do_delete(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_menu")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -259,8 +259,8 @@ function _pb_ajax_menu_editor_load_menu(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_menu")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -270,8 +270,8 @@ function _pb_ajax_menu_editor_load_menu(){
 	if(!isset($check_data_)){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "잘못된 요청",
-			"error_message" => "메뉴정보가 존재하지 않습니다.",
+			"error_title" => __("잘못된 요청"),
+			"error_message" => __("메뉴정보가 존재하지 않습니다."),
 		));
 		pb_end();
 	}

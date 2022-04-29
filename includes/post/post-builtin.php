@@ -53,7 +53,7 @@ pb_hook_add_action("pb_post_edit_form_control_panel_after", function($pbpost){
 <div class="panel panel-default" id="pb-post-edit-form-post-categories">
 	<div class="panel-heading" role="tab">
 		<h4 class="panel-title">
-			<a role="button" data-toggle="collapse" href="#pb-post-edit-form-post-categories-body" aria-expanded="true" aria-controls="collapseOne">분류</a>
+			<a role="button" data-toggle="collapse" href="#pb-post-edit-form-post-categories-body" aria-expanded="true" ><?=__('분류')?></a>
 		</h4>
 	</div>
 	<div id="pb-post-edit-form-post-categories-body" class="panel-collapse collapse in" role="tabpanel">
@@ -67,15 +67,15 @@ pb_hook_add_action("pb_post_edit_form_control_panel_after", function($pbpost){
 				</div>
 				<?php } ?>
 				<?php if(count($post_categories_) <= 0 ){ ?>
-					<div class="help-block" data-no-category-label>등록된 분류가 없습니다.</div>
+					<div class="help-block" data-no-category-label><?=__('등록된 분류가 없습니다.')?></div>
 				<?php } ?>
 			</div>
 			<hr>
 			<div class="form-group">
-				<label>새로운 분류 추가</label>
-				<p><input type="text" name="new_category_name" class="form-control" placeholder="카테고리명 입력"></p>
+				<label><?=__('새로운 분류 추가')?></label>
+				<p><input type="text" name="new_category_name" class="form-control" placeholder="<?=__('카테고리명 입력')?>"></p>
 				<div class="text-right">
-					<a href="javascript:pb_post_add_new_category();" class="btn btn-default">분류추가</a>
+					<a href="javascript:pb_post_add_new_category();" class="btn btn-default"><?=__('분류추가')?></a>
 				</div>
 			</div>
 		</div>
@@ -93,7 +93,7 @@ pb_hook_add_action('pb_admin_post_list_conditions_group_right_before', function(
 ?>
 	<div class="form-group">
 		<select class="form-control" name="category_id">
-			<option value="">-분류-</option>
+			<option value=""><?=__('-분류-')?></option>
 			<?php foreach($post_categories_ as $category_data_){ ?>
 				<option value="<?=$category_data_['id']?>" <?=pb_selected(_GET("category_id"), $category_data_['id'])?>><?=$category_data_['title']?></option>
 			<?php } ?>			

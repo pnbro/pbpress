@@ -65,6 +65,32 @@ function pb_user_list($conditions_ = array()){
 	return pb_hook_apply_filters('pb_user_list', $statement_->select($orderby_, $limit_));
 }
 
+function pb_user_simply_statement($conditions_ = array()){
+	$statement_ = pb_database_select_statement('users');
+
+	$statement_->add_field(
+		"users.id id",
+		"users.user_login user_login",
+		"users.user_email user_email",
+		"users.user_name user_name",
+		"users.user_pass user_pass",
+		"users.status status"
+	);
+
+	$statement_->add_conditions_from_data($conditions_, array(
+		'id' => array(PBDB_SS::COND_COMPARE, 'users.id', "=", PBDB::TYPE_NUMBER),
+		'user_login' => array(PBDB_SS::COND_COMPARE, 'users.user_login', "=", PBDB::TYPE_STRING),
+		'user_email' => array(PBDB_SS::COND_COMPARE, 'users.user_email', "=", PBDB::TYPE_STRING),
+		'status' => array(PBDB_SS::COND_IN, "users.status"),
+	));
+
+	return pb_hook_apply_filters('pb_user_simply_statement', $statement_, $conditions_);
+}
+function pb_user_simply_data($user_id_){
+	$statement_ = pb_user_simply_statement(array('id' => $user_id_));
+	return pb_hook_apply_filters('pb_user_simply_data', $statement_->get_first_row(), $user_id_);
+}
+
 function pb_user_by($by_, $val_){
 	$data_ = pb_user_list(array($by_ => $val_));
 	if(!isset($data_) || count($data_) <= 0) return null;
@@ -93,12 +119,12 @@ function pb_user_add($raw_data_){
 function _pb_user_before_add_common($raw_data_){
 	$exists_check1_ = pb_user_by_user_login($raw_data_['user_login']);
 	if(isset($exists_check1_)){
-		return new PBError(-1, "사용자추가실패", "이미 존재하는 사용자아이디입니다.");
+		return new PBError(-1, __("사용자추가실패"), __("이미 존재하는 사용자아이디입니다."));
 	}
 
 	$exists_check2_ = pb_user_by_user_email($raw_data_['user_email']);
 	if(isset($exists_check2_)){
-		return new PBError(-1, "사용자추가실패", "이미 존재하는 이메일입니다.");
+		return new PBError(-1, __("사용자추가실패"), __("이미 존재하는 이메일입니다."));
 	}
 
 	return $raw_data_;
@@ -133,13 +159,14 @@ function pb_user_delete($id_){
 define('PB_USER_SESSION_KEY', "_PB_USER_SESSION_");
 
 function pb_user_create_session($user_data_){
-	pb_session_put(PB_USER_SESSION_KEY, $user_data_);
+	if(!isset($user_data_)) return false;
+	pb_session_put(PB_USER_SESSION_KEY, $user_data_['id']);
 	pb_hook_do_action("pb_user_session_created", $user_data_);
 	return true;
 }
 function pb_user_login($id_, $plain_password_){
-	$user_data_ = pb_user($id_);
-	if(!isset($user_data_)) return new PBError(-1, "로그인실패", "사용자정보가 없습니다.");
+	$user_data_ = pb_user_simply_data($id_);
+	if(!isset($user_data_)) return new PBError(-1, __("로그인실패"), __("사용자정보가 없습니다."));
 
 	$result_ = pb_hook_apply_filters('pb_user_check_login', true, $user_data_, $plain_password_);
 
@@ -150,12 +177,11 @@ function pb_user_login($id_, $plain_password_){
 	return pb_user_create_session($user_data_);
 }
 function pb_user_login_by_both($both_, $plain_password_){
-	$user_data_ = pb_user_by_user_login($both_);
+	$user_statement_ = pb_user_simply_statement();
+	$user_statement_->add_custom_condition("(users.user_login = '".pb_database_escape_string($both_)."' OR users.user_email = '".pb_database_escape_string($both_)."')");
+	$user_data_ = $user_statement_->get_first_row();
 	if(!isset($user_data_)){
-		$user_data_ = pb_user_by_user_email($both_);
-		if(!isset($user_data_)){
-			return new PBError(-1, "로그인실패", "사용자정보가 없습니다.");
-		}
+		return new PBError(-1, __("로그인실패"), __("사용자정보가 없습니다."));
 	}
 
 	$result_ = pb_hook_apply_filters('pb_user_check_login', true, $user_data_, $plain_password_);
@@ -168,11 +194,11 @@ function pb_user_login_by_both($both_, $plain_password_){
 }
 function _pb_user_check_login_common($result_, $user_data_, $plain_password_){
 	if($user_data_['user_pass'] !== pb_crypt_hash($plain_password_)){
-		return new PBError(-1, "로그인실패", "비밀번호가 정확하지 않습니다.");
+		return new PBError(-1, __("로그인실패"), __("비밀번호가 정확하지 않습니다."));
 	}
 
-	if($user_data_['status'] !== "00003"){
-		return new PBError(-2, "로그인실패", "로그인할 수 없는 상태입니다.");
+	if($user_data_['status'] !== PB_USER_STATUS::NORMAL){
+		return new PBError(-2, __("로그인실패"), __("로그인할 수 없는 상태입니다."));
 	}
 
 	return true;
@@ -180,27 +206,30 @@ function _pb_user_check_login_common($result_, $user_data_, $plain_password_){
 pb_hook_add_filter('pb_user_check_login', "_pb_user_check_login_common");
 
 function pb_user_logout(){
-	$user_data_ = pb_current_user();
-	if(!isset($user_data_)) return false;
-
+	if(!pb_is_user_logged_in()) return false;
 	pb_session_put(PB_USER_SESSION_KEY, null);
-	pb_hook_do_action("pb_user_session_removed", $user_data_);
+	pb_hook_do_action("pb_user_session_removed", pb_user_simply_data(pb_current_user_id()));
 	return true;
 }
 
-function pb_current_user($fetch_ = false){
-	$check_data_ = pb_session_get(PB_USER_SESSION_KEY);
-	if(!isset($check_data_)) return null;
-	$result_ = null;
-	if($fetch_) $result_ = pb_user($check_data_['id']);
-	else $result_ = $check_data_;
-	return pb_hook_apply_filters('pb_current_user', $result_);
+function pb_current_user($full_ = false){
+	$user_id_ = pb_session_get(PB_USER_SESSION_KEY);
+	if(!strlen($user_id_)) return pb_hook_apply_filters('pb_current_user', null);
+
+	if($full_){
+		$user_data_ = pb_user($user_id_);
+	}else{
+		$user_data_ = pb_user_simply_data($user_id_);
+	}
+
+	return pb_hook_apply_filters('pb_current_user', $user_data_, $full_);
+		
 }
 function pb_current_user_id(){
-	$user_data_ = pb_session_get(PB_USER_SESSION_KEY);
-	if(!isset($user_data_)) return -1;
-
-	return $user_data_['id'];
+	$user_id_ = pb_session_get(PB_USER_SESSION_KEY);
+	$user_id_ = pb_hook_apply_filters('pb_current_user_id', $user_id_);
+	if(!strlen($user_id_)) return -1;
+	return $user_id_;
 }
 
 function pb_is_user_logged_in(){
@@ -211,7 +240,7 @@ function pb_is_user_logged_in(){
 //사용자 등록
 function pb_user_register($data_ = array()){
 	if(!isset($data_['user_login']) || !isset($data_['user_email']) || !isset($data_['user_name']) || !isset($data_['user_pass'])){
-		return new PBError(-1, "등록실패", "필수정보가 누락되었습니다.");
+		return new PBError(-1, __("등록실패"), __("필수정보가 누락되었습니다."));
 	}
 
 	$data_['user_pass'] = pb_crypt_hash($data_['user_pass']);
@@ -228,7 +257,7 @@ function pb_user_send_email_for_findpass($user_email_){
 	$user_data_ = pb_user_by_user_email($user_email_);
 
 	if(!isset($user_data_) || empty($user_data_)){
-		return new PBError(PB_USER_FINDPASS_VKEY_NOTFOUND, '가입이력없음', '해당 이메일로 가입이력이 존재하지 않습니다.');
+		return new PBError(PB_USER_FINDPASS_VKEY_NOTFOUND, __('가입이력없음'), __('해당 이메일로 가입이력이 존재하지 않습니다.'));
 	}
 
 	$user_id_ = $user_data_['id'];
@@ -243,10 +272,10 @@ function pb_user_send_email_for_findpass($user_email_){
 	$mail_content_ = pb_hook_apply_filters('pb-user-findpass-email-content', "");
 
 	if(!strlen($mail_content_)){
-		$mail_content_ = '<a href="'.$validation_url_.'">새로운 비밀번호 설정</a>';
+		$mail_content_ = '<a href="'.$validation_url_.'">'.__('새로운 비밀번호 설정').'</a>';
 	}
 
-	$mail_title_ = pb_hook_apply_filters('pb-user-findpass-email-title', "[".pb_option_value('site_name')."] 비밀번호 재설정 안내");
+	$mail_title_ = pb_hook_apply_filters('pb-user-findpass-email-title', sprintf(__("[%s] 비밀번호 재설정 안내"), pb_option_value('site_name')));
 
 	return pb_mail_template_send($user_email_, $mail_title_, array(
 		'content' => $mail_content_,
@@ -269,13 +298,13 @@ function pb_user_check_findpass_validation_key($user_id_, $validation_key_){
 	$user_ = pb_user($user_id_);
 
 	if(!isset($user_) || empty($user_)){
-		return new PBError(PB_USER_FINDPASS_VKEY_NOTFOUND, '가입이력없음', '해당 이메일로 가입이력이 존재하지 않습니다.');
+		return new PBError(PB_USER_FINDPASS_VKEY_NOTFOUND, __('가입이력없음'), __('해당 이메일로 가입이력이 존재하지 않습니다.'));
 	}
 
 	$stored_validation_key_ = $user_['findpass_vkey'];
 
 	if($validation_key_ !== $stored_validation_key_){
-		return new PBError(PB_USER_FINDPASS_VKEY_NOTVALID, '잘못된 인증키', '비밀번호인증키가 잘못되었습니다.');
+		return new PBError(PB_USER_FINDPASS_VKEY_NOTVALID, __('잘못된 인증키'), __('비밀번호인증키가 잘못되었습니다.'));
 	}
 
 	global $pbdb;
@@ -286,7 +315,7 @@ function pb_user_check_findpass_validation_key($user_id_, $validation_key_){
 		WHERE id = {$user_id_}");
 
 	if($exprie_day_count_ < 0){
-		return new PBError(PB_USER_FINDPASS_VKEY_EXPIRED, '만료된 인증키', '비밀번호인증키가 만료되었습니다.');
+		return new PBError(PB_USER_FINDPASS_VKEY_EXPIRED, __('만료된 인증키'), __('비밀번호인증키가 만료되었습니다.'));
 	}
 
 	return true;

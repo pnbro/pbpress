@@ -8,7 +8,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 function _pb_gcode_register_adminpage($results_){
 	$results_['manage-gcode'] = array(
-		'name' => '공통코드',
+		'name' => __('공통코드'),
 		'type' => 'menu',
 		'directory' => 'common',
 		'page' => PB_DOCUMENT_PATH."includes/gcode/views/list.php",
@@ -26,8 +26,8 @@ function _pb_ajax_admin_gcode_load(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_site")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -47,8 +47,8 @@ function _pb_ajax_admin_gcode_insert(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_site")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -80,8 +80,8 @@ function _pb_ajax_admin_gcode_update(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_site")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -114,8 +114,8 @@ function _pb_ajax_admin_gcode_delete(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_site")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -135,8 +135,8 @@ function _pb_ajax_admin_gcode_dtl_load(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_site")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -158,8 +158,8 @@ function _pb_ajax_admin_gcode_dtl_insert(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_site")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -194,8 +194,8 @@ function _pb_ajax_admin_gcode_dtl_update(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_site")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -227,8 +227,8 @@ function _pb_ajax_admin_gcode_dtl_delete(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_site")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}

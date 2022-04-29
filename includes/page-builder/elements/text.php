@@ -12,7 +12,7 @@ class PBPageBuilderElement_text extends PBPageBuilderElement{
 			array(
 				'name' => 'content',
 				'type' => 'editor',
-				'label' => '텍스트에디터',
+				'label' => __('텍스트에디터'),
 			),
 
 		));
@@ -31,7 +31,7 @@ class PBPageBuilderElement_text extends PBPageBuilderElement{
 }
 
 pb_page_builder_add_element("text", array(
-	'name' => "텍스트",
+	'name' => __("텍스트"),
 	'desc' => "",
 	'icon' => PB_LIBRARY_URL."img/page-builder/text.jpg",
 	'element_object' => "PBPageBuilderElement_text",
@@ -44,7 +44,7 @@ pb_page_builder_add_element("text", array(
 			'display' => 'block',
 		),
 	),
-	'category' => "기본",
+	'category' => __("기본"),
 ));
 
 ?>

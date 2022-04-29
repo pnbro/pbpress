@@ -75,12 +75,12 @@ $admin_id_ = pb_user_add(array(
 	'user_email' => $user_email_,
 	'user_name' => $user_name_,
 	'user_pass' => pb_crypt_hash($user_pass_),
-	'status' => "00003",
+	'status' => PB_USER_STATUS::NORMAL,
 	'reg_date' => pb_current_time(),
 ));
 
 pb_user_grant_authority($admin_id_, PB_AUTHORITY_SLUG_ADMINISTRATOR);
-pb_user_create_session(pb_user($admin_id_));
+pb_user_create_session(pb_user_simply_data($admin_id_));
 
 $theme_list_ = pb_theme_list();
 

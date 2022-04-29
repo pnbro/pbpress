@@ -12,21 +12,21 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 			array(
 				'name' => 'max_width',
 				'type' => 'text',
-				'label' => '최대넓이',
+				'label' => __('최대넓이'),
 			),
 			array(
 				'name' => 'alt',
 				'type' => 'text',
-				'label' => '설명',
+				'label' => __('설명'),
 			),
 			array(
 				'name' => 'image_align',
 				'type' => 'select',
-				'label' => '정렬',
+				'label' => __('정렬'),
 				'options' => array(
-					'center' => '중앙',
-					'left' => '좌측',
-					'right' => '우측',
+					'center' => __('중앙'),
+					'left' => __('좌측'),
+					'right' => __('우측'),
 				)
 			),
 
@@ -59,7 +59,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 		?>
 
 		<div class="form-group">
-			<label>이미지선택</label>
+			<label><?=__('이미지선택')?></label>
 			<input type="hidden" name="thumbnail_src" value="<?=$thumbnail_src_?>" id="<?=$temp_form_id_?>-thumbnail">
 			<input type="text" name="src" value="<?=$src_?>" class="hidden" id="<?=$temp_form_id_?>" data-upload-path="" data-thumbnail-ipnut="#<?=$temp_form_id_?>-thumbnail">
 			<div class="clearfix"></div>
@@ -88,18 +88,18 @@ pb_page_builder_add_element("image", array(
 		array(
 			'name' => 'max_width',
 			'type' => 'text',
-			'render' => '최대넓이 {max_width}',
+			'render' => __('최대넓이 {max_width}'),
 		),
 		array(
 			'name' => 'image_align',
 			'type' => 'select',
 			'values' => array(
-				'center' => '중앙',
-				'left' => '좌측',
-				'right' => '우측',
+				'center' => __('중앙'),
+				'left' => __('좌측'),
+				'right' => __('우측'),
 			),
 			'display' => 'inline',
-			'render' => '{image_align} 정렬',
+			'render' => __('{image_align} 정렬'),
 		),
 		array(
 			'name' => 'src',
@@ -107,7 +107,7 @@ pb_page_builder_add_element("image", array(
 			'display' => 'block',
 		)
 	),
-	'category' => "기본",
+	'category' => __("기본"),
 ));
 
 ?>

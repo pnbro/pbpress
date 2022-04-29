@@ -7,7 +7,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 function _pb_page_builder_hook_register_manage_site_menu_list($results_){
 	$results_['page-builder'] = array(
-		'name' => '페이지빌더',
+		'name' => __('페이지빌더'),
 		'renderer' => '_pb_page_builder_hook_manage_site',
 	);
 	return $results_;
@@ -19,34 +19,34 @@ function _pb_page_builder_hook_manage_site($menu_data_){
 
 	<div class="manage-site-form-panel panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">페이지빌더설정</h3>
+			<h3 class="panel-title"><?=__('페이지빌더설정')?></h3>
 		</div>
 		<div class="panel-body">
-			<h3>반응형기준 <small>정수만 입력하세요 픽셀로 계산됩니다.</small></h3>
+			<h3><?=__('반응형기준')?> <small><?=__('정수만 입력하세요 픽셀로 계산됩니다.')?></small></h3>
 			<div class="row">
 				<div class="col-xs-6 col-sm-3"><div class="form-group">
-					<label>모바일</label>
+					<label><?=__('모바일')?></label>
 					<input type="text"  value="<?=pb_option_value('pb_page_builder_screen_xs', "480")?>" class="form-control" name="pb_page_builder_screen_xs">
 				</div></div>
 				<div class="col-xs-6 col-sm-3"><div class="form-group">
-					<label>타블렛</label>
+					<label><?=__('타블렛')?></label>
 					<input type="text"  value="<?=pb_option_value('pb_page_builder_screen_sm', "768")?>" class="form-control" name="pb_page_builder_screen_sm">
 				</div></div>
 
 				<div class="col-xs-6 col-sm-3"><div class="form-group">
-					<label>PC(작은화면)</label>
+					<label><?=__('PC(작은화면)')?></label>
 					<input type="text"  value="<?=pb_option_value('pb_page_builder_screen_md', "992")?>" class="form-control" name="pb_page_builder_screen_md">
 				</div></div>
 
 				<div class="col-xs-6 col-sm-3"><div class="form-group">
-					<label>PC(큰화면)</label>
+					<label><?=__('PC(큰화면)')?></label>
 					<input type="text"  value="<?=pb_option_value('pb_page_builder_screen_lg', "1200")?>" class="form-control" name="pb_page_builder_screen_lg">
 				</div></div>
 			</div>
 
-			<h3>적재요소관련 <small>정수만 입력하세요 픽셀로 계산됩니다.</small></h3>
+			<h3><?=__('적재요소관련')?> <small><?=__('정수만 입력하세요 픽셀로 계산됩니다.')?></small></h3>
 			<div class="form-group">
-				<label>컨테이너, 컬럼 안쪽여백</label>
+				<label><?=__('컨테이너, 컬럼 안쪽여백')?></label>
 				<input type="text"  value="<?=pb_option_value('pb_page_builder_default_padding', "20")?>" class="form-control" name="pb_page_builder_default_padding">
 			</div>
 

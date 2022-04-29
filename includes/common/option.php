@@ -17,16 +17,7 @@ function pb_option_statement($conditions_ = array()){
 	global $options_do;
 
 	$statement_ = $options_do->statement();
-
-	$statement_->add_field(
-		"DATE_FORMAT(options.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
-		"DATE_FORMAT(options.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
-		"DATE_FORMAT(options.reg_date, '%Y.%m.%d') reg_date_ymd",
-		"DATE_FORMAT(options.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
-		"DATE_FORMAT(options.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
-		"DATE_FORMAT(options.mod_date, '%Y.%m.%d') mod_date_ymd"
-	);
-
+	
 	$statement_->add_legacy_field_filter('pb_option_list_fields', '', $conditions_);
 	$statement_->add_legacy_join_filter('pb_option_list_join', '', $conditions_);
 	$statement_->add_legacy_where_filter('pb_option_list_where', '', $conditions_);

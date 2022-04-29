@@ -136,7 +136,7 @@ function pb_page_write($data_){
 	$slug_ = strlen($slug_) ? $slug_ : $page_title_;
 	$slug_ = pb_slugify($slug_);
 	
-	if(!strlen($slug_)) return new PBError(403, "페이지 슬러그가 잘못되었습니다.", "잘못된 슬러그");
+	if(!strlen($slug_)) return new PBError(403, __("페이지 슬러그가 잘못되었습니다."), __("잘못된 슬러그"));
 
 	$insert_data_ = array(
 		'page_title' => $page_title_,
@@ -174,7 +174,7 @@ function pb_page_edit($id_, $data_){
 		$update_data_['slug'] = pb_slugify((strlen($data_['slug']) ? $data_['slug'] : $page_title_));
 		$update_data_['slug'] = pb_page_rewrite_slug($update_data_['slug'], $id_);
 
-		if(!strlen($update_data_['slug'])) return new PBError(403, "페이지 슬러그가 잘못되었습니다.", "잘못된 슬러그");
+		if(!strlen($update_data_['slug'])) return new PBError(403, __("페이지 슬러그가 잘못되었습니다."), __("잘못된 슬러그"));
 	}
 
 	pb_page_update($id_, $update_data_);

@@ -9,15 +9,15 @@ define('PB_POST_SHORT_LENGTH', 100);
 global $_pb_post_type_label_defaults;
 
 $_pb_post_type_label_defaults = array(
-	'list' => "글내역",
-	'add' => "글추가",
-	'update' => "글수정",
-	'delete' => "글삭제",
-	'button_add' => "글추가",
-	'button_update' => "글수정",
-	'before_delete' => "해당 글을 삭제합니다. 계속하시겠습니까?",
-	'after_delete' => "글이 삭제되었습니다.",
-	'no_results' => "검색된 글이 없습니다.",
+	'list' => __("글내역"),
+	'add' => __("글추가"),
+	'update' => __("글수정"),
+	'delete' => __("글삭제"),
+	'button_add' => __("글추가"),
+	'button_update' => __("글수정"),
+	'before_delete' => __("해당 글을 삭제합니다. 계속하시겠습니까?"),
+	'after_delete' => __("글이 삭제되었습니다."),
+	'no_results' => __("검색된 글이 없습니다."),
 );
 
 function pb_post_types(){
@@ -315,8 +315,8 @@ function pb_post_write($data_){
 
 	$post_types_ = pb_post_types();
 	
-	if(!strlen($type_) || !isset($post_types_[$type_])) return new PBError(403, "글형식이 잘못되었습니다.", "잘못된 글형식");
-	if(!strlen($slug_)) return new PBError(403, "글 슬러그가 잘못되었습니다.", "잘못된 슬러그");
+	if(!strlen($type_) || !isset($post_types_[$type_])) return new PBError(403, __("글형식이 잘못되었습니다."), __("잘못된 글형식"));
+	if(!strlen($slug_)) return new PBError(403, __("글 슬러그가 잘못되었습니다."), __("잘못된 슬러그"));
 
 	$insert_data_ = array(
 		'post_title' => $post_title_,
@@ -373,7 +373,7 @@ function pb_post_edit($id_, $data_){
 		$update_data_['slug'] = pb_slugify((strlen($data_['slug']) ? $data_['slug'] : $post_title_));
 		$update_data_['slug'] = pb_post_rewrite_slug($before_data_['type'], $update_data_['slug'], $id_);
 
-		if(!strlen($update_data_['slug'])) return new PBError(403, "글 슬러그가 잘못되었습니다.", "잘못된 슬러그");
+		if(!strlen($update_data_['slug'])) return new PBError(403, __("글 슬러그가 잘못되었습니다."), __("잘못된 슬러그"));
 	}
 
 	pb_post_update($id_, $update_data_);

@@ -12,7 +12,7 @@ pb_easytable_register("pb-admin-authority-table", function($offset_, $per_page_)
 	);
 }, array(
 	"auth_name" => array(
-		'name' => '권한명',
+		'name' => __('권한명'),
 		'class' => 'col-4',
 		'render' => function($table_, $item_, $row_index_){
 			?>
@@ -22,7 +22,7 @@ pb_easytable_register("pb-admin-authority-table", function($offset_, $per_page_)
 		}
 	),
 	"slug" => array(
-		'name' => '슬러그',
+		'name' => __('슬러그'),
 		'class' => 'col-4',
 	),
 	
@@ -31,15 +31,15 @@ pb_easytable_register("pb-admin-authority-table", function($offset_, $per_page_)
 		'class' => 'col-3 text-right',
 		'render' => function($table_, $item_, $row_index_){
 			?>
-			<a href="javascript:_pb_authority_edit('<?=$item_['id']?>');" class="btn btn-default">수정</a>
-			<a href="javascript:_pb_authority_remove('<?=$item_['id']?>');" class="btn btn-black">삭제</a>
+			<a href="javascript:_pb_authority_edit('<?=$item_['id']?>');" class="btn btn-default"><?=__('수정')?></a>
+			<a href="javascript:_pb_authority_remove('<?=$item_['id']?>');" class="btn btn-black"><?=__('삭제')?></a>
 			<?php
 
 		}
 	)
 ), array(
 	'class' => 'pb-admin-authority-table',
-	"no_rowdata" => "조회된 권한이 없습니다.",
+	"no_rowdata" => __("조회된 권한이 없습니다."),
 	'per_page' => 15,
 	'ajax' => true,
 ));
@@ -75,7 +75,7 @@ pb_easytable_register("pb-admin-authority-task-table", function($offset_, $per_p
 	);
 }, array(
 	"task_name" => array(
-		'name' => '권한명',
+		'name' => __('권한명'),
 		'class' => 'col-4',
 		'render' => function($table_, $item_, $row_index_){
 
@@ -87,12 +87,12 @@ pb_easytable_register("pb-admin-authority-task-table", function($offset_, $per_p
 		}
 	),
 	"slug" => array(
-		'name' => '슬러그',
+		'name' => __('슬러그'),
 		'class' => 'col-4',
 	),
 	
 	"grant_yn" => array(
-		'name' => '권한부여',
+		'name' => __('권한부여'),
 		'class' => 'col-3 text-center',
 		'render' => function($table_, $item_, $row_index_){
 			$auth_id_ = _GET('master_id');
@@ -119,7 +119,7 @@ pb_easytable_register("pb-admin-authority-task-table", function($offset_, $per_p
 ), array(
 	'class' => 'pb-admin-authority-table',
 	'hide_pagenav' => true,
-	"no_rowdata" => "조회된 권한이 없습니다.",
+	"no_rowdata" => __("조회된 권한이 없습니다."),
 	'per_page' => 999,
 	'ajax' => true,
 ));

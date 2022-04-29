@@ -120,17 +120,17 @@ function pb_menu_categories(){
 	if(!isset($_pb_menu_categories)){
 		$_pb_menu_categories = pb_hook_apply_filters('pb_menu_categories', array(
 			'common' => array(
-				'title' => '기본',
+				'title' => __('기본'),
 				'render' => '_pb_menu_category_list_common_render',
 				'edit_categories' => array("common"),
 			),
 			'page' => array(
-				'title' => '페이지',
+				'title' => __('페이지'),
 				'render' => "_pb_menu_category_list_page_render",
 				'edit_categories' => array("page"),
 			),
 			'ext-link' => array(
-				'title' => '외부링크',
+				'title' => __('외부링크'),
 				'render' => "_pb_menu_category_list_ext_link_render",
 				'edit_categories' => array("ext-link"),
 			),
@@ -154,7 +154,7 @@ function _pb_menu_category_list_common_render($category_, $menu_target_list_){
 	<?php }
 
 		if(count($menu_target_list_) <= 0){ ?>
-			<li class="help-block text-center no-row">추가할 메뉴항목이 없습니다.</li>
+			<li class="help-block text-center no-row"><?=__('추가할 메뉴항목이 없습니다.')?></li>
 		<?php  }
 
 	?>
@@ -183,8 +183,8 @@ function _pb_menu_category_list_common_render($category_, $menu_target_list_){
 
 			if(add_list_.length <= 0){
 				PB.alert({
-					title : "선택확인",
-					content : "메뉴에 추가할 항목을 선택하세요",
+					title : "<?=__('선택확인')?>",
+					content : "<?=__('메뉴에 추가할 항목을 선택하세요')?>",
 				});
 				return false;
 			}
@@ -213,7 +213,7 @@ function _pb_menu_category_list_page_render($category_, $menu_target_list_){
 	<?php }
 
 		if(count($menu_target_list_) <= 0){ ?>
-			<li class="help-block text-center no-row">추가할 메뉴항목이 없습니다.</li>
+			<li class="help-block text-center no-row"><?=__('추가할 메뉴항목이 없습니다.')?></li>
 		<?php  }
 
 	?>
@@ -242,8 +242,8 @@ function _pb_menu_category_list_page_render($category_, $menu_target_list_){
 
 			if(add_list_.length <= 0){
 				PB.alert({
-					title : "선택확인",
-					content : "메뉴에 추가할 항목을 선택하세요",
+					title : "<?=__('선택확인')?>",
+					content : "<?=__('메뉴에 추가할 항목을 선택하세요')?>",
 				});
 				return false;
 			}
@@ -397,14 +397,14 @@ pb_menu_category_edit_form_add("page", '_pb_menu_category_edit_form_add_page');
 function _pb_menu_category_edit_form_add_ext_link($data_, $meta_data_){
 	?>
 
-	<h3>외부링크</h3>
+	<h3><?=__('외부링크')?></h3>
 	<table class="table pb-form-table">
 		<tbody>
 			<tr>
-				<th>외부링크주소</th>
+				<th><?=__('외부링크주소')?></th>
 				<td>
 					<div class="form-group">
-						<input type="text" name="ext_link_url" value="<?=isset($meta_data_['ext_link_url']) ? $meta_data_['ext_link_url'] : ""?>" required data-error="URL을 입력하세요" class="form-control" placeholder="URL 입력">
+						<input type="text" name="ext_link_url" value="<?=isset($meta_data_['ext_link_url']) ? $meta_data_['ext_link_url'] : ""?>" required data-error="<?=__('URL을 입력하세요')?>" class="form-control" placeholder="<?=__('URL 입력')?>">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>

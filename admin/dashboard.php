@@ -9,6 +9,6 @@
 	<div class="logo-frame">
 		<img src="<?=PB_LIBRARY_URL?>img/dashboard-logo.png" class="logo">
 	</div>
-	<h1 class="title">PBPress 관리자페이지<br/>
-	<small>사이드메뉴를 클릭하여 각 관리화면으로 접근할 수 있습니다.</small></h1>
+	<h1 class="title"><?=__('PBPress 관리자페이지')?><br/>
+	<small><?=__('사이드메뉴를 클릭하여 각 관리화면으로 접근할 수 있습니다.')?></small></h1>
 </div>

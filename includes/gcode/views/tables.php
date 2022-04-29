@@ -12,11 +12,11 @@ pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
 	);
 },array(
 	"code_id" => array(
-		'name' => '코드',
+		'name' => __('코드'),
 		'class' => 'col-2 text-center',
 	),
 	"code_nm" => array(
-		'name' => '코드명',
+		'name' => __('코드명'),
 		'class' => 'col-4',
 		'render' => function($table_, $item_, $row_index_){
 			?>
@@ -27,7 +27,7 @@ pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
 		}
 	),
 	"use_yn" => array(
-		'name' => '사용',
+		'name' => __('사용'),
 		'class' => 'col-2 text-center',
 	),
 	"button_area" => array(
@@ -36,8 +36,8 @@ pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
 		'render' => function($table_, $item_, $row_index_){
 			?>
 			<?php pb_hook_do_action('pb-admin-gcode-table-button-before'); ?>
-			<a href="javascript:_pb_gcode_edit('<?=$item_['code_id']?>');" class="btn btn-default">수정</a>
-			<a href="javascript:_pb_gcode_remove	('<?=$item_['code_id']?>');" class="btn btn-black">삭제</a>
+			<a href="javascript:_pb_gcode_edit('<?=$item_['code_id']?>');" class="btn btn-default"><?=__('수정')?></a>
+			<a href="javascript:_pb_gcode_remove	('<?=$item_['code_id']?>');" class="btn btn-black"><?=__('삭제')?></a>
 			<?php pb_hook_do_action('pb-admin-gcode-table-button-after'); ?>
 			<?php
 
@@ -45,7 +45,7 @@ pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
 	)
 ), array(
 	'class' => 'pb-gcode-table',
-	"no_rowdata" => "조회된 공통코드가 없습니다.",
+	"no_rowdata" => __("조회된 공통코드가 없습니다."),
 	'per_page' => 15,
 	'ajax' => true,
 ));
@@ -66,11 +66,11 @@ pb_easytable_register("pb-admin-gcode-dtl-table", function($offset_, $per_page_)
 	);
 },array(
 	"code_did" => array(
-		'name' => '코드',
+		'name' => __('코드'),
 		'class' => 'col-2 text-center',
 	),
 	"code_dnm" => array(
-		'name' => '코드명',
+		'name' => __('코드명'),
 		'class' => 'col-2',
 	),
 	"col1" => array(
@@ -90,7 +90,7 @@ pb_easytable_register("pb-admin-gcode-dtl-table", function($offset_, $per_page_)
 		'class' => "col-1 text-center extra-col4",
 	),
 	"use_yn" => array(
-		'name' => '사용',
+		'name' => __('사용'),
 		'class' => 'col-1 text-center',
 	),
 	"button_area" => array(
@@ -99,8 +99,8 @@ pb_easytable_register("pb-admin-gcode-dtl-table", function($offset_, $per_page_)
 		'render' => function($table_, $item_, $row_index_){
 			?>
 			<?php pb_hook_do_action('pb-admin-gcode-dtl-table-button-before'); ?>
-			<a href="javascript:_pb_gcode_dtl_edit('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-default">수정</a>
-			<a href="javascript:_pb_gcode_dtl_remove('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-black">삭제</a>
+			<a href="javascript:_pb_gcode_dtl_edit('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-default"><?=__('수정')?></a>
+			<a href="javascript:_pb_gcode_dtl_remove('<?=$item_['code_id']?>', '<?=$item_['code_did']?>');" class="btn btn-black"><?=__('삭제')?></a>
 			<?php pb_hook_do_action('pb-admin-gcode-dtl-table-button-after'); ?>
 			<?php
 
@@ -108,7 +108,7 @@ pb_easytable_register("pb-admin-gcode-dtl-table", function($offset_, $per_page_)
 	)
 ), array(
 	'class' => 'pb-gcode-dtl-table',
-	"no_rowdata" => "조회된 상세코드가 없습니다.",
+	"no_rowdata" => __("조회된 상세코드가 없습니다."),
 	'per_page' => 15,
 	'ajax' => true,
 ));

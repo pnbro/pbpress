@@ -12,7 +12,7 @@ class PBPageBuilderElement_html extends PBPageBuilderElement{
 			array(
 				'name' => 'content',
 				'type' => 'html',
-				'label' => 'HTML에디터',
+				'label' => __('HTML에디터'),
 			),
 
 		));
@@ -44,7 +44,7 @@ pb_page_builder_add_element("html", array(
 			'display' => 'block',
 		),
 	),
-	'category' => "기본",
+	'category' => __("기본"),
 ));
 
 ?>

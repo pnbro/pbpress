@@ -44,8 +44,8 @@ class PBPageBuilderElement_container extends PBPageBuilderElement{
 }
 
 pb_page_builder_add_element("container", array(
-	'name' => "컨테이너",
-	'desc' => "기본적인 요소 적재공간",
+	'name' => __("컨테이너"),
+	'desc' => __("기본적인 요소 적재공간"),
 	'icon' => PB_LIBRARY_URL."img/page-builder/container.jpg",
 	'element_object' => "PBPageBuilderElement_container",
 	'edit_categories' => array("common", "styles"),

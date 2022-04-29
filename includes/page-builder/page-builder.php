@@ -55,12 +55,12 @@ function pb_page_builder_parse_xml($xml_string_){
 	$xml_instance_ = @simplexml_load_string($xml_string_);
 
 	if(!$xml_instance_){
-		return new PBError(-9, "잘못된 XML 형식입니다.", "문서형식오류");		
+		return new PBError(-9, __("잘못된 XML 형식입니다."), __("문서형식오류"));		
 	}
 
 	$root_node_name_ = $xml_instance_->getName();
 	if($root_node_name_ !== "pbpagebuilder"){
-		return new PBError(-1, "PBPageBuilder 문서형식이 아닙니다.", "문서형식오류");
+		return new PBError(-1, __("PBPageBuilder 문서형식이 아닙니다."), __("문서형식오류"));
 	}
 	$root_attrs_ = $xml_instance_->attributes();
 	$version_ = (string)$root_attrs_["version"];
@@ -69,11 +69,11 @@ function pb_page_builder_parse_xml($xml_string_){
 	$version_check_max_ = version_compare($version_, PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX, "<=");
 
 	if(!$version_check_min_ || !$version_check_max_){
-		return new PBError(-3, "문서 버젼이 현재버젼의  PBPageBuilder와 호환되지 않습니다", "문서호환성오류");	
+		return new PBError(-3, __("문서 버젼이 현재버젼의  PBPageBuilder와 호환되지 않습니다"), __("문서호환성오류"));
 	}
 
 	if(!isset($xml_instance_->settings) || !isset($xml_instance_->pagecontent)){
-		return new PBError(-6, "필수노드가 누락되었습니다.", "문서형식오류");		
+		return new PBError(-6, __("필수노드가 누락되었습니다."), __("문서형식오류"));		
 	}
 
 	$settings_ = $xml_instance_->settings;
@@ -163,7 +163,7 @@ jQuery(document).ready(function(){
 			<img src="<?=PB_LIBRARY_URL?>img/page-builder/icon.png" class="logo-image">
 		</div>
 		<div class="col-right">
-			<a href="" data-element-add-element-btn class="btn btn-default add-element-btn"><i class="icon material-icons">add_circle</i>요소추가</a>
+			<a href="" data-element-add-element-btn class="btn btn-default add-element-btn"><i class="icon material-icons">add_circle</i><?=__('요소추가')?></a>
 			<a href="" data-element-setting-btn class="icon-link page-settings-btn"><i class="icon material-icons">settings</i></a>
 			<a href="" data-fullscreen-btn class="icon-link fullscreen-btn">
 				<i class="icon material-icons on">fullscreen</i>
@@ -174,8 +174,8 @@ jQuery(document).ready(function(){
 	</div></div>
 
 	<div class="element-content-list empty" data-children-frame data-page-element-item="document">
-		<a data-add-element-btn="prepend" class="add-element-btn prepend" href=""><i class="material-icons icon">add_box</i> 요소추가</a>
-		<a data-add-element-btn="append" class="add-element-btn append" href=""><i class="material-icons icon">add_box</i> 요소추가</a>
+		<a data-add-element-btn="prepend" class="add-element-btn prepend" href=""><i class="material-icons icon">add_box</i> <?=__('요소추가')?></a>
+		<a data-add-element-btn="append" class="add-element-btn append" href=""><i class="material-icons icon">add_box</i> <?=__('요소추가')?></a>
 	</div>
 
 	<div class="copyrights">© 2019 Paul&Bro Company All Rights Reserved. v<?=PB_PAGE_BUILDER_VERSION?></div>

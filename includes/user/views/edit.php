@@ -20,7 +20,7 @@
 
 	<div class="manage-user-edit-form-panel panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">사용자정보수정</h3>
+			<h3 class="panel-title"><?=__('사용자정보수정')?></h3>
 		</div>
 		<div class="panel-body">
 			<form id="pb-manage-user-edit-form" method="POST">
@@ -29,30 +29,30 @@
 				<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_manage_user")?>">
 				<input type="hidden" name="id", value="<?=$user_data['id']?>">
 				<div class="form-group">
-					<label >사용자ID <sup class="text-danger">변경불가</sup></label>
+					<label ><?=__('사용자ID')?> <sup class="text-danger"><?=__('변경불가')?></sup></label>
 					<p class="form-control-static"><?=$user_data['user_login']?></p>
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
 
 				<div class="form-group">
-					<label for="pb-manage-user-edit-form-user_pass">암호변경</label>
-					<input type="password" name="user_pass" placeholder="변경할 암호 입력" id="pb-manage-user-edit-form-user_pass" class="form-control" data-error="암호를 입력하세요" value="">
+					<label for="pb-manage-user-edit-form-user_pass"><?=__('암호변경')?></label>
+					<input type="password" name="user_pass" placeholder="<?=__('변경할 암호 입력')?>" id="pb-manage-user-edit-form-user_pass" class="form-control" data-error="<?=__('암호를 입력하세요')?>" value="">
 
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
 
 				<div class="form-group">
-					<label for="pb-manage-user-edit-form-user_name">사용자명 <sup class="text-primary">*</sup></label>
-					<input type="text" name="user_name" placeholder="사용자명 입력" id="pb-manage-user-edit-form-user_name" class="form-control" required data-error="사용자명을 입력하세요" value="<?=$user_data['user_name']?>">
+					<label for="pb-manage-user-edit-form-user_name"><?=__('사용자명')?> <sup class="text-primary">*</sup></label>
+					<input type="text" name="user_name" placeholder="<?=__('사용자명 입력')?>" id="pb-manage-user-edit-form-user_name" class="form-control" required data-error="<?=__('사용자명을 입력하세요')?>" value="<?=$user_data['user_name']?>">
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
 
 				<div class="form-group">
-					<label for="pb-manage-user-edit-form-user_email">사용자이메일 <sup class="text-primary">*</sup></label>
-					<input type="email" name="user_email" placeholder="이메일 입력" id="pb-manage-user-edit-form-user_email" class="form-control" required data-error="이메일을 입력하세요" value="<?=$user_data['user_email']?>" data-remote="<?=pb_ajax_url("pb-admin-manage-user-check-email", array("user_id" => $user_data['id']))?>" data-remote-error="이미 사용하고 있는 이메일입니다.">
+					<label for="pb-manage-user-edit-form-user_email"><?=__('사용자이메일')?> <sup class="text-primary">*</sup></label>
+					<input type="email" name="user_email" placeholder="<?=__('이메일 입력')?>" id="pb-manage-user-edit-form-user_email" class="form-control" required data-error="<?=__('이메일을 입력하세요')?>" value="<?=$user_data['user_email']?>" data-remote="<?=pb_ajax_url("pb-admin-manage-user-check-email", array("user_id" => $user_data['id']))?>" data-remote-error="이미 사용하고 있는 이메일입니다.">
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 				</div>
@@ -60,9 +60,9 @@
 				<?php if(!$is_root_admin_){ ?>
 
 					<div class="form-group">
-						<label for="pb-manage-user-edit-form-user_status">상태 <sup class="text-primary">*</sup></label>
+						<label for="pb-manage-user-edit-form-user_status"><?=__('상태')?> <sup class="text-primary">*</sup></label>
 
-						<select class="form-control" name="user_status" required data-error="상태를 선택하세요">
+						<select class="form-control" name="user_status" required data-error="<?=__('상태를 선택하세요')?>">
 							<?= pb_gcode_make_options(array("code_id" => "U0001"), $user_data['status']);?>
 						</select>
 
@@ -75,10 +75,10 @@
 					
 
 				<div class="form-group">
-					<label for="pb-manage-user-edit-form-user_authority">권한 <sup class="text-primary">*</sup></label>
+					<label for="pb-manage-user-edit-form-user_authority"><?=__('권한')?> <sup class="text-primary">*</sup></label>
 
 					<?php if($is_root_admin_){ ?>
-						<p class="form-control-static">관리자 <small>(최초관리자의 권한은 변경불가)</small></p>
+						<p class="form-control-static"><?=__('관리자')?> <small>(<?=__('최초관리자의 권한은 변경불가')?>)</small></p>
 					<?php }else{ ?>
 						<select class="form-control" name="user_authority" multiple>
 							<?php 
@@ -102,8 +102,8 @@
 				<?php pb_hook_do_action('pb_admin_manage_user_edit_form_after')?>
 
 				<hr>
-				<button type="submit" class="btn btn-primary btn-block btn-lg">변경사항 저장</button>
-				<a href="<?=pb_admin_url("manage-user")?>" class="btn btn-block btn-default ">내역으로</a>
+				<button type="submit" class="btn btn-primary btn-block btn-lg"><?=__('변경사항 저장')?></button>
+				<a href="<?=pb_admin_url("manage-user")?>" class="btn btn-block btn-default "><?=__('내역으로')?></a>
 			</form>
 		</div>
 	</div>

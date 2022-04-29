@@ -15,8 +15,8 @@ function _pb_admin_ajax_post_revision_load_master(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$post_type_}")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -37,8 +37,8 @@ function _pb_admin_ajax_post_revision_restore(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$post_type_}")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -46,8 +46,8 @@ function _pb_admin_ajax_post_revision_restore(){
 	if(!isset($revision_data_)){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "잘못된 요청",
-			"error_message" => "요청정보가 잘못되었습니다.",
+			"error_title" => __("잘못된 요청"),
+			"error_message" => __("요청정보가 잘못되었습니다."),
 		));
 		pb_end();
 	}
@@ -79,8 +79,8 @@ function _pb_admin_ajax_post_revision_delete(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$post_type_}")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -88,8 +88,8 @@ function _pb_admin_ajax_post_revision_delete(){
 	if(!isset($revision_data_)){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "잘못된 요청",
-			"error_message" => "요청정보가 잘못되었습니다.",
+			"error_title" => __("잘못된 요청"),
+			"error_message" => __("요청정보가 잘못되었습니다."),
 		));
 		pb_end();
 	}

@@ -84,8 +84,8 @@ function pb_page_builder_element_add_edit_category_function($key_, $func_, $prio
 	));
 }
 
-pb_page_builder_element_add_edit_category('common', '기본설정', 1);
-pb_page_builder_element_add_edit_category('styles', '스타일', 2);
+pb_page_builder_element_add_edit_category('common', __('기본설정'), 1);
+pb_page_builder_element_add_edit_category('styles', __('스타일'), 2);
 pb_page_builder_element_add_edit_category_function('common', 'pb_page_builder_element_edit_category_common');
 pb_page_builder_element_add_edit_category_function('styles', 'pb_page_builder_element_edit_category_styles');
 
@@ -98,8 +98,8 @@ function pb_page_builder_element_edit_category_common($element_data_){
 	<div class="row">
 		<div class="col-xs-12 col-sm-6">
 			<div class="form-group">
-				<label>ID</label>
-				<input type="text" name="id" placeholder="ID 입력" class="form-control" value="<?=$id_?>">
+				<label><?=__('ID')?></label>
+				<input type="text" name="id" placeholder="<?=__('ID 입력')?>" class="form-control" value="<?=$id_?>">
 
 				<div class="help-block with-errors"></div>
 				<div class=""></div>
@@ -109,8 +109,8 @@ function pb_page_builder_element_edit_category_common($element_data_){
 		<div class="col-xs-12 col-sm-6">
 
 			<div class="form-group">
-				<label>클래스</label>
-				<input type="text" name="class" placeholder="클래스 입력" class="form-control" value="<?=$class_?>">
+				<label><?=__('클래스')?></label>
+				<input type="text" name="class" placeholder="<?=__('클래스 입력')?>" class="form-control" value="<?=$class_?>">
 
 				<div class="help-block with-errors"></div>
 				<div class=""></div>
@@ -149,7 +149,7 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 	<div class="row">
 		<div class="col-xs-12 col-sm-6">
 			<div class="form-group">
-				<label>여백설정</label>
+				<label><?=__('여백설정')?></label>
 				<div class="pb-page-builder-element-margin-editor">
 						
 					<div class="square-edit-area margin">
@@ -157,14 +157,15 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 						<input type="text" name="margin_right" class="input right" placeholder="-" value="<?=$margin_right_?>">
 						<input type="text" name="margin_bottom" class="input bottom" placeholder="-" value="<?=$margin_bottom_?>">
 						<input type="text" name="margin_left" class="input left" placeholder="-" value="<?=$margin_left_?>">
-						<label class="subject">바깥쪽여백</label>
+						<label class="subject"><?=__('바깥쪽여백')?></label>
 					</div>
 					<div class="square-edit-area padding">
 						<input type="text" name="padding_top" class="input top" placeholder="-" value="<?=$padding_top_ ?>">
 						<input type="text" name="padding_right" class="input right" placeholder="-" value="<?=$padding_right_ ?>">
 						<input type="text" name="padding_bottom" class="input bottom" placeholder="-" value="<?=$padding_bottom_ ?>">
 						<input type="text" name="padding_left" class="input left" placeholder="-" value="<?=$padding_left_ ?>">
-						<label class="subject">안쪽여백</label>					</div>
+						<label class="subject"><?=__('안쪽여백')?></label>					
+					</div>
 
 				</div>
 
@@ -177,9 +178,9 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 			<div class="row">
 				<div class="col-xs-12 col-sm-6">
 					<div class="form-group">
-						<label>배경색</label>
+						<label><?=__('배경색')?></label>
 						<div class="input-group colorpicker-component" id="<?=$bacground_color_picker_id_?>">
-							<input type="text" name="background_color" placeholder="배경색 선택" class="form-control" value="<?=$background_color_?>">
+							<input type="text" name="background_color" placeholder="<?=__('배경색 선택')?>" class="form-control" value="<?=$background_color_?>">
 							<span class="input-group-addon"><i></i></span>
 						</div>
 						
@@ -196,8 +197,8 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 				</div>
 				<div class="col-xs-12 col-sm-6">
 					<div class="form-group">
-						<label>배경이미지</label>
-						<input type="hidden" name="background_image" placeholder="ID 입력" value="<?=$background_image_?>" data-upload-path="/" id="<?=$bacground_image_picker_id_?>">
+						<label><?=__('배경이미지')?></label>
+						<input type="hidden" name="background_image" value="<?=$background_image_?>" data-upload-path="/" id="<?=$bacground_image_picker_id_?>">
 
 						<script type="text/javascript">
 							jQuery(document).ready(function(){
@@ -214,7 +215,7 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 			<div class="row">
 				<div class="col-xs-12 col-sm-12">
 					<div class="form-group">
-						<label>배경이미지 크기</label>
+						<label><?=__('배경이미지 크기')?></label>
 						<input type="text" name="background_size" placeholder="크기 입력" class="form-control" value="<?=$background_size_?>">
 
 						<div class="help-block with-errors"></div>
@@ -223,8 +224,8 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 				</div>
 				<div class="col-xs-12 col-sm-12">
 					<div class="form-group">
-						<label>배경이미지 위치</label>
-						<input type="text" name="background_position" placeholder="위치 입력" class="form-control" value="<?=$background_position_?>">
+						<label><?=__('배경이미지 위치')?></label>
+						<input type="text" name="background_position" placeholder="<?=__('위치 입력')?>" class="form-control" value="<?=$background_position_?>">
 
 						<div class="help-block with-errors"></div>
 						<div class=""></div>

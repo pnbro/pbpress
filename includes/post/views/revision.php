@@ -12,16 +12,16 @@ pb_easy_splited_view("pb-post-revision-splitted-view", "pb-admin-post-revision-t
 		'header' => function(){ 
 			global $pbpost;
 		?>
-			<h3><?=$pbpost['post_title']?> 리비젼내역 </h3>
+			<h3><?=sprintf(__('%s 리비젼내역'), $pbpost['post_title'])?> </h3>
 			<input type="hidden" name="post_id" value="<?=$pbpost['id']?>">
 		<?php },
 	),
 
 	'detail' => array(
 		'header' => function(){ ?>
-			<h3>리비젼내용 
+			<h3><?=__('리비젼내용')?> 
 				<div class="pull-right">
-					<a href="javascript:pb_admin_post_restore();" class="btn btn-primary btn-sm">이 버젼으로 복구</a>
+					<a href="javascript:pb_admin_post_restore();" class="btn btn-primary btn-sm"><?=__('이 버젼으로 복구')?></a>
 				</div>
 				<div class="clearfix"></div>
 			</h3>
@@ -29,7 +29,7 @@ pb_easy_splited_view("pb-post-revision-splitted-view", "pb-admin-post-revision-t
 			<div class="revision-iframe-group" id="pb-revision-iframe-group"></div>
 		<?php },
 	),
-	'placeholder' => "좌측에서 리비젼을 선택하세요",
+	'placeholder' => __("좌측에서 리비젼을 선택하세요"),
 ));
 
 ?>

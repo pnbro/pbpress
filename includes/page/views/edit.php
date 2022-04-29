@@ -18,7 +18,7 @@
 
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-page/edit.css">
-<h3><?=($is_new_ ? "페이지추가" : "페이지수정")?></h3>
+<h3><?=($is_new_ ? __("페이지추가") : __("페이지수정"))?></h3>
 
 <form id="pb-page-edit-form" method="POST">
 	<?php pb_hook_do_action("pb_page_edit_form_before", $pbpage) ?>
@@ -28,19 +28,19 @@
 	<div class="page-edit-frame">
 		<div class="col-content">
 			<div class="form-group page-title-form-group">
-				<input type="text" name="page_title" placeholder="<?=pb_hook_apply_filters('pb_page_edit_form_placeholder', "페이지제목 입력")?>" value="<?=$pbpage['page_title']?>" class="form-control input-lg" required data-error="페이지제목을 입력하세요">
+				<input type="text" name="page_title" placeholder="<?=pb_hook_apply_filters('pb_page_edit_form_placeholder', __("페이지제목 입력"))?>" value="<?=$pbpage['page_title']?>" class="form-control input-lg" required data-error="<?=__('페이지제목을 입력하세요')?>">
 
 				<div class="url-slug-group <?=$is_new_ ? "only-editing" : ""?>" id="pb-page-edit-form-url-slug-group">
 					<div class="input-group input-group-sm">
 						<span class="input-group-addon"><?=pb_home_url()?></span>
-						<input type="text" name="slug" class="form-control" placeholder="URL슬러그 입력" value="<?=$pbpage['slug']?>" data-original-slug="<?=$pbpage['slug']?>">
+						<input type="text" name="slug" class="form-control" placeholder="<?=__('URL슬러그 입력')?>" value="<?=$pbpage['slug']?>" data-original-slug="<?=$pbpage['slug']?>">
 		
 						<?php if(!$is_new_){ ?>
 						<span class="input-group-btn">
-							<button class="btn btn-primary" type="button" data-slug-edit-update-btn>수정</button>
+							<button class="btn btn-primary" type="button" data-slug-edit-update-btn><?=__('수정')?></button>
 						</span>
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" data-slug-edit-cancel-btn>취소</button>
+							<button class="btn btn-default" type="button" data-slug-edit-cancel-btn><?=__('취소')?></button>
 						</span>
 						<?php } ?>
 					</div>	
@@ -55,7 +55,7 @@
 						<?php }else{ ?>
 							<a href="<?=pb_home_url($pbpage['slug'])?>" target="_blank" data-page-link>
 							<?=pb_home_url()?><strong class="slug"><?=$pbpage['slug']?></strong>
-						</a> <a href="" class="btn btn-sm btn-default" data-slug-edit-btn>수정</a>
+						</a> <a href="" class="btn btn-sm btn-default" data-slug-edit-btn><?=__('수정')?></a>
 						<?php } ?>
 						
 
@@ -96,14 +96,14 @@
 			<div class="panel panel-default" id="pb-page-edit-form-page-common-panel">
 				<div class="panel-heading" role="tab">
 					<h4 class="panel-title">
-						<a role="button" data-toggle="collapse" href="#pb-page-edit-form-page-common-panel-body" aria-expanded="true" aria-controls="collapseOne">기본정보</a>
+						<a role="button" data-toggle="collapse" href="#pb-page-edit-form-page-common-panel-body" aria-expanded="true"><?=__('기본정보')?></a>
 					</h4>
 				</div>
 				<div id="pb-page-edit-form-page-common-panel-body" class="panel-collapse collapse in" role="tabpanel">
 					<div class="panel-body">
 						<div class="form-group">
-							<label>페이지상태</label>
-							<select class="form-control" name="status" required data-error="상태를 선택하세요">
+							<label><?=__('페이지상태')?></label>
+							<select class="form-control" name="status" required data-error="<?=__('상태를 선택하세요')?>">
 								<?=PB_PAGE_STATUS::make_options($pbpage['status'])?>
 							</select>
 							<div class="help-block with-errors"></div>
@@ -112,7 +112,7 @@
 						
 						<?php if(!$is_new_){ ?>
 						<div class="form-group">
-							<label>마지막수정일자</label>
+							<label><?=__('마지막수정일자')?></label>
 							<p class="form-control-static"><?=strlen($pbpage['mod_date_ymdhi']) ? $pbpage['mod_date_ymdhi'] : $pbpage['reg_date_ymdhi']?></p>
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>
@@ -124,7 +124,7 @@
 						<div class="button-area">
 
 							<div class="col-left">
-								<button type="submit" class="btn btn-primary btn-block btn-lg"><?=($is_new_ ? "페이지추가" : "페이지수정")?></button>
+								<button type="submit" class="btn btn-primary btn-block btn-lg"><?=($is_new_ ? __("페이지추가") : __("페이지수정"))?></button>
 							</div>
 							<?php if(!$is_new_){ ?>
 								<div class="col-right">

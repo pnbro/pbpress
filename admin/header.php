@@ -15,9 +15,9 @@
 				<?=pb_hook_apply_filters('pb-admin-header-user-name', strlen($user_data_['user_name']) ? $user_data_['user_name'] : "-")?>
 			</a>
 			<ul class="dropdown-menu dropdown-menu-right">
-				<li><a href="<?=pb_home_url()?>">사이트홈</a></li>
+				<li><a href="<?=pb_home_url()?>"><?=__('사이트홈')?></a></li>
 				<?php pb_hook_do_action('pb-admin-header-mypage-menu'); ?>
-				<li><a href="<?=pb_admin_lgout_url(pb_admin_url())?>">로그아웃</a></li>
+				<li><a href="<?=pb_admin_lgout_url(pb_admin_url())?>"><?=__('로그아웃')?></a></li>
 			</ul>
 		</div>
 

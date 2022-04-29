@@ -10,7 +10,7 @@ function _pb_post_register_adminpage($results_){
 
 	foreach($post_types_ as $key_ => $type_data_){
 		$results_["manage-{$key_}"] = array(
-			'name' => "{$type_data_['name']} 관리",
+			'name' => sprintf(__("%s 관리"), $type_data_['name']),
 			'type' => 'menu',
 			'post_type' => $key_,
 			'rewrite_handler' => "_pb_post_rewrite_handler_for_adminpage",
@@ -45,7 +45,7 @@ function _pb_post_rewrite_handler_for_adminpage($rewrite_path_){
 	$pbpost_type_data = isset($post_types_[$post_type_]) ? $post_types_[$post_type_] : null;
 
 	if(!isset($pbpost_type_data)){
-		return new PBError(503, "잘못된 접근", "존재하지 않는 글형식입니다.");
+		return new PBError(503, __("잘못된 접근"), __("존재하지 않는 글형식입니다."));
 	}
 	
 	if(count($rewrite_path_) < 2){
@@ -65,7 +65,7 @@ function _pb_post_rewrite_handler_for_adminpage($rewrite_path_){
 		$pbpost = pb_post($post_id_);
 
 		if(!isset($pbpost) || $pbpost['type'] !== $pbpost_type){
-			return new PBError(503, "잘못된 접근", "존재하지 않는 글입니다.");
+			return new PBError(503, __("잘못된 접근"), __("존재하지 않는 글입니다."));
 		}
 
 		global $pbpost_meta_map;
@@ -94,7 +94,7 @@ function _pb_post_rewrite_handler_for_adminpage($rewrite_path_){
 		return $other_path_;
 	}
 
-	return new PBError(503, "잘못된 접근", "요청정보가 잘못됬습니다.");
+	return new PBError(503, __("잘못된 접근"), __("요청정보가 잘못됬습니다."));
 }
 
 
@@ -103,7 +103,7 @@ function _pb_post_register_authority_task_types($results_){
 
 	foreach($post_types_ as $key_ => $type_data_){
 		$results_["manage_{$key_}"] = array(
-			'name' => "{$type_data_['name']} 관리"
+			'name' => sprintf(__("%s 관리"), $type_data_['name']),
 		);
 	}
 
@@ -135,8 +135,8 @@ function _pb_post_ajax_edit(){
 	if(!isset($post_data_)){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => "잘못된 요청",
-			'error_message' => "필수 요청값이 누락되었습니다.",
+			'error_title' => __("잘못된 요청"),
+			'error_message' => __("필수 요청값이 누락되었습니다."),
 		));
 		pb_end();
 	}
@@ -146,8 +146,8 @@ function _pb_post_ajax_edit(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$post_type_}")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -214,8 +214,8 @@ function _pb_post_ajax_delete(){
 	if(!strlen($post_id_)){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => "잘못된 요청",
-			'error_message' => "필수 요청값이 누락되었습니다.",
+			'error_title' => __("잘못된 요청"),
+			'error_message' => __("필수 요청값이 누락되었습니다."),
 		));
 		pb_end();
 	}
@@ -225,8 +225,8 @@ function _pb_post_ajax_delete(){
 	if(!isset($post_data_)){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => "잘못된 요청",
-			'error_message' => "글정보가 존재하지 않습니다.",
+			'error_title' => __("잘못된 요청"),
+			'error_message' => __("글정보가 존재하지 않습니다."),
 		));
 		pb_end();
 	}
@@ -236,8 +236,8 @@ function _pb_post_ajax_delete(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$post_type_}")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -260,8 +260,8 @@ function _pb_post_ajax_update_slug(){
 	if(!strlen($post_id_)){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => "잘못된 요청",
-			'error_message' => "필수 요청값이 누락되었습니다.",
+			'error_title' => __("잘못된 요청"),
+			'error_message' => __("필수 요청값이 누락되었습니다."),
 		));
 		pb_end();
 	}
@@ -272,8 +272,8 @@ function _pb_post_ajax_update_slug(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$post_type_}")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}
@@ -299,8 +299,8 @@ function _pb_post_ajax_update_status(){
 	if(!strlen($post_id_) || !isset($post_data_)){
 		echo json_encode(array(
 			'success' => false,
-			'error_title' => "잘못된 요청",
-			'error_message' => "필수 요청값이 누락되었습니다.",
+			'error_title' => __("잘못된 요청"),
+			'error_message' => __("필수 요청값이 누락되었습니다."),
 		));
 		pb_end();
 	}
@@ -308,8 +308,8 @@ function _pb_post_ajax_update_status(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_{$post_type_}")){
 		echo json_encode(array(
 			"success" => false,
-			"error_title" => "권한없음",
-			"error_message" => "접근권한이 없습니다.",
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
 		));
 		pb_end();
 	}

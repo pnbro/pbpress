@@ -32,7 +32,7 @@ global $pb_config;
 ?><!DOCTYPE html>
 <html>
 <head>
-	<title><?=pb_hook_apply_filters('pb-adminpage-title', "PBPress 관리자페이지")?></title>
+	<title><?=pb_hook_apply_filters('pb-adminpage-title', __("PBPress 관리자페이지"))?></title>
 
 	<meta charset="<?=$pb_config->charset?>">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">

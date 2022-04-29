@@ -7,11 +7,11 @@
 <div class="post-html"><?=pb_post_html()?></div>
 
 <?php if(pb_exists_prev_post()){ ?>
-<a href="<?=pb_prev_post_url()?>" class="prev-post-link">[이전글] <?=pb_prev_post_title()?></a>
+<a href="<?=pb_prev_post_url()?>" class="prev-post-link"><?=pb_prev_post_title()?></a>
 <?php } ?>
 
 <?php if(pb_exists_next_post()){ ?>
-<a href="<?=pb_next_post_url()?>" class="next-post-link">[다음글] <?=pb_next_post_title()?></a>
+<a href="<?=pb_next_post_url()?>" class="next-post-link"><?=pb_next_post_title()?></a>
 <?php } ?>
 
 <?php
