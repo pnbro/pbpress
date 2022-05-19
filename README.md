@@ -93,7 +93,7 @@ you can make a theme that you want, and just put your theme you made into 'theme
 	NotoSansKR Webfont(Converted by theeluwin) : https://github.com/theeluwin/NotoSansKR-Hestia
 
 ## license
-	개인 또는 업체가 PBPress를 사용한 테마 및 플러그인 개발하여 상업적으로 납품이 가능하나, PBPress 자체를 판매 및 수익활동을 금지합니다. 기타 라이센스 규약은 MIT 라이센스를 따릅니다.
+개인 또는 업체가 PBPress를 사용한 테마 및 플러그인 개발하여 상업적으로 납품이 가능하나, PBPress 자체를 판매 및 수익활동을 금지합니다. 기타 라이센스 규약은 MIT 라이센스를 따릅니다.
 	
 ## TODO
 	1. Write API documentation and manuals.
