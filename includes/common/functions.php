@@ -43,7 +43,13 @@ function pb_redirect_404(){
 	include(PB_DOCUMENT_PATH."404.php");
 }
 
-function pb_redirect_error($code_, $message_, $title_ = "ERROR!"){
+function pb_redirect_error($code_, $message_ = null, $title_ = "ERROR!"){
+	if(pb_is_error($code_)){
+		$message_ = $code_->error_message();		
+		$title_ = $code_->error_title();		
+		$code_ = $code_->error_code();
+	}
+
 	if($code_ == 404){
 		pb_redirect_404();
 		return;
