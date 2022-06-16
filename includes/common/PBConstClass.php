@@ -54,7 +54,7 @@ abstract class PBConstClass{
 		$query_ = " (CASE \r\n";
 
 		foreach($const_names_ as $code_ => $name_){
-			$query_ .= " WHEN {$column_} = '{$code_}' THEN '{$name_}' \r\n";
+			$query_ .= " WHEN {$column_} = '{$code_}' THEN '".addslashes($name_)."' \r\n";
 		}
 		$query_ .= " ELSE NULL \r\n";
 		$query_ .= " END) {$alias_} ";

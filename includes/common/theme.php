@@ -100,14 +100,19 @@ function pb_current_theme_url(){
 	return PB_DOCUMENT_URL."themes/".pb_current_theme()."/";	
 }
 
+function pb_theme_part($part_name_){
+	$part_path_ = PB_DOCUMENT_PATH."themes/".pb_current_theme()."/{$part_name_}.php";
+	$part_path_ = pb_hook_apply_filters('pb_theme_part', $part_path_, $part_name_);
+	include($part_path_);
+}
+
 function pb_theme_header($header_name_ = null){
 	if(strlen($header_name_)){
 		$header_name_ = "header-".$header_name_;
 	}else{
 		$header_name_ = "header";
 	}
-
-	include(PB_DOCUMENT_PATH."themes/".pb_current_theme()."/{$header_name_}.php");
+	pb_theme_part($header_name_);
 }
 
 function pb_theme_footer($footer_name_ = null){
@@ -116,7 +121,7 @@ function pb_theme_footer($footer_name_ = null){
 	}else{
 		$footer_name_ = "footer";
 	}
-	include(PB_DOCUMENT_PATH."themes/".pb_current_theme()."/{$footer_name_}.php");	
+	pb_theme_part($footer_name_);
 }
 
 include(PB_DOCUMENT_PATH . 'includes/common/theme-builtin.php');

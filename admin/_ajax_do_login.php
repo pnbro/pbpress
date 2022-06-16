@@ -40,8 +40,6 @@ if(pb_is_error($result_)){
 	pb_admin_end();	
 }
 
-pb_user_create_session(pb_user_simply_data($result_));
-
 echo json_encode(array(
 	'success' => true,
 ));
