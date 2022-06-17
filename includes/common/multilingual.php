@@ -88,6 +88,8 @@ function pb_lang_load_translations_json($domain_, $locale_){
 				$translations_data_[stripslashes($lang_key_)] = stripslashes($lang_value_);
 			}
 
+			$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded'] = true;
+
 		}catch(Exception $ex_){
 			return pb_error(500, __("에러발생"), $ex_->getMessage());
 		}
