@@ -25,6 +25,11 @@ $current_adminpage_slug_ = strlen($current_adminpage_slug_) ? $current_adminpage
 $rewrite_handler_ = isset($current_adminpage_["rewrite_handler"]) ? $current_adminpage_["rewrite_handler"] : "pb_adminpage_rewrite_common_handler";
 $current_adminpage_path_ = call_user_func_array($rewrite_handler_, array(pb_adminpage_rewrite_path(), $current_adminpage_));
 
+if(isset($current_adminpage_['authority_task']) && !pb_user_has_authority_task(pb_current_user_id(), $current_adminpage_['authority_task'])){
+	pb_redirect_error(new PBError(403, __("권한없음"), __("접근권한이 없습니다.")));
+	pb_end();
+}
+
 pb_hook_do_action("pb_admin_started");
 
 global $pb_config;

@@ -44,9 +44,9 @@ function pb_lang_load_translations($domain_, $json_dir_path_){
 
 	if(!file_exists($json_dir_path_)) return false;
 
-	foreach(glob($pb_lang_domain_maps[$domain_]['path'].'*.php') as $filename_){
+	foreach(glob($pb_lang_domain_maps[$domain_]['path'].'*.lng') as $filename_){
 		
-		$locale_name_ = basename($filename_, ".php");
+		$locale_name_ = basename($filename_, ".lng");
 		$pb_lang_domain_maps[$domain_]['locales'][$locale_name_] = array(
 			'loaded' => false,
 			'translations' => array(),
@@ -71,7 +71,23 @@ function pb_lang_load_translations_json($domain_, $locale_){
 	if(!$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded']){
 
 		try{
-			$translations_data_ = include($pb_lang_domain_maps[$domain_]['path'].$locale_.'.php');
+
+			$lang_file_ = file_get_contents($pb_lang_domain_maps[$domain_]['path'].$locale_.'.lng');
+			$lang_file_ = trim($lang_file_);
+			$lang_file_ = explode(";;", $lang_file_);
+
+			$translations_data_ = array();
+
+			foreach($lang_file_ as $lang_text_){
+				$lang_text_ = trim($lang_text_);
+				$lang_text_ = explode(";=;", $lang_text_);
+				if(count($lang_text_) < 2) continue;
+
+				$lang_key_ = trim($lang_text_[0], ";");
+				$lang_value_ = trim($lang_text_[1], ";");
+				$translations_data_[stripslashes($lang_key_)] = stripslashes($lang_value_);
+			}
+
 		}catch(Exception $ex_){
 			return pb_error(500, __("에러발생"), $ex_->getMessage());
 		}

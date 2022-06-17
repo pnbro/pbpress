@@ -1,7 +1,7 @@
 @import (reference) "../../pb-admin.less";
 
 @pb-admin-header-height: 40px;
-@pb-admin-aside-width: 180px;
+@pb-admin-aside-width: 200px;
 
 html,body{
 	min-height: 100%;
@@ -13,7 +13,7 @@ body{
 	background-color: #fdfdfd;
 	padding-bottom: 20px;
 
-	@media screen and (max-width: @screen-xs-max){
+	@media screen and (max-width: @screen-sm-max){
 		padding-left: 0px;
 	}
 }
@@ -98,7 +98,7 @@ body{
 				height: 30px;
 				vertical-align: middle;
 
-				@media screen and (max-width: @screen-xs-max){
+				@media screen and (max-width: @screen-sm-max){
 					display: inline-block;
 					margin-left: 10px;
 				}
@@ -125,7 +125,7 @@ body{
 	background-color: #3e3e3e;
 	z-index: @zindex-navbar-fixed - 1;
 
-	@media screen and (max-width: @screen-xs-max){
+	@media screen and (max-width: @screen-sm-max){
 		left: auto;
 		right: 0px;
 	}
@@ -219,7 +219,7 @@ body{
 		}
 	}
 
-	@media screen and (max-width: @screen-xs-max){
+	@media screen and (max-width: @screen-sm-max){
 		display: block;
 		-webkit-transition: -webkit-transform .3s;
 				transition: transform .3s;
@@ -255,7 +255,7 @@ body{
 	background-color: rgba(0,0,0,0.5);
 	z-index: @zindex-navbar-fixed - 2;
 
-	@media screen and (max-width: @screen-xs-max){
+	@media screen and (max-width: @screen-sm-max){
 		display: block;
 		-webkit-transition: opacity .3s;
 				transition: opacity .3s;
@@ -291,13 +291,9 @@ body{
 		> .col-detail{
 
 			@media screen and (max-width: @screen-sm-max){
-				padding-top: 60px;
-				padding-left: @pb-admin-aside-width + 10px;
-			}
-			@media screen and (max-width: @screen-xs-max){
 				padding-left: 10px;	
 			}
-
+			
 		}
 	}
 }

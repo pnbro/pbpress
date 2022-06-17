@@ -149,10 +149,6 @@ function pb_adminpage_rewrite_common_handler($rewrite_path_, $adminpage_data_){
 		return pb_hook_apply_filters("pb-adminpage-dashboard",PB_DOCUMENT_PATH."admin/dashboard.php");
 	}
 
-	if(isset($adminpage_data_['authority_task']) && !pb_user_has_authority_task(pb_current_user_id(), $adminpage_data_['authority_task'])){
-		return new PBError(403, __("권한없음"), __("접근권한이 없습니다."));
-	}
-
 	return $adminpage_data_['page'];
 }
 
