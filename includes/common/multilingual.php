@@ -88,15 +88,15 @@ function pb_lang_load_translations_json($domain_, $locale_){
 				$translations_data_[stripslashes($lang_key_)] = stripslashes($lang_value_);
 			}
 
+			$pb_lang_domain_maps[$domain_]['locales'][$locale_]['translations'] = $translations_data_;
 			$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded'] = true;
+			pb_hook_do_action('pb_lang_translations_json_loaded', $domain_, $locale_, $translations_data_);
+
+			return $pb_lang_domain_maps[$domain_]['locales'][$locale_];
 
 		}catch(Exception $ex_){
 			return pb_error(500, __("에러발생"), $ex_->getMessage());
 		}
-
-		$pb_lang_domain_maps[$domain_]['locales'][$locale_]['translations'] = $translations_data_;
-		pb_hook_do_action('pb_lang_translations_json_loaded', $domain_, $locale_, $translations_data_);
-		return $pb_lang_domain_maps[$domain_]['locales'][$locale_];
 	}
 
 	return pb_error(500, __("불러오기 실패"), __("번역본을 불러오기에 실패하였습니다."));
