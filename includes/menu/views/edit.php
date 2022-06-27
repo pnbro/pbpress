@@ -162,7 +162,7 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 							}	?>
 					</div>
 					<div class="button-area text-right">
-						<a href="" class="btn btn-default btn-block" data-add-menu-item-btn>메뉴항목 추가</a>
+						<a href="" class="btn btn-default btn-block" data-add-menu-item-btn><?=__('메뉴항목 추가')?></a>
 					</div>
 				</div>
 			</div>

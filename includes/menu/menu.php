@@ -261,23 +261,23 @@ function _pb_menu_category_list_ext_link_render($category_, $menu_target_list_){
 	?>
 
 		<div class="form-group">
-			<label>메뉴항목명</label>
-			<input type="text" name="title" placeholder="메뉴항목명 입력" required data-error="메뉴항목명을 입력하세요" class="form-control">
+			<label><?=__('메뉴항목명')?></label>
+			<input type="text" name="title" placeholder="<?=__('메뉴항목명 입력')?>" required data-error="<?=__('메뉴항목명을 입력하세요')?>" class="form-control">
 			<div class="help-block with-errors"></div>
 			<div class="clearfix"></div>
 		</div>
 		<div class="form-group">
-			<label>외부링크주소</label>
-			<input type="text" name="ext_link_url" placeholder="URL 입력" required data-error="URL을 입력하세요" class="form-control">
+			<label><?=__('외부링크주소')?></label>
+			<input type="text" name="ext_link_url" placeholder="<?=__('URL 입력')?>" required data-error="<?=__('URL을 입력하세요')?>" class="form-control">
 			<div class="help-block with-errors"></div>
 			<div class="clearfix"></div>
 		</div>
 
 		<div class="form-group">
-			<label>새창으로 열기</label>
+			<label><?=__('새창으로 열기')?></label>
 			<div>
-				<label class="radio-inline"><input type="radio" name="open_new_window" value="Y"> 예</label>
-				<label class="radio-inline"><input type="radio" name="open_new_window" value="N"> 아니오</label>
+				<label class="radio-inline"><input type="radio" name="open_new_window" value="Y"> <?=__('예')?></label>
+				<label class="radio-inline"><input type="radio" name="open_new_window" value="N"> <?=__('아니오')?></label>
 			</div>
 			<div class="help-block with-errors"></div>
 			<div class="clearfix"></div>

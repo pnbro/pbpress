@@ -56,41 +56,56 @@ function pb_lang_load_translations($domain_, $json_dir_path_){
 	pb_hook_do_action('pb_lang_translations_loaded', $domain_);
 	return true;
 }
-function pb_lang_is_loaded_translations_json($domain_, $locale_){
+function pb_lang_is_loaded_translations_file($domain_, $locale_){
 	global $pb_lang_domain_maps;
 	if(!isset($pb_lang_domain_maps[$domain_])) return false;
 	if(!isset($pb_lang_domain_maps[$domain_]['locales'][$locale_])) return false;
 	return $pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded'];
 }
 
-function pb_lang_load_translations_json($domain_, $locale_){
+function pb_lang_load_translations_file($domain_, $locale_, $reload_ = false){
 	global $pb_lang_domain_maps;
 	if(!isset($pb_lang_domain_maps[$domain_])) return false;
 	if(!isset($pb_lang_domain_maps[$domain_]['locales'][$locale_])) return false;
 
-	if(!$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded']){
+	if(!$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded'] || $reload_){
 
 		try{
 
-			$lang_file_ = file_get_contents($pb_lang_domain_maps[$domain_]['path'].$locale_.'.lng');
-			$lang_file_ = trim($lang_file_);
-			$lang_file_ = explode(";;", $lang_file_);
+			if(!file_exists($pb_lang_domain_maps[$domain_]['path'].$locale_.'.lnz') || $reload_){
+				@unlink($pb_lang_domain_maps[$domain_]['path'].$locale_.'.lnz');
+				
+				$lang_file_ = file_get_contents($pb_lang_domain_maps[$domain_]['path'].$locale_.'.lng');
+				$lang_file_ = trim($lang_file_);
+				$lang_file_ = explode(";;", $lang_file_);
 
-			$translations_data_ = array();
+				$translations_data_ = array();
 
-			foreach($lang_file_ as $lang_text_){
-				$lang_text_ = trim($lang_text_);
-				$lang_text_ = explode(";=;", $lang_text_);
-				if(count($lang_text_) < 2) continue;
+				foreach($lang_file_ as $lang_text_){
+					$lang_text_ = trim($lang_text_);
+					$lang_text_ = explode(";=;", $lang_text_);
+					if(count($lang_text_) < 2) continue;
 
-				$lang_key_ = trim($lang_text_[0], ";");
-				$lang_value_ = trim($lang_text_[1], ";");
-				$translations_data_[stripslashes($lang_key_)] = stripslashes($lang_value_);
+					$lang_key_ = trim($lang_text_[0], ";");
+					$lang_value_ = trim($lang_text_[1], ";");
+					$translations_data_[stripslashes($lang_key_)] = stripslashes($lang_value_);
+				}
+
+				$translations_bin_ = gzcompress(serialize($translations_data_));
+				file_put_contents($pb_lang_domain_maps[$domain_]['path'].$locale_.'.lnz', $translations_bin_);
+
+				$pb_lang_domain_maps[$domain_]['locales'][$locale_]['translations'] = $translations_data_;
+				$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded'] = true;
+				pb_hook_do_action('pb_lang_translations_json_loaded', $domain_, $locale_, $translations_data_);
+
+			}else{
+				$translations_bin_ = file_get_contents($pb_lang_domain_maps[$domain_]['path'].$locale_.'.lnz');
+				$translations_data_ = unserialize(gzuncompress($translations_bin_));
+
+				$pb_lang_domain_maps[$domain_]['locales'][$locale_]['translations'] = $translations_data_;
+				$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded'] = true;
+				pb_hook_do_action('pb_lang_translations_json_loaded', $domain_, $locale_, $translations_data_);
 			}
-
-			$pb_lang_domain_maps[$domain_]['locales'][$locale_]['translations'] = $translations_data_;
-			$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded'] = true;
-			pb_hook_do_action('pb_lang_translations_json_loaded', $domain_, $locale_, $translations_data_);
 
 			return $pb_lang_domain_maps[$domain_]['locales'][$locale_];
 
@@ -110,7 +125,7 @@ function __($text_, $domain_ = PBDOMAIN){
 	if(!isset($pb_lang_domain_maps[$domain_]['locales'][$current_locale_])) return $text_;
 
 	if(!$pb_lang_domain_maps[$domain_]['locales'][$current_locale_]['loaded']){
-		if(pb_is_error(pb_lang_load_translations_json($domain_, $current_locale_))) return $text_;
+		if(pb_is_error(pb_lang_load_translations_file($domain_, $current_locale_))) return $text_;
 	}
 
 	$translations_ = $pb_lang_domain_maps[$domain_]['locales'][$current_locale_]['translations'];
@@ -135,7 +150,7 @@ function pb_register_rewrite_handler_lang_pblang_script(){
 	$results_ = array();
 
 	foreach($pb_lang_domain_maps as $domain_ => $map_data_){
-		pb_lang_load_translations_json($domain_, $current_locale_);
+		pb_lang_load_translations_file($domain_, $current_locale_);
 	}
 
 	foreach($pb_lang_domain_maps as $domain_ => $map_data_){

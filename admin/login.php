@@ -39,7 +39,7 @@ $admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', __("PBPress
 
 					<div class="form-group">
 						<label for="pb-login-form-user_login"><?=__('ID 또는 이메일')?> <sup class="text-primary">*</sup></label>
-						<input type="text" name="user_login" placeholder="사용자ID 입력" id="pb-login-form-site_login" class="form-control" required data-error="<?=__('사용자ID를 입력하세요')?>">
+						<input type="text" name="user_login" placeholder="<?=__('사용자ID 입력')?>" id="pb-login-form-site_login" class="form-control" required data-error="<?=__('사용자ID를 입력하세요')?>">
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
 					</div>

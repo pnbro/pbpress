@@ -23,7 +23,7 @@ $_pb_post_type_label_defaults = array(
 function pb_post_types(){
 	$pb_post_types_ = pb_hook_apply_filters('pb_post_types', array(
 		'post' => array(
-			'name' => '글',
+			'name' => __('글'),
 			'label' => array(),
 			'use_category' => true,
 			'use_single_post' => true,
