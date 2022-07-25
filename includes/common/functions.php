@@ -5,7 +5,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 }
 
 function pb_home_url($sub_path_ = "", $params_ = array()){
-	return pb_make_url(pb_append_url(PB_DOCUMENT_URL, $sub_path_), $params_);
+	return pb_hook_apply_filters('pb_home_url', pb_make_url(pb_append_url(PB_DOCUMENT_URL, $sub_path_), $params_), $sub_path_, $params_);
 }
 function _pb_home_url_add_to_header_pbvar($results_){
 	$results_['home_url'] = pb_home_url();
