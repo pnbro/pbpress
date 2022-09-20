@@ -1,7 +1,7 @@
 <?php
 
-define('PB_VERSION', '3.4.1');
-define('PB_SCRIPT_VERSION', '2.1.1');
+define('PB_VERSION', '3.5.0');
+define('PB_SCRIPT_VERSION', '2.2.0');
 
 //check exists config file
 if(!file_exists(dirname( __FILE__ )."/pb-config.php")){
