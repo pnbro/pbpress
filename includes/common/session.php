@@ -25,8 +25,6 @@ if($session_manager_class_ === "default"){
 	$pb_session_manager = new PBSessionHandlerFile();
 }
 
-session_set_save_handler($pb_session_manager);
-
 if(PHP_VERSION_ID < 70300){
 	$cookie_save_path_ = '/;SameSite='.$pb_config->session_cookie_samesite();
 
@@ -124,5 +122,6 @@ function pb_cookie_remove($key_){
 
 ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
 session_start();
+session_register_shutdown();
 
 ?>

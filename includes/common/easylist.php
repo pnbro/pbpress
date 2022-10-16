@@ -174,7 +174,7 @@ class PB_easylist{
 				<a href="javascript:void(0);" class="pagenav-right pagenav-btn" data-page-index="<?=$pagenav_end_offset_?>"><?=$options_['pagenav_after_html']?></a>
 			<?php }else{ ?>
 
-				<span class="pagenav-left pagenav-btn"></span>
+				<span class="pagenav-right pagenav-btn"></span>
 				
 			<?php }
 		}else{
@@ -195,7 +195,7 @@ class PB_easylist{
 			if($total_page_count_ > ($page_index_+1)){ ?>
 				<a href="javascript:void(0);" class="pagenav-right pagenav-btn" data-page-index="<?=$page_index_+1?>"><?=$options_['pagenav_after_html']?></a>
 			<?php }else{ ?>
-				<span class="pagenav-left pagenav-btn"></span>
+				<span class="pagenav-right pagenav-btn"></span>
 			<?php }
 
 		}
