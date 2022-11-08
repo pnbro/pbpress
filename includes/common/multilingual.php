@@ -77,7 +77,7 @@ function pb_lang_load_translations_file($domain_, $locale_, $reload_ = false){
 				
 				$lang_file_ = file_get_contents($pb_lang_domain_maps[$domain_]['path'].$locale_.'.lng');
 				$lang_file_ = trim($lang_file_);
-				$lang_file_ = explode(";;", $lang_file_);
+				$lang_file_ = explode(";;".PHP_EOL, $lang_file_);
 
 				$translations_data_ = array();
 

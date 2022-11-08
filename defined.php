@@ -1,6 +1,6 @@
 <?php
 
-define('PB_VERSION', '3.6.0');
+define('PB_VERSION', '3.6.1');
 define('PB_SCRIPT_VERSION', '2.3.0');
 
 //check exists config file
