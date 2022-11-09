@@ -117,24 +117,33 @@ function pb_lang_load_translations_file($domain_, $locale_, $reload_ = false){
 	return pb_error(500, __("불러오기 실패"), __("번역본을 불러오기에 실패하였습니다."));
 }
 
-function __($text_, $domain_ = PBDOMAIN){
+function __($text_, $domain_ = PBDOMAIN, $locale_ = null){
 	global $pb_lang_domain_maps;
 	if(!isset($pb_lang_domain_maps[$domain_])) return $text_;
 
-	$current_locale_ = pb_current_locale();
-	if(!isset($pb_lang_domain_maps[$domain_]['locales'][$current_locale_])) return $text_;
+	if(!strlen($locale_)){
+		$locale_ = pb_current_locale();
+	}
+	if(!isset($pb_lang_domain_maps[$domain_]['locales'][$locale_])) return $text_;
 
-	if(!$pb_lang_domain_maps[$domain_]['locales'][$current_locale_]['loaded']){
-		if(pb_is_error(pb_lang_load_translations_file($domain_, $current_locale_))) return $text_;
+	if(!$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded']){
+		if(pb_is_error(pb_lang_load_translations_file($domain_, $locale_))) return $text_;
 	}
 
-	$translations_ = $pb_lang_domain_maps[$domain_]['locales'][$current_locale_]['translations'];
+	$translations_ = $pb_lang_domain_maps[$domain_]['locales'][$locale_]['translations'];
 
 	if(@strlen($translations_[$text_])) return $translations_[$text_];
 	else return $text_;
 }
-function _e($text_, $domain_ = PBDOMAIN){
-	echo __($text_, $domain_);
+function __f($text_, $params_, $domain_ = PBDOMAIN, $locale_ = null){
+	$format_text_ = __($text_, $domain_, $locale_);
+	return vsprintf($format_text_, $params_);
+}
+function _e($text_, $domain_ = PBDOMAIN, $locale_ = null){
+	echo __($text_, $domain_, $locale_);
+}
+function _ef($text_, $params_, $domain_ = PBDOMAIN, $locale_ = null){
+	echo __f($text_, $params_, $domain_, $locale_);
 }
 
 define('PB_LANG_PBLANG_SLUG', "_pblang.js");
