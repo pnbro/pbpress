@@ -120,7 +120,6 @@ function pb_cookie_remove($key_){
 	return $pb_cookie->remove($key_);
 }
 
-ini_set('session.gc_maxlifetime', $pb_config->session_max_time());
 session_start();
 session_register_shutdown();
 

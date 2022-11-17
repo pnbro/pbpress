@@ -18,8 +18,8 @@ if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'){
 define('PB_HTTPS', $https_);
 
 define("PB_DOCUMENT_PATH", dirname( __FILE__ )."/");
-define("PB_DOCUMENT_DOMAIN", $_SERVER['HTTP_HOST'] . str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH));
-define("PB_DOCUMENT_URL", ($https_ ? 'https' : 'http') . '://' . PB_DOCUMENT_DOMAIN);
+define("PB_DOCUMENT_DOMAIN", rtrim($_SERVER['HTTP_HOST'] . str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH), "/"));
+define("PB_DOCUMENT_URL", ($https_ ? 'https' : 'http') . '://' . PB_DOCUMENT_DOMAIN.'/');
 
 include(dirname( __FILE__ )."/pb-config.php");
 

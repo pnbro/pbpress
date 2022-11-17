@@ -81,7 +81,7 @@ class PBConfig{
 		$this->session_cookie_domain = (defined("PB_SESSION_COOKIE_DOMAIN")) ? PB_SESSION_COOKIE_DOMAIN : null;
 
 		if(!strlen($this->session_cookie_domain)){
-			$this->session_cookie_domain = '.'.PB_DOCUMENT_DOMAIN;
+			$this->session_cookie_domain = PB_DOCUMENT_DOMAIN;
 		}
 
 		$this->session_cookie_domain = trim($this->session_cookie_domain,"/");
