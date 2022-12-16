@@ -112,7 +112,7 @@ class PBConfig{
 	}
 
 	public function session_manager(){
-		return pb_hook_apply_filters('pb_config_session_manager', $this->use_https);
+		return pb_hook_apply_filters('pb_config_session_manager', $this->session_manager);
 	}
 
 	public function session_cookie_max_time(){
