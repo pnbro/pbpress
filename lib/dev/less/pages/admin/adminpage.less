@@ -334,7 +334,19 @@ table{
 
 				> a{
 					& + a{
-						margin-left: 3px;
+						margin-left: 5px;
+						
+						&:before{
+							position: relative;
+							display: inline-block;
+							content: "";
+							width: 1px;
+							height: 12px;
+							vertical-align: middle;
+							background-color: rgba(0,0,0,0.15);
+							margin-right: 6px;
+							
+						}
 					}
 				}
 			}

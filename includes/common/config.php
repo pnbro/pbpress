@@ -97,46 +97,46 @@ class PBConfig{
 	}
 
 	public function is_devmode(){
-		return $this->devmode;
+		return pb_hook_apply_filters('pb_config_is_devmode', $this->devmode);
 	}
 	public function is_show_database_error(){
-		return $this->show_database_error;
+		return pb_hook_apply_filters('pb_config_is_show_database_error', $this->show_database_error);
 	}
 
 	public function default_locale(){
-		return $this->default_locale;
+		return pb_hook_apply_filters('pb_config_default_locale', $this->default_locale);
 	}
 
 	public function use_https(){
-		return $this->use_https;
+		return pb_hook_apply_filters('pb_config_use_https', $this->use_https);
 	}
 
 	public function session_manager(){
-		return $this->session_manager;
+		return pb_hook_apply_filters('pb_config_session_manager', $this->use_https);
 	}
 
 	public function session_cookie_max_time(){
-		return $this->session_cookie_max_time;
+		return pb_hook_apply_filters('pb_config_session_cookie_max_time', $this->session_cookie_max_time);
 	}
 	public function session_cookie_domain(){
-		return $this->session_cookie_domain;
+		return pb_hook_apply_filters('pb_config_session_cookie_domain', $this->session_cookie_domain);
 	}
 	public function session_cookie_samesite(){
-		return $this->session_cookie_samesite;
+		return pb_hook_apply_filters('pb_config_session_cookie_samesite', $this->session_cookie_samesite);
 	}
 	public function session_cookie_secure(){
-		return $this->session_cookie_secure;
+		return pb_hook_apply_filters('pb_config_session_cookie_secure', $this->session_cookie_secure);
 	}
 	public function session_cookie_httponly(){
-		return $this->session_cookie_httponly;
+		return pb_hook_apply_filters('pb_config_session_cookie_httponly', $this->session_cookie_httponly);
 	}
 
 	public function session_save_path(){
-		return $this->session_save_path;
+		return pb_hook_apply_filters('pb_config_session_save_path', $this->session_save_path);
 	}
 
 	public function session_max_time(){
-		return $this->session_max_time;
+		return pb_hook_apply_filters('pb_config_session_max_time', $this->session_max_time);
 	}
 }
 
