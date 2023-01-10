@@ -37,13 +37,16 @@ pb_page_builder_add_element("html", array(
 	'element_object' => "PBPageBuilderElement_html",
 	'edit_categories' => array("common", "styles"),
 	'loadable' => false,
-	'preview_fields' => array(
+	'preview' => function($element_data_, $content_){
+		echo $content_;
+	},
+	/*'preview_fields' => array(
 		array(
 			'name' => 'content',
 			'type' => 'html',
 			'display' => 'block',
 		),
-	),
+	),*/
 	'category' => __("기본"),
 ));
 

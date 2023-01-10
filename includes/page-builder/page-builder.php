@@ -4,8 +4,8 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "1.9.0");
-define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "1.0.0");
+define('PB_PAGE_BUILDER_VERSION', "2.0.0");
+define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "1.5.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', PB_PAGE_BUILDER_VERSION);
 
 function _pb_page_builder_recursive_parse_inner($element_){
@@ -234,16 +234,16 @@ function _pb_page_builder_compile_css_map(){
 	$default_padding_ = pb_option_value('pb_page_builder_default_padding', 20);
 
 	$style_data_ = array(
-		'screen_xs_min' => $screen_xs_min_,
-		'screen_xs_max' => $screen_xs_max_,
-		'screen_sm_min' => $screen_sm_min_,
-		'screen_sm_max' => $screen_sm_max_,
-		'screen_md_min' => $screen_md_min_,
-		'screen_md_max' => $screen_md_max_,
-		'screen_lg_min' => $screen_lg_min_,
-		'default_padding' => $default_padding_,
-		'default_padding_double' => $default_padding_ * 2,
-		'default_padding_half' => $default_padding_ / 2,
+		'screen_xs_min' => $screen_xs_min_.'px',
+		'screen_xs_max' => $screen_xs_max_.'px',
+		'screen_sm_min' => $screen_sm_min_.'px',
+		'screen_sm_max' => $screen_sm_max_.'px',
+		'screen_md_min' => $screen_md_min_.'px',
+		'screen_md_max' => $screen_md_max_.'px',
+		'screen_lg_min' => $screen_lg_min_.'px',
+		'default_padding' => $default_padding_.'px',
+		'default_padding_double' => ($default_padding_ * 2).'px',
+		'default_padding_half' => ($default_padding_ / 2).'px',
 	);
 
 	$style_data_ = pb_hook_apply_filters('pb_page_builder_compile_css_style_data', $style_data_);
@@ -251,12 +251,19 @@ function _pb_page_builder_compile_css_map(){
 	global $_pb_page_builder_css_map;
 	if(!isset($_pb_page_builder_css_map)) $_pb_page_builder_css_map = array();
 
-	$css_string_ = "";
+	$style_variables_string_ = "";
+
+	foreach($style_data_ as $skey_ => $sval_){
+		$style_variables_string_ .= "--pbuilder-{$skey_}: ".$sval_.";".PHP_EOL;
+	}
+
+	$style_variables_string_ = ":root{".PHP_EOL.$style_variables_string_."}".PHP_EOL;
+
+	$css_string_ = $style_variables_string_;
 
 	foreach($_pb_page_builder_css_map as $css_map_data_){
 		$css_string_ .= @file_get_contents($css_map_data_['path']) . PHP_EOL;
 	}
-
 
 	$css_string_ = pb_hook_apply_filters('pb_page_builder_compile_css_string', $css_string_);
 
@@ -271,11 +278,9 @@ function _pb_page_builder_compile_css_map(){
 		foreach($regex_matches_[0] as $string_){
 			$exp_ = ltrim($string_, "@@{");
 			$exp_ = rtrim($exp_, "}@@");
-			// print_r($exp_);
 		}
 	}
 		
-
 	return $css_string_;
 }
 

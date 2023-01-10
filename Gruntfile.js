@@ -256,6 +256,9 @@ module.exports = function (grunt) {
         files: [
           'lib/dev/concat-lib/**/*.js',
           'lib/dev/js/**/*.js',
+          '!lib/dev/comp-lib/**/*.js',
+          '!lib/dev/concat-lib/dist/**/*.js',
+        	
         ],
         tasks: ['build-js']
       },

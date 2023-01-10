@@ -1,5 +1,32 @@
 @import (reference) "../../pb-admin.less";
 
+
+@-webkit-keyframes page-builder-skeleton {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes page-builder-skeleton {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
+
 .pb-page-builder-page-settings-modal{
 	> .modal-dialog{
 		max-width: 768px;
@@ -501,6 +528,33 @@
 									width: 1px;
 									background-color: @gray-light;
 									margin: 0 5px;
+								}
+							}
+
+							> .skeleton{
+								position: relative;
+								display: block;
+
+								&:before,
+								&:after{
+									position: relative;
+									display: block;
+									content: "";
+									border-radius: 20px;
+									background-color: rgba(0,0,0,0.05);
+									width: 100%;
+									// opacity: 0;
+
+									-webkit-animation: page-builder-skeleton 2s infinite linear;
+          									animation: page-builder-skeleton 2s infinite linear;
+								}
+
+								&:before{
+									height: 20px;
+								}
+								&:after{
+									margin-top: 7px;
+									height: 60px;
 								}
 							}
 

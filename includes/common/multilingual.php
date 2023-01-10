@@ -45,7 +45,6 @@ function pb_lang_load_translations($domain_, $json_dir_path_){
 	if(!file_exists($json_dir_path_)) return false;
 
 	foreach(glob($pb_lang_domain_maps[$domain_]['path'].'*.lng') as $filename_){
-		
 		$locale_name_ = basename($filename_, ".lng");
 		$pb_lang_domain_maps[$domain_]['locales'][$locale_name_] = array(
 			'loaded' => false,
@@ -71,7 +70,6 @@ function pb_lang_load_translations_file($domain_, $locale_, $reload_ = false){
 	if(!$pb_lang_domain_maps[$domain_]['locales'][$locale_]['loaded'] || $reload_){
 
 		try{
-
 			if(!file_exists($pb_lang_domain_maps[$domain_]['path'].$locale_.'.lnz') || $reload_){
 				@unlink($pb_lang_domain_maps[$domain_]['path'].$locale_.'.lnz');
 				

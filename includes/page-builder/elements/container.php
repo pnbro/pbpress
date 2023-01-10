@@ -52,6 +52,7 @@ pb_page_builder_add_element("container", array(
 	'loadable' => true,
 	'children' => array("*", "!container"),
 	'parent' => array("*", "!column"),
+	
 	'preview_fields' => array(
 		array(
 			'name' => 'container_type',
