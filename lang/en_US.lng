@@ -92,7 +92,6 @@
 ;업로드할 파일이 비어있습니다.;=;No file to upload;;
 ;파일을 쓸 수 있는 권한이 없습니다.;=;No permission to write file.;;
 ;파일 업로드가 불가한 환경입니다.;=;Can't upload file;;
-;Data not found;=;Data not found;;
 ;메일설정;=;EMail settings;;
 ;발송메일주소;=;Sender EMail Address;;
 ;수신메일주소;=;Receiver EMail Address;;
@@ -368,7 +367,6 @@
 ;자료 추가 중, 에러가 발생했습니다.;=;Error occurred while file uploading;;
 ;자료 수정 중, 에러가 발생했습니다.;=;Error occurred while file editing;;
 ;자료 삭제 중, 에러가 발생했습니다.;=;Error occurred while file deleting;;
-;마스터 조회 중, 에러가 발생했습니다.;=;Error occurred while master listing;;
 ;확인;=;Confirm;;
 ;파일추가;=;Add file;;
 ;삭제확인;=;Confirm to delete;;
@@ -476,3 +474,4 @@
 ;사용자정보를 변경하시겠습니까?;=;Confirm to change user info;;
 ;사용자 정보 수정 중, 에러가 발생했습니다.;=;Error occurred while user info changing;;
 ;사용자 정보가 수정되었습니다.;=;User info change complete;;
+;마스터 조회 중, 에러가 발생했습니다.;=;Error occurred while master listing;;

@@ -30,7 +30,6 @@ class PBConfig{
 	public $file_upload_handler = "default";
 
 	private $default_locale = "ko_KR";
-	private $use_https = false;
 
 	private $session_manager = null;
 	
@@ -74,8 +73,6 @@ class PBConfig{
 		$this->file_upload_handler = (defined("PB_FILE_UPLOAD_HANDLER")) ? PB_FILE_UPLOAD_HANDLER : "default";
 
 		$this->default_locale = (defined("PB_DEFAULT_LOCALE")) ? PB_DEFAULT_LOCALE : "ko_KR";
-
-		$this->use_https = (defined("PB_HTTPS")) ? PB_HTTPS : false;
 		
 		$this->session_manager = (defined("PB_SESSION_MANAGER")) ? PB_SESSION_MANAGER : "default";
 		$this->session_cookie_domain = (defined("PB_SESSION_COOKIE_DOMAIN")) ? PB_SESSION_COOKIE_DOMAIN : null;
@@ -105,10 +102,6 @@ class PBConfig{
 
 	public function default_locale(){
 		return pb_hook_apply_filters('pb_config_default_locale', $this->default_locale);
-	}
-
-	public function use_https(){
-		return pb_hook_apply_filters('pb_config_use_https', $this->use_https);
 	}
 
 	public function session_manager(){

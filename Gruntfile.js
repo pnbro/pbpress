@@ -111,11 +111,9 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/pb/modules/pb.crypt.js',
           'lib/dev/concat-lib/src/pb/modules/pb.utils.js',
           'lib/dev/concat-lib/src/pb/modules/pb.lang.js',
-          'lib/dev/concat-lib/src/pb/modules/pb.listtable.js',
           'lib/dev/concat-lib/src/pb/modules/pb.easytable.js',
           'lib/dev/concat-lib/src/pb/modules/pb.easylist.js',
           'lib/dev/concat-lib/src/pb/modules/pb.edit-form-modal.js',
-          'lib/dev/concat-lib/src/pb/modules/pb.splitted-view.js',
           'lib/dev/concat-lib/src/pb/modules/pb.easy-splitted-view.js',
 
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.js',

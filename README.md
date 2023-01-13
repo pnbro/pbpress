@@ -11,7 +11,7 @@ PHP Framework for simple website creation.
 * menu managing (menu editor)
 
 ## Requirements
-	PHP >= 5.4(Recommend higher than 5.6)
+	PHP >= 5.6(Recommend higher than 7.x)
 	MySQL >= 5.x (innoDB)
 		- mysql, mysqli, pdo
 		

@@ -10,15 +10,6 @@
 		pb_install_rewrite();
 	}
 
-	//check https config
-	if(!pb_is_https() && $pb_config->use_https()){
-		$https_location_ = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-		header('HTTP/1.1 301 Moved Permanently');
-		header('Location: ' . $https_location_);
-		pb_hook_do_action('pb_ended');
-		exit;
-	}
-
 	pb_hook_do_action("pb_admin_install_init");
 
 	global $pbdb;

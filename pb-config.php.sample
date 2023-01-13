@@ -27,8 +27,6 @@ define("PB_CRYPT_PASSWORD", "~W.7bNa[~$+aeP>u");
 
 // define("PB_DEFAULT_LOCALE", 'ko_KR');
 
-// define("PB_HTTPS", true);
-
 // define("PB_UPLOAD_MAX_IMAGE_WIDTH", 2000);
 // define("PB_UPLOAD_MAX_IMAGE_HEIGHT", 2000);
 
