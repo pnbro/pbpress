@@ -39,18 +39,22 @@
 	.table-striped;
 
 	margin-bottom: 0px;
-	border-bottom: 2px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
 
 	> thead{
 		> tr{
-			background-color: #f1f1f1;
+			background-color: @input-border;
+			> th{
+				font-weight: normal;
+				border-bottom: none;
+			}
 		}
 	}
 
 	> tbody > tr{
 
 		&:hover{
-			background-color: #fff8f3;
+			background-color: @table-bg-hover;
 		}
 	}
 
@@ -114,7 +118,7 @@
 
 		&:active,
 		&:hover{
-			color: lighten(@brand-primary, 15%);
+			color: @brand-primary-l1
 		}
 	}
 
@@ -126,10 +130,10 @@
 		padding: 5px 5px;
 		margin: 2px 5px 0 5px;
 		box-sizing: border-box;
-		border-bottom: 2px solid transparent;
+		border-bottom: 1px solid transparent;
 
 		&.active{
-			border-bottom: 2px solid @brand-primary;
+			border-bottom: 1px solid @brand-primary;
 		}
 
 		&:hover,&:focus{

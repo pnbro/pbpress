@@ -15,7 +15,19 @@
 @dark-color: #222 ;
 
 @modal-submit-color: @brand-primary ;
+@modal-submit-color-l1: @brand-primary-l1;
+@modal-submit-color-l2: @brand-primary-l2;
+
+@modal-submit-color-d1: @brand-primary-d1;
+@modal-submit-color-d2: @brand-primary-d2;
+
 @modal-reset-color: @gray-lighter ;
+
+@modal-reset-color-l1: @gray-lighter-l1;
+@modal-reset-color-l2: @gray-lighter-l2;
+
+@modal-reset-color-d1: @gray-lighter-d1;
+@modal-reset-color-d2: @gray-lighter-d2;
 
 @transition-duration: 150ms ;
 @slow-transition-duration: 300ms ;
@@ -462,29 +474,29 @@
 
         &.trumbowyg-modal-submit {
             right: 110px;
-            background: darken(@modal-submit-color, 3%);
+            background: @modal-submit-color-d1;
 
             &:hover,
             &:focus {
-                background: lighten(@modal-submit-color, 5%);
+                background: @modal-submit-color-l1;
                 outline: none;
             }
             &:active {
-                background: darken(@modal-submit-color, 10%);
+                background: @modal-submit-color-d2;
             }
         }
 
         &.trumbowyg-modal-reset {
             color: #555;
-            background: darken(@modal-reset-color, 3%);
+            background: @modal-reset-color-d1;
 
             &:hover,
             &:focus {
-                background: lighten(@modal-reset-color, 5%);
+                background: @modal-reset-color-l1;
                 outline: none;
             }
             &:active {
-                background: darken(@modal-reset-color, 10%);
+                background: @modal-reset-color-d2;
             }
         }
     }
@@ -796,14 +808,14 @@ body.trumbowyg-body-fullscreen {
 
         .trumbowyg-modal-button {
             &.trumbowyg-modal-submit {
-                background: darken(@modal-submit-color, 20%);
+                background: @modal-submit-color;
 
                 &:hover,
                 &:focus {
-                    background: darken(@modal-submit-color, 10%);
+                    background: @modal-submit-color-d1;
                 }
                 &:active {
-                    background: darken(@modal-submit-color, 25%);
+                    background: @modal-submit-color-d2;
                 }
             }
             &.trumbowyg-modal-reset {

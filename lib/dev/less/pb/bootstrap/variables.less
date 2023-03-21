@@ -7,30 +7,289 @@
 //
 //## Gray and brand colors for use across Bootstrap.
 
-@gray-base:              #3a3a3a;
-@gray-darker:            lighten(@gray-base, 13.5%); // #222
-@gray-dark:              lighten(@gray-base, 20%);   // #333
-@gray:                   lighten(@gray-base, 33.5%); // #555
-@gray-light:             lighten(@gray-base, 46.7%); // #777
-@gray-light2:             lighten(@gray-base, 70%);
-@gray-lighter:           lighten(@gray-base, 75%); // #eee
+@root-gray-base:              #1b1b1b;
+@root-gray-darker:            #505050;
+@root-gray-dark:              #6a6a6a;
+@root-gray:                   #8f8f8f;
+@root-gray-light:             #767676;
+@root-gray-light2:            #e7e7e7;
+@root-gray-lighter:           #ababab;
 
-@brand-primary:       #427cb7;
-@brand-primary-dark:  darken(@brand-primary,10%);
-@brand-primary-darker: darken(@brand-primary,15%);
-@brand-primary-light: lighten(@brand-primary,10%);
+@root-brand-primary: 					#088edb;
+@root-brand-primary-dark1: 			#007ec7;
+@root-brand-primary-dark2: 			#0070b0;
+@root-brand-primary-light1: 			#0c96e5;
+@root-brand-primary-light2: 			#0da1f5;
 
-@brand-success:         #50e3c2;
-@brand-info:            #5bc0de;
-@brand-warning:         #f0ad4e;
-@brand-danger:          #d9534f;
-@brand-ivory:			#faf8f3;
-@brand-yellow:			#f0ad4e;
-@brand-green:			#45ce34;
-@brand-red:				#be0000;
-@brand-blue:			#4e8ff0;
-@brand-dark:			#36383f;
-@brand-dark-light:		#4c4b53;
+@root-brand-success:         #10db9b;
+@root-brand-info:            #5bc0de;
+@root-brand-warning:         #f0ad4e;
+@root-brand-danger:          #d9534f;
+@root-brand-ivory:			  #faf8f3;
+@root-brand-yellow:		  #f0ad4e;
+@root-brand-green:			  #45ce34;
+@root-brand-red:			  #be0000;
+@root-brand-blue:			  #4e8ff0;
+@root-brand-dark:			  #323232;
+
+:root{
+
+--root-gray-base:              @root-gray-base;
+--root-gray-darker:            @root-gray-darker;
+--root-gray-dark:              @root-gray-dark;
+--root-gray:                   @root-gray;
+--root-gray-light:             @root-gray-light;
+--root-gray-light2:            @root-gray-light2;
+--root-gray-lighter:           @root-gray-lighter;
+
+--root-brand-primary: 					@root-brand-primary;
+--root-brand-primary-dark1: 			@root-brand-primary-dark1;
+--root-brand-primary-dark2: 			@root-brand-primary-dark2;
+--root-brand-primary-light1: 			@root-brand-primary-light1;
+--root-brand-primary-light2: 			@root-brand-primary-light2;
+
+--root-brand-success:         @root-brand-success;
+--root-brand-info:            @root-brand-info;
+--root-brand-warning:         @root-brand-warning;
+--root-brand-danger:          @root-brand-danger;
+--root-brand-ivory:			  @root-brand-ivory;
+--root-brand-yellow:		  @root-brand-yellow;
+--root-brand-green:			  @root-brand-green;
+--root-brand-red:			  @root-brand-red;
+--root-brand-blue:			  @root-brand-blue;
+--root-brand-dark:			  @root-brand-dark;
+
+
+--root-gray-base-l1:              lighten(@root-gray-base, 5%);
+--root-gray-darker-l1:            lighten(@root-gray-darker, 5%);
+--root-gray-dark-l1:              lighten(@root-gray-dark, 5%);
+--root-gray-l1:                   lighten(@root-gray, 5%);
+--root-gray-light-l1:             lighten(@root-gray-light, 5%);
+--root-gray-light2-l1:            lighten(@root-gray-light2, 5%);
+--root-gray-lighter-l1:           lighten(@root-gray-lighter, 5%);
+
+--root-brand-primary-l1: 				lighten(@root-brand-primary, 5%);
+--root-brand-primary-dark1-l1: 			lighten(@root-brand-primary-dark1, 5%);
+--root-brand-primary-dark2-l1: 			lighten(@root-brand-primary-dark2, 5%);
+--root-brand-primary-light1-l1: 			lighten(@root-brand-primary-light1, 5%);
+--root-brand-primary-light2-l1: 			lighten(@root-brand-primary-light2, 5%);
+
+--root-brand-success-l1:         lighten(@root-brand-success, 5%);
+--root-brand-info-l1:            lighten(@root-brand-info, 5%);
+--root-brand-warning-l1:         lighten(@root-brand-warning, 5%);
+--root-brand-danger-l1:          lighten(@root-brand-danger, 5%);
+--root-brand-ivory-l1:			  lighten(@root-brand-ivory, 5%);
+--root-brand-yellow-l1:		  lighten(@root-brand-yellow, 5%);
+--root-brand-green-l1:			  lighten(@root-brand-green, 5%);
+--root-brand-red-l1:			  lighten(@root-brand-red, 5%);
+--root-brand-blue-l1:			  lighten(@root-brand-blue, 5%);
+--root-brand-dark-l1:			  lighten(@root-brand-dark, 5%);
+
+--root-gray-base-l2:              lighten(@root-gray-base, 10%);
+--root-gray-darker-l2:            lighten(@root-gray-darker, 10%);
+--root-gray-dark-l2:              lighten(@root-gray-dark, 10%);
+--root-gray-l2:                   lighten(@root-gray, 10%);
+--root-gray-light-l2:             lighten(@root-gray-light, 10%);
+--root-gray-light2-l2:            lighten(@root-gray-light2, 10%);
+--root-gray-lighter-l2:           lighten(@root-gray-lighter, 10%);
+
+--root-brand-primary-l2: 				lighten(@root-brand-primary, 10%);
+--root-brand-primary-dark1-l2: 			lighten(@root-brand-primary-dark1, 10%);
+--root-brand-primary-dark2-l2: 			lighten(@root-brand-primary-dark2, 10%);
+--root-brand-primary-light1-l2: 			lighten(@root-brand-primary-light1, 10%);
+--root-brand-primary-light2-l2: 			lighten(@root-brand-primary-light2, 10%);
+
+--root-brand-success-l2:         lighten(@root-brand-success, 10%);
+--root-brand-info-l2:            lighten(@root-brand-info, 10%);
+--root-brand-warning-l2:         lighten(@root-brand-warning, 10%);
+--root-brand-danger-l2:          lighten(@root-brand-danger, 10%);
+--root-brand-ivory-l2:			  lighten(@root-brand-ivory, 10%);
+--root-brand-yellow-l2:		  lighten(@root-brand-yellow, 10%);
+--root-brand-green-l2:			  lighten(@root-brand-green, 10%);
+--root-brand-red-l2:			  lighten(@root-brand-red, 10%);
+--root-brand-blue-l2:			  lighten(@root-brand-blue, 10%);
+--root-brand-dark-l2:			  lighten(@root-brand-dark, 10%);
+
+--root-gray-base-d1:              darken(@root-gray-base, 5%);
+--root-gray-darker-d1:            darken(@root-gray-darker, 5%);
+--root-gray-dark-d1:              darken(@root-gray-dark, 5%);
+--root-gray-d1:                   darken(@root-gray, 5%);
+--root-gray-light-d1:             darken(@root-gray-light, 5%);
+--root-gray-light2-d1:            darken(@root-gray-light2, 5%);
+--root-gray-lighter-d1:           darken(@root-gray-lighter, 5%);
+
+--root-brand-primary-d1: 				darken(@root-brand-primary, 5%);
+--root-brand-primary-dark1-d1: 			darken(@root-brand-primary-dark1, 5%);
+--root-brand-primary-dark2-d1: 			darken(@root-brand-primary-dark2, 5%);
+--root-brand-primary-light1-d1: 			darken(@root-brand-primary-light1, 5%);
+--root-brand-primary-light2-d1: 			darken(@root-brand-primary-light2, 5%);
+
+--root-brand-success-d1:         darken(@root-brand-success, 5%);
+--root-brand-info-d1:            darken(@root-brand-info, 5%);
+--root-brand-warning-d1:         darken(@root-brand-warning, 5%);
+--root-brand-danger-d1:          darken(@root-brand-danger, 5%);
+--root-brand-ivory-d1:			  darken(@root-brand-ivory, 5%);
+--root-brand-yellow-d1:		  darken(@root-brand-yellow, 5%);
+--root-brand-green-d1:			  darken(@root-brand-green, 5%);
+--root-brand-red-d1:			  darken(@root-brand-red, 5%);
+--root-brand-blue-d1:			  darken(@root-brand-blue, 5%);
+--root-brand-dark-d1:			  darken(@root-brand-dark, 5%);
+
+--root-gray-base-d2:              darken(@root-gray-base, 10%);
+--root-gray-darker-d2:            darken(@root-gray-darker, 10%);
+--root-gray-dark-d2:              darken(@root-gray-dark, 10%);
+--root-gray-d2:                   darken(@root-gray, 10%);
+--root-gray-light-d2:             darken(@root-gray-light, 10%);
+--root-gray-light2-d2:            darken(@root-gray-light2, 10%);
+--root-gray-lighter-d2:           darken(@root-gray-lighter, 10%);
+
+--root-brand-primary-d2: 				darken(@root-brand-primary, 10%);
+--root-brand-primary-dark1-d2: 			darken(@root-brand-primary-dark1, 10%);
+--root-brand-primary-dark2-d2: 			darken(@root-brand-primary-dark2, 10%);
+--root-brand-primary-light1-d2: 			darken(@root-brand-primary-light1, 10%);
+--root-brand-primary-light2-d2: 			darken(@root-brand-primary-light2, 10%);
+
+--root-brand-success-d2:         darken(@root-brand-success, 10%);
+--root-brand-info-d2:            darken(@root-brand-info, 10%);
+--root-brand-warning-d2:         darken(@root-brand-warning, 10%);
+--root-brand-danger-d2:          darken(@root-brand-danger, 10%);
+--root-brand-ivory-d2:			  darken(@root-brand-ivory, 10%);
+--root-brand-yellow-d2:		  darken(@root-brand-yellow, 10%);
+--root-brand-green-d2:			  darken(@root-brand-green, 10%);
+--root-brand-red-d2:			  darken(@root-brand-red, 10%);
+--root-brand-blue-d2:			  darken(@root-brand-blue, 10%);
+--root-brand-dark-d2:			  darken(@root-brand-dark, 10%);
+
+}
+
+
+@gray-base: var(--root-gray-base);
+@gray-darker: var(--root-gray-darker);
+@gray-dark: var(--root-gray-dark);
+@gray: 		var(--root-gray);
+@gray-light: var(--root-gray-light);
+@gray-light2: var(--root-gray-light2);
+@gray-lighter: var(--root-gray-lighter);
+
+@brand-primary:       var(--root-brand-primary);
+@brand-primary-dark1: var(--root-brand-primary-dark1);
+@brand-primary-dark2: var(--root-brand-primary-dark2);
+@brand-primary-light1: var(--root-brand-primary-light1);
+@brand-primary-light2: var(--root-brand-primary-light2);
+
+@brand-success:			var(--root-brand-success);
+@brand-info:			var(--root-brand-info);
+@brand-warning:			var(--root-brand-warning);
+@brand-danger:			var(--root-brand-danger);
+@brand-ivory:			var(--root-brand-ivory);
+@brand-yellow:			var(--root-brand-yellow);
+@brand-green:			var(--root-brand-green);
+@brand-red:				var(--root-brand-red);
+@brand-blue:			var(--root-brand-blue);
+@brand-dark:			var(--root-brand-dark);
+@brand-dark-light:		var(--root-brand-dark-light);
+
+@gray-base-l1		: var(--root-gray-base-l1);
+@gray-darker-l1	: var(--root-gray-darker-l1);
+@gray-dark-l1		: var(--root-gray-dark-l1		);
+@gray-l1			: var(--root-gray-l1			);
+@gray-light-l1		: var(--root-gray-light-l1		);
+@gray-light2-l1	: var(--root-gray-light2-l1	);
+@gray-lighter-l1	: var(--root-gray-lighter-l1	);
+
+@brand-primary-l1		: var(--root-brand-primary-l1		);
+@brand-primary-dark1-l1	: var(--root-brand-primary-dark1-l1	);
+@brand-primary-dark2-l1	: var(--root-brand-primary-dark2-l1	);
+@brand-primary-light1-l1	: var(--root-brand-primary-light1-l1	);
+@brand-primary-light2-l1	: var(--root-brand-primary-light2-l1	);
+
+@brand-success-l1	: var(--root-brand-success-l1	);
+@brand-info-l1		: var(--root-brand-info-l1		);
+@brand-warning-l1	: var(--root-brand-warning-l1	);
+@brand-danger-l1		: var(--root-brand-danger-l1	);
+@brand-ivory-l1		: var(--root-brand-ivory-l1	);
+@brand-yellow-l1		: var(--root-brand-yellow-l1	);
+@brand-green-l1		: var(--root-brand-green-l1	);
+@brand-red-l1		: var(--root-brand-red-l1		);
+@brand-blue-l1		: var(--root-brand-blue-l1		);
+@brand-dark-l1		: var(--root-brand-dark-l1		);
+
+@gray-base-l2		: var(--root-gray-base-l2);
+@gray-darker-l2	: var(--root-gray-darker-l2);
+@gray-dark-l2		: var(--root-gray-dark-l2		);
+@gray-l2			: var(--root-gray-l2			);
+@gray-light-l2		: var(--root-gray-light-l2		);
+@gray-light2-l2	: var(--root-gray-light2-l2	);
+@gray-lighter-l2	: var(--root-gray-lighter-l2	);
+
+@brand-primary-l2		: var(--root-brand-primary-l2		);
+@brand-primary-dark1-l2	: var(--root-brand-primary-dark1-l2	);
+@brand-primary-dark2-l2	: var(--root-brand-primary-dark2-l2	);
+@brand-primary-light1-l2	: var(--root-brand-primary-light1-l2	);
+@brand-primary-light2-l2	: var(--root-brand-primary-light2-l2	);
+
+@brand-success-l2	: var(--root-brand-success-l2	);
+@brand-info-l2		: var(--root-brand-info-l2		);
+@brand-warning-l2	: var(--root-brand-warning-l2	);
+@brand-danger-l2		: var(--root-brand-danger-l2	);
+@brand-ivory-l2		: var(--root-brand-ivory-l2	);
+@brand-yellow-l2		: var(--root-brand-yellow-l2	);
+@brand-green-l2		: var(--root-brand-green-l2	);
+@brand-red-l2		: var(--root-brand-red-l2		);
+@brand-blue-l2		: var(--root-brand-blue-l2		);
+@brand-dark-l2		: var(--root-brand-dark-l2		);
+
+@gray-base-d1		: var(--root-gray-base-d1);
+@gray-darker-d1	: var(--root-gray-darker-d1);
+@gray-dark-d1		: var(--root-gray-dark-d1		);
+@gray-d1			: var(--root-gray-d1			);
+@gray-light-d1		: var(--root-gray-light-d1		);
+@gray-light2-d1	: var(--root-gray-light2-d1	);
+@gray-lighter-d1	: var(--root-gray-lighter-d1	);
+
+@brand-primary-d1		: var(--root-brand-primary-d1		);
+@brand-primary-dark1-d1	: var(--root-brand-primary-dark1-d1	);
+@brand-primary-dark2-d1	: var(--root-brand-primary-dark2-d1	);
+@brand-primary-light1-d1	: var(--root-brand-primary-light1-d1	);
+@brand-primary-light2-d1	: var(--root-brand-primary-light2-d1	);
+
+@brand-success-d1	: var(--root-brand-success-d1	);
+@brand-info-d1		: var(--root-brand-info-d1		);
+@brand-warning-d1	: var(--root-brand-warning-d1	);
+@brand-danger-d1		: var(--root-brand-danger-d1	);
+@brand-ivory-d1		: var(--root-brand-ivory-d1	);
+@brand-yellow-d1		: var(--root-brand-yellow-d1	);
+@brand-green-d1		: var(--root-brand-green-d1	);
+@brand-red-d1		: var(--root-brand-red-d1		);
+@brand-blue-d1		: var(--root-brand-blue-d1		);
+@brand-dark-d1		: var(--root-brand-dark-d1		);
+
+
+@gray-base-d2		: var(--root-gray-base-d2);
+@gray-darker-d2	: var(--root-gray-darker-d2);
+@gray-dark-d2		: var(--root-gray-dark-d2		);
+@gray-d2			: var(--root-gray-d2			);
+@gray-light-d2		: var(--root-gray-light-d2		);
+@gray-light2-d2	: var(--root-gray-light2-d2	);
+@gray-lighter-d2	: var(--root-gray-lighter-d2	);
+
+@brand-primary-d2		: var(--root-brand-primary-d2		);
+@brand-primary-dark1-d2	: var(--root-brand-primary-dark1-d2	);
+@brand-primary-dark2-d2	: var(--root-brand-primary-dark2-d2	);
+@brand-primary-light1-d2	: var(--root-brand-primary-light1-d2	);
+@brand-primary-light2-d2	: var(--root-brand-primary-light2-d2	);
+
+@brand-success-d2	: var(--root-brand-success-d2	);
+@brand-info-d2		: var(--root-brand-info-d2		);
+@brand-warning-d2	: var(--root-brand-warning-d2	);
+@brand-danger-d2		: var(--root-brand-danger-d2	);
+@brand-ivory-d2		: var(--root-brand-ivory-d2	);
+@brand-yellow-d2		: var(--root-brand-yellow-d2	);
+@brand-green-d2		: var(--root-brand-green-d2	);
+@brand-red-d2		: var(--root-brand-red-d2		);
+@brand-blue-d2		: var(--root-brand-blue-d2		);
+@brand-dark-d2		: var(--root-brand-dark-d2		);
+
 
 //== Scaffolding
 //
@@ -42,9 +301,9 @@
 @text-color:            @gray-base;
 
 //** Global textual link color.
-@link-color:            @brand-primary-dark;
+@link-color:            @brand-primary;
 //** Link hover color set via `darken()` function.
-@link-hover-color:      darken(@link-color, 15%);
+@link-hover-color:      @brand-primary-dark1;
 //** Link hover decoration.
 @link-hover-decoration: none;
 
@@ -59,9 +318,9 @@
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
 
-@font-size-base:          12px;
-@font-size-large:         14px;
-@font-size-small:         10px;
+@font-size-base:          13px;
+@font-size-large:         15px;
+@font-size-small:         11px;
 
 @font-size-h1:            floor((@font-size-base * 1.75)); // ~36px
 @font-size-h2:            floor((@font-size-base * 1.5)); // ~30px
@@ -98,14 +357,14 @@
 //
 //## Define common padding and border radius sizes and more. Values based on 14px text and 1.428 line-height (~20px to start).
 
-@padding-base-vertical:     4px;
-@padding-base-horizontal:   8px;
+@padding-base-vertical:     5px;
+@padding-base-horizontal:   10px;
 
 @padding-large-vertical:    8px;
 @padding-large-horizontal:  12px;
 
-@padding-small-vertical:    3px;
-@padding-small-horizontal:  6px;
+@padding-small-vertical:    4px;
+@padding-small-horizontal:  7px;
 
 @padding-xs-vertical:       1px;
 @padding-xs-horizontal:     3px;
@@ -133,9 +392,9 @@
 //## Customizes the `.table` component with basic values, each used across all table variations.
 
 //** Padding for `<th>`s and `<td>`s.
-@table-cell-padding:            5px;
+@table-cell-padding:            7px;
 //** Padding for cells in `.table-condensed`.
-@table-condensed-cell-padding:  3px;
+@table-condensed-cell-padding:  5px;
 
 //** Default background color used for all tables.
 @table-bg:                      transparent;
@@ -144,9 +403,10 @@
 //** Background color used for `.table-hover`.
 @table-bg-hover:                #f5f5f5;
 @table-bg-active:               @table-bg-hover;
+@table-bg-active-hover:         darken(@table-bg-hover, 5%);
 
 //** Border color for table and cell borders.
-@table-border-color:            #ddd;
+@table-border-color:            @input-border;
 
 
 //== Buttons
@@ -155,45 +415,68 @@
 
 @btn-font-weight:                normal;
 
-@btn-default-color:              #333;
-@btn-default-bg:                 #fff;
-@btn-default-border:             #ccc;
+@btn-default-color:              @brand-primary;
+@btn-default-bg:                 @gray-light2;
+@btn-default-border:             @gray-light2;
+@btn-default-bg-hover:           @gray-light2-d1;
+@btn-default-border-hover:       @gray-light2-d1;
+@btn-default-color-hover:        @brand-primary;
 
-@btn-primary-color:              #fff;
+@btn-primary-color:              white;
 @btn-primary-bg:                 @brand-primary;
-@btn-primary-border:             darken(@btn-primary-bg, 5%);
+@btn-primary-border:             @brand-primary;
+@btn-primary-bg-hover:           @brand-primary-d1;
+@btn-primary-border-hover:       @brand-primary-d1;
+@btn-primary-color-hover:        white;
 
 @btn-success-color:              #fff;
 @btn-success-bg:                 @brand-success;
-@btn-success-border:             darken(@btn-success-bg, 5%);
+@btn-success-border:             @brand-success;
+@btn-success-bg-hover:           @brand-success-d1;
+@btn-success-border-hover:       @brand-success-d1;
+@btn-success-color-hover:        #fff;;
 
 @btn-info-color:                 #fff;
 @btn-info-bg:                    @brand-info;
-@btn-info-border:                darken(@btn-info-bg, 5%);
+@btn-info-border:                @brand-info;
+@btn-info-bg-hover:          	 @brand-success-d1;
+@btn-info-border-hover:       	 @brand-success-d1;
+@btn-info-color-hover:                 #fff;
 
 @btn-warning-color:              #fff;
 @btn-warning-bg:                 @brand-warning;
-@btn-warning-border:             darken(@btn-warning-bg, 5%);
+@btn-warning-border:             @brand-warning;
+@btn-warning-bg-hover:           @brand-warning-d1;
+@btn-warning-border-hover:       @brand-warning-d1;
+@btn-warning-color-hover:        #fff;
 
 @btn-danger-color:               #fff;
 @btn-danger-bg:                  @brand-danger;
-@btn-danger-border:              darken(@btn-danger-bg, 5%);
+@btn-danger-border:              @brand-danger;
+@btn-danger-bg-hover:            @brand-danger-d1;
+@btn-danger-border-hover:        @brand-danger-d1;
+@btn-danger-color-hover:               #fff;
 
 @btn-dark-color:				 #fff;
 @btn-dark-bg:					 @brand-dark;
-@btn-dark-border:				 darken(@btn-dark-bg, 5%);
-
-@btn-dark-light-color:				 #fff;
-@btn-dark-light-bg:					 @brand-dark-light;
-@btn-dark-light-border:				 darken(@btn-dark-light-bg, 5%);
+@btn-dark-border:				 @brand-dark;
+@btn-dark-bg-hover:           	 @brand-dark-d1;
+@btn-dark-border-hover:       	 @brand-dark-d1;
+@btn-dark-color-hover:				 #fff;
 
 @btn-gray-color:				 #fff;
 @btn-gray-bg:					 @gray;
-@btn-gray-border:				 darken(@btn-gray-bg, 5%);
+@btn-gray-border:				 @gray;
+@btn-gray-bg-hover:           	 @gray-d1;
+@btn-gray-border-hover:       	 @gray-d1;
+@btn-gray-color-hover:				 #fff;
 
 @btn-gray-light-color:				 #fff;
 @btn-gray-light-bg:					 @gray-light;
-@btn-gray-light-border:				 darken(@btn-gray-light-bg, 5%);
+@btn-gray-light-border:				 @gray-light;
+@btn-gray-light-bg-hover:           		 @gray-light-d1;
+@btn-gray-light-border-hover:       		 @gray-light-d1;
+@btn-gray-light-color-hover:				 #fff;
 
 @btn-link-disabled-color:        @gray-light;
 
@@ -261,18 +544,18 @@
 //** Background for the dropdown menu.
 @dropdown-bg:                    #fff;
 //** Dropdown menu `border-color`.
-@dropdown-border:                rgba(0,0,0,.15);
+@dropdown-border:                @gray-light2;
 //** Dropdown menu `border-color` **for IE8**.
 @dropdown-fallback-border:       #ccc;
 //** Divider color for between dropdown items.
 @dropdown-divider-bg:            #e5e5e5;
 
 //** Dropdown link text color.
-@dropdown-link-color:            @gray-dark;
+@dropdown-link-color:            @brand-primary;
 //** Hover color for dropdown links.
-@dropdown-link-hover-color:      darken(@gray-dark, 5%);
+@dropdown-link-hover-color:      @brand-primary-d1;
 //** Hover background for dropdown links.
-@dropdown-link-hover-bg:         #f5f5f5;
+@dropdown-link-hover-bg:         @gray-light2-l1;
 
 //** Active dropdown menu item text color.
 @dropdown-link-active-color:     @component-active-color;
@@ -286,7 +569,7 @@
 @dropdown-header-color:          @gray-light;
 
 //** Deprecated `@dropdown-caret-color` as of v3.1.0
-@dropdown-caret-color:           #000;
+@dropdown-caret-color:           @brand-primary;
 
 
 //-- Z-index master list
@@ -419,12 +702,12 @@
 
 //=== Inverted navbar
 // Reset inverted navbar basics
-@navbar-inverse-color:                      lighten(@gray-light, 15%);
+@navbar-inverse-color:                      @gray-light2;
 @navbar-inverse-bg:                         #222;
 @navbar-inverse-border:                     darken(@navbar-inverse-bg, 10%);
 
 // Inverted navbar links
-@navbar-inverse-link-color:                 lighten(@gray-light, 15%);
+@navbar-inverse-link-color:                 @gray-light2;
 @navbar-inverse-link-hover-color:           #fff;
 @navbar-inverse-link-hover-bg:              transparent;
 @navbar-inverse-link-active-color:          @navbar-inverse-link-hover-color;
@@ -449,7 +732,7 @@
 
 //=== Shared nav styles
 @nav-link-padding:                          10px 15px;
-@nav-link-hover-bg:                         @gray-lighter;
+@nav-link-hover-bg:                         @gray-light2;
 
 @nav-disabled-link-color:                   @gray-light;
 @nav-disabled-link-hover-color:             @gray-light;
@@ -457,7 +740,7 @@
 //== Tabs
 @nav-tabs-border-color:                     #ddd;
 
-@nav-tabs-link-hover-border-color:          @gray-lighter;
+@nav-tabs-link-hover-border-color:          @gray-light2;
 
 @nav-tabs-active-link-hover-bg:             @body-bg;
 @nav-tabs-active-link-hover-color:          @gray;
@@ -516,6 +799,7 @@
 @jumbotron-padding:              30px;
 @jumbotron-color:                inherit;
 @jumbotron-bg:                   @gray-lighter;
+@jumbotron-hr-color:             @gray-lighter-d1;
 @jumbotron-heading-color:        inherit;
 @jumbotron-font-size:            ceil((@font-size-base * 1.5));
 @jumbotron-heading-font-size:    ceil((@font-size-base * 4.5));
@@ -525,21 +809,21 @@
 //
 //## Define colors for form feedback states and, by default, alerts.
 
-@state-success-text:             #3c763d;
-@state-success-bg:               #dff0d8;
-@state-success-border:           @input-border;
+@state-success-text:             @brand-success-d2;
+@state-success-bg:               @brand-success-l2;
+@state-success-border:           @brand-success;
 
-@state-info-text:                #31708f;
-@state-info-bg:                  #d9edf7;
-@state-info-border:              darken(spin(@state-info-bg, -10), 7%);
+@state-info-text:                @brand-info-d2;
+@state-info-bg:                  @brand-info-l2;
+@state-info-border:              @brand-info;
 
-@state-warning-text:             #8a6d3b;
-@state-warning-bg:               #fcf8e3;
-@state-warning-border:           darken(spin(@state-warning-bg, -10), 5%);
+@state-warning-text:             @brand-warning-d2;
+@state-warning-bg:               @brand-warning-l2;
+@state-warning-border:           @brand-warning;
 
-@state-danger-text:              #a94442;
-@state-danger-bg:                #f2dede;
-@state-danger-border:            darken(spin(@state-danger-bg, -10), 5%);
+@state-danger-text:              @brand-danger-d2;
+@state-danger-bg:                @brand-danger-l2;
+@state-danger-border:            @brand-danger;
 
 
 //== Tooltips
@@ -595,16 +879,22 @@
 
 //** Default label background color
 @label-default-bg:            @gray-light;
+@label-default-bg-hover:            @gray-light-d1;
 //** Primary label background color
 @label-primary-bg:            @brand-primary;
+@label-primary-bg-hover:            @brand-primary-d1;
 //** Success label background color
 @label-success-bg:            @brand-success;
+@label-success-bg-hover:            @brand-success-d1;
 //** Info label background color
 @label-info-bg:               @brand-info;
+@label-info-bg-hover:               @brand-info-d1;
 //** Warning label background color
 @label-warning-bg:            @brand-warning;
+@label-warning-bg-hover:            @brand-warning-d1;
 //** Danger label background color
 @label-danger-bg:             @brand-danger;
+@label-danger-bg-hover:             @brand-danger-d1;
 
 //** Default label text color
 @label-color:                 #fff;
@@ -713,7 +1003,7 @@
 //** Border color of active list elements
 @list-group-active-border:      @list-group-active-bg;
 //** Text color for content within active list items
-@list-group-active-text-color:  lighten(@list-group-active-bg, 40%);
+@list-group-active-text-color:  white;
 
 //** Text color of disabled list items
 @list-group-disabled-color:      @gray-light;
@@ -733,17 +1023,17 @@
 
 @panel-bg:                    #fff;
 @panel-body-padding:          7px;
-@panel-heading-padding:       5px 7px;
+@panel-heading-padding:       10px 15px;
 @panel-footer-padding:        @panel-heading-padding;
 @panel-border-radius:         @border-radius-base;
 
 //** Border color for elements within panels
-@panel-inner-border:          #ddd;
-@panel-footer-bg:             #f5f5f5;
+@panel-inner-border:          @input-border;
+@panel-footer-bg:             @input-border;
 
-@panel-default-text:          @gray-dark;
-@panel-default-border:        #ddd;
-@panel-default-heading-bg:    #f5f5f5;
+@panel-default-text:          @brand-primary;
+@panel-default-border:        @gray-light2;
+@panel-default-heading-bg:    @gray-light2-l1;
 
 @panel-primary-text:          #fff;
 @panel-primary-border:        @brand-primary;

@@ -41,20 +41,22 @@
 
 	&.btn-fileupload-dropzone{
 	    display: block;
-	    border: 5px dashed @gray-lighter;
-		color: darken(@gray-lighter,20%);
-		background-color: transparent;
+	    border: 1px dashed @gray-light2;
+		color: @gray-lighter-d2;
+		background-color: @gray-light2-l1;
 		font-size: 20px;
 		padding: 50px 5px;
 
+
+
 		&:hover,&:active,&:visited{
-			color: darken(@gray-lighter,20%);
-			border-color: darken(@gray-lighter,10%);
+			color: @gray-light;
+			border-color: @gray-light-l1;
 			background-color: transparent;
 		}
 
 		&.dropin{
-			border-color: lighten(@brand-primary, 20%);
+			border-color: @brand-primary-l2;
 			background-color: transparent;	
 		}
 
@@ -114,9 +116,9 @@
     }
 
     > .add-btn{
-        border: 3px dashed lighten(@gray-light,20%);
+        border: 1px dashed @gray-light2-d1;
 
-        color: #ababab;
+        color: @gray-light2-d2;
         line-height: 10px;
         text-align: center;
         vertical-align: top;

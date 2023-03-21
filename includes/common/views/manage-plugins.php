@@ -9,25 +9,29 @@
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-plugins.css">
 <script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/manage-plugins.js"></script>
 	
-<div class="manage-theme-frame"><form id="pb-manage-plugins-form" method="POST">
+<div class="manage-theme-frame"><form id="pb-manage-plugins-form" method="POST" class="pb-easytable-group">
 
 	<h3><?=__('플러그인설정')?></h3>
 
-	<div class="pb-listtable-cond-form">
+	<div class="pb-easytable-conditions">
 		<div class="left-frame">
-			<select class="form-control" name="task_type" id="pb-manage-plugins-form-task-type-selector">
-				<option value=""><?=__('선택한 플러그인을...')?></option>
-				<option value="active"><?=__('활성화')?></option>
-				<option value="deactive"><?=__('비활성화')?></option>
-			</select>
-			<a href="javascript:pb_manage_plugins_batch();" class="btn btn-default"><?=__('적용하기')?></a>
+			<div class="input-group">
+				<select class="form-control" name="task_type" id="pb-manage-plugins-form-task-type-selector">
+					<option value=""><?=__('선택한 플러그인을...')?></option>
+					<option value="active"><?=__('활성화')?></option>
+					<option value="deactive"><?=__('비활성화')?></option>
+				</select>
+				<a href="javascript:pb_manage_plugins_batch();" class="btn btn-default input-group-addon"><?=__('적용하기')?></a>
+			</div>
+				
+			
 		</div>
 		<div class="right-frame"></div>
 	</div>	
 	
 	<input type="hidden" name="_request_chip", value="<?=pb_request_token("pbpress_manage_plugins")?>" id="pb-manage-plugins-form-request-chip">
 
-	<table class="table table-hover table-striped pb-listtable pb-plugins-table" id="pb-manage-plugins-form-table">
+	<table class="table pb-easytable pb-plugins-table" id="pb-manage-plugins-form-table">
 		<thead>
 			<tr>
 				<th class="cb">

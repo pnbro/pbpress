@@ -1,6 +1,6 @@
 pb-config.php
-plugins/ajax-console
-plugins/multilingual-mapper
+plugins/
+!plugins/clock
 uploads
 extensions
 node_modules

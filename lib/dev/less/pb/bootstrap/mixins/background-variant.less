@@ -1,9 +1,9 @@
 // Contextual backgrounds
 
-.bg-variant(@color) {
+.bg-variant(@color; @hover){
   background-color: @color;
   a&:hover,
   a&:focus {
-    background-color: darken(@color, 10%);
+    background-color: @hover;
   }
 }

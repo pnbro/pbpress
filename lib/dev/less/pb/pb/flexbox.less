@@ -1,0 +1,19 @@
+.pb-flexbox(@align-items: ~"center"; @justify-content: ~"center";@flex-direction: ~"row"; @flex-wrap: ~"nowrap"){
+	display: flex;
+
+	-webkit-align-items: @align-items;
+		-ms-align-items: @align-items;
+			align-items: @align-items;
+	
+	-webkit-justify-content: @justify-content;
+		-ms-justify-content: @justify-content;
+			justify-content: @justify-content;
+	
+	-webkit-flex-direction: @flex-direction;
+		-ms-flex-direction: @flex-direction;
+			flex-direction: @flex-direction;
+
+	-webkit-flex-wrap: @flex-wrap;
+		-ms-flex-wrap: @flex-wrap;
+			flex-wrap: @flex-wrap;
+}
