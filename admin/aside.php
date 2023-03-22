@@ -5,9 +5,13 @@
 
 	$adminpage_tree_ = pb_adminpage_tree();
 	$current_adminpage_ = pb_current_adminpage();
+	$rewrite_path_ = pb_rewrite_path();
 ?><aside id="pb-admin-aside" class="in out end"><div class="wrap">
 	
 	<ul class="pb-adminpage-list" id="pb-adminpage-list">
+		<li class="adminpage-menu-item adminpage-menu-item-home <?=count($rewrite_path_) <= 1 ? "active" : ""?>">
+			<a href="<?=pb_admin_url()?>"><?=pb_hook_apply_filters('pb_adminpage_aside_home_text', __('관리홈')) ?></a>
+		</li>
 		<?php foreach($adminpage_tree_ as $slug_ => $menu_data_){ ?>
 			
 				
