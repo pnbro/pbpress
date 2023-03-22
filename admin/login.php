@@ -17,12 +17,12 @@ $admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', __("PBPress
 	<meta name="format-detection" content="telephone=no">
 
 	<?php pb_admin_head(); ?>
-	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/login.css">
+	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/login.css?v=<?=PB_SCRIPT_VERSION?>">
 </head>
 
 <body class="page-pbpress-login">
 
-	<div class="container">
+	<div class="container"><div class="login-wrapper">
 	
 		<div class="pb-logo-frame">
 			<img src="<?=pb_hook_apply_filters('adminpage_login_logo_image', PB_LIBRARY_URL."img/symbol.jpg")?>" class="logo">
@@ -59,7 +59,9 @@ $admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', __("PBPress
 				</form>
 			</div>
 		</div>
-	</div>
+
+		<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?></div>
+	</div></div>
 
 	<div class="modal fade " tabindex="-1" role="dialog" id="pb-admin-login-findpass-modal">
 		<div class="modal-dialog " role="document"><div class="modal-content">
@@ -87,7 +89,7 @@ $admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', __("PBPress
 		</div></div>
 	</div>
 
-	<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?></div>
+	
 
 	<?php pb_admin_foot(); ?>
 	<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/login.js"></script>

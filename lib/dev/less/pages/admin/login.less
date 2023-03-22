@@ -1,17 +1,42 @@
 @import (reference) "../../pb-admin.less";
 
 .page-pbpress-login{
+	
+	
+
+	position: relative;
+	display: block;
+
+	.login-wrapper{
+		--page-login-fullscreen-box-min-height: 768px;
+		min-height: 100vh;
+		min-height: ~"calc(100vh + env(safe-area-inset-top))";
+		min-height: ~"max(calc(100vh + env(safe-area-inset-top)), var(--page-login-fullscreen-box-min-height))";
+		.pb-flexbox(center; center; column; wrap);
+		width: 100%;
+		padding-top: 70px;
+		padding-bottom: 100px;
+
+		@media screen and (max-width: @screen-xs-max){
+			--page-login-fullscreen-box-min-height: 500px;
+		}
+
+		
+	}
+
 	.pb-logo-frame{
+		margin-top: -70px;
 
 		> .logo{
 			display: block;
-			max-width: 150px;
+			max-width: 120px;
 			height: auto;
-			margin: 0 auto;
+			margin: 0 auto 20px auto;
 		}
 	}
 
 	.login-form-panel{
+		width: 100%;
 		max-width: 400px;
 		margin: 0 auto;
 	}
@@ -21,6 +46,7 @@
 		text-align: center;
 		color: @gray-light;
 		margin-top: 20px;
+		font-size: 12px;
 	}
 
 	.bottom-frame{

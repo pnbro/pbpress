@@ -30,12 +30,12 @@ if(pb_is_error($check_vkey_)){
 	<meta name="format-detection" content="telephone=no">
 
 	<?php pb_admin_head(); ?>
-	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/resetpass.css">
+	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/resetpass.css?v=<?=PB_SCRIPT_VERSION?>">
 </head>
 
 <body class="page-pbpress-resetpass">
 
-	<div class="container">
+	<div class="container"><div class="resetpass-wrapper">
 	
 		<div class="pb-logo-frame">
 			<img src="<?=PB_LIBRARY_URL?>img/symbol.jpg" class="logo">
@@ -63,7 +63,7 @@ if(pb_is_error($check_vkey_)){
 				</form>
 			</div>
 		</div>
-	</div>
+	</div></div>
 
 	<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?></div>
 
