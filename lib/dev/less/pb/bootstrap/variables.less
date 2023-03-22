@@ -7,13 +7,20 @@
 //
 //## Gray and brand colors for use across Bootstrap.
 
-@root-gray-base:              #1b1b1b;
-@root-gray-darker:            #505050;
-@root-gray-dark:              #6a6a6a;
-@root-gray:                   #8f8f8f;
-@root-gray-light:             #767676;
-@root-gray-light2:            #e7e7e7;
-@root-gray-lighter:           #ababab;
+@root-gray-base:              #232323;
+
+@root-gray:                   #848484;
+@root-gray-d1:            	  darken(@root-gray, 7%);
+@root-gray-d2:                darken(@root-gray, 15%);
+@root-gray-l1:             	  lighten(@root-gray, 7%);
+@root-gray-l2:           	  lighten(@root-gray, 15%);
+@root-gray-l3:            	  lighten(@root-gray, 20%);
+
+@root-gray-darker:            @root-gray-d1;
+@root-gray-dark:              @root-gray-d2;
+@root-gray-light:             @root-gray-l1;
+@root-gray-lighter:           @root-gray-l2;
+@root-gray-light2:            @root-gray-l3;
 
 @root-brand-primary: 					#088edb;
 @root-brand-primary-dark1: 			#007ec7;
@@ -35,12 +42,17 @@
 :root{
 
 --root-gray-base:              @root-gray-base;
+--root-gray:                   @root-gray;
 --root-gray-darker:            @root-gray-darker;
 --root-gray-dark:              @root-gray-dark;
---root-gray:                   @root-gray;
 --root-gray-light:             @root-gray-light;
---root-gray-light2:            @root-gray-light2;
 --root-gray-lighter:           @root-gray-lighter;
+--root-gray-light2:            @root-gray-light2;
+--root-gray-d1: 			   @root-gray-d1;
+--root-gray-d2: 			   @root-gray-d2;
+--root-gray-l1: 			   @root-gray-l1;
+--root-gray-l2: 			   @root-gray-l2;
+--root-gray-l3: 			   @root-gray-l3;
 
 --root-brand-primary: 					@root-brand-primary;
 --root-brand-primary-dark1: 			@root-brand-primary-dark1;
