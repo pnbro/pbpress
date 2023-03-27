@@ -102,11 +102,11 @@ function pb_user($id_){
 }
 
 function pb_user_by_user_login($user_login_){
-	return pb_user_by("user_login", $user_login_);
+	return pb_user_by("user_login", strtolower(trim($user_login_)));
 }
 
 function pb_user_by_user_email($user_email_){
-	return pb_user_by("user_email", $user_email_);
+	return pb_user_by("user_email", strtolower(trim($user_email_)));
 }
 
 function pb_user_add($raw_data_){
@@ -177,6 +177,7 @@ function pb_user_login($id_, $plain_password_){
 	return pb_user_create_session($user_data_);
 }
 function pb_user_login_by_both($both_, $plain_password_){
+	$both_ = strtolower(trim($both_));
 	$user_statement_ = pb_user_simply_statement();
 	$user_statement_->add_custom_condition("(users.user_login = '".pb_database_escape_string($both_)."' OR users.user_email = '".pb_database_escape_string($both_)."')");
 	$user_data_ = $user_statement_->get_first_row();
@@ -242,6 +243,8 @@ function pb_user_register($data_ = array()){
 	if(!isset($data_['user_login']) || !isset($data_['user_email']) || !isset($data_['user_name']) || !isset($data_['user_pass'])){
 		return new PBError(-1, __("등록실패"), __("필수정보가 누락되었습니다."));
 	}
+	$data_['user_login'] = strtolower(trim($data_['user_login']));
+	$data_['user_email'] = strtolower(trim($data_['user_email']));
 
 	$data_['user_pass'] = pb_crypt_hash($data_['user_pass']);
 	return pb_user_add($data_);
