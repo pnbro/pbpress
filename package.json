@@ -1,6 +1,6 @@
 {
   "name": "PBPress",
-  "version": "5.8.0",
+  "version": "5.8.1",
   "description": "PBPress for PHP Frameworks",
   "main": "Gruntfile.js",
   "dependencies": {
