@@ -73,15 +73,17 @@
 
     display: block;
 
+    .pb-flexbox(flex-start; flex-start; column; wrap);
+    margin: -2px 0px;
+
     > .file-item,
     > .add-btn{
-        display: inline-block;
+        display: block;
         width: 80px;
         height: 40px;
         box-sizing: border-box;
+        margin: 2px 0px;
         
-        margin-right: 10px;
-        margin-bottom: 5px;
     }
 
     > .file-item{
@@ -90,10 +92,12 @@
         // border: 1px solid @gray-lighter;
         // overflow: hidden;
         width: auto;
+        height: auto;
+
+        .pb-flexbox(center; flex-start; row; nowrap);
 
         > .preview{
-        	display: inline-block;
-        	vertical-align: middle;
+        	display: block;
 
         	> .icon{
         		vertical-align: middle;
@@ -103,7 +107,7 @@
     
         > .delete-btn{
             position: relative;
-            display: inline-block;
+            display: block;
             vertical-align: middle;
             color: @brand-danger;
 
@@ -118,12 +122,14 @@
     > .add-btn{
         border: 1px dashed @gray-light2-d1;
 
-        color: @gray-light2-d2;
+        // color: @gray-light2-d2;
         line-height: 10px;
         text-align: center;
         vertical-align: top;
-        font-size: 40px;
+        font-size: 12px;
         padding: 5px 0;
+
+        .pb-flexbox(center; center; row; nowrap);
 
         &:hover,&:active,&:focus{
             text-decoration: none;

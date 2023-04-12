@@ -120,6 +120,7 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.imageuploader.js',
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.imageinput.js',
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.fileinput.js',
+          'lib/dev/concat-lib/src/pb/modules/pb.fileupload.fileuploader.js',
           'lib/dev/concat-lib/src/pb/modules/pb.wysiwyg.editor.js',
 
           'lib/dev/concat-lib/src/pb/modules/pb.editors.js',
