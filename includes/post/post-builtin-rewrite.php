@@ -32,7 +32,9 @@ function _pb_post_hook_for_rewrite_handler($rewrite_path_){
 	global $pbpost, $pbpost_meta_map;
 	$pbpost = $post_data_;
 
-	if($pbpost['status'] !== PB_POST_STATUS::PUBLISHED && ((int)$pbpost['wrt_id']) != (int)pb_current_user_id()){
+	if($pbpost['status'] !== PB_POST_STATUS::PUBLISHED 
+		&& ((int)$pbpost['wrt_id']) != (int)pb_current_user_id()
+		&& !pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
 		return new PBError(404, __("글을 찾을 수 없습니다."), "404");
 	}
 

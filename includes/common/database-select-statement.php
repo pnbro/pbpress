@@ -549,6 +549,12 @@ class PBDB_select_statement{
 
 					
 
+			}else{
+				$join_table_fields_ = $join_data_['fields'];
+
+				foreach($join_table_fields_ as $column_name_){
+					$fields_array_[] = $column_name_;	
+				}
 			}
 		}
 		$query_ .= implode(",\n\r", $fields_array_) ." \n\r"; 
