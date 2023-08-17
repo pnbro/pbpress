@@ -10,12 +10,12 @@ function pb_page_builder_elements($excludes_ = array()){
 	if(!isset($pb_page_builder_elements)){
 		$pb_page_builder_elements = array();
 	}
-	$temp_ = pb_hook_apply_filters("pb_page_builder_elements", $pb_page_builder_elements);
+	$pb_page_builder_elements = pb_hook_apply_filters("pb_page_builder_elements", $pb_page_builder_elements);
 
-	foreach($temp_ as $key_ => $data_){
-		if(in_array($key_, $excludes_)) continue;
-
-		$pb_page_builder_elements[$key_] = $data_;
+	foreach($pb_page_builder_elements as $key_ => $data_){
+		if(in_array($key_, $excludes_)){
+			unset($pb_page_builder_elements[$key_]);
+		}
 	}
 
 	return $pb_page_builder_elements;

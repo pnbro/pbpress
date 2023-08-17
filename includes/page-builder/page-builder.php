@@ -121,6 +121,7 @@ function pb_page_builder($content_ = null, $data_ = array()){
 	$builder_id_ = isset($data_['id']) ? $data_['id'] : "pb-page-builder-".pb_random_string(5);
 	$elements_ = isset($data_['elements']) ? $data_['elements'] : null;
 	$exclude_elements_ = isset($data_['excludes']) ? $data_['excludes'] : array();
+	$exclude_elements_ = pb_hook_apply_filters('pb_page_builder_excludes', $exclude_elements_, $builder_id_);
 
 	if(empty($elements_)){
 		$elements_ = array();
