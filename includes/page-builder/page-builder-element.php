@@ -4,13 +4,21 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-function pb_page_builder_elements(){
+function pb_page_builder_elements($excludes_ = array()){
 	global $pb_page_builder_elements;
 
 	if(!isset($pb_page_builder_elements)){
 		$pb_page_builder_elements = array();
 	}
-	return pb_hook_apply_filters("pb_page_builder_elements", $pb_page_builder_elements);
+	$temp_ = pb_hook_apply_filters("pb_page_builder_elements", $pb_page_builder_elements);
+
+	foreach($temp_ as $key_ => $data_){
+		if(in_array($key_, $excludes_)) continue;
+
+		$pb_page_builder_elements[$key_] = $data_;
+	}
+
+	return $pb_page_builder_elements;
 }
 function pb_page_builder_element_class($key_){
 	global $pb_page_builder_element_classes;

@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "2.1.0");
+define('PB_PAGE_BUILDER_VERSION', "2.2.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "1.5.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', PB_PAGE_BUILDER_VERSION);
 
@@ -120,10 +120,11 @@ function pb_page_builder($content_ = null, $data_ = array()){
 
 	$builder_id_ = isset($data_['id']) ? $data_['id'] : "pb-page-builder-".pb_random_string(5);
 	$elements_ = isset($data_['elements']) ? $data_['elements'] : null;
+	$exclude_elements_ = isset($data_['excludes']) ? $data_['excludes'] : array();
 
 	if(empty($elements_)){
 		$elements_ = array();
-		$temp_elements_ = pb_page_builder_elements();
+		$temp_elements_ = pb_page_builder_elements($exclude_elements_);
 
 		foreach($temp_elements_ as $key_ => $element_data_){
 			$elements_[] = $key_;
@@ -151,7 +152,8 @@ jQuery(document).ready(function(){
 
 
 <?php
-		pb_hook_do_action('pb_page_builder_admin_initialize');
+		pb_hook_do_action('pb_page_builder_admin_initialize', $builder_id_);
+		pb_hook_do_action('pb_page_builder_initialize', $builder_id_);
 		$pb_page_builder_admin_initialized = true;
 	}
 
@@ -178,7 +180,7 @@ jQuery(document).ready(function(){
 		<a data-add-element-btn="append" class="add-element-btn append" href=""><i class="material-icons icon">add_box</i> <?=__('요소추가')?></a>
 	</div>
 
-	<div class="copyrights">© 2019 Paul&Bro Company All Rights Reserved. v<?=PB_PAGE_BUILDER_VERSION?></div>
+	<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?> v<?=PB_PAGE_BUILDER_VERSION?></div>
 
 </div>
 <script type="text/xmldata" id="<?=$builder_id_?>-defaults"><?=htmlentities($content_, null, $pb_config->charset)?></script>
@@ -199,6 +201,9 @@ jQuery(document).ready(function(){
 </script>
 
 <?php 
+
+	pb_hook_do_action('pb_page_builder_admin_initialized', $builder_id_);
+	pb_hook_do_action('pb_page_builder_initialized', $builder_id_);
 }
 
 define('PB_PAGE_BUILDER_COMPILED_SLUG', '_page_builder_compiled.css');

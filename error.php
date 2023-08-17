@@ -29,7 +29,7 @@
 	<div class="content-group">
 		<h1 class="title"><?=$error_title?></h1>
 		<div class="subject"><?=$error_message?></div>
-		<div class="copyrights">© 2019 Paul&Bro Company All Rights Reserved.</div>
+		<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?></div>
 	</div>
 
 	

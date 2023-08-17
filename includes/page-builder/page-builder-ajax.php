@@ -99,9 +99,6 @@ function _pb_page_builder_ajax_load_edit_element_form(){
 
 	ob_start();
 ?>
-
-
-
 <div class="pb-page-builder-element-edit-nav-tabs">
 
 	<ul class="nav nav-tabs" role="tablist">
