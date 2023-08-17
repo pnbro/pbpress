@@ -29,7 +29,7 @@
 	<div class="content-group">
 		<h1 class="title">404</h1>
 		<div class="subject">Page not found.</div>
-		<div class="copyrights">© 2019 Paul&Bro Company All Rights Reserved.</div>
+		<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?></div>
 	</div>
 
 	
