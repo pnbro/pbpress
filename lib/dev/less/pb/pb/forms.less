@@ -332,3 +332,28 @@
     display: block;
 }
 
+
+
+.subinfo-list{
+	list-style: none;
+	padding: 0px;
+	margin: 10px 0px;
+
+	> li{
+		.pb-flexbox(flex-start; flex-start; row; nowrap);
+
+		> .subject{
+			color: @gray-light;
+			min-width: 65px;
+			margin-right: 20px;
+		}
+		.content{
+			color: @gray-base;
+			flex-grow: 1;
+		}
+
+		& + li{
+			margin-top: 7px;
+		}
+	}
+}
