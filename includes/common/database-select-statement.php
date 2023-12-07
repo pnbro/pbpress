@@ -384,8 +384,11 @@ class PBDB_select_statement{
 			$this->_field_list[] = func_get_arg($fi_);
 		}
 	}
+	function remove_field($index_){
+		array_splice($this->_field_list, 1, 1);
+	}
 
-	function &add_join($join_type_, $obj_, $alias_ = null, $on_ = array(), $fields_ = array(), $column_prefix_ = ""){
+	function add_join($join_type_, $obj_, $alias_ = null, $on_ = array(), $fields_ = array(), $column_prefix_ = ""){
 		if(!isset($on_)){
 			$on_ = new PBDB_select_statement_conditions();
 		}
@@ -401,7 +404,7 @@ class PBDB_select_statement{
 
 		return $on_;
 	}
-	function &add_join_statement($join_type_, $statement_, $alias_ = null, $on_ = array(), $fields_ = array(), $column_prefix_ = ""){
+	function add_join_statement($join_type_, $statement_, $alias_ = null, $on_ = array(), $fields_ = array(), $column_prefix_ = ""){
 		return $this->add_join($join_type_, $statement_, $alias_, $on_, $fields_, $column_prefix_);
 	}
 

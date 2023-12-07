@@ -53,6 +53,8 @@
 ;변경할 비밀번호 입력;=;Input new password;;
 ;비밀번호를 입력하세요;=;Input password;;
 ;비밀번호 재설정;=;Reset password;;
+;통신 중, 에러가 발생했습니다.;=;;;
+;확인;=;Confirm;;
 ;권한관리;=;Permission management;;
 ;관리자;=;Administrator;;
 ;사이트를 관리할 수 있는 권한;=;Site administration Authority;;
@@ -87,6 +89,13 @@
 ;%s 에디터가 존재하지 않습니다.;=;%s editor does not exists;;
 ;%s 에디터 렌더러가 존재하지 않습니다.;=;%s editor renderer does not exists;;
 ;파일핸들러가 존재하지 않습니다.;=;File handler does not exists;;
+;리소스관리;=;;;
+;리소스업로드관리;=;;;
+;임시저장;=;;;
+;공개;=;opened;;
+;비공개;=;closed;;
+;업로드테스트;=;;;
+;파일리소스;=;;;
 ;Rewrite를 생성할 수 없습니다. 파일권한을 확인하세요.;=;Can't create Rewrite rule. Please check file permission.;;
 ;파일 사이즈가 너무 큽니다.;=;File size is too big.;;
 ;파일의 일부만 업로드 되었습니다.;=;Only part of the file has been Uploaded.;;
@@ -179,8 +188,6 @@
 ;페이지를 찾을 수 없습니다.;=;Can't find the page;;
 ;404;=;404;;
 ;작성중;=;on editing;;
-;공개;=;opened;;
-;비공개;=;closed;;
 ;요청정보가 잘못되었습니다.;=;Wrong request;;
 ;리비젼;=;Revision;;
 ;%s개의 리비젼;=;%s of rivision(s);;
@@ -368,7 +375,6 @@
 ;자료 추가 중, 에러가 발생했습니다.;=;Error occurred while file uploading;;
 ;자료 수정 중, 에러가 발생했습니다.;=;Error occurred while file editing;;
 ;자료 삭제 중, 에러가 발생했습니다.;=;Error occurred while file deleting;;
-;확인;=;Confirm;;
 ;파일추가;=;Add file;;
 ;삭제확인;=;Confirm to delete;;
 ;해당 요소를 삭제하시겠습니까?;=;Please confirm to delete element;;

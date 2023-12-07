@@ -14,6 +14,9 @@ function _pb_exceptions_ajax_error_handler($severity_, $message_, $filename_, $l
 	if(error_reporting() == 0){
 		return;
 	}
+
+	@ob_clean();
+	
 	global $pb_config;
 	header("Content-Type:application/json; charset=".$pb_config->charset);
 	pb_hook_do_action('pb_ajax_error_occurred', $severity_, $message_, $filename_, $lineno_);

@@ -351,12 +351,20 @@ class PBDB_DO extends ArrayObject{
 		return $this->_keys;
 	}
 
-	function statement(){
+	function statement($fields_ = null){
 		$statment_ = pbdb_ss($this->_table_name, null, $this->_pbdb);
 
-		foreach($this->_fields as $column_name_ => $field_data_){
-			$statment_->add_field($column_name_);
+		if(!empty($fields_)){
+			foreach($fields_ as $column_name_){
+				$statment_->add_field($column_name_);
+			}
+		}else{
+			foreach($this->_fields as $column_name_ => $field_data_){
+				$statment_->add_field($column_name_);
+			}
 		}
+
+		
 
 		return $statment_;
 	}
