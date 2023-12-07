@@ -108,7 +108,7 @@ function pb_file_resource_delete($id_){
 	pb_hook_do_action("pb_user_deleted", $before_data_);
 }
 
-include(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.modal.php");
+// include(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.modal.php");
 __iinclude(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.adminpage.php");
 
 ?>
