@@ -20,7 +20,7 @@
 
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-post/edit.css">
-<h3><?=($is_new_ ? $pbpost_type_data['label']['add'] : $pbpost_type_data['label']['update'])?></h3>
+<h3><?=($is_new_ ? $pbpost_type_data['label']['add'] : $pbpost_type_data['label']['update'])?> <a class="btn btn-default btn-sm" href="<?=pb_adminpage_back_url("manage-{$pbpost_type}")?>"><?=__('목록으로')?></a></h3>
 
 <form id="pb-post-edit-form" method="POST">
 	<?php pb_hook_do_action("pb_post_edit_form_before", $pbpost) ?>

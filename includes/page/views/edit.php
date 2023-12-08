@@ -18,7 +18,7 @@
 
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-page/edit.css">
-<h3><?=($is_new_ ? __("페이지추가") : __("페이지수정"))?></h3>
+<h3><?=($is_new_ ? __("페이지추가") : __("페이지수정"))?> <a class="btn btn-default btn-sm" href="<?=pb_adminpage_back_url("manage-page")?>"><?=__('목록으로')?></a></h3>
 
 <form id="pb-page-edit-form" method="POST">
 	<?php pb_hook_do_action("pb_page_edit_form_before", $pbpage) ?>

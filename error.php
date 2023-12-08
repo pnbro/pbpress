@@ -19,8 +19,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<meta name="format-detection" content="telephone=no">
 
-	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pb-admin.css">
-	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/error.css">
+	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pb-admin.css?v=<?=PB_LIBRARY_URL?>">
+	<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/error.css?v=<?=PB_LIBRARY_URL?>">
 
 </head>
 

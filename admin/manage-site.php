@@ -52,7 +52,7 @@
 									<button type="button" class="btn btn-default btn-block " onclick="pb_manage_site_reinstall_tables();"><?=__('테이블 재설치')?></button>
 								</div>
 							</div>
-							<div class="help-block"><?=__('*테이블 재설치가 필요할 경우에만 수행')?></div>
+							<div class="help-block hint"><?=__('*테이블 재설치가 필요할 경우에만 수행')?></div>
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>
 						</div>

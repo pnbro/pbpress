@@ -16,36 +16,69 @@ pb_easytable_register("pb-user-listtable", function($offset_, $per_page_){
 		'class' => "col-seq text-center",
 		'seq' => true,
 	),
+
 	'user_name' => array(
 		'name' => __("사용자명"),
-		'class' => "col-2",
+		'class' => "col-3 link-action",
+		'render' => function($table_, $item_, $page_index_){
+			
+			?>
+
+			<div class="title-frame ">
+				<?=strlen($item_['user_name']) ? $item_['user_name'] : "<span class='no-title'>".__("(사용자명 없음)")."</span>"?>
+			</div>
+		
+			<div class="subaction-frame">
+				<a href="<?=pb_admin_url("manage-user/edit/".$item_['id']."")?>" class=""><?=__('관리')?></a>
+				<?php pb_hook_do_action('adminpage-manage-user-table-subaction', $item_) ?>
+			</div>
+
+
+			<div class="xs-visiable-info">
+				<ul class="subinfo-list small-theme">
+		
+		
+					<li>
+						<div class="subject">이메일</div>
+						<div class="content"><?=$item_['user_email'] ?></div>
+					</li>
+					<li>
+						<div class="subject">상태</div>
+						<div class="content"><?=$item_['status_name'] ?></div>
+					</li>
+			
+				</ul>
+			</div>
+			<div class="xs-visiable-info">
+				<div class="subinfo"><i class="icon material-icons">access_time</i> <span class="text"><?=$item_['reg_date_ymdhi']?></span></div>
+			</div>
+
+
+			<?php
+
+		}
 	),
+
+
 	'user_login' => array(
 		'name' => __("ID"),
-		'class' => "col-2 text-center",
+		'class' => "col-2 text-center hidden-xs",
 	),
 	'user_email' => array(
 		'name' => __("이메일"),
 		'class' => "col-2 text-center hidden-xs",
 	),
-	'status' => array(
+	'status_name' => array(
 		'name' => __("상태"),
-		'class' => "col-2 text-center",
-		'render' => function($listtable_, $item_, $page_index_){
-			echo $item_['status_name'];
-		}
+		'class' => "col-2 text-center hidden-xs",
+	
 	),
-	'button_area' => array(
-		'name' => "",
-		'class' => "col-4 text-right",
-		'render' => function($listtable_, $item_, $page_index_){
-			?>
-
-			<a href="<?=pb_admin_url("manage-user/edit/".$item_['id'])?>" class="btn btn-default"><?=__('수정')?></a>
-
-			<?php
-		}
+	'reg_date_ymdhi' => array(
+		'name' => __("등록일자"),
+		'class' => "col-2 text-center hidden-xs",
+	
 	),
+
 )), pb_hook_apply_filters("pb_adminpage_user_listtable_options", array(
 	"no_rowdata" => __("조회된 사용자가 없습니다."),
 	'per_page' => 15,

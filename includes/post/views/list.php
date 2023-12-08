@@ -10,6 +10,7 @@
 	$keyword_ = _GET('keyword');
 	$status_ = _GET('search_status');
 
+	pb_adminpage_register_back_url();
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-post/list.css">
 <h3><?=$pbpost_type_data['label']['list']?></h3>

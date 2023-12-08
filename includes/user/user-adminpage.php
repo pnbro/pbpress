@@ -53,7 +53,7 @@ function _user_adminpage_rewrite_handler($rewrite_path_){
 			break;
 		case "add" : 
 
-			return (PB_DOCUMENT_PATH."includes/user/views/add.php");
+			return (PB_DOCUMENT_PATH."includes/user/views/edit.php");
 			break;
 		default :
 
@@ -63,7 +63,7 @@ function _user_adminpage_rewrite_handler($rewrite_path_){
 	}
 }
 
-function _pb_ajax_admin_user_check_login(){
+pb_add_ajax("pb-admin-manage-user-check-login", function(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_user")){
 		echo json_encode(array(
 			"success" => false,
@@ -91,11 +91,11 @@ function _pb_ajax_admin_user_check_login(){
 
 	echo json_encode(array("success" => true));
 	pb_end();
-}
-pb_add_ajax("pb-admin-manage-user-check-login", "_pb_ajax_admin_user_check_login");
+});
 	
 
-function _pb_ajax_admin_user_check_email(){
+
+pb_add_ajax("pb-admin-manage-user-check-email", function(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_user")){
 		echo json_encode(array(
 			"success" => false,
@@ -124,10 +124,10 @@ function _pb_ajax_admin_user_check_email(){
 
 	echo json_encode(array("success" => true));
 	pb_end();
-}
-pb_add_ajax("pb-admin-manage-user-check-email", "_pb_ajax_admin_user_check_email");
+});
 
-function _pb_ajax_admin_user_update(){
+
+pb_add_ajax("pb-admin-manage-user-do-update", function(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_user")){
 		echo json_encode(array(
 			"success" => false,
@@ -191,10 +191,10 @@ function _pb_ajax_admin_user_update(){
 		"redirect_url" => pb_admin_url("manage-user/edit/".$request_data_['id']),
 	));
 	pb_end();
-}
-pb_add_ajax("pb-admin-manage-user-do-update", "_pb_ajax_admin_user_update");
+});
 
-function _pb_ajax_admin_user_add(){
+
+pb_add_ajax("pb-admin-manage-user-do-add", function(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_user")){
 		echo json_encode(array(
 			"success" => false,
@@ -226,6 +226,8 @@ function _pb_ajax_admin_user_add(){
 		$add_data_['status'] = $request_data_['user_status'];
 	}
 
+	$add_data_['reg_date'] = pb_current_time();
+
 	$insert_id_ = pb_user_add($add_data_);
 
 	$request_data_['user_authority'] = isset($request_data_['user_authority']) ? $request_data_['user_authority']: array();
@@ -239,7 +241,6 @@ function _pb_ajax_admin_user_add(){
 		"redirect_url" => pb_admin_url("manage-user/edit/".$insert_id_),
 	));
 	pb_end();
-}
-pb_add_ajax("pb-admin-manage-user-do-add", "_pb_ajax_admin_user_add");
+});
 
 ?>

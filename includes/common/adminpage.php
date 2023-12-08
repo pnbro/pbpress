@@ -164,4 +164,35 @@ function pb_adminpage_draw_error($code_, $message_, $title_ = "ERROR!"){
 	include(PB_DOCUMENT_PATH."admin/error.php");
 }
 
+function pb_adminpage_register_back_url($url_ = null){
+	if(!strlen($url_)){
+		$url_ = $_SERVER['REQUEST_URI'];
+	}
+
+	$parsed_url_ = parse_url($url_);
+	$path_ = $parsed_url_['path'];
+	$query_ = @$parsed_url_['query'];
+
+	pb_session_put('__pb_adminpage_back_url_path', array('path' => $path_, 'query' => $query_));
+}
+function pb_adminpage_back_url($path_){
+	$url_ = pb_admin_url($path_);
+	global $__pb_adminpage_back_url_info;
+	$parsed_url_ = parse_url($url_);
+	if(@$__pb_adminpage_back_url_info['path'] === @$parsed_url_['path']){
+		$url_ = $url_.(@strlen($__pb_adminpage_back_url_info['query']) ? "?".$__pb_adminpage_back_url_info['query'] : "");
+	}
+
+	$__pb_adminpage_back_url_info = null;
+
+	return $url_;
+}
+
+pb_hook_add_action('pb_init|pb_admin_init', function(){
+	global $__pb_adminpage_back_url_info;
+	$__pb_adminpage_back_url_info = pb_session_get('__pb_adminpage_back_url_path');
+	
+	pb_session_put('__pb_adminpage_back_url_path', null);
+});
+
 ?>

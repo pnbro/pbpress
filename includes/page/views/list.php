@@ -6,6 +6,8 @@
 	$keyword_ = _GET('keyword');
 	$status_ = _GET('search_status');
 
+	pb_adminpage_register_back_url();
+
 ?>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-page/list.css">
 <h3><?=__('페이지내역')?></h3>
