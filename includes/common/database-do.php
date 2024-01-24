@@ -38,6 +38,7 @@ class PBDB_DO extends ArrayObject{
 	const TYPE_BLOB = "BLOB";
 	const TYPE_MEDIUMBLOB = "MEDIUMBLOB";
 	const TYPE_LONGBLOB = "LONGBLOB";
+	const TYPE_JSON = "JSON";
 
 	const FK_CASCADE = "CASCADE";
 	const FK_SETNULL = "SET NULL";
@@ -62,6 +63,7 @@ class PBDB_DO extends ArrayObject{
 			case PBDB_DO::TYPE_BLOB : 
 			case PBDB_DO::TYPE_MEDIUMBLOB : 
 			case PBDB_DO::TYPE_LONGBLOB : 
+			case PBDB_DO::TYPE_JSON :
 				return PBDB::TYPE_STRING;
 
 			case PBDB_DO::TYPE_BIT : 

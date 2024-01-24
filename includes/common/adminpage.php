@@ -188,7 +188,7 @@ function pb_adminpage_back_url($path_){
 	return $url_;
 }
 
-pb_hook_add_action('pb_init|pb_admin_init', function(){
+pb_hook_add_action('pb_admin_init', function(){
 	global $__pb_adminpage_back_url_info;
 	$__pb_adminpage_back_url_info = pb_session_get('__pb_adminpage_back_url_path');
 	
