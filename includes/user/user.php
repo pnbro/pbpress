@@ -194,7 +194,7 @@ function pb_user_login_by_both($both_, $plain_password_){
 	return pb_user_create_session($user_data_);
 }
 function _pb_user_check_login_common($result_, $user_data_, $plain_password_){
-	if($user_data_['user_pass'] !== pb_crypt_hash($plain_password_)){
+	if($user_data_['user_pass'] !== pb_crypt_hash(trim($plain_password_))){
 		return new PBError(-1, __("로그인실패"), __("비밀번호가 정확하지 않습니다."));
 	}
 
