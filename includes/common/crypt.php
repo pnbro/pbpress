@@ -135,7 +135,12 @@ function _pb_crypt_decrypt_hook($params_, $add_){
 pb_hook_add_filter("pb_decrypt", "_pb_crypt_decrypt_hook");
 
 function pb_crypt_hash($plain_){
-	return hash("sha256", $plain_, false);
+	$crypt_hash_func_ = pb_hook_apply_filters('pb_crypt_hash_func', null);
+	if(empty($crypt_hash_func_)){
+		return hash("sha256", $plain_, false);	
+	}
+
+	return call_user_func_array($crypt_hash_func_, array($plain_));
 }
 
 ?>

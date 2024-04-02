@@ -14,6 +14,12 @@ define('PB_RANDOM_STRING_ALPHABET', "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQ
 define('PB_RANDOM_STRING_LOWER', "abcdefghijklmnopqrstuvwxyz");
 define('PB_RANDOM_STRING_UPPER', "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
+function rinclude($part_){
+	$backtrace_ = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
+    $caller_dir_ = @dirname($backtrace_[0]['file']);
+    include $caller_dir_.'/'.$part_.'.php';
+}
+
 function pb_random_string($length_ = 20, $characters_ = PB_RANDOM_STRING_ALL){
 	$characters_length_ = iconv_strlen($characters_, 'UTF-8');
 	$random_string_ = "";
