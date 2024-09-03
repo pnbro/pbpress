@@ -35,7 +35,7 @@
 
 				<div class="url-slug-group <?=$is_new_ ? "only-editing" : ""?> <?=!$pbpost_type_data['use_single_post'] ? "hidden" : ""?>" id="pb-post-edit-form-url-slug-group">
 					<div class="input-group input-group-sm">
-						<span class="input-group-addon"><?=pb_home_url($pbpost_type.'/')?></span>
+						<span class="input-group-addon"><?=pb_hook_apply_filters("pb_post_slug_base_url", pb_home_url($pbpost_type.'/'), $pbpost_type)?></span>
 						<input type="text" name="slug" class="form-control" placeholder="<?=__('URL슬러그 입력')?>" value="<?=$pbpost['slug']?>" data-original-slug="<?=$pbpost['slug']?>">
 		
 						<?php if(!$is_new_){ ?>
@@ -52,7 +52,7 @@
 					?>
 					<p class="post-url-info">
 						<a href="<?=pb_post_url($pbpost['id'])?>" target="_blank" data-post-link>
-							<?=pb_home_url($pbpost_type.'/')?><strong class="slug"><?=$pbpost['slug']?></strong>
+							<?=pb_hook_apply_filters("pb_post_slug_base_url", pb_home_url($pbpost_type.'/'), $pbpost_type)?><strong class="slug"><?=$pbpost['slug']?></strong>
 						</a> <a href="" class="btn btn-sm btn-default" data-slug-edit-btn><?=__('수정')?></a>
 						
 
