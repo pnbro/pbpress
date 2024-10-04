@@ -318,7 +318,7 @@ function pb_post_write($data_){
 	if(!strlen($type_) || !isset($post_types_[$type_])) return new PBError(403, __("글형식이 잘못되었습니다."), __("잘못된 글형식"));
 	if(!strlen($slug_)) return new PBError(403, __("글 슬러그가 잘못되었습니다."), __("잘못된 슬러그"));
 
-	$insert_data_ = array(
+	$insert_data_ = pb_hook_apply_filters("pb_post_before_write", array(
 		'post_title' => $post_title_,
 		'post_html' => $post_html_,
 		'type' => $type_,
@@ -328,7 +328,7 @@ function pb_post_write($data_){
 		'wrt_id' => pb_current_user_id(),
 		'reg_date' => $reg_date_,
 		'mod_date' => pb_current_time(),
-	);
+	));
 
 	$inserted_id_ = pb_post_insert($insert_data_);
 

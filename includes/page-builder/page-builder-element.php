@@ -344,13 +344,14 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 	$placeholder_ = isset($edit_data_['placeholder']) ? $edit_data_['placeholder'] : null;
 	$help_ = isset($edit_data_['help']) ? $edit_data_['help'] : null;
 	$type_ = isset($edit_data_['type']) ? $edit_data_['type'] : null;
+	$default_ = isset($edit_data_['default']) ? $edit_data_['default'] : null;
 
 	$input_value_ = null;
 
 	if($name_ === 'content'){
 		$input_value_ = $content_;
 	}else{
-		$input_value_ = isset($element_data_[$name_]) ? $element_data_[$name_] : null;
+		$input_value_ = isset($element_data_[$name_]) ? $element_data_[$name_] : $default_;
 	}
 
 	$validators_ = isset($edit_data_['validators']) ? $edit_data_['validators'] : array();
