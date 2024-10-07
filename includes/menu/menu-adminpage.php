@@ -108,7 +108,12 @@ function _pb_ajax_menu_editor_load_edit_form(){
 	<?php
 
 	foreach($edit_categories_ as $edit_category_){
-		call_user_func_array($menu_category_edit_form_[$edit_category_], array($item_data_, $item_meta_data_));
+		if(isset($menu_category_edit_form_[$edit_category_])){
+			foreach($menu_category_edit_form_[$edit_category_] as $func_){
+				call_user_func_array($func_, array($item_data_, $item_meta_data_));		
+			}
+		}
+		
 	}
 
 	$meta_form_html_ = ob_get_clean();

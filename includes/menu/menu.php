@@ -369,7 +369,12 @@ function pb_menu_category_edit_forms(){
 }
 function pb_menu_category_edit_form_add($key_, $func_){
 	$pb_menu_category_edit_forms_ = pb_menu_category_edit_forms();
-	$pb_menu_category_edit_forms_[$key_] = $func_;
+
+	if(!isset($pb_menu_category_edit_forms_[$key_])){
+		$pb_menu_category_edit_forms_[$key_] = array();
+	}
+	$pb_menu_category_edit_forms_[$key_][] = $func_;
+	
 	global $_pb_menu_category_edit_forms;
 	$_pb_menu_category_edit_forms = $pb_menu_category_edit_forms_;
 }
