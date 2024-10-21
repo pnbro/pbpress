@@ -147,10 +147,10 @@ class PB_easytable{
 					$column_data_['class'] = isset($column_data_['class']) ? $column_data_['class'] : " ";
 					$column_data_['name'] = isset($column_data_['name']) ? $column_data_['name'] : "";
 
-					if(!strlen($column_data_['sort'])){
+					if(@!strlen($column_data_['sort'])){
 						$column_data_['sort'] = @$options_['sort'][$key_];
 					}
-					
+
 					$column_data_['sortable'] = @strlen($column_data_['sort']);
 
 					$has_sort_ = $column_data_['sortable'] && _GET('__ez_sort') === $key_;
