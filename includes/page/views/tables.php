@@ -1,6 +1,6 @@
 <?php
 
-pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
+pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_, $order_by_ = "reg_date DESC"){
 	$keyword_ = _GET('keyword', null);
 	$status_ = _GET('search_status', null);
 
@@ -11,7 +11,7 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
 
 	return array(
 		'count' => $statement_->count(),
-		'list' => $statement_->select("pages.id DESC", array($offset_, $per_page_)),
+		'list' => $statement_->select($order_by_, array($offset_, $per_page_)),
 	);
 
 }, array(
@@ -22,6 +22,7 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
 	),
 	"page_title" => array(
 		'name' => __('페이지명'),
+		'sort' => "page_title",
 		'class' => 'col-8 link-action',
 		'render' => function($table_, $item_, $page_index_){
 			$is_front_page_ = pb_front_page_id() === (string)$item_['id'];
@@ -77,7 +78,8 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_){
 		}
 	),
 	"reg_date_ymdhi" => array(
-		'name' => '',
+		'name' => __('등록일자'),
+		'sort' => "reg_date",
 		'class' => 'col-2 text-center hidden-xs',
 	),
 ), array(

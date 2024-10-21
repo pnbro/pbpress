@@ -47,6 +47,39 @@
 			> th{
 				font-weight: normal;
 				border-bottom: none;
+
+				.sort-link{
+					position: relative;
+					// .pb-flexbox(center;flex-start;row;nowrap);
+					// font-weight: bold;
+					color: @gray-base;
+					vertical-align: middle;
+					&:after{
+						.material-icons;
+						position: relative;
+						display: inline-block;
+						content: "keyboard_arrow_down";
+						display: inline-block;
+						vertical-align: middle;
+						margin-left: 2px;
+						font-size: 16px;
+						line-height: 16px;
+						color: @brand-primary;
+					}
+
+					&.sort-desc{
+						&:after{
+							content: "keyboard_arrow_up";
+						}
+					}
+				}
+
+				&.sorted{
+					> .sort-link{
+						font-weight: bold;
+						color: @brand-primary;
+					}
+				}
 			}
 		}
 	}

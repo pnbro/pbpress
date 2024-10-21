@@ -86,13 +86,13 @@ class PB_easytable{
 		unset($this->__added_fields[$column_name_]);
 	}
 	
-	function last_results($page_index_){
+	function last_results($page_index_, $orderby_ = null){
 		if(!isset($this->_last_results)){
 			$per_page_ = isset($this->_options['per_page']) ? $this->_options['per_page'] : 15;
 			$offset_ = ($page_index_) * $per_page_;
 
 			$loader_ = $this->loader();
-			$this->_last_results = call_user_func_array($loader_, array($offset_, $per_page_));	
+			$this->_last_results = call_user_func_array($loader_, array($offset_, $per_page_, $orderby_));	
 		}
 
 		return $this->_last_results;
@@ -110,7 +110,7 @@ class PB_easytable{
 	}
 
 
-	function display($page_index_){		
+	function display($page_index_, $sort_key_ = null, $sort_dir_ = null){		
 		$options_ = $this->_options;
 		$hide_pagenav_ = (isset($options_["hide_pagenav"]) ? $options_["hide_pagenav"] : false);
 
@@ -118,21 +118,68 @@ class PB_easytable{
 		$is_ajax_ = isset($options_['ajax']) ? $options_['ajax'] : false;
 
 		$loading_indicator_ = isset($options_['loading_indicator']) ? $options_['loading_indicator'] : pb_easytable_default_loading_indicator();
+
+		$options_['no_rowdata'] = isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null;
+
+		if(is_callable($options_['no_rowdata'])){
+			$options_['no_rowdata'] = call_user_func_array($options_['no_rowdata'], array($this, $options_, $page_index_));
+		}
+
+		$sort_key_ = strlen($sort_key_) ? $sort_key_ : _GET('__ez_sort');
+		$sort_dir_ = strlen($sort_dir_) ? $sort_dir_ : _GET('__ez_sort_dir');
+
 		
 		?>
 		<input type="hidden" name="page_index" value="<?=$page_index_?>">
+		<input type="hidden" name="__ez_sort" value="<?=$sort_key_?>">
+		<input type="hidden" name="__ez_sort_dir" value="<?=$sort_dir_?>">
 		<table class="pb-easytable <?=$table_class_?>" id="<?=$this->_id?>" data-ajax="<?=$is_ajax_ ? "Y" : "N"?>" data-loading-indicator="<?=htmlentities($loading_indicator_)?>" data-hide-pagenav="<?=$hide_pagenav_ ? "Y" : "N" ?>">
 			<thead>
 				<?php 
 
 				$data_ = $this->data();
+				$orderby_ = strlen($sort_key_) && isset($data_[$sort_key_]['sort']) ? $data_[$sort_key_]['sort']." ".($sort_dir_) : null;
+
 				foreach($data_ as $key_ => $column_data_){ 
-					$class_ = isset($column_data_['head_class']) ? $column_data_['head_class'] : " ";
-					$class_ .= (isset($column_data_['class']) ? $column_data_['class'] : " ");
+					$column_data_['head_class'] = isset($column_data_['head_class']) ? $column_data_['head_class'] : " ";
+					$column_data_['class'] = isset($column_data_['class']) ? $column_data_['class'] : " ";
+					$column_data_['name'] = isset($column_data_['name']) ? $column_data_['name'] : "";
+					$column_data_['sortable'] = @strlen($column_data_['sort']);
+
+					$has_sort_ = $column_data_['sortable'] && _GET('__ez_sort') === $key_;
+					$th_sort_class_ = $has_sort_ ? "sorted" : "";
+					$sort_class_ = "";
+
+					
+					
+					if($has_sort_ && _GET('__ez_sort_dir') === "desc"){
+						$sort_class_ = "sort-desc";
+					}else if($has_sort_){
+						$sort_class_ = "sort-asc";
+					}
+
+					if(is_callable($column_data_['head_class'])){
+						$column_data_['head_class'] = call_user_func_array($column_data_['head_class'], array($this, $key_, $column_data_, $options_));
+					}
+					if(is_callable($column_data_['class'])){
+						$column_data_['class'] = call_user_func_array($column_data_['class'], array($this, $key_, $column_data_, $options_));
+					}
+
+					if(is_callable($column_data_['name'])){
+						$column_data_['name'] = call_user_func_array($column_data_['name'], array($this, $key_, $column_data_, $options_));
+					}
+
+					$class_ = $column_data_['head_class']." ".$column_data_['class']." ".$th_sort_class_;
 					$class_ = trim($class_);
 
 				?>
-					<th class="<?=$key_?> <?=$class_?>"><?=isset($column_data_['name']) ? $column_data_['name'] : ""?></th>
+					<th class="<?=$key_?> <?=$class_?>">
+						<?php if($column_data_['sortable']){ ?>
+							<a href="#" class="sort-link <?=$sort_class_?>" data-sort-key="<?=$key_?>" data-sort-dir="<?=$has_sort_ && $sort_dir_ === "asc" ? "desc" : "asc"?>"><?=isset($column_data_['name']) ? $column_data_['name'] : ""?></a>
+						<?php }else{  ?>
+							<?=isset($column_data_['name']) ? $column_data_['name'] : ""?>
+						<?php } ?>
+					</th>
 				<?php } ?>
 			</thead>
 			<tbody>
@@ -142,7 +189,7 @@ class PB_easytable{
 						<td class="no-rowdata first" colspan="<?=count($data_)?>"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></td>
 					</tr>
 				<?php }else{
-					$this->render_body($page_index_);
+					$this->render_body($page_index_, $orderby_);
 				} ?>
 				
 			</tbody>
@@ -152,7 +199,7 @@ class PB_easytable{
 
 			<div class="pb-easytable-pagenav" id="<?=$this->_id?>-pagenav"  data-easytable-pagenav-id="<?=$this->_id?>">
 				<?php if(!$is_ajax_){
-					$this->render_pagenav($page_index_);
+					$this->render_pagenav($page_index_, $orderby_);
 				} ?>
 			</div>
 
@@ -165,13 +212,13 @@ class PB_easytable{
 		<?php
 	}
 
-	function render_body($page_index_){
+	function render_body($page_index_, $orderby_ = null){
 		$options_ = $this->_options;
 
 		$per_page_ = isset($options_['per_page']) ? $options_['per_page'] : 15;
 		$offset_ = ($page_index_) * $per_page_;
 
-		$results_ = $this->last_results($page_index_);
+		$results_ = $this->last_results($page_index_, $orderby_);
 
 		$total_count_ = $results_['count'];
 		$result_list_ = $results_['list'];
@@ -186,6 +233,12 @@ class PB_easytable{
 				foreach($data_ as $key_ => $column_data_){
 
 					$class_ = isset($column_data_['body_class']) ? $column_data_['body_class'] : " ";
+					$column_data_['class'] = (isset($column_data_['class']) ? $column_data_['class'] : " ");
+
+					if(is_callable($column_data_['class'])){
+						$column_data_['class'] = call_user_func_array($column_data_['class'], array($this, $key_, $column_data_, $options_));
+					}
+
 					$class_ .= (isset($column_data_['class']) ? $column_data_['class'] : " ");
 					$class_ = trim($class_);
 
@@ -219,7 +272,14 @@ class PB_easytable{
 			</tr>
 		<?php }
 
-		if(count($result_list_) <= 0){ ?>
+		if(count($result_list_) <= 0){ 
+			$options_['no_rowdata'] = isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null;
+
+			if(is_callable($options_['no_rowdata'])){
+				$options_['no_rowdata'] = call_user_func_array($options_['no_rowdata'], array($this, $options_, $page_index_));
+			}
+
+			?>
 
 			<tr>
 				<td class="no-rowdata" colspan="<?=count($data_)?>"><?=isset($options_['no_rowdata']) ? $options_['no_rowdata'] : null?></td>
@@ -228,7 +288,7 @@ class PB_easytable{
 		<?php }
 	}
 
-	function render_pagenav($page_index_){
+	function render_pagenav($page_index_, $orderby_ = null){
 		$results_ = $this->last_results($page_index_);
 		$options_ = $this->_options;
 	

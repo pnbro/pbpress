@@ -1,6 +1,6 @@
 <?php
 
-pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
+pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_, $order_by_ ="posts.id desc"){
 	global $pbpost_type, $pbpost_type_data;
 	
 	$keyword_ = _GET('keyword', null);
@@ -12,7 +12,7 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 		'status' => $status_,
 	)));
 
-	$post_list_ = $statement_->select("posts.id desc", array($offset_, $per_post_));
+	$post_list_ = $statement_->select($order_by_, array($offset_, $per_post_));
 	foreach($post_list_ as &$row_data_){
 		$category_values_ = pb_post_category_values($row_data_['id']);
 		$category_names_ = array();
@@ -42,10 +42,12 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 		),
 		'category_names' => array(
 			'name' => __('분류'),
+			'sort' => "category_names",
 			'class' => 'col-2 text-center hidden-xs',
 		),
 		"post_title" => array(
 			'name' => __('제목'),
+			'sort' => "post_title",
 			'class' => 'col-6 link-action',
 			'render' => function($table_, $item_, $post_index_){
 				$post_url_ = pb_post_url($item_['id']);
@@ -105,7 +107,8 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_){
 			}
 		),
 		"reg_date_ymdhi" => array(
-			'name' => '',
+			'name' => __('등록일자'),
+			'sort' => "reg_date",
 			'class' => 'col-2 text-center hidden-xs',
 		),
 	);

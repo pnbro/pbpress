@@ -220,6 +220,7 @@
 ;홈화면 지정;=;Set as a home;;
 ;홈화면 지정해제;=;Cancel as a home;;
 ;상태;=;Status;;
+;등록일자;=;Registration date;;
 ;검색된 페이지가 없습니다.;=;No search result;;
 ;컨테이너;=;Container;;
 ;기본적인 요소 적재공간;=;Default item load place;;
@@ -325,7 +326,6 @@
 ;분류명을 입력하세요;=;Enter the category name;;
 ;상위분류;=;Higher category;;
 ;-상위없음-;=;-No top-;;
-;등록일자;=;Registration date;;
 ;검색된 분류가 없습니다.;=;No category was found.;;
 ;사용자관리;=;Manage user;;
 ;존재하지 않는 사용자입니다.;=;The user does not exist.;;

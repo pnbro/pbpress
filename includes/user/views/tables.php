@@ -1,14 +1,19 @@
 <?php
 
-pb_easytable_register("pb-user-listtable", function($offset_, $per_page_){
+pb_easytable_register("pb-user-listtable", function($offset_, $per_page_, $orderby_){
 	$keyword_ = _GET('keyword', null);
 	$statement_ = pb_user_statement(array(
 		"keyword" => $keyword_,
 	));
 
+	if(!strlen($orderby_)){
+		$orderby_ = "reg_date DESC";	
+	}
+	
+
 	return array(
 		'count' => $statement_->count(),
-		'list' => $statement_->select("reg_date DESC", array($offset_, $per_page_)),
+		'list' => $statement_->select($orderby_, array($offset_, $per_page_)),
 	);
 }, pb_hook_apply_filters("pb_adminpage_user_listtable_data", array(
 	'seq' => array(
@@ -19,6 +24,7 @@ pb_easytable_register("pb-user-listtable", function($offset_, $per_page_){
 
 	'user_name' => array(
 		'name' => __("사용자명"),
+		'sort' => "user_name",
 		'class' => "col-3 link-action",
 		'render' => function($table_, $item_, $page_index_){
 			
@@ -62,19 +68,23 @@ pb_easytable_register("pb-user-listtable", function($offset_, $per_page_){
 
 	'user_login' => array(
 		'name' => __("ID"),
+		'sort' => "user_login",
 		'class' => "col-2 text-center hidden-xs",
 	),
 	'user_email' => array(
 		'name' => __("이메일"),
+		'sort' => "user_email",
 		'class' => "col-2 text-center hidden-xs",
 	),
 	'status_name' => array(
 		'name' => __("상태"),
+		// 'sort' => true,
 		'class' => "col-2 text-center hidden-xs",
 	
 	),
 	'reg_date_ymdhi' => array(
 		'name' => __("등록일자"),
+		'sort' => "reg_date",
 		'class' => "col-2 text-center hidden-xs",
 	
 	),
