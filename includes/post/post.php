@@ -57,8 +57,8 @@ $posts_do = pbdb_data_object("posts", array(
 	'wrt_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
 		'table' => 'users',
 		'column' => 'id',
-		'delete' => PBDB_DO::FK_CASCADE,
-		'update' => PBDB_DO::FK_CASCADE,
+		'delete' => PBDB_DO::FK_NULL,
+		'update' => PBDB_DO::FK_NULL,
 	), 'nn' => true, "comment" => "사용자ID"),
 		
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
