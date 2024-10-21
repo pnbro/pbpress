@@ -125,6 +125,8 @@ class PB_easytable{
 			$options_['no_rowdata'] = call_user_func_array($options_['no_rowdata'], array($this, $options_, $page_index_));
 		}
 
+		$options_['sort'] = isset($options_) ? $options_ : array();
+
 		$sort_key_ = strlen($sort_key_) ? $sort_key_ : _GET('__ez_sort');
 		$sort_dir_ = strlen($sort_dir_) ? $sort_dir_ : _GET('__ez_sort_dir');
 
@@ -144,13 +146,17 @@ class PB_easytable{
 					$column_data_['head_class'] = isset($column_data_['head_class']) ? $column_data_['head_class'] : " ";
 					$column_data_['class'] = isset($column_data_['class']) ? $column_data_['class'] : " ";
 					$column_data_['name'] = isset($column_data_['name']) ? $column_data_['name'] : "";
+
+					if(!strlen($column_data_['sort'])){
+						$column_data_['sort'] = @$options_['sort'][$key_];
+					}
+					
 					$column_data_['sortable'] = @strlen($column_data_['sort']);
 
 					$has_sort_ = $column_data_['sortable'] && _GET('__ez_sort') === $key_;
 					$th_sort_class_ = $has_sort_ ? "sorted" : "";
 					$sort_class_ = "";
 
-					
 					
 					if($has_sort_ && _GET('__ez_sort_dir') === "desc"){
 						$sort_class_ = "sort-desc";
