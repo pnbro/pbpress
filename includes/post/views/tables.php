@@ -42,7 +42,7 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_, $ord
 		),
 		'category_names' => array(
 			'name' => __('분류'),
-			'sort' => "category_names",
+			// 'sort' => "category_names",
 			'class' => 'col-2 text-center hidden-xs',
 		),
 		"post_title" => array(
