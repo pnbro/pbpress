@@ -76,6 +76,8 @@
 ;수정;=;edit;;
 ;삭제;=;delete;;
 ;권한부여;=;Put permission;;
+;이름순;=;;;
+;슬러그순;=;;;
 ;조회된 권한이 없습니다.;=;No result of permission;;
 ;업로드실패;=;Upload failed;;
 ;업로드 파일이 비어있습니다.;=;No upload file;;
@@ -86,6 +88,7 @@
 ;잘못된 요청;=;Wrong request;;
 ;삭제할 키가 없습니다.;=;No key to delete;;
 ;키갯수가 일치하지 않습니다.;=;The number of keys does not match.;;
+;정렬순서;=;;;
 ;%s 에디터가 존재하지 않습니다.;=;%s editor does not exists;;
 ;%s 에디터 렌더러가 존재하지 않습니다.;=;%s editor renderer does not exists;;
 ;파일핸들러가 존재하지 않습니다.;=;File handler does not exists;;
@@ -143,6 +146,8 @@
 ;상세코드내역;=;Detailed D-code list;;
 ;상세추가;=;Add detail;;
 ;코드;=;Code;;
+;코드순;=;;;
+;코드명순;=;;;
 ;조회된 공통코드가 없습니다.;=;No G-code;;
 ;조회된 상세코드가 없습니다.;=;No D-code;;
 ;메뉴관리;=;Menu management;;
@@ -221,6 +226,7 @@
 ;홈화면 지정해제;=;Cancel as a home;;
 ;상태;=;Status;;
 ;등록일자;=;Registration date;;
+;등록일자순;=;;;
 ;검색된 페이지가 없습니다.;=;No search result;;
 ;컨테이너;=;Container;;
 ;기본적인 요소 적재공간;=;Default item load place;;
@@ -364,6 +370,8 @@
 ;사용자내역;=;User history;;
 ;사용자 추가;=;Add user;;
 ;관리;=;;;
+;이메일순;=;;;
+;ID순;=;;;
 ;(사용자명 없음);=;;;
 ;이메일;=;Email;;
 ;조회된 사용자가 없습니다.;=;No user results;;

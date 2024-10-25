@@ -1,14 +1,16 @@
 <?php
 
-pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
+pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_, $order_by_){
 	$keyword_ = _GET('keyword');
 	$statement_ = pb_gcode_statement(array(
 		"keyword" => $keyword_,
 	));
 
+	$order_by_ = strlen($order_by_) ? $order_by_ : "code_id ASC";
+
 	return array(
 		'count' => $statement_->count(),
-		'list' => $statement_->select(null, array($offset_, $per_page_)),
+		'list' => $statement_->select($order_by_, array($offset_, $per_page_)),
 	);
 },array(
 	"code_id" => array(
@@ -33,6 +35,17 @@ pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_){
 	"button_area" => array(
 		'name' => '',
 		'class' => 'col-4 text-center',
+		'sort' => array(
+			"code_id" => array(
+				'title' => __("코드순"),
+				'column' => "code_id",
+			),
+
+			"code_nm" => array(
+				'title' => __("코드명순"),
+				'column' => "code_nm",
+			),
+		),
 		'render' => function($table_, $item_, $row_index_){
 			?>
 			<?php pb_hook_do_action('pb-admin-gcode-table-button-before'); ?>

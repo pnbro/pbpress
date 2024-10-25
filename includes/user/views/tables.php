@@ -24,7 +24,24 @@ pb_easytable_register("pb-user-listtable", function($offset_, $per_page_, $order
 
 	'user_name' => array(
 		'name' => __("사용자명"),
-		'sort' => "user_name",
+		'sort' => array(
+			"user_name" => array(
+				'title' => __("이름순"),
+				'column' => "user_name",
+			),
+			"user_email" => array(
+				'title' => __("이메일순"),
+				'column' => "user_email",
+			),
+			"user_login" => array(
+				'title' => __("ID순"),
+				'column' => "user_login",
+			),
+			"reg_date" => array(
+				'title' => __("등록일자순"),
+				'column' => "reg_date",
+			),
+		),
 		'class' => "col-3 link-action",
 		'render' => function($table_, $item_, $page_index_){
 			
@@ -45,11 +62,11 @@ pb_easytable_register("pb-user-listtable", function($offset_, $per_page_, $order
 		
 		
 					<li>
-						<div class="subject">이메일</div>
+						<div class="subject"><?=__("이메일")?></div>
 						<div class="content"><?=$item_['user_email'] ?></div>
 					</li>
 					<li>
-						<div class="subject">상태</div>
+						<div class="subject"><?=__("상태")?></div>
 						<div class="content"><?=$item_['status_name'] ?></div>
 					</li>
 			
@@ -68,12 +85,11 @@ pb_easytable_register("pb-user-listtable", function($offset_, $per_page_, $order
 
 	'user_login' => array(
 		'name' => __("ID"),
-		'sort' => "user_login",
 		'class' => "col-2 text-center hidden-xs",
 	),
 	'user_email' => array(
 		'name' => __("이메일"),
-		'sort' => "user_email",
+		// 'sort' => "user_email",
 		'class' => "col-2 text-center hidden-xs",
 	),
 	'status_name' => array(
@@ -84,7 +100,7 @@ pb_easytable_register("pb-user-listtable", function($offset_, $per_page_, $order
 	),
 	'reg_date_ymdhi' => array(
 		'name' => __("등록일자"),
-		'sort' => "reg_date",
+		// 'sort' => "reg_date",
 		'class' => "col-2 text-center hidden-xs",
 	
 	),

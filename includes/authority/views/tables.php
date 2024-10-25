@@ -1,14 +1,16 @@
 <?php
 
-pb_easytable_register("pb-admin-authority-table", function($offset_, $per_page_){
+pb_easytable_register("pb-admin-authority-table", function($offset_, $per_page_, $order_by_){
 	$keyword_ = _GET('keyword', null);
 	$statement_ = pb_authority_statement(array(
 		"keyword" => $keyword_,
 	));
 
+	$order_by_ = strlen($order_by_) ? $order_by_ : "reg_date ASC";
+
 	return array(
 		'count' => $statement_->count(),
-		'list' => $statement_->select(null, array($offset_, $per_page_)),
+		'list' => $statement_->select($order_by_, array($offset_, $per_page_)),
 	);
 }, array(
 	"auth_name" => array(
@@ -29,6 +31,18 @@ pb_easytable_register("pb-admin-authority-table", function($offset_, $per_page_)
 	"button_area" => array(
 		'name' => '',
 		'class' => 'col-3 text-right',
+		'sort' => array(
+			"auth_name" => array(
+				'title' => __("이름순"),
+				'column' => "auth_name",
+			),
+
+			"slug" => array(
+				'title' => __("슬러그순"),
+				'column' => "slug",
+			),
+		),
+
 		'render' => function($table_, $item_, $row_index_){
 			?>
 			<a href="javascript:_pb_authority_edit('<?=$item_['id']?>');" class="btn btn-default"><?=__('수정')?></a>

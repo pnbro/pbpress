@@ -48,6 +48,45 @@
 				font-weight: normal;
 				border-bottom: none;
 
+				.sortbox{
+					.pb-flexbox(center;flex-start;row;nowrap);
+
+					.column-title{
+						margin-right: 10px;
+					}
+
+					.dropdown{
+						
+
+						.sort-link{
+							vertical-align: top;
+							color: @root-gray-d1;
+
+							&.sorted{
+								color: @brand-primary;
+								font-weight: bold;
+							}
+						}
+
+						.dropdown-menu > li{
+							color: @gray-base;
+
+							.sort-link{
+								&:after{
+									display: none;
+								}
+								&.sorted{
+									&:after{
+										display: inline-block;
+									}
+								}
+							}
+
+						}
+						
+					}
+				}
+
 				.sort-link{
 					position: relative;
 					// .pb-flexbox(center;flex-start;row;nowrap);

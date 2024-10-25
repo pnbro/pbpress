@@ -22,7 +22,19 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_, $ord
 	),
 	"page_title" => array(
 		'name' => __('페이지명'),
-		'sort' => "page_title",
+		// 'sort' => "page_title",
+		'sort' => array(
+			"page_title" => array(
+				'title' => __("이름순"),
+				'column' => "page_title",
+			),
+		
+			"reg_date" => array(
+				'title' => __("등록일자순"),
+				'column' => "reg_date",
+			),
+		),
+
 		'class' => 'col-8 link-action',
 		'render' => function($table_, $item_, $page_index_){
 			$is_front_page_ = pb_front_page_id() === (string)$item_['id'];
@@ -79,7 +91,7 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_, $ord
 	),
 	"reg_date_ymdhi" => array(
 		'name' => __('등록일자'),
-		'sort' => "reg_date",
+		// 'sort' => "reg_date",
 		'class' => 'col-2 text-center hidden-xs',
 	),
 ), array(

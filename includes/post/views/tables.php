@@ -47,7 +47,17 @@ pb_easytable_register("pb-admin-post-table", function($offset_, $per_post_, $ord
 		),
 		"post_title" => array(
 			'name' => __('제목'),
-			'sort' => "post_title",
+			'sort' => array(
+				"post_title" => array(
+					'title' => __("이름순"),
+					'column' => "post_title",
+				),
+			
+				"reg_date" => array(
+					'title' => __("등록일자순"),
+					'column' => "reg_date",
+				),
+			),
 			'class' => 'col-6 link-action',
 			'render' => function($table_, $item_, $post_index_){
 				$post_url_ = pb_post_url($item_['id']);

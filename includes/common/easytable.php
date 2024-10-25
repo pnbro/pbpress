@@ -109,6 +109,30 @@ class PB_easytable{
 		return ($total_count_ - $row_seq_) + 1;
 	}
 
+	function render_orderby($data_, $sort_key_, $sort_dir_){
+		$orderby_ = null;
+
+		if(!strlen($sort_key_)) return null;
+
+		foreach($data_ as $column_key_ => $column_data_){
+			if(!isset($column_data_['sort'])) continue;
+
+			$column_sort_data_ = $column_data_['sort'];
+
+			if(is_array($column_sort_data_)){
+				if(isset($column_sort_data_[$sort_key_]['column'])){
+					$orderby_ = $column_sort_data_[$sort_key_]['column']." ".($sort_dir_);
+				}
+			}else{
+				$orderby_ = $column_sort_data_." ".($sort_dir_);
+			}
+		}
+
+		
+
+		return $orderby_;
+	}
+
 
 	function display($page_index_, $sort_key_ = null, $sort_dir_ = null){		
 		$options_ = $this->_options;
@@ -140,18 +164,18 @@ class PB_easytable{
 				<?php 
 
 				$data_ = $this->data();
-				$orderby_ = strlen($sort_key_) && isset($data_[$sort_key_]['sort']) ? $data_[$sort_key_]['sort']." ".($sort_dir_) : null;
+				$orderby_ = $this->render_orderby($data_, $sort_key_, $sort_dir_);
 
 				foreach($data_ as $key_ => $column_data_){ 
 					$column_data_['head_class'] = isset($column_data_['head_class']) ? $column_data_['head_class'] : " ";
 					$column_data_['class'] = isset($column_data_['class']) ? $column_data_['class'] : " ";
 					$column_data_['name'] = isset($column_data_['name']) ? $column_data_['name'] : "";
 
-					if(@!strlen($column_data_['sort'])){
+					if(@!isset($column_data_['sort'])){
 						$column_data_['sort'] = @$options_['sort'][$key_];
 					}
 
-					$column_data_['sortable'] = @strlen($column_data_['sort']);
+					$column_data_['sortable'] = @isset($column_data_['sort']);
 
 					$has_sort_ = $column_data_['sortable'] && _GET('__ez_sort') === $key_;
 					$th_sort_class_ = $has_sort_ ? "sorted" : "";
@@ -180,9 +204,48 @@ class PB_easytable{
 
 				?>
 					<th class="<?=$key_?> <?=$class_?>">
-						<?php if($column_data_['sortable']){ ?>
-							<a href="#" class="sort-link <?=$sort_class_?>" data-sort-key="<?=$key_?>" data-sort-dir="<?=$has_sort_ && $sort_dir_ === "asc" ? "desc" : "asc"?>"><?=isset($column_data_['name']) ? $column_data_['name'] : ""?></a>
-						<?php }else{  ?>
+						<?php if($column_data_['sortable']){ 
+
+							if(is_array($column_data_['sort'])){ 
+
+								$actived_sort_data_ = @$column_data_['sort'][$sort_key_];
+
+								$inner_sort_class_ = "";
+								if(isset($actived_sort_data_) && $sort_dir_ === "desc"){
+									$inner_sort_class_ = "sort-desc";
+								}else if($has_sort_){
+									$inner_sort_class_ = "sort-asc";
+								}
+
+
+
+							?>
+							<div class="sortbox">
+								<div class="column-title"><?=isset($column_data_['name']) ? $column_data_['name'] : ""?></div>
+								<div class="dropdown">
+									<?php if(isset($actived_sort_data_)){ ?>
+										<a href="#" class="sort-link <?=$inner_sort_class_?> sorted" data-toggle="dropdown" data-sort-label><?=isset($actived_sort_data_['title']) ? $actived_sort_data_['title'] : ""?></a>
+									<?php }else{ ?>
+										<a href="#" class="sort-link <?=$inner_sort_class_?>" data-toggle="dropdown" data-sort-label><?=__("정렬순서")?></a>
+									<?php } ?>
+
+									<ul class="dropdown-menu">
+										<?php foreach($column_data_['sort'] as $inner_key_ => $sort_data_){ 
+											$inner_sorted_ = $inner_key_ === $sort_key_;
+										?>
+											<li>
+												<a href="#" class="<?=$inner_sorted_ ? "sort-link sorted ".$inner_sort_class_ : "sort-link"?>" data-sort-key="<?=$inner_key_?>" data-sort-dir="<?=$sort_key_ === $inner_key_ && $sort_dir_ === "asc" ? "desc" : "asc"?>"><?=$sort_data_['title']?></a>
+											</li>
+										<?php } ?>
+									</ul>
+								</div>
+							</div>
+								
+							<?php }else{ ?>
+								<a href="#" class="sort-link <?=$sort_class_?>" data-sort-key="<?=$key_?>" data-sort-dir="<?=$has_sort_ && $sort_dir_ === "asc" ? "desc" : "asc"?>"><?=isset($column_data_['name']) ? $column_data_['name'] : ""?></a>
+							<?php }
+
+						}else{  ?>
 							<?=isset($column_data_['name']) ? $column_data_['name'] : ""?>
 						<?php } ?>
 					</th>
@@ -370,15 +433,19 @@ function _pb_ajax_easytable_load_html(){
 
 	$table_id_ = _GET('table_id', -1);
 	$page_index_ = _GET('page_index', 0, PB_PARAM_INT);
+	$sort_key_ = _GET('__ez_sort');
+	$sort_dir_ = _GET('__ez_sort_dir');
 
 	if(!isset($pb_easytable_map[$table_id_])){
 		pb_ajax_error(__('잘못된 접근'),__('잘못된 접근입니다.'));
 	}
 
 	$easytable_ = $pb_easytable_map[$table_id_];
+	$table_data_ = $easytable_->data();
+	$orderby_ = $easytable_->render_orderby($table_data_, $sort_key_, $sort_dir_);
 
 	ob_start();
-	$easytable_->render_body($page_index_);
+	$easytable_->render_body($page_index_, $orderby_);
 	$body_html_ = ob_get_clean();
 
 	$pagenav_html_ = null;
