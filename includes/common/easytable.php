@@ -122,6 +122,7 @@ class PB_easytable{
 			if(is_array($column_sort_data_)){
 				if(isset($column_sort_data_[$sort_key_]['column'])){
 					$orderby_ = $column_sort_data_[$sort_key_]['column']." ".($sort_dir_);
+					break;
 				}
 			}else{
 				$orderby_ = $column_sort_data_." ".($sort_dir_);
