@@ -24,14 +24,6 @@ function pb_menu_item_meta_statement($conditions_ = array()){
 	global $menus_item_meta_do;
 
 	$statement_ = $menus_item_meta_do->statement();
-	$statement_->add_field(
-		"DATE_FORMAT(menus_item_meta.reg_date, '%Y.%m.%d %H:%i:%S') reg_date_ymdhis",
-		"DATE_FORMAT(menus_item_meta.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
-		"DATE_FORMAT(menus_item_meta.reg_date, '%Y.%m.%d') reg_date_ymd",
-		"DATE_FORMAT(menus_item_meta.mod_date, '%Y.%m.%d %H:%i:%S') mod_date_ymdhis",
-		"DATE_FORMAT(menus_item_meta.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
-		"DATE_FORMAT(menus_item_meta.mod_date, '%Y.%m.%d') mod_date_ymd"
-	);
 
 	$statement_->add_legacy_field_filter('pb_menu_item_meta_list_fields', '', $conditions_);
 	$statement_->add_legacy_join_filter('pb_menu_item_meta_list_join', '', $conditions_);
