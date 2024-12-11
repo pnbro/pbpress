@@ -66,10 +66,12 @@ function pb_page_statement($conditions_ = array()){
 	if(isset($conditions_['keyword']) && strlen($conditions_['keyword'])){
 		$statement_->add_like_condition(pb_hook_apply_filters('pb_page_list_keyword', array(
 			"pages.slug",
+			"pages.page_title",
 			"users.user_login",
 			"users.user_email",
 			"users.user_name",
-		)), $conditions_['keyword']);
+
+		)), $conditions_['keyword'], true, true);
 	}
 
 	return pb_hook_apply_filters('pb_page_statement', $statement_, $conditions_);

@@ -28,6 +28,10 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_, $ord
 				'title' => __("이름순"),
 				'column' => "page_title",
 			),
+			"slug" => array(
+				'title' => __("슬러그순"),
+				'column' => "slug",
+			),
 		
 			"reg_date" => array(
 				'title' => __("등록일자순"),
