@@ -295,8 +295,15 @@ class PB_easytable{
 
 		$data_ = $this->data();
 
-		foreach($result_list_ as $row_index_ => $row_data_){ ?>
-			<tr>
+		foreach($result_list_ as $row_index_ => $row_data_){ 
+			$tr_classes_ = "";
+
+			if(@is_callable($options_['tr_classes'])){
+				$tr_classes_ = call_user_func_array($options_['tr_classes'], array($row_index_, $row_data_, $options_));
+			}
+
+		?>
+			<tr class="<?=$tr_classes_?>">
 
 				<?php 
 	
