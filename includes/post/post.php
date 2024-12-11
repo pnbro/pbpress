@@ -376,7 +376,7 @@ function pb_post_edit($id_, $data_){
 		if(!strlen($update_data_['slug'])) return new PBError(403, __("글 슬러그가 잘못되었습니다."), __("잘못된 슬러그"));
 	}
 
-	pb_post_update($id_, $update_data_);
+	pb_post_update($id_, pb_hook_apply_filters('pb_post_before_edit', $update_data_, $id_, $data_));
 
 	if(isset($data_['category_id'])){
 		if(gettype($data_['category_id']) !== "array"){
