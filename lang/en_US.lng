@@ -386,6 +386,8 @@
 ;자료 수정 중, 에러가 발생했습니다.;=;Error occurred while file editing;;
 ;자료 삭제 중, 에러가 발생했습니다.;=;Error occurred while file deleting;;
 ;파일추가;=;Add file;;
+;이미지 업로드;=;;;
+;이미지 추가;=;;;
 ;삭제확인;=;Confirm to delete;;
 ;해당 요소를 삭제하시겠습니까?;=;Please confirm to delete element;;
 ;삭제하기;=;Delete;;

@@ -149,7 +149,7 @@ function pb_page_write($data_){
 		'reg_date' => pb_current_time(),
 	);
 
-	$inserted_id_ = pb_page_insert($insert_data_);
+	$inserted_id_ = pb_page_insert(pb_hook_apply_filters('pb_page_before_write', $insert_data_));
 	pb_hook_do_action('pb_page_writed', $inserted_id_);
 	return $inserted_id_;
 }
@@ -179,7 +179,7 @@ function pb_page_edit($id_, $data_){
 		if(!strlen($update_data_['slug'])) return new PBError(403, __("페이지 슬러그가 잘못되었습니다."), __("잘못된 슬러그"));
 	}
 
-	pb_page_update($id_, $update_data_);
+	pb_page_update($id_, pb_hook_apply_filters('pb_page_before_edit', $update_data_, $id_, $data_));
 	pb_hook_do_action('pb_page_edited', $id_);	
 	return $id_;
 }
