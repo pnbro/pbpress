@@ -46,7 +46,7 @@ abstract class PBConstClass{
 		foreach ($each_data_ as $key_ => $value_data_) {
 			if(in_array($key_, $excludes_)) continue;
 
-			$option_el_ .= '<option value="' . $key_ . '" ' . pb_selected($value_, $key_) . ' >' . $value_data_ . '</option>';
+			$option_el_ .= '<option value="' . $key_ . '" ' . pb_selected((string)$value_, (string)$key_) . ' >' . $value_data_ . '</option>';
 		}
 		return $option_el_;
 	}

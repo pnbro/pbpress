@@ -328,7 +328,7 @@ function pb_post_write($data_){
 		'wrt_id' => pb_current_user_id(),
 		'reg_date' => $reg_date_,
 		'mod_date' => pb_current_time(),
-	));
+	), $data_);
 
 	$inserted_id_ = pb_post_insert($insert_data_);
 
