@@ -59,7 +59,7 @@ $posts_do = pbdb_data_object("posts", array(
 		'column' => 'id',
 		'delete' => PBDB_DO::FK_SETNULL,
 		'update' => PBDB_DO::FK_SETNULL,
-	), 'nn' => true, "comment" => "사용자ID"),
+	), "nn" => false, "comment" => "사용자ID"),
 		
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
