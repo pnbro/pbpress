@@ -15,14 +15,14 @@ $file_resources_do = pbdb_data_object("file_resources", array(
 	'file_desc'		 => array("type" => PBDB_DO::TYPE_VARCHAR, 'length' => 200, "comment" => "파일설명"),
 	'file_type'		 => array("type" => PBDB_DO::TYPE_VARCHAR, 'length' => 20, "comment" => "파일형식"),
 
-	'status'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "index" => true, "comment" => "파일상태"),
+	'display_option'		 => array("type" => PBDB_DO::TYPE_VARCHAR, "length" => 5, "nn" => true, "index" => true, "comment" => "파일상태"),
 	
 	'wrt_id'		 => array("type" => PBDB_DO::TYPE_BIGINT, "length" => 11, "fk" => array(
 		'table' => 'users',
 		'column' => 'id',
 		'delete' => PBDB_DO::FK_CASCADE,
 		'update' => PBDB_DO::FK_CASCADE,
-	), 'nn' => true, "comment" => "사용자ID"),
+	), 'nn' => false, "comment" => "사용자ID"),
 		
 	'reg_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "등록일자"),
 	'mod_date'	 => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "수정일자"),
@@ -33,7 +33,7 @@ function pb_file_resource_statement($conditions_ = array()){
 
 	$statement_ = $file_resources_do->statement();
 	$statement_->add_field(
-		PB_FILE_RESOURCE_STATUS::subquery("file_resources.status", 'status_name'),
+		PB_FILE_RESOURCE_OPTION::subquery("file_resources.display_option", 'display_option_name'),
 		"DATE_FORMAT(file_resources.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi",
 		"DATE_FORMAT(file_resources.reg_date, '%Y.%m.%d') reg_date_ymd",
 		"DATE_FORMAT(file_resources.mod_date, '%Y.%m.%d %H:%i') mod_date_ymdhi",
@@ -52,7 +52,7 @@ function pb_file_resource_statement($conditions_ = array()){
 	$statement_->add_conditions_from_data($conditions_, array(
 		'id' => array(PBDB_SS::COND_IN, 'file_resources.id'),
 		'slug' => array(PBDB_SS::COND_IN, 'file_resources.slug'),
-		'status' => array(PBDB_SS::COND_IN, 'file_resources.status'),
+		'display_option' => array(PBDB_SS::COND_IN, 'file_resources.display_option'),
 		'wrt_id' => array(PBDB_SS::COND_IN, 'file_resources.wrt_id'),
 		'keyword' => array(PBDB_SS::COND_LIKE, array(
 			'file_resources.file_title',
@@ -108,7 +108,7 @@ function pb_file_resource_delete($id_){
 	pb_hook_do_action("pb_user_deleted", $before_data_);
 }
 
-// include(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.modal.php");
+include(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.modal.php");
 __iinclude(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.adminpage.php");
 
 ?>

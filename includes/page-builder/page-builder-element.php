@@ -394,7 +394,6 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 			$thumbnail_src_ = isset($element_data_[$name_.'_thumbnail']) ? $element_data_[$name_.'_thumbnail'] : $input_value_;
 
 		?>
-			<input type="hidden" name="<?=$name_?>_thumbnail" value="<?=stripslashes($thumbnail_src_)?>" id="<?=$image_input_id_?>-thumbnail">
 			<input type="hidden" name="<?=$name_?>" data-upload-path="/" id='<?=$image_input_id_?>' value="<?=stripslashes($input_value_)?>" data-thumbnail-ipnut="#<?=$image_input_id_?>-thumbnail">
 			<script type="text/javascript">jQuery("#<?=$image_input_id_?>").pb_image_input();</script>
 			

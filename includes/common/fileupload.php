@@ -7,6 +7,9 @@ if(!defined('PB_DOCUMENT_PATH')){
 function pb_fileupload_url($params_ = array()){
 	return pb_make_url(pb_home_url("fileupload"), $params_);
 }
+function pb_chunk_fileupload_url($params_ = array()){
+	return pb_make_url(pb_home_url("chunkfileupload"), $params_);
+}
 function pb_filebase_url($file_path_ = null, $params_ = array(), $handler_ = null){
 	$file_upload_handler_ = pb_fileupload_handler($handler_);
 	if(!isset($file_upload_handler_) || pb_is_error($file_upload_handler_)) return null;
@@ -17,13 +20,21 @@ function _pb_fileupload_add_to_rewrite($results_){
 	$results_['fileupload'] = array(
 		'page' => PB_DOCUMENT_PATH."includes/common/_fileupload.php",
 	);
+	$results_['chunkfileupload'] = array(
+		'page' => PB_DOCUMENT_PATH."includes/common/_fileupload_chunk.php",
+	);
+
 	return $results_;
 };
 pb_hook_add_filter('pb_rewrite_list', "_pb_fileupload_add_to_rewrite");
 
 function _pb_fileupload_add_to_header_pbvar($results_){
 	$results_['fileupload_url'] = pb_fileupload_url();
+	$results_['chunk_fileupload_url'] = pb_chunk_fileupload_url();
 	$results_['filebase_url'] = pb_filebase_url();
+
+	global $pb_config;
+	$results_['file_chunksize'] = $pb_config->file_chunksize;
 	return $results_;
 };
 pb_hook_add_filter('pb-admin-head-pbvar', "_pb_fileupload_add_to_header_pbvar");
@@ -66,14 +77,25 @@ function pb_fileupload_handle($files_, $options_ = array()){
 	
 	return pb_hook_apply_filters('pb_fileupload_handle_results', $handler_->handle($files_, $options_));
 }
+function pb_fileupload_handle_chunk($chunk_, $data_, $options_ = array()){
+	$handler_ = pb_fileupload_handler((isset($options_['handler']) ? $options_['handler'] : null));
+	if(pb_is_error($handler_)) return $handler_;
 
+	global $pb_config;
+	pb_hook_do_action('pb_fileupload_before_handle_chunk', $chunk_, $data_, $options_, $handler_);
+	
+	return pb_hook_apply_filters('pb_fileupload_handle_chunk_results', $handler_->handle_chunk($chunk_, $data_, $options_));
+}
 
 abstract class PBPressFileUPloadHandler{
 	abstract function initialize();
 	abstract function filebase_url($file_path_ = null, $params_ = array());
+	
 	abstract function handle($files_, $options_ = array());
+	abstract function handle_chunk($chunk_, $data_, $options_ = array());
+	abstract function post_process($result_, $options_ = array());
 }
 
-// include(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.php");
+include(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.php");
 
 ?>

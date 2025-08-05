@@ -17,7 +17,8 @@
 	$is_front_page_ = !$is_new_ && pb_front_page_id() === (string)$pbpage['id'];
 
 ?>
-<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-page/edit.css">
+<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-page/edit.css?v=<?=PB_SCRIPT_VERSION?>">
+<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/aside-view.css?v=<?=PB_SCRIPT_VERSION?>">
 <h3><?=($is_new_ ? __("페이지추가") : __("페이지수정"))?> <a class="btn btn-default btn-sm" href="<?=pb_adminpage_back_url("manage-page")?>"><?=__('목록으로')?></a></h3>
 
 <form id="pb-page-edit-form" method="POST">
@@ -25,7 +26,7 @@
 	<input type="hidden" name="id" value="<?=$pbpage['id']?>">
 	<input type="hidden" name="_request_chip" value="<?=pb_request_token('edit_page')?>">
 
-	<div class="page-edit-frame">
+	<div class="page-edit-frame aside-view-frame">
 		<div class="col-content">
 			<div class="form-group page-title-form-group">
 				<input type="text" name="page_title" placeholder="<?=pb_hook_apply_filters('pb_page_edit_form_placeholder', __("페이지제목 입력"))?>" value="<?=$pbpage['page_title']?>" class="form-control input-lg" required data-error="<?=__('페이지제목을 입력하세요')?>">
@@ -83,7 +84,7 @@
 				pb_editor("page_html", $pbpage['page_html'], array(
 					"min_height" => 400,
 					"id" => "pb-page-html-editor",
-					"editor" => pb_user_meta_value(pb_current_user_id(), 'page_actived_editor_id_'.$pbpage['id']),
+					"editor" => pb_user_meta_value(pb_current_user_id(), 'page_actived_editor_id_'.$pbpage['id'], "pbpagebuilder"),
 				));
 				pb_hook_do_action("pb_page_edit_form_page_html_after", $pbpage);
 			?>

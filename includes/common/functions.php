@@ -70,7 +70,7 @@ function pb_redirect_error($code_, $message_ = null, $title_ = "ERROR!"){
 function pb_head(){
 	$pbvar_ = pb_hook_apply_filters('pb-head-pbvar', array());
 
-	$jquery_script_url_ = pb_hook_apply_filters('pb-jquery-script-url', PB_LIBRARY_URL."js/jquery.js");
+	$jquery_script_url_ = pb_hook_apply_filters('pb-jquery-script-url', PB_LIBRARY_URL."js/jquery.4.js");
 
 	global $pb_config;
 ?>

@@ -3,10 +3,7 @@
 #pb-post-edit-form{
 
 	.post-edit-frame{
-		position: relative;
-		display: table;
-		table-layout: fixed;
-		width: 100%;
+		
 		.post-title-form-group{
 			// padding-bottom: 10px;
 			margin-bottom: 20px;
@@ -42,77 +39,6 @@
 				}
 			}
 
-		}
-
-		@media screen and (max-width: @screen-sm-max){
-			display: block;
-		}
-
-		> .col-content,
-		> .col-control-panel{
-			position: relative;
-			display: table-cell;
-			vertical-align: top;
-
-			@media screen and (max-width: @screen-sm-max){
-				display: block;
-			}
-
-		}
-
-		> .col-content{
-			.post-url-info{
-				margin-top: 3px;
-				margin-bottom: 0px;
-			}
-		}
-
-		> .col-control-panel{
-			width: 270px;
-			padding-left: 15px;
-
-			@media screen and (max-width: @screen-sm-max){
-				padding-left: 0px;
-				width: 100%;
-			}
-
-			#pb-post-edit-form-post-common-panel{
-				.button-area{
-					position: relative;
-					display: table;
-					table-layout: fixed;
-					width: 100%;
-
-					> .col-left,
-					> .col-right{
-						display: table-cell;
-						vertical-align: top;
-					}
-
-					> .col-left{
-						
-					}
-
-					> .col-right{
-						width: 50px;
-						padding-left: 5px;
-
-						.delete-btn{
-							padding-left: 0px;
-							padding-right: 0px;
-							padding: 6px 0px;
-							
-							> .icon{
-								font-size: 22px;
-								line-height: 26px;
-								height: 27px;
-								vertical-align: top;
-								margin-right: 0px;
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 }

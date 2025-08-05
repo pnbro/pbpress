@@ -28,6 +28,7 @@ class PBConfig{
 
 	public $wysiwyg_editor;
 	public $file_upload_handler = "default";
+	public $file_chunksize = 1024 * 1024; // 1MB
 
 	private $default_locale = "ko_KR";
 
@@ -43,12 +44,7 @@ class PBConfig{
 	private $session_max_time = null;
 
 	function __construct(){
-		$this->devmode = (defined("PB_DEV") && PB_DEV === true);
-
-		if($this->devmode){
-			error_reporting(E_ALL);
-			ini_set("display_errors", 1);
-		}
+		$this->chnage_devmode((defined("PB_DEV") && PB_DEV === true));
 
 		$this->show_database_error = (defined("PB_SHOW_DATABASE_ERROR") ? PB_SHOW_DATABASE_ERROR === true : $this->devmode);
 
@@ -71,6 +67,7 @@ class PBConfig{
 
 		$this->wysiwyg_editor = (defined("PB_WYSIWYG_EDITOR")) ? PB_WYSIWYG_EDITOR : "summernote";
 		$this->file_upload_handler = (defined("PB_FILE_UPLOAD_HANDLER")) ? PB_FILE_UPLOAD_HANDLER : "default";
+		$this->file_chunksize = (defined("FILE_CHUNKSIZE")) ? FILE_CHUNKSIZE : 1024 * 1024;
 
 		$this->default_locale = (defined("PB_DEFAULT_LOCALE")) ? PB_DEFAULT_LOCALE : "ko_KR";
 		
@@ -96,6 +93,19 @@ class PBConfig{
 	public function is_devmode(){
 		return pb_hook_apply_filters('pb_config_is_devmode', $this->devmode);
 	}
+	public function chnage_devmode($bool_){
+		$this->devmode = $bool_;
+
+		if($this->devmode){
+			error_reporting(E_ALL);
+			ini_set("display_errors", 1);
+		}else{
+			error_reporting(0);
+			ini_set("display_errors", 0);
+		}
+
+	}
+
 	public function is_show_database_error(){
 		return pb_hook_apply_filters('pb_config_is_show_database_error', $this->show_database_error);
 	}

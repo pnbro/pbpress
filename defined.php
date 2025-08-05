@@ -1,7 +1,7 @@
 <?php
 
-define('PB_VERSION', '6.20.0');
-define('PB_SCRIPT_VERSION', '6.11.0');
+define('__PB_VERSION', '7.0.0');
+define('__PB_SCRIPT_VERSION', '7.0.0');
 
 //check exists config file
 if(!file_exists(dirname( __FILE__ )."/pb-config.php")){
@@ -24,9 +24,14 @@ define("PB_DOCUMENT_URL", ($https_ ? 'https' : 'http') . '://' . PB_DOCUMENT_DOM
 include(dirname( __FILE__ )."/pb-config.php");
 
 if(defined("PB_DEV") && PB_DEV){
+	define('PB_VERSION', __PB_VERSION."_".time());
+	define('PB_SCRIPT_VERSION', __PB_SCRIPT_VERSION."_".time());
 	define("PB_LIBRARY_PATH", PB_DOCUMENT_PATH."lib/dev/");
 	define("PB_LIBRARY_URL", PB_DOCUMENT_URL."lib/dev/");
+
 }else{
+	define('PB_VERSION', __PB_VERSION);
+	define('PB_SCRIPT_VERSION', __PB_SCRIPT_VERSION);
 	define("PB_LIBRARY_PATH", PB_DOCUMENT_PATH."lib/dist/");
 	define("PB_LIBRARY_URL", PB_DOCUMENT_URL."lib/dist/");
 }

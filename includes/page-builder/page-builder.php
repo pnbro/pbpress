@@ -4,8 +4,17 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('PB_PAGE_BUILDER_VERSION', "2.3.0");
-define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "1.5.0");
+define('__PB_PAGE_BUILDER_VERSION', "3.0.0");
+
+global $pb_config;
+
+if($pb_config->is_devmode()){
+	define('PB_PAGE_BUILDER_VERSION', __PB_PAGE_BUILDER_VERSION."_".time());
+}else{
+	define('PB_PAGE_BUILDER_VERSION', __PB_PAGE_BUILDER_VERSION);
+}
+
+define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MIN', "3.0.0");
 define('PB_PAGE_BUILDER_VERSION_COMPATIBILITY_MAX', PB_PAGE_BUILDER_VERSION);
 
 function _pb_page_builder_recursive_parse_inner($element_){

@@ -18,6 +18,8 @@
 		exit;
 	}
 
+	$timezone_guess_ = date_default_timezone_get();
+	$timezone_list_ = DateTimeZone::listIdentifiers();
 
 ?><!DOCTYPE html>
 <html lang="ko">
@@ -66,6 +68,16 @@
 					<div class="form-group">
 						<label for="pb-install-form-timezone"><?=__('시간대')?></label>
 						<select class="form-control" name="timezone" required data-error="<?=__('시간대를 선택하세요')?>">
+							<?php foreach($timezone_list_ as $timezone_){
+								$timezone_offset_ = new DateTimeZone($timezone_);
+								$timezone_offset_ = $timezone_offset_->getOffset(new DateTime); 
+								$timezone_offset_prefix_ = $timezone_offset_ < 0 ? '-' : '+';
+								$timezone_offset_formatted_ = gmdate( 'H:i', abs($timezone_offset_) );
+
+								$pretty_offset_ = "${timezone_offset_prefix_}${timezone_offset_formatted_}";
+							?>
+							<option value="<?=$timezone_?>" <?=pb_selected($timezone_guess_, $timezone_)?>><?=$timezone_?> (GMT<?=$pretty_offset_?>)</option>
+							<?php } ?>
 						</select>
 						<div class="help-block with-errors"></div>
 						<div class="clearfix"></div>
@@ -120,7 +132,6 @@
 	<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?></div>
 
 	<?php pb_admin_foot(); ?>
-	<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/moment-timezone-with-data.js"></script>
 	<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/pages/admin/install.js"></script>
 	
 </body>

@@ -24,11 +24,13 @@
 
 ?>
 <?php pb_hook_do_action('pb_admin_manage_user_edit_page_before')?>
+<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/aside-view.css?v=<?=PB_SCRIPT_VERSION?>">
+
 <h3><?=__('사용자정보')?> <a class="btn btn-default btn-sm" href="<?=pb_adminpage_back_url('manage-user')?>"><?=__('목록으로')?></a></h3>
 <form method="POST" id="pb-manage-user-edit-form" autocomplete="off">
 	<input type="hidden" name="id" value="<?=@$user_data['id']?>">
 
-	<div class="admin-flex-aside-frame" data-flex-aside-frame>
+	<div class="aside-view-frame" data-flex-aside-frame>
 		<div class="col-content">
 			
 			<?php pb_hook_do_action('pb_admin_manage_user_edit_form_before')?>
@@ -105,7 +107,7 @@
 		</div>
 
 		
-		<div class="col-control">
+		<div class="col-control-panel">
 			<?php pb_hook_do_action('pb_admin_manage_user_edit_form_control_before')?>
 			<div class="panel panel-default control-panel" data-spy="affix" data-offset-top="50">
 				<div class="panel-heading" role="tab">

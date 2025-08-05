@@ -31,7 +31,8 @@ function pb_mail_send($to_, $subject_, $body_, $attachments_ = array(), $options
 	return $pb_mail_sender->send($to_, $subject_, $body_, $attachments_, $options_);
 }
 function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ = array(), $options_ = array()){
-	$mail_template_upload_path_ = pb_option_value('mail_template_upload', "");
+	$mail_template_upload_path_data_ = pb_clob_option_value('mail_template_upload', "");
+	$mail_template_upload_path_ = @$mail_template_upload_path_data_['r_name'];
 
 	if(strlen($mail_template_upload_path_)){
 		$mail_template_upload_path_ = PB_DOCUMENT_PATH."uploads/".$mail_template_upload_path_;
@@ -77,6 +78,9 @@ pb_hook_add_filter('pb-admin-manage-site-menu-list', "_pb_mail_hook_register_man
 function _pb_mail_hook_render_manage_site($menu_data_){
 
 	global $pb_config;
+
+	$mail_template_upload_path_ = pb_clob_option_value("mail_template_upload");
+	$mail_template_upload_path_ = isset($mail_template_upload_path_) ? json_encode($mail_template_upload_path_) : null;
 
 	?>
 
@@ -185,13 +189,13 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 				<div class="form-group">
 					<label><?=__('메일서식업로드')?><br/><small class="help-block"><?=__('*메일서식을 업로드 시, 위 메일서식을 대체합니다.')?></small></label>
 
-					<input type="text" name="mail_template_upload" value="<?=pb_option_value("mail_template_upload", "")?>" class="hidden" id="pb-manage-site-form-mail_template_upload_r_name" >
+					<input type="text" name="mail_template_upload" value="<?=htmlentities($mail_template_upload_path_)?>" class="hidden" id="pb-manage-site-form-mail_template_uploader" data-limit="1">
 					
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>
 
 					<script type="text/javascript">
-					jQuery(document).ready(function(){$("#pb-manage-site-form-mail_template_upload_r_name").pb_file_input();});
+					jQuery(document).ready(function(){$("#pb-manage-site-form-mail_template_uploader").pb_file_input();});
 					</script>
 
 				</div>
@@ -235,7 +239,9 @@ function _pb_mail_hook_update_site_settings($settings_data_){
 	pb_option_update("mail_smtp_secure", $settings_data_['mail_smtp_secure']);
 
 	pb_clob_option_update("mail_template", $settings_data_['mail_template']);
-	pb_option_update("mail_template_upload", $settings_data_['mail_template_upload']);
+
+	$settings_data_['mail_template_upload'] = isset($settings_data_['mail_template_upload']) ? $settings_data_['mail_template_upload'] : null;
+	pb_clob_option_update("mail_template_upload", $settings_data_['mail_template_upload']);
 	
 }
 pb_hook_add_action('pb-admin-update-site-settings', "_pb_mail_hook_update_site_settings");

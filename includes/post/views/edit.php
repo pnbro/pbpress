@@ -19,7 +19,8 @@
 	$editors_ = isset($pbpost_type_data['editors']) ? $pbpost_type_data['editors'] : array("text", "editor");
 
 ?>
-<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-post/edit.css">
+<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/manage-post/edit.css?v=<?=PB_SCRIPT_VERSION?>">
+<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/pages/admin/aside-view.css?v=<?=PB_SCRIPT_VERSION?>">
 <h3><?=($is_new_ ? $pbpost_type_data['label']['add'] : $pbpost_type_data['label']['update'])?> <a class="btn btn-default btn-sm" href="<?=pb_adminpage_back_url("manage-{$pbpost_type}")?>"><?=__('목록으로')?></a></h3>
 
 <form id="pb-post-edit-form" method="POST">
@@ -28,7 +29,7 @@
 	<input type="hidden" name="id" value="<?=$pbpost['id']?>">
 	<input type="hidden" name="_request_chip" value="<?=pb_request_token('edit_post')?>">
 
-	<div class="post-edit-frame">
+	<div class="post-edit-frame aside-view-frame">
 		<div class="col-content">
 			<div class="form-group post-title-form-group">
 				<input type="text" name="post_title" placeholder="<?=pb_hook_apply_filters('pb_post_edit_form_placeholder', __("제목 입력"))?>" value="<?=$pbpost['post_title']?>" class="form-control input-lg" required data-error="<?=__('제목을 입력하세요')?>">
@@ -81,7 +82,7 @@
 				pb_editor("post_html", $pbpost['post_html'], array(
 					"min_height" => 400,
 					"id" => "pb-post-html-editor",
-					"editor" => pb_user_meta_value(pb_current_user_id(), 'post_actived_editor_id_'.$pbpost['id']),
+					"editor" => pb_user_meta_value(pb_current_user_id(), 'post_actived_editor_id_'.$pbpost['id'], "editor"),
 					"editors" => pb_hook_apply_filters('pb_post_{$pbpost_type}_editors', pb_hook_apply_filters('pb_post_editors', $editors_)),
 				));
 				pb_hook_do_action("pb_post_edit_form_post_html_after", $pbpost);
@@ -113,7 +114,7 @@
 
 						<div class="form-group">
 							<label><?=__('대표이미지')?></label>
-							<input type="hidden" name="featured_image_path" data-upload-path="/" id="pb-post-featured-image-picker" value="<?=$pbpost['featured_image_path']?>">
+							<input type="hidden" name="featured_image_path" data-upload-path="/" id="pb-post-featured-image-picker" value="<?=$pbpost['featured_image_path']?>" data-single="Y" data-wrapper-class="simple">
 						</div>
 						
 						<div class="form-group">

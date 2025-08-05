@@ -187,17 +187,17 @@ function pb_editor_load_trumbowyg_library(){
 		$default_locale_ = strtolower($default_locale_);
 		$current_locale_ = pb_current_locale(true);
 		?>
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/trumbowyg.js?version=2.21.0"></script>
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/langs/<?=$default_locale_?>.js?version=2.21.0"></script>
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/langs/<?=$current_locale_?>.js?version=2.21.0"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/trumbowyg.js?version=<?=PB_SCRIPT_VERSION?>"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/langs/<?=$default_locale_?>.js?version=<?=PB_SCRIPT_VERSION?>"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/langs/<?=$current_locale_?>.js?version=<?=PB_SCRIPT_VERSION?>"></script>
 
 		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/plugins/resizimg/resizable-resolveconflict.js"></script>
 		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/plugins/resizimg/jquery-resizable.js"></script>
 		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/plugins/resizimg/trumbowyg.resizimg.js"></script>
 
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/trumbowyg.pb.extends.js"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/trumbowyg/trumbowyg.pb.extends.js?v=<?=PB_SCRIPT_VERSION?>"></script>
 
-		<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/trumbowyg/trumbowyg.css?version=2.21.0">
+		<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/trumbowyg/trumbowyg.css?version=<?=PB_SCRIPT_VERSION?>">
 
 		<?php
 
@@ -239,13 +239,13 @@ function pb_editor_load_summernote_library(){
 		$default_locale_ = $pb_config->default_locale();
 		$current_locale_ = pb_current_locale();
 		?>
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/summernote.js?version=0.8.16"></script>
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/lang/summernote_<?=$default_locale_?>.js?version=0.8.16"></script>
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/lang/summernote_<?=$current_locale_?>.js?version=0.8.16"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/summernote.js?version=<?=PB_SCRIPT_VERSION?>"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/lang/summernote_<?=$default_locale_?>.js?version=<?=PB_SCRIPT_VERSION?>"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/lang/summernote_<?=$current_locale_?>.js?version=<?=PB_SCRIPT_VERSION?>"></script>
 
-		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/summernote.pb.extends.js"></script>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/summernote/summernote.pb.extends.js?v=<?=PB_SCRIPT_VERSION?>"></script>
 
-		<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/summernote/summernote.css?version=0.8.16">
+		<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/summernote/summernote.css?version=<?=PB_SCRIPT_VERSION?>">
 
 		<?php
 

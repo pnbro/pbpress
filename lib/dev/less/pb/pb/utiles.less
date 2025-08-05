@@ -19,3 +19,32 @@
 	word-wrap: break-word;
 	word-break: break-all;
 }
+
+.pb-background-default(@size:~'cover', @position:~"center", @repeat:~"no-repeat"){
+	background-size: @size;
+	background-position: @position;
+	background-repeat: @repeat;
+}
+
+.pb-background-image(@url, @size:~'cover', @position:~"center", @repeat:~"no-repeat"){
+	background-image: url('@{main_image_path}@{url}');
+	.pb-background-default(@size, @position, @repeat);
+}
+
+.pb-background-mask-default(@size:~'cover', @position:~"center", @repeat:~"no-repeat"){
+	-webkit-mask-size: @size;
+			mask-size: @size;
+
+	-webkit-mask-position: @position;
+			mask-position: @position;
+
+	-webkit-mask-repeat: @repeat;
+			mask-repeat: @repeat;
+}
+
+.pb-background-mask(@url, @color, @size:~'cover', @position:~"center", @repeat:~"no-repeat"){
+	.pb-background-mask-default(@size; @position; @repeat);
+	background-color: @color;
+	-webkit-mask-image: @url;
+			mask-image: @url;
+}

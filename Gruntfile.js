@@ -37,7 +37,6 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/defaults/sortable-jquery.js',
 
           'lib/dev/concat-lib/src/defaults/codemirror.js',
-          'lib/dev/concat-lib/src/defaults/codemirror.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/mode/javascript.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/mode/css.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/mode/xml.js',
@@ -79,13 +78,7 @@ module.exports = function (grunt) {
 
           'lib/dev/concat-lib/src/jquery-default-plugins/jquery.cookie.js',
           'lib/dev/concat-lib/src/jquery-default-plugins/jquery.blockUI.js',
-          'lib/dev/concat-lib/src/jquery-default-plugins/jquery.ui.js',
-
-          'lib/dev/concat-lib/src/jquery-default-plugins/jquery.iframe-transport.js',
-
-          'lib/dev/concat-lib/src/jquery-default-plugins/jquery.fileupload/jquery.fileupload.js',
-          'lib/dev/concat-lib/src/jquery-default-plugins/jquery.fileupload/jquery.fileupload-process.js',
-          
+          // 'lib/dev/concat-lib/src/jquery-default-plugins/jquery.ui.js',
 
         ],
         dest: 'lib/dev/concat-lib/dist/jquery-default-plugins-admin.js'
@@ -117,10 +110,9 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/pb/modules/pb.easy-splitted-view.js',
 
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.js',
-          'lib/dev/concat-lib/src/pb/modules/pb.fileupload.imageuploader.js',
-          'lib/dev/concat-lib/src/pb/modules/pb.fileupload.imageinput.js',
+          'lib/dev/concat-lib/src/pb/modules/pb.fileupload.filedropzone.js',
           'lib/dev/concat-lib/src/pb/modules/pb.fileupload.fileinput.js',
-          'lib/dev/concat-lib/src/pb/modules/pb.fileupload.fileuploader.js',
+          'lib/dev/concat-lib/src/pb/modules/pb.fileupload.imageinput.js',
           'lib/dev/concat-lib/src/pb/modules/pb.wysiwyg.editor.js',
 
           'lib/dev/concat-lib/src/pb/modules/pb.editors.js',

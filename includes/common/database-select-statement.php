@@ -70,7 +70,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 		);
 	}
 
-	function add_like($a_ = array(), $keyword_, $full_search_ = false, $case_ignore_ = false){
+	function add_like($a_ = array(), $keyword_ = "", $full_search_ = false, $case_ignore_ = false){
 		if(gettype($a_) !== "array") $a_ = array($a_);
 
 		$this[] = array(
