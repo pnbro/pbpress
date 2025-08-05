@@ -47,7 +47,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 		
 		?>
 		<div class="pb-image-group <?=$class_?> <?=$unique_class_name_?> align-<?=$image_align_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>>
-			<img class="pb-image " src="<?=pb_filebase_url($image_data_[0]['thumbnail'])?>" style="<?=strlen($max_width_) ? "max-width:".$max_width_ : "" ?>" alt="<?=$alt_?>">
+			<img class="pb-image " src="<?=pb_filebase_url($image_data_[0]['r_name'])?>" style="<?=strlen($max_width_) ? "max-width:".$max_width_ : "" ?>" alt="<?=$alt_?>">
 		</div>
 		
 		<?php
@@ -56,6 +56,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 	function render_admin_form($element_data_ = array(), $content_ = null){
 		$temp_form_id_ = "image-input-".pb_random_string(5);
 		$image_data_ = isset($element_data_['src']) ? $element_data_['src'] : null;
+		$image_data_ = !is_string($image_data_) ? json_encode($image_data_) : $image_data_;
 		?>
 
 		<div class="form-group">
