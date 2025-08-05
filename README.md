@@ -11,7 +11,7 @@ PHP Framework for simple website creation.
 * menu managing (menu editor)
 
 ## Requirements
-	PHP >= 5.6(Recommend higher than 7.x)
+	PHP >= 7.0(Recommend higher than 7.x)
 	MySQL >= 5.x (innoDB)
 		- mysql, mysqli, pdo
 		
@@ -71,11 +71,10 @@ you can make a theme that you want, and just put your theme you made into 'theme
 ## included open sources
 ### Frontend 
 	jquery 2.x : https://jquery.com
+	jquery 4.x : https://jquery.com
 	jquery.blockUI : http://malsup.com/jquery/block
 	jquery.cookie : https://github.com/carhartl/jquery-cookie
 	imagesloaded : https://imagesloaded.desandro.com/
-	jquery.ui 1.x : https://jqueryui.com
-	blueimp fileupload : https://github.com/blueimp/jQuery-File-Upload
 	Bootstrap 3.x : https://getbootstrap.com 
 	bootstrap-datetimepicker : https://github.com/Eonasdan/bootstrap-datetimepicker
 	bootstrap-select : https://developer.snapappointments.com/bootstrap-select
