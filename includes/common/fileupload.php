@@ -96,6 +96,6 @@ abstract class PBPressFileUPloadHandler{
 	abstract function post_process($result_, $options_ = array());
 }
 
-include(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.php");
+// include(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.php");
 
 ?>

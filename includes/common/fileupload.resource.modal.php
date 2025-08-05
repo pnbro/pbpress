@@ -18,17 +18,4 @@ pb_add_ajax('admin-fileuploader-load-resource-modal', function(){
 	));
 });
 
-pb_hook_add_filter('pb_adminpage_list', function($results_){
-	$results_['dev001'] = array(
-		'name' => __('업로드테스트'),
-		'type' => 'menu',
-		// 'directory' => 'common',
-		'page' => PB_DOCUMENT_PATH."dev/dev001.php",
-		// 'authority_task' => 'manage_authority',
-		'subpath' => null,
-		'sort' => 999,
-	);
-	return $results_;
-});
-
 ?>
