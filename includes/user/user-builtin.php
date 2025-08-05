@@ -53,4 +53,49 @@ abstract class PB_USER_STATUS extends PBConstClass{
 	}
 }
 
+
+
+pb_hook_add_action('user_password_not_corrected', function($user_data_){
+	$pw_not_corrected_count_ = pb_user_meta_value($user_data_['id'], 'pw_not_corrected_count', 0);
+	if(!is_numeric($pw_not_corrected_count_)){
+		$pw_not_corrected_count_ = 0;
+	}
+
+	pb_user_meta_update($user_data_['id'], 'pw_not_corrected_count', ++$pw_not_corrected_count_);
+
+	global $pb_config; 
+
+	if($pb_config->login_max_fail_count() <= $pw_not_corrected_count_){
+		pb_user_meta_update($user_data_['id'], 'login_unabled_expire_date', strtotime("+".$pb_config->login_failed_to_ban_time()." minutes"));
+	}
+});
+
+pb_hook_add_action('pb_user_session_created', function($user_data_){
+	pb_user_meta_update($user_data_['id'], 'pw_not_corrected_count', 0);
+	pb_user_meta_update($user_data_['id'], 'login_unabled_expire_date', null);
+});
+
+pb_hook_add_action('pb_user_password_changed', function($user_id_){
+	pb_user_meta_update($user_id_, 'pw_not_corrected_count', 0);
+	pb_user_meta_update($user_id_, 'login_unabled_expire_date', null);
+});
+
+pb_hook_add_filter('pb_user_check_login', function($result_, $user_data_, $plain_password_){
+
+	global $pb_config; 
+
+	$pw_not_corrected_count_ = pb_user_meta_value($user_data_['id'], 'pw_not_corrected_count', 0);
+
+	if($pb_config->login_max_fail_count() <= $pw_not_corrected_count_){
+		$login_unabled_datetime_ = (int)(pb_user_meta_value($user_data_['id'], 'login_unabled_expire_date'));
+		$current_time_ = time();
+
+		if($login_unabled_datetime_ > $current_time_){
+			return new PBError(-7, __("로그인실패"), sprintf(__("로그인시도 횟수 제한으로 %s분동안 로그인이 제한됩니다."), round(abs($login_unabled_datetime_ - $current_time_) / 60)));
+		}
+	}
+
+	return $result_;
+});
+
 ?>

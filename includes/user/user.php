@@ -194,12 +194,13 @@ function pb_user_login_by_both($both_, $plain_password_){
 	return pb_user_create_session($user_data_);
 }
 function _pb_user_check_login_common($result_, $user_data_, $plain_password_){
-	if($user_data_['user_pass'] !== pb_crypt_hash(trim($plain_password_)) && !pb_hook_apply_filters('user_password_check', false, $plain_password_, $user_data_['user_pass'])){
-		return new PBError(-1, __("로그인실패"), __("비밀번호가 정확하지 않습니다."));
-	}
-
 	if($user_data_['status'] !== PB_USER_STATUS::NORMAL){
 		return new PBError(-2, __("로그인실패"), __("로그인할 수 없는 상태입니다."));
+	}
+
+	if($user_data_['user_pass'] !== pb_crypt_hash(trim($plain_password_)) && !pb_hook_apply_filters('user_password_check', false, $plain_password_, $user_data_['user_pass'])){
+		pb_hook_do_action('user_password_not_corrected', $user_data_);
+		return new PBError(-1, __("로그인실패"), __("비밀번호가 정확하지 않습니다."));
 	}
 
 	return true;
@@ -329,6 +330,17 @@ function pb_user_remove_findpass_validation_key($user_id_){
 		"findpass_vkey" => null,
 		"findpass_vkey_exp_date" => null
 	));
+}
+
+function pb_user_change_password($user_id_, $user_pass_){
+	$user_pass_ = pb_crypt_hash($user_pass_);
+
+	pb_user_update($user_id_, array(
+		'user_pass' => $user_pass_,
+	));
+
+	pb_user_remove_findpass_validation_key($user_id_);
+	pb_hook_do_action('pb_user_password_changed', $user_id_);
 }
 
 include(PB_DOCUMENT_PATH . 'includes/user/user-meta.php');

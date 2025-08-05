@@ -43,6 +43,9 @@ class PBConfig{
 	private $session_save_path = null;
 	private $session_max_time = null;
 
+	public $login_max_fail_count = 0;
+	public $login_failed_to_ban_time = 0;
+
 	function __construct(){
 		$this->chnage_devmode((defined("PB_DEV") && PB_DEV === true));
 
@@ -88,6 +91,9 @@ class PBConfig{
 		$this->session_save_path = (defined("PB_SESSION_SAVE_PATH")) ? PB_SESSION_SAVE_PATH : session_save_path();
 		$this->session_save_path = rtrim($this->session_save_path,"/")."/";
 		$this->session_max_time = (defined("PB_SESSION_MAX_TIME")) ? PB_SESSION_MAX_TIME : 60 * 60 * 60 * 3;
+
+		$this->login_max_fail_count = (defined("PB_LOGIN_MAX_FAIL_COUNT")) ? PB_LOGIN_MAX_FAIL_COUNT : 0;
+		$this->login_failed_to_ban_time = (defined("PB_LOGIN_FAILED_TO_BAN_TIME")) ? PB_LOGIN_FAILED_TO_BAN_TIME : 0;
 	}
 
 	public function is_devmode(){
@@ -141,6 +147,15 @@ class PBConfig{
 	public function session_max_time(){
 		return pb_hook_apply_filters('pb_config_session_max_time', $this->session_max_time);
 	}
+
+	public function login_max_fail_count(){
+		return pb_hook_apply_filters('pb_login_max_fail_count', $this->login_max_fail_count);
+	}
+
+	public function login_failed_to_ban_time(){
+		return pb_hook_apply_filters('pb_login_failed_to_ban_time', $this->login_failed_to_ban_time);
+	}
+
 }
 
 global $pb_config;
