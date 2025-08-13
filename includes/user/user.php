@@ -200,7 +200,7 @@ function _pb_user_check_login_common($result_, $user_data_, $plain_password_){
 
 	if($user_data_['user_pass'] !== pb_crypt_hash(trim($plain_password_)) && !pb_hook_apply_filters('user_password_check', false, $plain_password_, $user_data_['user_pass'])){
 		pb_hook_do_action('user_password_not_corrected', $user_data_);
-		return new PBError(-1, __("로그인실패"), __("비밀번호가 정확하지 않습니다."));
+		return new PBError(-1, __("로그인실패"), pb_hook_apply_filters('user_password_not_corrected_text', __("비밀번호가 정확하지 않습니다."), $user_data_));
 	}
 
 	return true;

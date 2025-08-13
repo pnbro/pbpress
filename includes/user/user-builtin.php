@@ -67,6 +67,7 @@ pb_hook_add_action('user_password_not_corrected', function($user_data_){
 
 	if($pb_config->login_max_fail_count() <= $pw_not_corrected_count_){
 		pb_user_meta_update($user_data_['id'], 'login_unabled_expire_date', strtotime("+".$pb_config->login_failed_to_ban_time()." minutes"));
+		pb_user_meta_update($user_data_['id'], 'pw_not_corrected_count', $pb_config->login_max_fail_count());
 	}
 });
 
@@ -96,6 +97,16 @@ pb_hook_add_filter('pb_user_check_login', function($result_, $user_data_, $plain
 	}
 
 	return $result_;
+});
+
+pb_hook_add_filter('user_password_not_corrected_text', function($text_, $user_data_){
+	$pw_not_corrected_count_ = pb_user_meta_value($user_data_['id'], 'pw_not_corrected_count', 0);
+	global $pb_config; 
+	$login_max_fail_count_ = $pb_config->login_max_fail_count();
+
+	if($login_max_fail_count_ > 0){
+		return sprintf(__("비밀번호가 정확하지 않습니다. (%s/%s)"), $pw_not_corrected_count_, $login_max_fail_count_);
+	}else return $text_;
 });
 
 ?>

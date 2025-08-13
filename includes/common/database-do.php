@@ -220,12 +220,12 @@ class PBDB_DO extends ArrayObject{
 		$fk_queries_ = array();
 
 		$exists_indexes_ = $this->_pbdb->serialize_column("
-			SELECT index_name FROM INFORMATION_SCHEMA.STATISTICS
+			SELECT INDEX_NAME index_name FROM INFORMATION_SCHEMA.STATISTICS
 			WHERE table_schema= '".$this->_pbdb->db_connection()->db_name()."' AND table_name='".$this->_table_name."'
 		", "index_name");
 
 		$exists_fks_ = $this->_pbdb->serialize_column("
-			SELECT constraint_name FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+			SELECT CONSTRAINT_NAME constraint_name FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
 			WHERE table_schema= '".$this->_pbdb->db_connection()->db_name()."' AND table_name='".$this->_table_name."'
 		", "constraint_name");
 
