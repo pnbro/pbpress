@@ -57,7 +57,8 @@ function pb_switch_theme($theme_){
 	curl_setopt($curl_instance_,CURLOPT_HTTPHEADER, array(
 		// 'Content-Type: application/json',
 	));
-	
+	curl_setopt($curl_instance_,CURLOPT_SSL_VERIFYPEER, false);
+	curl_setopt($curl_instance_,CURLOPT_SSL_VERIFYHOST, false);
 	curl_setopt($curl_instance_,CURLOPT_POST, true);
 	curl_setopt($curl_instance_,CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($curl_instance_,CURLOPT_POSTFIELDS, array(
