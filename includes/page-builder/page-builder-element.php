@@ -144,6 +144,7 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 
 	$background_color_ = isset($element_data_['background_color']) ? $element_data_['background_color'] : null;
 	$background_image_ = isset($element_data_['background_image']) ? $element_data_['background_image'] : null;
+	$background_image_ = pb_parse_json_uploaded_file($background_image_);
 	$background_size_ = isset($element_data_['background_size']) ? $element_data_['background_size'] : null;
 	$background_position_ = isset($element_data_['background_position']) ? $element_data_['background_position'] : null;
 
@@ -184,7 +185,7 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 		<div class="col-xs-12 col-sm-6">
 
 			<div class="row">
-				<div class="col-xs-12 col-sm-6">
+				<div class="col-xs-12 col-sm-12">
 					<div class="form-group">
 						<label><?=__('배경색')?></label>
 						<div class="input-group colorpicker-component" id="<?=$bacground_color_picker_id_?>">
@@ -203,10 +204,10 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 					</div>
 
 				</div>
-				<div class="col-xs-12 col-sm-6">
+				<div class="col-xs-12 col-sm-12">
 					<div class="form-group">
 						<label><?=__('배경이미지')?></label>
-						<input type="hidden" name="background_image" value="<?=$background_image_?>" data-upload-path="/" id="<?=$bacground_image_picker_id_?>">
+						<input type="hidden" name="background_image" value="<?=(htmlentities(json_encode($background_image_)))?>" data-upload-path="/" id="<?=$bacground_image_picker_id_?>" data-limit="1">
 
 						<script type="text/javascript">
 							jQuery(document).ready(function(){
@@ -266,7 +267,8 @@ function pb_page_builder_element_make_styles($element_data_ = array()){
 	$data_['padding-right'] = isset($element_data_['padding_right']) ? $element_data_['padding_right'] : null;
 	
 	$data_['background-color'] = isset($element_data_['background_color']) ? $element_data_['background_color'] : null;
-	$data_['background-image'] = isset($element_data_['background_image']) && strlen($element_data_['background_image']) ? "url('".pb_home_url("uploads/".$element_data_['background_image'])."')" : null;
+
+	$data_['background-image'] = isset($element_data_['background_image']) && strlen($element_data_['background_image']) ? "url('".pb_filebase_url(pb_parse_uploaded_file_path($element_data_['background_image']))."')" : null;
 	$data_['background-size'] = isset($element_data_['background_size']) ? $element_data_['background_size'] : null;
 	$data_['background-position'] = isset($element_data_['background_position']) ? $element_data_['background_position'] : null;
 
@@ -391,13 +393,24 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 		case 'image' :
 
 			$image_input_id_ = 'pb-page-builder-image-input-'.pb_random_string(5);
-			$thumbnail_src_ = isset($element_data_[$name_.'_thumbnail']) ? $element_data_[$name_.'_thumbnail'] : $input_value_;
+			$image_limit_ = isset($edit_data_['limit']) ? $edit_data_['limit'] : 1;
 
 		?>
-			<input type="hidden" name="<?=$name_?>" data-upload-path="/" id='<?=$image_input_id_?>' value="<?=stripslashes($input_value_)?>" data-thumbnail-ipnut="#<?=$image_input_id_?>-thumbnail">
+			<input type="hidden" name="<?=$name_?>" data-upload-path="/" id='<?=$image_input_id_?>' value="<?=htmlentities($input_value_)?>"  data-limit="<?=$image_limit_?>">
 			<script type="text/javascript">jQuery("#<?=$image_input_id_?>").pb_image_input();</script>
 			
 		<?php break;
+		case 'file' :
+
+			$file_input_id_ = 'pb-page-builder-file-input-'.pb_random_string(5);
+			$file_limit_ = isset($edit_data_['limit']) ? $edit_data_['limit'] : 1;
+
+		?>
+			<input type="hidden" name="<?=$name_?>" data-upload-path="/" id='<?=$image_input_id_?>' value="<?=htmlentities($input_value_)?>" data-limit="<?=$file_limit_?>">
+			<script type="text/javascript">jQuery("#<?=$file_input_id_?>").pb_file_input();</script>
+			
+		<?php break;
+
 		case 'select' : 
 			$options_ = $edit_data_['options'];
 		?>

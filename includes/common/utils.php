@@ -233,5 +233,22 @@ function pb_remove_protocol_from_url($url_){
 	$fragment_ = isset($parsed_url_['fragment']) ? '#' . $parsed_url_['fragment'] : '';
 	return "$user_$pass_$host_$port_$path_$query_$fragment_";
 }
+
+function pb_parse_json_uploaded_file($file_data_){
+	if(!is_object($file_data_)){
+		$parsed_data_ = json_decode($file_data_, true);
+		if(json_last_error() === JSON_ERROR_SYNTAX) return $file_data_;
+
+		if(isset($parsed_data_)) return $parsed_data_;
+	}else{
+		return $file_data_;
+	}
+}
+
+function pb_parse_uploaded_file_path($file_data_, $index_ = 0, $column_ = "r_name"){
+	$file_data_ = pb_parse_json_uploaded_file($file_data_);
+	if(isset($file_data_[$index_])) return $file_data_[$index_][$column_];
+	return null;
+}
 	
 ?>

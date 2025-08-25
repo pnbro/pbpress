@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('__PB_PAGE_BUILDER_VERSION', "3.0.0");
+define('__PB_PAGE_BUILDER_VERSION', "3.1.0");
 
 global $pb_config;
 

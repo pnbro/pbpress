@@ -107,8 +107,9 @@ function pb_is_current_slug($slug_){
 	return ($target_slug_ === $slug_);
 }
 function pb_is_home(){
-	if(strpos($_SERVER['REQUEST_URI'], PB_REWRITE_BASE) === false) return false;
-	return !isset($_SERVER['REDIRECT_STATUS']);
+	return $_SERVER['REQUEST_URI'] === PB_REWRITE_BASE;
+	// if(strpos($_SERVER['REQUEST_URI'], PB_REWRITE_BASE) === false) return false;
+	// return !isset($_SERVER['REDIRECT_STATUS']);
 }
 
 function pb_rewrite_common_handler($rewrite_path_, $rewrite_data_){
