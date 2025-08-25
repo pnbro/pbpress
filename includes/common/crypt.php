@@ -85,7 +85,7 @@ function pb_crypt_decrypt($ciphertext_, $private_key_ = null, $password_ = null)
 	return $plaintext_;
 }
 
-function pb_static_crypt_encrypt($plaintext_, $password_ = null){
+function pb_static_crypt_encrypt($plaintext_, $password_ = null, $iv_ = null){
 	global $pb_config;
 
 	if(!strlen($password_)){
@@ -93,7 +93,11 @@ function pb_static_crypt_encrypt($plaintext_, $password_ = null){
 	}
 
 	$encryption_key_ = base64_decode($password_);
-	$iv_ = pb_random_string($pb_config->crypt_static_iv_size);
+	
+	if(!strlen($iv_)){
+		$iv_ = pb_random_string($pb_config->crypt_static_iv_size);	
+	}
+	
 	$encrypted_data_ = openssl_encrypt($plaintext_, $pb_config->crypt_static_cipher_mode, $encryption_key_, 0, $iv_);
 	return array(
 		'data' => base64_encode($encrypted_data_),
