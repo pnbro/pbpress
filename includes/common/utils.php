@@ -236,6 +236,7 @@ function pb_remove_protocol_from_url($url_){
 
 function pb_parse_json_uploaded_file($file_data_){
 	if(!is_object($file_data_)){
+		if(!isset($file_data_) || !strlen($file_data_)) return null;
 		$parsed_data_ = json_decode($file_data_, true);
 		if(json_last_error() === JSON_ERROR_SYNTAX) return $file_data_;
 

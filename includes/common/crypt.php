@@ -147,4 +147,13 @@ function pb_crypt_hash($plain_){
 	return call_user_func_array($crypt_hash_func_, array($plain_));
 }
 
+function pb_crypt_check_hash($plain_, $hash_){
+	$crypt_check_hash_func_ = pb_hook_apply_filters('pb_crypt_check_hash_func', null);
+	if(empty($crypt_check_hash_func_)){
+		return pb_crypt_hash($plain_) === $hash_;
+	}
+
+	return call_user_func_array($crypt_check_hash_func_, array($plain_, $hash_));
+}
+
 ?>

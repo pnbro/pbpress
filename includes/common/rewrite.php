@@ -141,7 +141,7 @@ function _pb_rewrite_unique_slug_for_reserved($result_, $original_slug_, $retry_
 	global $_pb_rewrite_reserved;
 
 	if(!isset($_pb_rewrite_reserved)){
-		$_pb_rewrite_reserved = pb_hook_apply_filters("pb_reserved_slug", array("admin", "includes", "lib", "themes", "uploads"));
+		$_pb_rewrite_reserved = pb_hook_apply_filters("pb_reserved_slug", array("admin", "includes", "lib", "themes", "uploads", "chunkfileupload"));
 	}
 
 	if(!in_array($result_, $_pb_rewrite_reserved)){
