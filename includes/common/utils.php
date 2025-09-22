@@ -234,7 +234,8 @@ function pb_remove_protocol_from_url($url_){
 	return "$user_$pass_$host_$port_$path_$query_$fragment_";
 }
 
-function pb_parse_json_uploaded_file($file_data_){
+// pb_parse_json_uploaded_file
+function pb_decode_json_uploaded_file($file_data_){
 	if(!is_object($file_data_)){
 		if(!isset($file_data_) || !strlen($file_data_)) return null;
 		$parsed_data_ = json_decode($file_data_, true);
@@ -245,11 +246,27 @@ function pb_parse_json_uploaded_file($file_data_){
 		return $file_data_;
 	}
 }
+function pb_encode_json_uploaded_file($file_data_){
+	if(!is_string($file_data_) && $file_data_ !== null){
+		try {
+			$file_data_ = json_encode($file_data_);
+		}catch(Exception $ex_){
+			return null;
+		}
+
+		return $file_data_;
+		
+	}else{
+		return (strlen($file_data_) ? $file_data_ : null);
+	}
+}
 
 function pb_parse_uploaded_file_path($file_data_, $index_ = 0, $column_ = "r_name"){
-	$file_data_ = pb_parse_json_uploaded_file($file_data_);
+	$file_data_ = pb_decode_json_uploaded_file($file_data_);
 	if(isset($file_data_[$index_])) return $file_data_[$index_][$column_];
 	return null;
 }
+
+
 	
 ?>

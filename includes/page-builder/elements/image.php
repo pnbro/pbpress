@@ -54,13 +54,16 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 
 	function render_admin_form($element_data_ = array(), $content_ = null){
 		$temp_form_id_ = "image-input-".pb_random_string(5);
+
 		$image_data_ = isset($element_data_['src']) ? $element_data_['src'] : null;
-		$image_data_ = !is_string($image_data_) ? json_encode($image_data_) : $image_data_;
+		$image_data_ = pb_encode_json_uploaded_file($image_data_);
+		$image_data_ = strlen($image_data_) ? htmlentities(json_encode($image_data_)) : $image_data_;
+
 		?>
 
 		<div class="form-group">
 			<label><?=__('이미지선택')?></label>
-			<input type="text" name="src" value="<?=htmlentities($image_data_)?>" class="hidden" id="<?=$temp_form_id_?>" data-upload-path="" data-thumbnail-ipnut="#<?=$temp_form_id_?>-thumbnail">
+			<input type="text" name="src" value="<?=$image_data_?>" class="hidden" id="<?=$temp_form_id_?>" data-upload-path="" data-thumbnail-ipnut="#<?=$temp_form_id_?>-thumbnail">
 			<div class="clearfix"></div>
 		</div>
 

@@ -144,7 +144,7 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 
 	$background_color_ = isset($element_data_['background_color']) ? $element_data_['background_color'] : null;
 	$background_image_ = isset($element_data_['background_image']) ? $element_data_['background_image'] : null;
-	$background_image_ = pb_parse_json_uploaded_file($background_image_);
+	$background_image_ = pb_encode_json_uploaded_file($background_image_);
 	$background_size_ = isset($element_data_['background_size']) ? $element_data_['background_size'] : null;
 	$background_position_ = isset($element_data_['background_position']) ? $element_data_['background_position'] : null;
 

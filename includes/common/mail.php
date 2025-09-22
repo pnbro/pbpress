@@ -195,7 +195,9 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 					<div class="clearfix"></div>
 
 					<script type="text/javascript">
-					jQuery(document).ready(function(){$("#pb-manage-site-form-mail_template_uploader").pb_file_input();});
+					jQuery(document).ready(function(){$("#pb-manage-site-form-mail_template_uploader").pb_file_input({
+						'accept' : ".html",
+					});});
 					</script>
 
 				</div>
