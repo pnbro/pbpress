@@ -207,7 +207,7 @@ function pb_page_builder_element_edit_category_styles($element_data_){
 				<div class="col-xs-12 col-sm-12">
 					<div class="form-group">
 						<label><?=__('배경이미지')?></label>
-						<input type="hidden" name="background_image" value="<?= isset($background_image_) ? (htmlentities(json_encode($background_image_))) : null ?>" data-upload-path="/" id="<?=$bacground_image_picker_id_?>" data-limit="1">
+						<input type="hidden" name="background_image" value="<?= isset($background_image_) ? (htmlentities($background_image_)) : null ?>" data-upload-path="/" id="<?=$bacground_image_picker_id_?>" data-limit="1" data-single="1">
 
 						<script type="text/javascript">
 							jQuery(document).ready(function(){

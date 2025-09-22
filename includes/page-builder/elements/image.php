@@ -57,7 +57,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 
 		$image_data_ = isset($element_data_['src']) ? $element_data_['src'] : null;
 		$image_data_ = pb_encode_json_uploaded_file($image_data_);
-		$image_data_ = strlen($image_data_) ? htmlentities(json_encode($image_data_)) : $image_data_;
+		$image_data_ = strlen($image_data_) ? htmlentities($image_data_) : $image_data_;
 
 		?>
 
