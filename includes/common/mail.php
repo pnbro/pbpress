@@ -32,7 +32,7 @@ function pb_mail_send($to_, $subject_, $body_, $attachments_ = array(), $options
 }
 function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ = array(), $options_ = array()){
 	$mail_template_upload_path_data_ = pb_clob_option_value('mail_template_upload', "");
-	$mail_template_upload_path_ = @$mail_template_upload_path_data_['r_name'];
+	$mail_template_upload_path_ = @$mail_template_upload_path_data_[0]['r_name'];
 
 	if(strlen($mail_template_upload_path_)){
 		$mail_template_upload_path_ = PB_DOCUMENT_PATH."uploads/".$mail_template_upload_path_;
