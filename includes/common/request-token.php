@@ -17,13 +17,16 @@ function _pb_request_token_shared_keys(){
 	global $pb_config;
 
 	$key_ = openssl_pkey_new(array(
+		'config' => OPENSSL_CONF_PATH,
 		'digest_alg' => 'sha256',
 		'private_key_bits' => 512,
 		'private_key_type' => OPENSSL_KEYTYPE_RSA,
 	));
 
 	$private_key_ = null;
-	openssl_pkey_export($key_, $private_key_, $pb_config->crypt_password);
+	openssl_pkey_export($key_, $private_key_, $pb_config->crypt_password, array(
+		'config' => OPENSSL_CONF_PATH,
+	));
 
 	$public_key_ = openssl_pkey_get_details($key_);
 	$public_key_ = $public_key_['key'];

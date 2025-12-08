@@ -21,6 +21,11 @@ abstract class PBConstClass{
 
 		return $results_;
 	}
+	static public function is_exists($code_){
+		$constants_ = static::codes();
+		return isset($constants_[$code_]);
+	}
+
 	static public function names(){
 		$constants_ = static::constants();
 		$results_ = array();

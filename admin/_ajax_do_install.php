@@ -103,6 +103,7 @@ if(count($theme_list_) > 0){
 
 echo json_encode(array(
 	'success' => true,
+	'redirect_url' => pb_admin_url(),
 ));
 
 pb_admin_end();
