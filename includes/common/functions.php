@@ -95,15 +95,25 @@ function pb_end(){
 global $_pb_includes_for_after_init;
 $_pb_includes_for_after_init = array();
 
-function __iinclude($include_){
+function __iinclude($includes_){
 	global $_pb_includes_for_after_initialized, $_pb_includes_for_after_init;
 
-	if(!$_pb_includes_for_after_initialized){
-		$_pb_includes_for_after_init[] = $include_;	
+	if(gettype($includes_) === "string"){
+		if(!$_pb_includes_for_after_initialized){
+			$_pb_includes_for_after_init[] = $includes_;
+		}else{
+			include($includes_);
+		}
 	}else{
-		include($include_);
+		if(!$_pb_includes_for_after_initialized){
+			$_pb_includes_for_after_init = array_merge($_pb_includes_for_after_init, $includes_);
+		}else{
+			foreach($includes_ as $include_){
+				include($include_);
+			}
+			
+		}
 	}
-	
 }
 function pb_include_after_init($include_){
 	__iinclude($include_);
@@ -118,6 +128,51 @@ function _p_hook_includes_for_after_init(){
 	foreach($_pb_includes_for_after_init as $include_){
 		include($include_);
 	}
+}
+
+function r_path($paths_){
+	$is_string_ = gettype($paths_) === "string";
+	if($is_string_){
+		$paths_ = array($paths_);
+	}
+
+	$target_basepath_ = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+	$target_basepath_ = dirname($target_basepath_[0]['file']);
+
+	$results_ = array();
+	foreach($paths_ as $path_){
+		$results_[] = $target_basepath_."/".$path_;
+	}	
+
+	return $is_string_ ? $results_[0] : $results_;
+}
+
+function r_include($includes_){
+	if(gettype($includes_) === "string"){
+		$includes_ = array($includes_);
+	}
+
+	$target_basepath_ = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+	$target_basepath_ = dirname($target_basepath_[0]['file']);
+
+	foreach($includes_ as $include_){
+		include($target_basepath_."/".$include_);
+	}	
+}
+
+function r_iinclude($includes_){
+	$target_basepath_ = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+	$target_basepath_ = dirname($target_basepath_[0]['file']);
+
+	if(gettype($includes_) === "string"){
+		__iinclude($target_basepath_."/".$includes_);	
+	}else{
+		foreach($includes_ as $include_){
+			__iinclude($target_basepath_."/".$include_);		
+		}
+	}
+
+	
 }
 
 ?>

@@ -89,6 +89,55 @@ class PBDB_DO extends ArrayObject{
 		}
 	}
 
+	public static function convert_to_pbdb_value($val_, $type_){
+		switch($type_){
+			case PBDB_DO::TYPE_CHAR : 
+			case PBDB_DO::TYPE_VARCHAR : 
+			case PBDB_DO::TYPE_TINYTEXT : 
+			case PBDB_DO::TYPE_TEXT : 
+			case PBDB_DO::TYPE_MEDIUMTEXT : 
+			case PBDB_DO::TYPE_LONGTEXT : 
+			case PBDB_DO::TYPE_BINARY : 
+			case PBDB_DO::TYPE_VARBINARY : 
+			case PBDB_DO::TYPE_TINYBLOB : 
+			case PBDB_DO::TYPE_BLOB : 
+			case PBDB_DO::TYPE_MEDIUMBLOB : 
+			case PBDB_DO::TYPE_LONGBLOB : 
+			
+				return $val_;
+
+			case PBDB_DO::TYPE_DATE : 
+			case PBDB_DO::TYPE_TIME : 
+			case PBDB_DO::TYPE_DATETIME : 
+			case PBDB_DO::TYPE_TIMESTAMP : 
+			case PBDB_DO::TYPE_YEAR : 
+			case PBDB_DO::TYPE_JSON :
+				return strlen($val_) ? $val_ : null;
+				
+
+			case PBDB_DO::TYPE_BIT : 
+			case PBDB_DO::TYPE_BOOL : 
+			case PBDB_DO::TYPE_BOOLEAN : 
+			case PBDB_DO::TYPE_TINYINT : 
+			case PBDB_DO::TYPE_SMALLINT : 
+			case PBDB_DO::TYPE_MEDIUMINT : 
+			case PBDB_DO::TYPE_INT : 
+			case PBDB_DO::TYPE_BIGINT : 
+				return strlen($val_) ? $val_ : null;
+
+			case PBDB_DO::TYPE_DOUBLE : 
+			case PBDB_DO::TYPE_REAL : 
+			case PBDB_DO::TYPE_FLOAT : 
+			case PBDB_DO::TYPE_DECIMAL : 
+			case PBDB_DO::TYPE_DEC : 
+			case PBDB_DO::TYPE_NUMERIC : 
+			case PBDB_DO::TYPE_FIXED : 
+				return strlen($val_) ? $val_ : null;
+				
+			default : return $val_;
+		}
+	}
+
 	private $_table_name;
 	private $_engine;
 	private $_comment;
@@ -390,7 +439,7 @@ class PBDB_DO extends ArrayObject{
 
 			$type_ = isset($field_data_['type']) ? $field_data_['type'] : PBDB_DO::TYPE_STRING;
 
-			$insert_values_[$column_name_] = $column_value_;
+			$insert_values_[$column_name_] = PBDB_DO::convert_to_pbdb_value($column_value_, $type_);
 			$insert_types_[] = PBDB_DO::convert_to_pbdb_type($type_);
 		}
 
@@ -433,7 +482,7 @@ class PBDB_DO extends ArrayObject{
 
 			$type_ = isset($field_data_['type']) ? $field_data_['type'] : PBDB_DO::TYPE_STRING;
 
-			$update_values_[$column_name_] = $column_value_;
+			$update_values_[$column_name_] = PBDB_DO::convert_to_pbdb_value($column_value_, $type_);
 			$update_types_[] = PBDB_DO::convert_to_pbdb_type($type_);
 		}
 

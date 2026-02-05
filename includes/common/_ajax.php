@@ -33,7 +33,9 @@ function pb_ajax_success($data_ = array()){
 	));
 
 	echo json_encode($results_);
-	pb_end();
+
+	global $__pb_ajax_refuse_die;
+	if(!$__pb_ajax_refuse_die) pb_end();
 }
 function pb_ajax_error($arg_ = null, $error_message_ = null){
 	if(pb_is_error($arg_)){
@@ -46,7 +48,30 @@ function pb_ajax_error($arg_ = null, $error_message_ = null){
 		'error_title' => $arg_,
 		'error_message' => $error_message_,
 	));
-	pb_end();
+	global $__pb_ajax_refuse_die;
+	if(!$__pb_ajax_refuse_die) pb_end();
+}
+
+function pb_ajax_override_call($key_){
+	global $__pb_ajax_refuse_die;
+
+	$__pb_ajax_refuse_die = true;
+	ob_start();
+	pb_hook_do_action('pb_ajax_'.$key_);	
+
+	$results_ = ob_get_clean();	
+
+	$__pb_ajax_refuse_die = false;
+
+	$result_json_ = @json_decode($results_, true);
+
+	if(!isset($result_json_) || $result_json_['success'] !== true){
+		echo $results_;
+		pb_end();
+		return false;
+	}
+
+	return true;
 }
 
 $rewrite_slug_ = pb_current_slug();

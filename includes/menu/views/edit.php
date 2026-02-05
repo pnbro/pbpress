@@ -106,6 +106,7 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 		
 
 			<div class="button-area text-right" data-submit-btn-frame>
+				<button type="button" class="btn btn-default" data-duplicate-btn><?=__('메뉴복제')?></button>
 				<button type="button" class="btn btn-dark" data-delete-btn>메뉴삭제</button>
 				<button type="submit" class="btn btn-primary">변경사항 저장</button>
 			</div>

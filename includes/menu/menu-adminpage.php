@@ -259,6 +259,83 @@ function _pb_ajax_menu_editor_do_delete(){
 }
 pb_add_ajax('menu-editor-do-delete', "_pb_ajax_menu_editor_do_delete");
 
+function _pb_menu_duplicate_items_recursive($source_menu_id_, $new_menu_id_, $source_parent_id_, $new_parent_id_){
+	$conditions_ = array(
+		'menu_id' => $source_menu_id_,
+		'orderby' => "ORDER BY sort_char ASC",
+	);
+
+	if($source_parent_id_ === null){
+		$conditions_['root_only'] = true;
+	}else{
+		$conditions_['parent_id'] = $source_parent_id_;
+	}
+
+	$items_ = pb_menu_item_list($conditions_);
+
+	foreach($items_ as $item_){
+		$new_item_id_ = pb_menu_item_insert(array(
+			'menu_id' => $new_menu_id_,
+			'parent_id' => $new_parent_id_,
+			'category' => $item_['category'],
+			'title' => $item_['title'],
+			'sort_char' => $item_['sort_char'],
+			'reg_date' => pb_current_time(),
+		));
+
+		$meta_map_ = pb_menu_item_meta_map($item_['id'], false);
+		foreach($meta_map_ as $meta_key_ => $meta_value_){
+			if(is_array($meta_value_)){
+				foreach($meta_value_ as $mv_){
+					pb_menu_item_meta_update($new_item_id_, $meta_key_, $mv_, false);
+				}
+			}else{
+				pb_menu_item_meta_update($new_item_id_, $meta_key_, $meta_value_);
+			}
+		}
+
+		_pb_menu_duplicate_items_recursive($source_menu_id_, $new_menu_id_, $item_['id'], $new_item_id_);
+	}
+}
+
+function _pb_ajax_menu_editor_do_duplicate(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_menu")){
+		echo json_encode(array(
+			"success" => false,
+			"error_title" => __("권한없음"),
+			"error_message" => __("접근권한이 없습니다."),
+		));
+		pb_end();
+	}
+
+	$menu_id_ = _POST('menu_id');
+
+	$source_menu_ = pb_menu($menu_id_);
+	if(!isset($source_menu_)){
+		echo json_encode(array(
+			"success" => false,
+			"error_title" => __("잘못된 요청"),
+			"error_message" => __("메뉴정보가 존재하지 않습니다."),
+		));
+		pb_end();
+	}
+
+	$new_menu_id_ = pb_menu_insert(array(
+		'title' => $source_menu_['title'] . ' ' . __('(복사본)'),
+		'slug' => pb_menu_delete_rewrite_slug($source_menu_['slug'].'_copy', 0),
+		'reg_date' => pb_current_time(),
+	));
+
+	_pb_menu_duplicate_items_recursive($menu_id_, $new_menu_id_, null, null);
+
+	echo json_encode(array(
+		'success' => true,
+		'menu_id' => $new_menu_id_,
+	));
+	pb_end();
+}
+pb_add_ajax('menu-editor-do-duplicate', "_pb_ajax_menu_editor_do_duplicate");
+
 
 function _pb_ajax_menu_editor_load_menu(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_menu")){

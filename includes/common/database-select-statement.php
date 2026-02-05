@@ -12,6 +12,8 @@ abstract class PBDB_SS{
 	const COND_ISNULL = 7;
 	const COND_LIKE = 8;
 	const COND_CUSTOM = 9;
+
+	const COND_OR = 109;
 }
 
 //shortcut
@@ -23,6 +25,7 @@ abstract class SS_COND{
 	const ISNULL = PBDB_SS::COND_ISNULL;
 	const LIKE = PBDB_SS::COND_LIKE;
 	const CUSTOM = PBDB_SS::COND_CUSTOM;
+	const OR = PBDB_SS::COND_OR;
 }
 
 class PBDB_select_statement_conditions extends ArrayObject{
@@ -89,6 +92,16 @@ class PBDB_select_statement_conditions extends ArrayObject{
 			'types' => $types_,
 		);
 	}
+
+	function add_or(){
+		$conditions_ = func_get_args();
+		
+		$this[] = array(
+			'type' => PBDB_SS::COND_OR,
+			'conditions' => $conditions_,
+		);
+	}
+
 	function add(){
 		$condition_ = func_get_args();
 		$type_ = array_splice($condition_,0, 1);
@@ -142,7 +155,176 @@ class PBDB_select_statement_conditions extends ArrayObject{
 				
 				call_user_func_array(array($this, 'add_custom'), array($text_, $values_, $types_));
 			break;
+			case PBDB_SS::COND_OR :
+				
+				call_user_func_array(array($this, 'add_or'), $condition_);
+			break;
 		}
+	}
+
+	public function build_single($data_){
+
+		$query_ = array();
+		$param_values_ = array();
+		$param_types_ = array();
+
+		$cond_type_ = isset($data_['type']) ? $data_['type'] : null;
+
+		switch($cond_type_){
+			case PBDB_SS::COND_COMPARE :
+
+				$a_ = $data_['a'];
+				$b_ = $data_['b'];
+				$b_type_ = $data_['b_type'];
+				$compare_ = $data_['compare'];
+
+				if(strlen($b_type_)){
+					$param_values_[] = pb_database_escape_string($b_);
+					$param_types_[] = $b_type_;
+
+					$query_[] = "{$a_} {$compare_} ".PBDB_PARAM_MAP_STR." \n\r";
+
+				}else{
+					$query_[] = "{$a_} {$compare_} {$b_} \n\r";
+				}
+
+				
+
+			break;
+
+			case PBDB_SS::COND_IN :
+
+				$a_ = $data_['a'];
+				$b_ = $data_['b'];
+					
+				if(count($b_) > 0){
+					$b_types_ = $data_['b_types'];
+					$in_str_array_ = array();
+
+					foreach($b_ as $bi_ => $bv_){
+						$param_values_[] = pb_database_escape_string($bv_);
+						$param_types_[] = isset($b_types_[$bi_]) ? $b_types_[$bi_] : PBDB::TYPE_STRING;
+						$in_str_array_[] = PBDB_PARAM_MAP_STR;
+					}
+
+					$query_[] = "{$a_} IN (".implode(",", $in_str_array_).") \n\r";
+				}
+
+			break;
+
+			case PBDB_SS::COND_NOT_IN :
+
+				$a_ = $data_['a'];
+				$b_ = $data_['b'];
+					
+				if(count($b_) > 0){
+					$b_types_ = $data_['b_types'];
+					$in_str_array_ = array();
+
+					foreach($b_ as $bi_ => $bv_){
+						$param_values_[] = pb_database_escape_string($bv_);
+						$param_types_[] = isset($b_types_[$bi_]) ? $b_types_[$bi_] : PBDB::TYPE_STRING;
+						$in_str_array_[] = PBDB_PARAM_MAP_STR;
+					}
+
+					$query_[] = "{$a_} NOT IN (".implode(",", $in_str_array_).") \n\r";
+				}
+
+			break;
+
+			case PBDB_SS::COND_ISNOTNULL :
+				$a_ = $data_['a'];
+
+				$query_[] = "{$a_} IS NOT NULL \n\r";
+
+			break;
+
+			case PBDB_SS::COND_ISNULL :
+				$a_ = $data_['a'];
+
+				$query_[] = "{$a_} IS NULL \n\r";
+
+			break;
+
+			case PBDB_SS::COND_LIKE :
+				$query_where_keyword_ = "";
+				$keyword_first_ = true;
+				foreach($data_['a'] as $field_){
+					if(!$keyword_first_){
+						$query_where_keyword_ .= " OR ";
+					}
+
+					if($data_['case_ignore']){
+						$query_where_keyword_ .= " LOWER({$field_}) LIKE ".PBDB_PARAM_MAP_STR." ";
+						$param_values_[] = ($data_['full'] ? '%' : '').pb_database_escape_string(strtolower($data_['keyword'])).'%';
+						$param_types_[] = PBDB::TYPE_STRING;
+					}else{
+						$query_where_keyword_ .= " {$field_} LIKE ".PBDB_PARAM_MAP_STR." ";
+						$param_values_[] = ($data_['full'] ? '%' : '').pb_database_escape_string($data_['keyword']).'%';
+						$param_types_[] = PBDB::TYPE_STRING;
+					}
+					
+					$keyword_first_ = false;
+				}
+
+				$query_[] = "({$query_where_keyword_}) \n\r";
+
+
+			break;
+
+
+			case PBDB_SS::COND_CUSTOM :
+				$values_ = $data_['values'];
+				$types_ = $data_['types'];
+
+				$query_[] = $data_['custom']." \n\r";
+
+				if(isset($values_)){
+					foreach($values_ as $vi_ => $value_){
+						$param_values_[] = pb_database_escape_string($value_);
+						$param_types_[] = isset($types_[$vi_]) ? $types_[$vi_] : PBDB::TYPE_STRING;
+					}
+				}
+					
+			break;
+
+			case PBDB_SS::COND_OR :
+				$or_conditions_ = $data_['conditions'];
+
+				$or_query_ = array();
+
+				foreach($or_conditions_ as $or_condition_data_){
+					$sub_cond_result_ = null;
+					if(@get_class($or_condition_data_) === "PBDB_select_statement_conditions"){
+						$sub_cond_result_ = $or_condition_data_->build();
+					}else if(is_array($or_conditions_)){
+						$sub_cond_obj_ = new PBDB_select_statement_conditions();
+						call_user_func_array(array($sub_cond_obj_, "add"), $or_conditions_);
+						$sub_cond_result_ = $sub_cond_obj_->build();
+					}
+
+					if(isset($sub_cond_result_)){
+						$or_query_[] = '('.implode(" AND ", $sub_cond_result_['query']).')';
+						$param_values_ = array_merge($param_values_, $sub_cond_result_['values']);
+						$param_types_ = array_merge($param_types_, $sub_cond_result_['types']);
+					}
+				}
+
+				$query_[] = '('.implode(" OR ", $or_query_).')';
+
+			break;
+
+			default : 
+				$query_[] = pb_hook_apply_filters('pb_database_select_statement_build_condition', $query_, $data_)." \n\r";
+
+			break;
+		}
+
+		return array(
+			'query' => $query_,
+			'values' => $param_values_,
+			'types' => $param_types_,
+		);
 	}
 
 	public function build(){
@@ -155,130 +337,11 @@ class PBDB_select_statement_conditions extends ArrayObject{
 			$cond_type_ = isset($data_['type']) ? $data_['type'] : null;
 			if(!strlen($cond_type_)) return $query_;
 
-			switch($cond_type_){
-				case PBDB_SS::COND_COMPARE :
+			$single_build_ = $this->build_single($data_);
 
-					$a_ = $data_['a'];
-					$b_ = $data_['b'];
-					$b_type_ = $data_['b_type'];
-					$compare_ = $data_['compare'];
-
-					if(strlen($b_type_)){
-						$param_values_[] = pb_database_escape_string($b_);
-						$param_types_[] = $b_type_;
-
-						$query_[] = "{$a_} {$compare_} ".PBDB_PARAM_MAP_STR." \n\r";
-
-					}else{
-						$query_[] = "{$a_} {$compare_} {$b_} \n\r";
-					}
-
-					
-
-				break;
-
-				case PBDB_SS::COND_IN :
-
-					$a_ = $data_['a'];
-					$b_ = $data_['b'];
-						
-					if(count($b_) > 0){
-						$b_types_ = $data_['b_types'];
-						$in_str_array_ = array();
-
-						foreach($b_ as $bi_ => $bv_){
-							$param_values_[] = pb_database_escape_string($bv_);
-							$param_types_[] = isset($b_types_[$bi_]) ? $b_types_[$bi_] : PBDB::TYPE_STRING;
-							$in_str_array_[] = PBDB_PARAM_MAP_STR;
-						}
-
-						$query_[] = "{$a_} IN (".implode(",", $in_str_array_).") \n\r";
-					}
-
-				break;
-
-				case PBDB_SS::COND_NOT_IN :
-
-					$a_ = $data_['a'];
-					$b_ = $data_['b'];
-						
-					if(count($b_) > 0){
-						$b_types_ = $data_['b_types'];
-						$in_str_array_ = array();
-
-						foreach($b_ as $bi_ => $bv_){
-							$param_values_[] = pb_database_escape_string($bv_);
-							$param_types_[] = isset($b_types_[$bi_]) ? $b_types_[$bi_] : PBDB::TYPE_STRING;
-							$in_str_array_[] = PBDB_PARAM_MAP_STR;
-						}
-
-						$query_[] = "{$a_} NOT IN (".implode(",", $in_str_array_).") \n\r";
-					}
-
-				break;
-
-				case PBDB_SS::COND_ISNOTNULL :
-					$a_ = $data_['a'];
-
-					$query_[] = "{$a_} IS NOT NULL \n\r";
-
-				break;
-
-				case PBDB_SS::COND_ISNULL :
-					$a_ = $data_['a'];
-
-					$query_[] = "{$a_} IS NULL \n\r";
-
-				break;
-
-				case PBDB_SS::COND_LIKE :
-					$query_where_keyword_ = "";
-					$keyword_first_ = true;
-					foreach($data_['a'] as $field_){
-						if(!$keyword_first_){
-							$query_where_keyword_ .= " OR ";
-						}
-
-						if($data_['case_ignore']){
-							$query_where_keyword_ .= " LOWER({$field_}) LIKE ".PBDB_PARAM_MAP_STR." ";
-							$param_values_[] = ($data_['full'] ? '%' : '').pb_database_escape_string(strtolower($data_['keyword'])).'%';
-							$param_types_[] = PBDB::TYPE_STRING;
-						}else{
-							$query_where_keyword_ .= " {$field_} LIKE ".PBDB_PARAM_MAP_STR." ";
-							$param_values_[] = ($data_['full'] ? '%' : '').pb_database_escape_string($data_['keyword']).'%';
-							$param_types_[] = PBDB::TYPE_STRING;
-						}
-						
-						$keyword_first_ = false;
-					}
-
-					$query_[] = "({$query_where_keyword_}) \n\r";
-
-
-				break;
-
-
-				case PBDB_SS::COND_CUSTOM :
-					$values_ = $data_['values'];
-					$types_ = $data_['types'];
-
-					$query_[] = $data_['custom']." \n\r";
-
-					if(isset($values_)){
-						foreach($values_ as $vi_ => $value_){
-							$param_values_[] = pb_database_escape_string($value_);
-							$param_types_[] = isset($types_[$vi_]) ? $types_[$vi_] : PBDB::TYPE_STRING;
-						}
-					}
-						
-				break;
-
-				default : 
-					$query_[] = pb_hook_apply_filters('pb_database_select_statement_build_condition', $query_, $data_)." \n\r";
-
-				break;
-			}
-
+			$query_ = array_merge($query_, $single_build_['query']);
+			$param_values_ = array_merge($param_values_, $single_build_['values']);
+			$param_types_ = array_merge($param_types_, $single_build_['types']);
 		}
 
 		$results_ = array(
