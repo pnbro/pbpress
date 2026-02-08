@@ -109,7 +109,7 @@ function _pb_page_builder_ajax_load_edit_element_form(){
 				continue;
 			}
 		?>
-			<li role="presentation" class=""><a href="#manage-site-tab-<?=$category_data_['key']?>" role="tab" data-toggle="tab"><?=$category_data_['title']?></a></li>
+			<li role="presentation" class=""><a href="#manage-site-tab-<?=$category_data_['key']?>" role="tab" data-bs-toggle="tab"><?=$category_data_['title']?></a></li>
 		<?php } ?>
 		
 	</ul>

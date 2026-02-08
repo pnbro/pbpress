@@ -32,6 +32,7 @@ module.exports = function (grunt) {
         src: [
           'lib/dev/concat-lib/src/defaults/moment.js',
           'lib/dev/concat-lib/src/defaults/bootstrap5.bundle.js',
+          'lib/dev/concat-lib/src/defaults/bootstrap5-jquery-shim.js',
           'lib/dev/concat-lib/src/defaults/jsencrypt.js',
           'lib/dev/concat-lib/src/defaults/sortable.js',
           'lib/dev/concat-lib/src/defaults/sortable-jquery.js',

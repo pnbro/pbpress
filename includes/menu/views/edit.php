@@ -25,7 +25,7 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 	
 	<div class="modal-content">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+			<button type="button" class="close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
 			<h4 class="modal-title"><?=__('메뉴항목수정하기')?></h4>
 		</div>
 		<div class="modal-body" data-menu-item-edit-body>
@@ -34,7 +34,7 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 
 		</div>
 		<div class="modal-footer">
-			<a href="" class="btn btn-default" data-dismiss="modal"><?=__('취소')?></a>
+			<a href="" class="btn btn-default" data-bs-dismiss="modal"><?=__('취소')?></a>
 			<button type="button" class="btn btn-primary" data-submit-btn><?=__('변경사항 저장')?></button>
 		</div>
 	</div>
@@ -126,7 +126,7 @@ window._pb_menu_editor_categories = <?=json_encode($menu_categories_info_)?>;
 								else $title_ = $data_['title'];
 
 							?>
-							<li role="presentation " class="<?=$is_first_ ? "active" : ""?>" ><a href="#pb-menu-target-list-tab-<?=$category_?>" role="tab" data-toggle="tab"><?=$title_?></a></li>
+							<li role="presentation " class="<?=$is_first_ ? "active" : ""?>" ><a href="#pb-menu-target-list-tab-<?=$category_?>" role="tab" data-bs-toggle="tab"><?=$title_?></a></li>
 						<?php 
 							$is_first_ = false;
 						} ?>

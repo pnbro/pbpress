@@ -99,7 +99,7 @@ function _pb_post_edit_form_after_hook_for_revision($post_data_){
 	<div class="panel panel-default" id="pb-post-edit-form-revision-panel">
 		<div class="panel-heading" role="tab">
 			<h4 class="panel-title">
-				<a role="button" data-toggle="collapse" href="#pb-post-edit-form-revision-panel-body" aria-expanded="true" ><?=__('리비젼')?></a>
+				<a role="button" data-bs-toggle="collapse" href="#pb-post-edit-form-revision-panel-body" aria-expanded="true" ><?=__('리비젼')?></a>
 			</h4>
 		</div>
 		<div id="pb-post-edit-form-revision-panel-body" class="panel-collapse collapse in" role="tabpanel">

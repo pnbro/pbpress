@@ -13,9 +13,9 @@
 <div class="manage-site-tab"><form id="pb-manage-site-form" method="POST">
 
 	<ul class="nav nav-tabs" role="tablist">
-		<li role="presentation" class="active"><a href="#manage-site-tab-basic" role="tab" data-toggle="tab"><?=__('기본설정')?></a></li>
+		<li role="presentation" class="active"><a href="#manage-site-tab-basic" role="tab" data-bs-toggle="tab"><?=__('기본설정')?></a></li>
 		<?php foreach($menu_list_ as $menu_id_ => $menu_data_){ ?>
-			<li role="presentation" ><a href="#manage-site-subtab-<?=$menu_id_?>" role="tab" data-toggle="tab"><?=$menu_data_['name']?></a></li>
+			<li role="presentation" ><a href="#manage-site-subtab-<?=$menu_id_?>" role="tab" data-bs-toggle="tab"><?=$menu_data_['name']?></a></li>
 		<?php }?>
 	</ul>
 

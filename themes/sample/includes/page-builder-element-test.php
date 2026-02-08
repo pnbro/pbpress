@@ -20,7 +20,7 @@ class PBPageBuilderElement_image_slider extends PBPageBuilderElement{
 		$_is_first_slide = true;
 		?>
 <div class="image-slider-group <?=$class_?> <?=$unique_class_name_?>" id="<?=$id_?>">
-	<div class="carousel slide"  data-ride="carousel">
+	<div class="carousel slide"  data-bs-ride="carousel">
 
 		<div class="carousel-inner" role="listbox">
 			<?=$this->render_content($data_['elementcontent'])?>

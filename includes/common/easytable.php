@@ -225,9 +225,9 @@ class PB_easytable{
 								<div class="column-title"><?=isset($column_data_['name']) ? $column_data_['name'] : ""?></div>
 								<div class="dropdown">
 									<?php if(isset($actived_sort_data_)){ ?>
-										<a href="#" class="sort-link <?=$inner_sort_class_?> sorted" data-toggle="dropdown" data-sort-label><?=isset($actived_sort_data_['title']) ? $actived_sort_data_['title'] : ""?></a>
+										<a href="#" class="sort-link <?=$inner_sort_class_?> sorted" data-bs-toggle="dropdown" data-sort-label><?=isset($actived_sort_data_['title']) ? $actived_sort_data_['title'] : ""?></a>
 									<?php }else{ ?>
-										<a href="#" class="sort-link <?=$inner_sort_class_?>" data-toggle="dropdown" data-sort-label><?=__("정렬순서")?></a>
+										<a href="#" class="sort-link <?=$inner_sort_class_?>" data-bs-toggle="dropdown" data-sort-label><?=__("정렬순서")?></a>
 									<?php } ?>
 
 									<ul class="dropdown-menu">

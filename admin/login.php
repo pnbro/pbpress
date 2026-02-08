@@ -54,7 +54,7 @@ $admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', __("PBPress
 					<hr>
 					<button type="submit" class="btn btn-primary btn-block btn-lg"><?=__('로그인')?></button>
 					<div class="bottom-frame text-center">
-						<a href="" data-toggle="modal" data-target="#pb-admin-login-findpass-modal"><?=__('비밀번호 찾기')?></a>
+						<a href="" data-bs-toggle="modal" data-bs-target="#pb-admin-login-findpass-modal"><?=__('비밀번호 찾기')?></a>
 					</div>
 				</form>
 			</div>
@@ -66,7 +66,7 @@ $admin_login_title_ = pb_hook_apply_filters('adminpage_login_title', __("PBPress
 	<div class="modal fade " tabindex="-1" role="dialog" id="pb-admin-login-findpass-modal">
 		<div class="modal-dialog " role="document"><div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title"><?=__('비밀번호 찾기')?></h4>
 			</div>
 			<div class="modal-body"><form id="pb-admin-login-findpass-form" method="POST" >

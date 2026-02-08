@@ -53,7 +53,7 @@ pb_hook_add_action("pb_post_edit_form_control_panel_after", function($pbpost){
 <div class="panel panel-default" id="pb-post-edit-form-post-categories">
 	<div class="panel-heading" role="tab">
 		<h4 class="panel-title">
-			<a role="button" data-toggle="collapse" href="#pb-post-edit-form-post-categories-body" aria-expanded="true" ><?=__('분류')?></a>
+			<a role="button" data-bs-toggle="collapse" href="#pb-post-edit-form-post-categories-body" aria-expanded="true" ><?=__('분류')?></a>
 		</h4>
 	</div>
 	<div id="pb-post-edit-form-post-categories-body" class="panel-collapse collapse in" role="tabpanel">

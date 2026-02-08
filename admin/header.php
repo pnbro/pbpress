@@ -11,7 +11,7 @@
 	<div class="col-right">
 		<?php pb_hook_do_action('pb-admin-header-right-before') ?>
 		<div class="dropdown mypage-menu">
-			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+			<a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 				<?=pb_hook_apply_filters('pb-admin-header-user-name', strlen($user_data_['user_name']) ? $user_data_['user_name'] : "-")?>
 			</a>
 			<ul class="dropdown-menu dropdown-menu-right">

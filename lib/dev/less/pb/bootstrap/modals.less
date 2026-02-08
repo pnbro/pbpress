@@ -33,7 +33,8 @@
     .translate(0, -25%);
     .transition-transform(~"0.3s ease-out");
   }
-  &.in .modal-dialog { .translate(0, 0) }
+  &.in .modal-dialog,
+  &.show .modal-dialog { .translate(0, 0) }
 }
 .modal-open .modal {
   overflow-x: hidden;
@@ -71,7 +72,8 @@
   background-color: @modal-backdrop-bg;
   // Fade for backdrop
   &.fade { .opacity(0); }
-  &.in { .opacity(@modal-backdrop-opacity); }
+  &.in,
+  &.show { .opacity(@modal-backdrop-opacity); }
 }
 
 // Modal header

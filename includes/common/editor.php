@@ -66,7 +66,7 @@ function pb_editor($name_, $content_ = null, $data_ = array()){
 	<div id="<?=$editor_id_?>" class="pb-editor">
 		<ul class="nav nav-tabs tab-right" role="tablist">
 			<?php foreach($editor_list_ as $key_ => $editor_data_){ ?>
-				<li role="presentation" class="" data-key="<?=$key_?>"><a href="#<?=$editor_id_?>-nav-tab-<?=$key_?>" role="tab" data-toggle="tab"><?=$editor_data_['title']?></a></li>
+				<li role="presentation" class="" data-key="<?=$key_?>"><a href="#<?=$editor_id_?>-nav-tab-<?=$key_?>" role="tab" data-bs-toggle="tab"><?=$editor_data_['title']?></a></li>
 			<?php } ?>
 		</ul>
 		<div class="clearfix"></div>

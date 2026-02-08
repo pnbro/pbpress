@@ -10,7 +10,8 @@
 .fade {
   opacity: 0;
   .transition(opacity .15s linear);
-  &.in {
+  &.in,
+  &.show {
     opacity: 1;
   }
 }
@@ -18,9 +19,12 @@
 .collapse {
   display: none;
 
-  &.in      { display: block; }
-  tr&.in    { display: table-row; }
-  tbody&.in { display: table-row-group; }
+  &.in,
+  &.show      { display: block; }
+  tr&.in,
+  tr&.show    { display: table-row; }
+  tbody&.in,
+  tbody&.show { display: table-row-group; }
 }
 
 .collapsing {

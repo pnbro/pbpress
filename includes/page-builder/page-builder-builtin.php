@@ -11,14 +11,14 @@ function _pb_page_builder_add_shared_modal_to_footer(){
 	
 	<div class="modal-content">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+			<button type="button" class="close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
 			<h4 class="modal-title"><?=__('항목수정')?></h4>
 		</div>
 		<div class="modal-body">
 			
 		</div>
 		<div class="modal-footer">
-			<a href="" class="btn btn-default" data-dismiss="modal"><?=__('취소')?></a>
+			<a href="" class="btn btn-default" data-bs-dismiss="modal"><?=__('취소')?></a>
 			<button type="submit" class="btn btn-primary"><?=__('변경사항 저장')?></button>
 		</div>
 	</div>
@@ -27,7 +27,7 @@ function _pb_page_builder_add_shared_modal_to_footer(){
 	
 	<div class="modal-content">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+			<button type="button" class="close" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button>
 			<h4 class="modal-title"><?=__('항목추가')?></h4>
 		</div>
 		<div class="modal-body">
@@ -52,7 +52,7 @@ function _pb_page_builder_add_shared_modal_to_footer(){
 	
 	<div class="modal-content"><form id="pb-page-builder-page-settings-modal-form" method="POST">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			<h4 class="modal-title"><?=__('페이지설정')?></h4>
 		</div>
 		<div class="modal-body">
@@ -69,7 +69,7 @@ function _pb_page_builder_add_shared_modal_to_footer(){
 			
 		</div>
 		<div class="modal-footer">
-			<a href="" class="btn btn-default" data-dismiss="modal"><?=__('취소')?></a>
+			<a href="" class="btn btn-default" data-bs-dismiss="modal"><?=__('취소')?></a>
 			<button type="submit" class="btn btn-primary"><?=__('변경사항저장')?></button>
 		</div>
 	</form></div>

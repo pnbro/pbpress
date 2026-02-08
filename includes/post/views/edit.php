@@ -98,7 +98,7 @@
 			<div class="panel panel-default" id="pb-post-edit-form-post-common-panel">
 				<div class="panel-heading" role="tab">
 					<h4 class="panel-title">
-						<a role="button" data-toggle="collapse" href="#pb-post-edit-form-post-common-panel-body" aria-expanded="true" ><?=__('기본정보')?></a>
+						<a role="button" data-bs-toggle="collapse" href="#pb-post-edit-form-post-common-panel-body" aria-expanded="true" ><?=__('기본정보')?></a>
 					</h4>
 				</div>
 				<div id="pb-post-edit-form-post-common-panel-body" class="panel-collapse collapse in" role="tabpanel">
