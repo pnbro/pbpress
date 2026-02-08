@@ -75,6 +75,7 @@ function pb_head(){
 	global $pb_config;
 ?>
 <script type="text/javascript" src="<?=$jquery_script_url_?>"></script>
+<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/jquery-migrate-3.5.2.js"></script>
 <script type="text/javascript">window.PBVAR = <?=json_encode($pbvar_)?>;</script>
 <script type="text/javascript" src="<?=PB_LIBRARY_URL?>comp-lib/all-main.js"></script>
 

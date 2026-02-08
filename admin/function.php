@@ -10,6 +10,7 @@ function pb_admin_head(){
 <link rel="stylesheet" type="text/css" href="<?=pb_hook_apply_filters('adminpage-default-css', PB_LIBRARY_URL."css/pb-admin.css?v=".PB_SCRIPT_VERSION)?>">
 
 <script type="text/javascript" src="<?=pb_hook_apply_filters('adminpage-default-jquery', PB_LIBRARY_URL."js/jquery.js?v=".PB_SCRIPT_VERSION)?>"></script>
+<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/jquery-migrate-3.5.2.js?v=<?=PB_SCRIPT_VERSION?>"></script>
 <script type="text/javascript">window.PBVAR = <?=json_encode($pbvar_)?>;</script>
 <script type="text/javascript" src="<?=pb_hook_apply_filters('adminpage-default-js', PB_LIBRARY_URL."comp-lib/all-admin.js?v=".PB_SCRIPT_VERSION)?>"></script>
 

@@ -9,7 +9,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
 
   grunt.initConfig({
-    
+
     clean: {
       dist: [
         'lib/dev/css',
@@ -17,21 +17,21 @@ module.exports = function (grunt) {
       ]
     },
 
-    concat : {
+    concat: {
 
-      'defaults-main' : {
+      'defaults-main': {
         src: [
           'lib/dev/concat-lib/src/defaults/moment.js',
           'lib/dev/concat-lib/src/defaults/jsencrypt.js',
-        
+
         ],
         dest: 'lib/dev/concat-lib/dist/defaults-main.js'
       },
 
-      'defaults-admin' : {
+      'defaults-admin': {
         src: [
           'lib/dev/concat-lib/src/defaults/moment.js',
-          'lib/dev/concat-lib/src/defaults/bootstrap.js',
+          'lib/dev/concat-lib/src/defaults/bootstrap5.bundle.js',
           'lib/dev/concat-lib/src/defaults/jsencrypt.js',
           'lib/dev/concat-lib/src/defaults/sortable.js',
           'lib/dev/concat-lib/src/defaults/sortable-jquery.js',
@@ -52,7 +52,7 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/defaults/codemirror-addons/xml-fold.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/xml-hint.js',
           'lib/dev/concat-lib/src/defaults/codemirror-addons/html-hint.js',
-          
+
           'lib/dev/concat-lib/src/bootstrap/bootstrap-validator.js',
           'lib/dev/concat-lib/src/bootstrap/bootstrap-select.js',
           'lib/dev/concat-lib/src/bootstrap/bootstrap-datetimepicker.js',
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
         dest: 'lib/dev/concat-lib/dist/defaults-admin.js'
       },
 
-      'jquery-default-plugins-main' : {
+      'jquery-default-plugins-main': {
         src: [
 
           'lib/dev/concat-lib/src/jquery-default-plugins/jquery.cookie.js',
@@ -71,9 +71,9 @@ module.exports = function (grunt) {
         ],
         dest: 'lib/dev/concat-lib/dist/jquery-default-plugins-main.js'
       },
-      
-  
-      'jquery-default-plugins-admin' : {
+
+
+      'jquery-default-plugins-admin': {
         src: [
 
           'lib/dev/concat-lib/src/jquery-default-plugins/jquery.cookie.js',
@@ -84,7 +84,7 @@ module.exports = function (grunt) {
         dest: 'lib/dev/concat-lib/dist/jquery-default-plugins-admin.js'
       },
 
-      'pb-main' : {
+      'pb-main': {
         src: [
           'lib/dev/concat-lib/src/pb/modules/pb.mainmodule.js',
           'lib/dev/concat-lib/src/pb/modules/pb.crypt.js',
@@ -98,7 +98,7 @@ module.exports = function (grunt) {
         dest: 'lib/dev/concat-lib/dist/pb-main.js'
       },
 
-      'pb-admin' : {
+      'pb-admin': {
         src: [
           'lib/dev/concat-lib/src/pb/modules/pb.mainmodule.js',
           'lib/dev/concat-lib/src/pb/modules/pb.crypt.js',
@@ -116,14 +116,14 @@ module.exports = function (grunt) {
           'lib/dev/concat-lib/src/pb/modules/pb.wysiwyg.editor.js',
 
           'lib/dev/concat-lib/src/pb/modules/pb.editors.js',
-          
+
           'lib/dev/concat-lib/src/pb/pb.admin.js',
 
         ],
         dest: 'lib/dev/concat-lib/dist/pb-admin.js'
       },
 
-      'concat-all-main' : {
+      'concat-all-main': {
         src: [
           'lib/dev/concat-lib/dist/defaults-main.js',
           'lib/dev/concat-lib/dist/jquery-default-plugins-main.js',
@@ -132,7 +132,7 @@ module.exports = function (grunt) {
         dest: 'lib/dev/comp-lib/all-main.js'
       },
 
-      'concat-all-admin' : {
+      'concat-all-admin': {
         src: [
           'lib/dev/concat-lib/dist/defaults-admin.js',
           'lib/dev/concat-lib/dist/jquery-default-plugins-admin.js',
@@ -142,11 +142,11 @@ module.exports = function (grunt) {
       }
 
     },
-    
-    less : {
-      build : {
-        options : {
-          ieCompat : true,
+
+    less: {
+      build: {
+        options: {
+          ieCompat: true,
           paths: ["lib/dev/css/"]
         },
         files: [{
@@ -154,8 +154,8 @@ module.exports = function (grunt) {
           cwd: 'lib/dev/less',
           src: ['pb-main.less', 'pb-admin.less'],
           dest: 'lib/dev/css/',
-          rename : function(dest, src){
-            return dest + src.replace('.less','.css');
+          rename: function (dest, src) {
+            return dest + src.replace('.less', '.css');
           }
         },
         {
@@ -163,8 +163,8 @@ module.exports = function (grunt) {
           cwd: 'lib/dev/less/pages',
           src: ['**/*.less'],
           dest: 'lib/dev/css/pages/',
-          rename : function(dest, src){
-            return dest + src.replace('.less','.css');
+          rename: function (dest, src) {
+            return dest + src.replace('.less', '.css');
           }
         },
         {
@@ -172,8 +172,8 @@ module.exports = function (grunt) {
           cwd: 'lib/dev/less/page-builder',
           src: ['**/*.less'],
           dest: 'lib/dev/css/page-builder/',
-          rename : function(dest, src){
-            return dest + src.replace('.less','.css');
+          rename: function (dest, src) {
+            return dest + src.replace('.less', '.css');
           }
         },
         {
@@ -181,8 +181,8 @@ module.exports = function (grunt) {
           cwd: 'lib/dev/less/trumbowyg',
           src: ['trumbowyg.less'],
           dest: 'lib/dev/css/trumbowyg/',
-          rename : function(dest, src){
-            return dest + src.replace('.less','.css');
+          rename: function (dest, src) {
+            return dest + src.replace('.less', '.css');
           }
         },
         {
@@ -190,8 +190,8 @@ module.exports = function (grunt) {
           cwd: 'lib/dev/less/summernote',
           src: ['summernote.less'],
           dest: 'lib/dev/css/summernote/',
-          rename : function(dest, src){
-            return dest + src.replace('.less','.css');
+          rename: function (dest, src) {
+            return dest + src.replace('.less', '.css');
           }
         },
 
@@ -199,8 +199,8 @@ module.exports = function (grunt) {
       }
     },
 
-    copy : {
-      dist :{
+    copy: {
+      dist: {
         files: [{
           expand: true,
           cwd: 'lib/dev',
@@ -230,7 +230,7 @@ module.exports = function (grunt) {
       }
     },
 
-    cssmin : {
+    cssmin: {
       minify: {
         expand: true,
         cwd: 'lib/dev/',
@@ -243,23 +243,23 @@ module.exports = function (grunt) {
     },
 
     watch: {
-      js : {
+      js: {
         files: [
           'lib/dev/concat-lib/**/*.js',
           'lib/dev/js/**/*.js',
           '!lib/dev/comp-lib/**/*.js',
           '!lib/dev/concat-lib/dist/**/*.js',
-        	
+
         ],
         tasks: ['build-js']
       },
-      css : {
+      css: {
         files: [
           'lib/dev/concat-lib/**/*.css',
         ],
         tasks: ['build-css']
       },
-      less : {
+      less: {
         files: [
           'lib/dev/less/**/*.less'
         ],
@@ -272,7 +272,7 @@ module.exports = function (grunt) {
     'concat:defaults-admin',
     'concat:jquery-default-plugins-admin',
     'concat:pb-admin',
-    
+
     'concat:defaults-main',
     'concat:jquery-default-plugins-main',
     'concat:pb-main',
@@ -281,7 +281,7 @@ module.exports = function (grunt) {
     'concat:concat-all-main'
   ]);
   grunt.registerTask('build-css', ['less']);
-  grunt.registerTask('build', ['clean','build-js','build-css']);
+  grunt.registerTask('build', ['clean', 'build-js', 'build-css']);
   grunt.registerTask('dist', ['build', 'uglify', 'cssmin', 'copy:dist']);
   grunt.registerTask('default', ['build']);
 
