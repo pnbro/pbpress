@@ -651,6 +651,46 @@ function _pb_menu_tree_for_render_level_hook($menu_tree_, $options_){
 pb_hook_add_filter('pb_menu_tree_for_render', '_pb_menu_tree_for_render_level_hook');
 
 
+function _pb_menu_duplicate_items_recursive($source_menu_id_, $new_menu_id_, $source_parent_id_, $new_parent_id_){
+	$conditions_ = array(
+		'menu_id' => $source_menu_id_,
+		'orderby' => "ORDER BY sort_char ASC",
+	);
+
+	if($source_parent_id_ === null){
+		$conditions_['root_only'] = true;
+	}else{
+		$conditions_['parent_id'] = $source_parent_id_;
+	}
+
+	$items_ = pb_menu_item_list($conditions_);
+
+	foreach($items_ as $item_){
+		$new_item_id_ = pb_menu_item_insert(array(
+			'menu_id' => $new_menu_id_,
+			'parent_id' => $new_parent_id_,
+			'category' => $item_['category'],
+			'title' => $item_['title'],
+			'sort_char' => $item_['sort_char'],
+			'reg_date' => pb_current_time(),
+		));
+
+		$meta_map_ = pb_menu_item_meta_map($item_['id'], false);
+		foreach($meta_map_ as $meta_key_ => $meta_value_){
+			if(is_array($meta_value_)){
+				foreach($meta_value_ as $mv_){
+					pb_menu_item_meta_update($new_item_id_, $meta_key_, $mv_, false);
+				}
+			}else{
+				pb_menu_item_meta_update($new_item_id_, $meta_key_, $meta_value_);
+			}
+		}
+
+		_pb_menu_duplicate_items_recursive($source_menu_id_, $new_menu_id_, $item_['id'], $new_item_id_);
+	}
+}
+
+
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-item.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-item-meta.php');
 include(PB_DOCUMENT_PATH . 'includes/menu/menu-builtin.php');
