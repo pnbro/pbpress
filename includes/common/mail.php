@@ -62,7 +62,8 @@ function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ 
 		$mail_body_ = str_replace("{".$key_."}",$value_,$mail_body_);
 	}
 
-	return pb_mail_send($to_, $subject_, $mail_body_, $attachments_, $options_);
+	$result_ = pb_mail_send($to_, $subject_, $mail_body_, $attachments_, $options_);
+	return pb_hook_apply_filters('pb_mail_sended', $result_, $to_, $subject_, $mail_body_, $attachments_, $options_);
 }
 
 

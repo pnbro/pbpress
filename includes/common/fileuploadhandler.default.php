@@ -99,7 +99,7 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 				'type' => $files_['type'][$file_index_],
 
 				'o_name' => $original_file_name_,
-				'r_name' => $yyymmdd_.$r_name_,
+				'r_name' => $yyymmdd_.$renamed_file_name_,
 
 			));			
 		}
