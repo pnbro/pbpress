@@ -40,44 +40,21 @@ function pb_theme_list(){
 
 function pb_switch_theme($theme_){
 	pb_hook_do_action('pb_switch_theme_before', $theme_);
-	$before_theme_ = pb_option_value(PB_OPTION_THEME_NAME);
+
+	// 테마 변경
+	pb_option_update(PB_OPTION_THEME_NAME, $theme_);
 
 	global $_pb_current_theme;
-	$_pb_current_theme = null;
+	$_pb_current_theme = $theme_;
 
-	pb_option_update(PB_OPTION_THEME_NAME, null);
-
-	$switch_theme_url_ = PB_DOCUMENT_URL . 'includes/common/_switch_theme.php';
-
-	$request_token_ = pb_random_string(20);
-	pb_option_update("_theme_switch_key_",$request_token_);
-
-	$curl_instance_ = curl_init();
-	curl_setopt($curl_instance_,CURLOPT_URL, $switch_theme_url_);
-	curl_setopt($curl_instance_,CURLOPT_HTTPHEADER, array(
-		// 'Content-Type: application/json',
-	));
-	curl_setopt($curl_instance_,CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($curl_instance_,CURLOPT_SSL_VERIFYHOST, false);
-	curl_setopt($curl_instance_,CURLOPT_POST, true);
-	curl_setopt($curl_instance_,CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($curl_instance_,CURLOPT_POSTFIELDS, array(
-		'theme' => $theme_,
-		'request_token' => $request_token_,
-	));
-
-	$result_message_ = curl_exec($curl_instance_);
-	$result_code_ = curl_getinfo($curl_instance_, CURLINFO_HTTP_CODE);
-
-	$result_ = @json_decode($result_message_, true);
-
-	if(!$result_['success']){
-		pb_option_update(PB_OPTION_THEME_NAME, $before_theme_);
-		pb_option_update("_theme_switch_key_",null);
-		return new PBError(503, $result_['error_title'], $result_['error_message']);
+	// 새 테마의 functions.php 로드 (테이블 설치 훅 등록)
+	$theme_path_ = PB_DOCUMENT_PATH . "themes/" . $theme_ . "/";
+	if(file_exists($theme_path_ . "functions.php")){
+		include_once($theme_path_ . "functions.php");
 	}
 
-	pb_option_update("_theme_switch_key_",null);
+	// 테마 테이블 설치
+	_pb_theme_install_tables();
 
 	pb_hook_do_action('pb_switch_theme_after', $theme_);
 	return true;

@@ -56,6 +56,7 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_, $ord
 			<div class="url-link"><a href="<?=$page_url_?>" target="_blank"><?=$page_url_?></a></div>
 			<div class="subaction-frame">
 				<a href="<?=pb_admin_url("manage-page/edit/".$item_['id'])?>"><?=__('수정')?></a>
+				<a href="<?=pb_home_url("__page-live-edit/".$item_['id'])?>" target="_blank"><?=__('라이브편집')?></a>
 				<?php if(!$is_front_page_){ ?>
 					<a href="javascript:pb_manage_page_register_front_page('<?=$item_['id']?>');" class=""><?=__('홈화면 지정')?></a>
 				<?php }else{ ?>

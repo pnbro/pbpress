@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-define('__PB_PAGE_BUILDER_VERSION', "3.1.0");
+define('__PB_PAGE_BUILDER_VERSION', "4.0.1");
 
 global $pb_config;
 
@@ -149,6 +149,7 @@ window.pb_page_builder_version = "<?=PB_PAGE_BUILDER_VERSION?>";
 window.pbpage_builder_element_map = <?=json_encode($element_map_)?>;
 </script>
 <script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/page-builder/editor/pb.page-builder.js?version=<?=PB_PAGE_BUILDER_VERSION?>"></script>
+<script type="text/javascript" src="<?=PB_LIBRARY_URL?>js/page-builder/editor/pb.page-builder.v4.js?version=<?=PB_PAGE_BUILDER_VERSION?>"></script>
 <link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/page-builder/editor/pb.page-builder.css?version=<?=PB_PAGE_BUILDER_VERSION?>">
 <script type="text/javascript">
 jQuery(document).ready(function(){
@@ -193,7 +194,7 @@ jQuery(document).ready(function(){
 	<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?> v<?=PB_PAGE_BUILDER_VERSION?></div>
 
 </div>
-<script type="text/xmldata" id="<?=$builder_id_?>-defaults"><?=htmlentities($content_, null, $pb_config->charset)?></script>
+<script type="text/xmldata" id="<?=$builder_id_?>-defaults"><?=htmlentities($content_, ENT_QUOTES, $pb_config->charset)?></script>
 
 <script type="text/javascript">
 jQuery(document).ready(function(){
@@ -204,7 +205,7 @@ jQuery(document).ready(function(){
 	var default_content_ = $('<textarea />').html($("#<?=$builder_id_?>-defaults").html()).text();
 
 	if(default_content_ && default_content_ !== ""){
-		page_builder_.apply_xml(default_content_);	
+		page_builder_.apply_data(default_content_);
 	}
 	
 });
@@ -322,8 +323,13 @@ function _pb_page_builder_head_hook_for_css_map(){
 }
 
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-element.php');
+include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-json-engine.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-ajax.php');
 include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-builtin.php');
+include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-saved-layouts.php');
+include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-saved-layouts-ajax.php');
+include(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-saved-layouts-picker.php');
+__iinclude(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-saved-layouts-adminpage.php');
 __iinclude(PB_DOCUMENT_PATH . 'includes/page-builder/page-builder-adminpage.php');
 
 ?>

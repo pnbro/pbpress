@@ -31,20 +31,32 @@ function _pb_page_builder_add_shared_modal_to_footer(){
 			<h4 class="modal-title"><?=__('항목추가')?></h4>
 		</div>
 		<div class="modal-body">
-			<form id="pb-page-builder-element-picker-cond-form" class="form-inline text-right" data-element-search-form>
-				<input type="hidden" name="parent">
-				<input type="hidden" name="included_elements">
-				<div class="input-group input-lg">
-					<input type="text" class="form-control search-input" placeholder="<?=__('요소 검색...')?>" name="keyword">
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="submit"><?=__('검색')?></button>
-					</span>
-				</div>
-			</form>
-			<div class="loading-frame">
-				<div class="pb-loading-indicator loading-indicator"></div>
+			<div class="picker-tab-bar" data-picker-tab-bar>
+				<a href="" class="picker-tab active" data-picker-tab="elements"><?=__('요소')?></a>
+				<a href="" class="picker-tab" data-picker-tab="saved-layouts"><?=__('저장서식')?></a>
 			</div>
-			<div class="element-list" data-element-list></div>
+			<div class="picker-tab-content" data-picker-tab-content="elements">
+				<form id="pb-page-builder-element-picker-cond-form" class="form-inline text-right" data-element-search-form>
+					<input type="hidden" name="parent">
+					<input type="hidden" name="included_elements">
+					<div class="input-group input-lg">
+						<input type="text" class="form-control search-input" placeholder="<?=__('요소 검색...')?>" name="keyword">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="submit"><?=__('검색')?></button>
+						</span>
+					</div>
+				</form>
+				<div class="loading-frame">
+					<div class="pb-loading-indicator loading-indicator"></div>
+				</div>
+				<div class="element-list" data-element-list></div>
+			</div>
+			<div class="picker-tab-content" data-picker-tab-content="saved-layouts" style="display:none;">
+				<div class="loading-frame" data-saved-layouts-loading>
+					<div class="pb-loading-indicator loading-indicator"></div>
+				</div>
+				<div class="saved-layouts-list" data-saved-layouts-list></div>
+			</div>
 		</div>
 	</div>
 </div></div>
@@ -114,10 +126,10 @@ function _pb_editor_render_page_builder($content_, $data_){
 				initialize : $.noop,
 				html : function(html_){
 					if(html_ !== undefined){
-						$("#<?=$editor_id_?>-page-builder").pb_page_builder().apply_xml(html_);
+						$("#<?=$editor_id_?>-page-builder").pb_page_builder().apply_data(html_);
 					}
 
-					return $("#<?=$editor_id_?>-page-builder").pb_page_builder().to_xml();
+					return $("#<?=$editor_id_?>-page-builder").pb_page_builder().export_json();
 				}
 			});
 		});

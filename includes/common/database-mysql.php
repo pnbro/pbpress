@@ -81,7 +81,7 @@ class PBDatabase_connection_mysql extends PBDatabase_connection{
 				$column_value_ = "'{$column_value_}'";
 			}
 
-			$query_ = preg_replace("/".PBDB_PARAM_MAP_STR."/", $column_value_, $query_, 1);
+			$query_ = substr_replace($query_, $column_value_, $last_pos_, strlen(PBDB_PARAM_MAP_STR));
 			++$param_index_;
 		}
 

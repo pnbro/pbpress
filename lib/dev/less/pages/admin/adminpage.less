@@ -402,10 +402,17 @@ table{
 				}
 			}
 
+			// 터치기기(hover 불가)는 화면폭과 무관하게 항상 표시 — 태블릿에서 hover가 없어 숨겨지던 문제 대응
+			@media (hover: none){
+				> .subaction-frame{
+					opacity: 1;
+				}
+			}
+
 			&:hover{
 				> .subaction-frame{
 					opacity: 1;
-				}	
+				}
 			}
 
 			.xs-visiable-info{

@@ -62,7 +62,7 @@ function pb_editor($name_, $content_ = null, $data_ = array()){
 	$data_['id'] = $editor_id_;
 
 	?>
-	<input type="hidden" name="<?=$name_?>" value="<?=htmlentities($content_, null, $pb_config->charset)?>" id="<?=$editor_id_?>-input">
+	<input type="hidden" name="<?=$name_?>" value="<?=htmlentities($content_, ENT_QUOTES, $pb_config->charset)?>" id="<?=$editor_id_?>-input">
 	<div id="<?=$editor_id_?>" class="pb-editor">
 		<ul class="nav nav-tabs tab-right" role="tablist">
 			<?php foreach($editor_list_ as $key_ => $editor_data_){ ?>

@@ -272,6 +272,14 @@ function pb_page_builder_element_make_styles($element_data_ = array()){
 	$data_['background-size'] = isset($element_data_['background_size']) ? $element_data_['background_size'] : null;
 	$data_['background-position'] = isset($element_data_['background_position']) ? $element_data_['background_position'] : null;
 
+	// 숫자만 입력된 margin/padding 값에 px 단위 자동 추가
+	$px_props_ = array('margin-top','margin-bottom','margin-left','margin-right','padding-top','padding-bottom','padding-left','padding-right');
+	foreach($px_props_ as $prop_){
+		if(isset($data_[$prop_]) && strlen($data_[$prop_]) && is_numeric($data_[$prop_])){
+			$data_[$prop_] = $data_[$prop_] . 'px';
+		}
+	}
+
 	$data_ = pb_hook_apply_filters('pb_page_builder_element_make_styles', $data_, $element_data_);
 
 	ob_start();

@@ -144,6 +144,15 @@ pb_page_builder_add_element("row", array(
 	'loadable' => true,
 	'parent' => array("*", "!row"),
 	'children' => array("column"),
+	'child_sync' => array(
+		'source_property'  => 'columns',
+		'delimiter'        => ':',
+		'child_element'    => 'column',
+		'child_property'   => 'column_width',
+		'default_value'    => '6:6',
+		'max_children'     => 5,
+		'merge_on_reduce'  => true,
+	),
 	'preview_fields' => array(
 		array(
 			'name' => 'columns',

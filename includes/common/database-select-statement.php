@@ -365,7 +365,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 				case PBDB_SS::COND_COMPARE :
 					$a_ = $condition_[0];
 					$compare_ = isset($condition_[1]) ? $condition_[1] : "=";
-					$type_ = isset($condition_[2]) ? $condition_[2] : PBDB_SS::TYPE_STRING;
+					$type_ = isset($condition_[2]) ? $condition_[2] : PBDB::TYPE_STRING;
 
 					call_user_func_array(array($this, 'add_compare'), array($a_, $data_[$key_], $compare_, $type_));
 				break;

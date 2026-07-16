@@ -128,6 +128,11 @@
 								<button type="submit" class="btn btn-primary btn-block btn-lg"><?=($is_new_ ? __("페이지추가") : __("페이지수정"))?></button>
 							</div>
 							<?php if(!$is_new_){ ?>
+							<div class="col-left" style="margin-left:8px;">
+								<a href="<?=pb_home_url("__page-live-edit/".$pbpage['id'])?>" target="_blank" class="btn btn-default btn-block btn-lg"><?=__('라이브편집')?></a>
+							</div>
+							<?php } ?>
+							<?php if(!$is_new_){ ?>
 								<div class="col-right">
 									<a href="javascript:pb_page_edit_form_delete(<?=$pbpage['id']?>)" class="btn btn-block btn-dark delete-btn">
 										<i class="icon material-icons">delete_forever</i>

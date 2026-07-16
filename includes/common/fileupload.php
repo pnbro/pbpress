@@ -35,6 +35,7 @@ function _pb_fileupload_add_to_header_pbvar($results_){
 
 	global $pb_config;
 	$results_['file_chunksize'] = $pb_config->file_chunksize;
+	$results_['text_chunk_threshold'] = defined("TEXT_CHUNK_THRESHOLD") ? TEXT_CHUNK_THRESHOLD : (512 * 1024);
 	return $results_;
 };
 pb_hook_add_filter('pb-admin-head-pbvar', "_pb_fileupload_add_to_header_pbvar");
@@ -97,5 +98,7 @@ abstract class PBPressFileUPloadHandler{
 }
 
 // include(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.php");
+
+include(PB_DOCUMENT_PATH . "includes/common/chunk-text.php");
 
 ?>

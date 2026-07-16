@@ -28,6 +28,13 @@ pb_rewrite_register('__page-live-edit', array(
 	'rewrite_handler' => '_page_rewrite_handler_for_live_edit',
 ));
 function _page_rewrite_handler_for_live_edit(){
+	// 비로그인 → 로그인 페이지로 리다이렉트 (redirect_url 포함)
+	if(!pb_is_user_logged_in()){
+		pb_redirect(pb_admin_login_url($_SERVER['REQUEST_URI']));
+		pb_end();
+	}
+
+	// 로그인은 됐으나 권한 없음 → 에러 페이지
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
 		return new PBError(403, __("잘못된 접근"), __("접근 권한이 없습니다."));
 	}
@@ -117,7 +124,6 @@ function _pb_page_ajax_edit(){
 	}
 
 	$page_id_ = null;
-	$page_data_['page_html'] = stripslashes($page_data_['page_html']);
 
 	if(!strlen($page_data_['id'])){
 		$page_data_['wrt_id'] = pb_current_user_id();
@@ -145,6 +151,87 @@ function _pb_page_ajax_edit(){
 	));
 }
 pb_add_ajax('edit-page', "_pb_page_ajax_edit");
+
+pb_chunk_text_register(
+	'edit-page-chunked',
+	function(){
+		if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
+			pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
+		}
+	},
+	function($merged_text_, $params_){
+		$page_data_ = isset($params_['page_data']) ? $params_['page_data'] : null;
+
+		if(!isset($page_data_)){
+			return new PBError(400, __("잘못된 요청"), __("필수 요청값이 누락되었습니다."));
+		}
+
+		$page_data_['page_html'] = $merged_text_;
+
+		$page_id_ = null;
+
+		if(!strlen($page_data_['id'])){
+			$page_data_['wrt_id'] = pb_current_user_id();
+			$page_id_ = pb_page_write($page_data_);
+
+			if(pb_is_error($page_id_)){
+				return $page_id_;
+			}
+		}else{
+			$page_id_ = $page_data_['id'];
+			$result_ = pb_page_edit($page_id_, $page_data_);
+
+			if(pb_is_error($result_)){
+				return $result_;
+			}
+		}
+
+		if(isset($page_data_['actived_editor_id'])){
+			pb_user_meta_update(pb_current_user_id(), "page_actived_editor_id_".$page_id_, $page_data_['actived_editor_id']);
+		}
+
+		return array(
+			'page_id' => $page_id_,
+			'redirect_url' => pb_admin_url("manage-page/edit/".$page_id_),
+		);
+	}
+);
+
+// 미리보기 임시저장 AJAX
+function _pb_page_ajax_preview(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
+		pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
+	}
+
+	$page_html_ = _POST('page_html');
+
+	if(!strlen($page_html_)){
+		pb_ajax_error(__("잘못된 요청"), __("미리보기 데이터가 누락되었습니다."));
+	}
+
+	pb_session_put('_preview_page_html', $page_html_);
+
+	pb_ajax_success(array(
+		'preview_url' => pb_home_url('__page-live-edit-preview'),
+	));
+}
+pb_add_ajax('preview-page', "_pb_page_ajax_preview");
+
+pb_chunk_text_register(
+	'preview-page-chunked',
+	function(){
+		if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
+			pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
+		}
+	},
+	function($merged_text_, $params_){
+		pb_session_put('_preview_page_html', $merged_text_);
+
+		return array(
+			'preview_url' => pb_home_url('__page-live-edit-preview'),
+		);
+	}
+);
 
 function _pb_page_ajax_delete(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
