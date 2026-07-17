@@ -130,7 +130,7 @@
 	</section>
 
 	<!-- CTA 배너 -->
-	<section class="sample-cta-banner text-center mt-9 p-7" data-reveal>
+	<section class="sample-cta-banner text-center mt-9" data-reveal>
 		<h2 class="sample-cta-banner__title"><?=__('지금 바로 pbpress 백엔드를 경험해보세요', PB_THEME_DOMAIN)?></h2>
 		<p class="sample-cta-banner__desc"><?=__('회원가입 없이도 방명록에 직접 글을 남기고, 코어 기능 데모를 둘러볼 수 있습니다.', PB_THEME_DOMAIN)?></p>
 		<div class="flex justify-center gap-3 flex-wrap mt-3">

@@ -119,6 +119,8 @@ a.sample-card:hover {
 	border-radius: var(--radius-lg);
 	background: var(--c-primary);
 	color: var(--c-text-inverse);
+	/* base.css에 .p-7 유틸이 없어 배너 상하 여백이 0이 되던 문제 → 컴포넌트에서 직접 지정 */
+	padding: var(--sp-9) var(--sp-6);
 }
 .sample-cta-banner__title {
 	color: var(--c-text-inverse);
