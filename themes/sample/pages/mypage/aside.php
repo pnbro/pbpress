@@ -12,7 +12,7 @@ $pb_mypage_menu_items_ = pb_mypage_menu_data();
 $pb_mypage_active_key_ = pb_mypage_current_key();
 $pb_mypage_current_user_ = pb_current_user();
 ?>
-<aside class="card mypage-aside" aria-label="마이페이지 메뉴">
+<aside class="card mypage-aside" aria-label="<?=__('마이페이지 메뉴', PB_THEME_DOMAIN)?>">
 	<div class="card-body">
 		<div class="user-card mb-6">
 			<span class="avatar avatar-lg" aria-hidden="true"><?=htmlspecialchars(pb_mypage_avatar_letter(@$pb_mypage_current_user_['user_name']))?></span>
@@ -22,7 +22,7 @@ $pb_mypage_current_user_ = pb_current_user();
 			</div>
 		</div>
 
-		<nav aria-label="마이페이지 서브메뉴">
+		<nav aria-label="<?=__('마이페이지 서브메뉴', PB_THEME_DOMAIN)?>">
 			<ul class="mypage-menu">
 				<?php foreach($pb_mypage_menu_items_ as $menu_key_ => $menu_data_): ?>
 				<li class="mypage-menu__item">

@@ -159,8 +159,8 @@ pb_theme_header();
 <div class="container">
 
 	<ul class="breadcrumb">
-		<li><a href="<?=pb_home_url()?>"><?=__("홈")?></a></li>
-		<li><?=__("쇼케이스")?></li>
+		<li><a href="<?=pb_home_url()?>"><?=__("홈", PB_THEME_DOMAIN)?></a></li>
+		<li><?=__("쇼케이스", PB_THEME_DOMAIN)?></li>
 	</ul>
 
 	<h1><?=__("코어 API 라이브 카탈로그", PB_THEME_DOMAIN)?></h1>
@@ -371,7 +371,7 @@ pb_theme_header();
 	<div class="modal-dialog">
 		<div class="modal-header">
 			<h3 class="modal-title"><?=__("데모 모달", PB_THEME_DOMAIN)?></h3>
-			<button type="button" class="modal-close" data-modal-close aria-label="<?=__("닫기")?>">&times;</button>
+			<button type="button" class="modal-close" data-modal-close aria-label="<?=__("닫기", PB_THEME_DOMAIN)?>">&times;</button>
 		</div>
 		<div class="modal-body">
 			<p><?=__("part001 컴포넌트 카탈로그의 .modal 컴포넌트를 그대로 재사용한 데모 모달입니다.", PB_THEME_DOMAIN)?></p>

@@ -16,33 +16,33 @@ $is_logged_in_ = _sample_blog_comment_is_logged_in();
 <section class="blog-comments card mt-8" id="blog-comments" data-post-id="<?=(int)$post_data_['id']?>">
 	<div class="card-body">
 		<h2 class="blog-comments__title">
-			댓글 <span class="blog-comments__count text-muted" data-comment-count><?=count($blog_comments_)?></span>
+			<?=__('댓글', PB_THEME_DOMAIN)?> <span class="blog-comments__count text-muted" data-comment-count><?=count($blog_comments_)?></span>
 		</h2>
 
 		<?php if($is_logged_in_): ?>
 		<form class="blog-comment-form mt-4" data-validate data-blog-comment-form novalidate>
 			<div class="field">
-				<label class="label sr-only" for="blog-comment-content">댓글 내용</label>
+				<label class="label sr-only" for="blog-comment-content"><?=__('댓글 내용', PB_THEME_DOMAIN)?></label>
 				<textarea
 					id="blog-comment-content"
 					name="content"
 					class="textarea"
 					rows="3"
-					placeholder="댓글을 입력하세요"
+					placeholder="<?=__('댓글을 입력하세요', PB_THEME_DOMAIN)?>"
 					maxlength="<?=SAMPLE_BLOG_COMMENT_CONTENT_MAX?>"
 					data-required
-					data-required-message="댓글 내용을 입력하세요."
+					data-required-message="<?=__('댓글 내용을 입력하세요.', PB_THEME_DOMAIN)?>"
 					data-max="<?=SAMPLE_BLOG_COMMENT_CONTENT_MAX?>"
-					data-max-message="댓글은 최대 <?=SAMPLE_BLOG_COMMENT_CONTENT_MAX?>자까지 입력할 수 있습니다."
+					data-max-message="<?=sprintf(__('댓글은 최대 %d자까지 입력할 수 있습니다.', PB_THEME_DOMAIN), SAMPLE_BLOG_COMMENT_CONTENT_MAX)?>"
 				></textarea>
 			</div>
 			<div class="flex justify-end mt-2">
-				<button type="submit" class="btn btn-primary btn-sm">댓글 등록</button>
+				<button type="submit" class="btn btn-primary btn-sm"><?=__('댓글 등록', PB_THEME_DOMAIN)?></button>
 			</div>
 		</form>
 		<?php else: ?>
 		<div class="alert alert-info blog-comment-login-prompt mt-4">
-			댓글을 작성하려면 <a href="<?=htmlspecialchars(_sample_blog_login_url())?>">로그인</a>이 필요합니다.
+			<?=sprintf(__('댓글을 작성하려면 %s이 필요합니다.', PB_THEME_DOMAIN), '<a href="'.htmlspecialchars(_sample_blog_login_url()).'">'.__('로그인').'</a>')?>
 		</div>
 		<?php endif; ?>
 

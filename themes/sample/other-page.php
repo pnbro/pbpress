@@ -2,11 +2,11 @@
 
 <div class="container">
 	<h1 class="text-center" class="text-center">Hello World!<br/>
-		<small>여기는 다른 페이지입니다.</small></h1>
+		<small><?=__('여기는 다른 페이지입니다.', PB_THEME_DOMAIN)?></small></h1>
 
 
 	<h2>AJAX TEST</h2>
-	<a href="javascript:_ajax_test();">AJAX 테스트하기</a>
+	<a href="javascript:_ajax_test();"><?=__('AJAX 테스트하기', PB_THEME_DOMAIN)?></a>
 
 <script type="text/javascript">
 	

@@ -12,9 +12,9 @@ $pb_mypage_user_ = pb_current_user();
 
 // 최근 활동 — 코어에 활동로그 모듈이 없어 데모용 더미 데이터로 시연한다(확장지점).
 $pb_mypage_recent_activity_ = array(
-	array('title' => '마이페이지에 로그인했습니다.', 'date' => date('Y.m.d H:i')),
-	array('title' => '회원정보 수정 화면을 확인했습니다.', 'date' => date('Y.m.d', strtotime('-1 day'))),
-	array('title' => '찜 목록 기능을 살펴봤습니다.', 'date' => date('Y.m.d', strtotime('-3 day'))),
+	array('title' => __('마이페이지에 로그인했습니다.', PB_THEME_DOMAIN), 'date' => date('Y.m.d H:i')),
+	array('title' => __('회원정보 수정 화면을 확인했습니다.', PB_THEME_DOMAIN), 'date' => date('Y.m.d', strtotime('-1 day'))),
+	array('title' => __('찜 목록 기능을 살펴봤습니다.', PB_THEME_DOMAIN), 'date' => date('Y.m.d', strtotime('-3 day'))),
 );
 
 pb_theme_header();
@@ -30,7 +30,7 @@ pb_theme_header();
 					<div class="user-card">
 						<span class="avatar avatar-lg" aria-hidden="true"><?=htmlspecialchars(pb_mypage_avatar_letter(@$pb_mypage_user_['user_name']))?></span>
 						<div>
-							<div class="user-card-name text-lg"><?=htmlspecialchars((string)@$pb_mypage_user_['user_name'])?>님, 안녕하세요.</div>
+							<div class="user-card-name text-lg"><?=sprintf(__('%s님, 안녕하세요.', PB_THEME_DOMAIN), htmlspecialchars((string)@$pb_mypage_user_['user_name']))?></div>
 							<div class="user-card-meta"><?=htmlspecialchars((string)@$pb_mypage_user_['user_email'])?></div>
 						</div>
 					</div>
@@ -38,10 +38,10 @@ pb_theme_header();
 			</div>
 
 			<div class="card">
-				<div class="card-header">최근 활동</div>
+				<div class="card-header"><?=__('최근 활동', PB_THEME_DOMAIN)?></div>
 				<div class="card-body">
 					<?php if(count($pb_mypage_recent_activity_) <= 0): ?>
-					<p class="text-muted text-center mypage-empty">최근 활동이 없습니다.</p>
+					<p class="text-muted text-center mypage-empty"><?=__('최근 활동이 없습니다.', PB_THEME_DOMAIN)?></p>
 					<?php else: ?>
 					<ul class="mypage-activity-list">
 						<?php foreach($pb_mypage_recent_activity_ as $activity_): ?>

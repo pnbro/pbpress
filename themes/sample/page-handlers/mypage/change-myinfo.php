@@ -6,7 +6,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 /* devplan002 part005 — 회원정보 수정 */
 pb_mypage_add_menu('change-myinfo', array(
-	'title' => '회원정보 수정',
+	'title' => __('회원정보 수정', PB_THEME_DOMAIN),
 	'page' => PB_THEME_PATH.'pages/mypage/change-myinfo.php',
 ), 110);
 
@@ -15,7 +15,7 @@ pb_add_ajax('user-mypage-update-myinfo', '_pb_mypage_ajax_update_myinfo');
 
 function _pb_mypage_ajax_update_myinfo(){
 	if(!pb_is_user_logged_in()){
-		pb_ajax_error(__("권한없음"), __("로그인이 필요합니다."));
+		pb_ajax_error(__("권한없음"), __("로그인이 필요합니다.", PB_THEME_DOMAIN));
 	}
 
 	$user_id_ = pb_current_user_id();
@@ -35,18 +35,18 @@ function _pb_mypage_ajax_update_myinfo(){
 	}
 
 	if(!strlen($user_name_)){
-		pb_ajax_error(__("입력오류"), __("이름을 입력하세요."));
+		pb_ajax_error(__("입력오류", PB_THEME_DOMAIN), __("이름을 입력하세요.", PB_THEME_DOMAIN));
 	}
 
 	if(!strlen($user_email_) || !filter_var($user_email_, FILTER_VALIDATE_EMAIL)){
-		pb_ajax_error(__("입력오류"), __("올바른 이메일을 입력하세요."));
+		pb_ajax_error(__("입력오류", PB_THEME_DOMAIN), __("올바른 이메일을 입력하세요.", PB_THEME_DOMAIN));
 	}
 
 	// 이메일 중복 체크(본인 제외). 코어 users 테이블은 user_email에 unique 제약이 없어
 	// theme 레벨에서 방어적으로 체크한다(pb_user_add의 pb_user_before_add 필터와 동일 취지).
 	$exists_ = pb_user_by_user_email($user_email_);
 	if(isset($exists_) && (int)$exists_['id'] !== (int)$user_id_){
-		pb_ajax_error(__("저장실패"), __("이미 사용중인 이메일입니다."));
+		pb_ajax_error(__("저장실패", PB_THEME_DOMAIN), __("이미 사용중인 이메일입니다.", PB_THEME_DOMAIN));
 	}
 
 	$update_data_ = array(
@@ -56,10 +56,10 @@ function _pb_mypage_ajax_update_myinfo(){
 
 	if(strlen($new_password_)){
 		if($new_password_ !== $new_password_confirm_){
-			pb_ajax_error(__("입력오류"), __("새 비밀번호가 일치하지 않습니다."));
+			pb_ajax_error(__("입력오류", PB_THEME_DOMAIN), __("새 비밀번호가 일치하지 않습니다.", PB_THEME_DOMAIN));
 		}
 		if(strlen($new_password_) < 6){
-			pb_ajax_error(__("입력오류"), __("비밀번호는 6자 이상이어야 합니다."));
+			pb_ajax_error(__("입력오류", PB_THEME_DOMAIN), __("비밀번호는 6자 이상이어야 합니다.", PB_THEME_DOMAIN));
 		}
 		$update_data_['user_pass'] = pb_crypt_hash($new_password_);
 	}
@@ -74,7 +74,7 @@ function _pb_mypage_ajax_update_myinfo(){
 	pb_user_meta_update($user_id_, 'profile_bio', $profile_bio_, true);
 
 	pb_ajax_success(array(
-		'message' => __("회원정보가 저장되었습니다."),
+		'message' => __("회원정보가 저장되었습니다.", PB_THEME_DOMAIN),
 		'user_name' => $user_name_,
 		'user_email' => $user_email_,
 		'profile_bio' => $profile_bio_,

@@ -10,7 +10,7 @@ if(!defined('PB_DOCUMENT_PATH')){
  * 조회 로직을 추가하고 뷰(pages/mypage/bookmarks.php)에 데이터를 전달하면 된다.
  */
 pb_mypage_add_menu('bookmarks', array(
-	'title' => '찜 목록',
+	'title' => __('찜 목록', PB_THEME_DOMAIN),
 	'page' => PB_THEME_PATH.'pages/mypage/bookmarks.php',
 ), 106);
 

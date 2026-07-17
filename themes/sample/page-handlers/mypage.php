@@ -93,7 +93,7 @@ function _pb_rewrite_handler_mypage($rewrite_path_, $rewrite_data_ = null){
 	$menulist_ = pb_mypage_menu_data();
 
 	if(!isset($menulist_[$menu_key_])){
-		return new PBError(404, __("잘못된 접근"), __("존재하지 않는 마이페이지입니다."));
+		return new PBError(404, __("잘못된 접근"), __("존재하지 않는 마이페이지입니다.", PB_THEME_DOMAIN));
 	}
 
 	global $pb_mypage_current_menu_key, $pb_mypage_current_menu;
@@ -110,7 +110,7 @@ function _pb_rewrite_handler_mypage($rewrite_path_, $rewrite_data_ = null){
 		return $menu_data_['page'];
 	}
 
-	return new PBError(404, __("잘못된 접근"), __("존재하지 않는 마이페이지입니다."));
+	return new PBError(404, __("잘못된 접근"), __("존재하지 않는 마이페이지입니다.", PB_THEME_DOMAIN));
 }
 
 pb_rewrite_register('mypage', array(

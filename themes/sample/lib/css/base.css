@@ -269,6 +269,9 @@ hr {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+		/* 데스크탑에서는 .drawer의 overflow-y:auto가 남아 헤더 언어전환 등
+		   하위 드롭다운을 잘라내므로 visible로 초기화한다(모바일 드로어는 영향 없음). */
+		overflow: visible;
 	}
 	.pb-header__nav .drawer__header { display: none; }
 }

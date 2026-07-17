@@ -22,9 +22,9 @@ if(!empty($pb_blog_view_fallback)){
 	?>
 	<div class="container sample-blog-page">
 		<div class="alert alert-info">
-			요청하신 글(<strong><?=htmlspecialchars((string)$pb_blog_key)?></strong>) 상세 화면은 아직 준비 중입니다.
+			<?=sprintf(__('요청하신 글(%s) 상세 화면은 아직 준비 중입니다.', PB_THEME_DOMAIN), '<strong>'.htmlspecialchars((string)$pb_blog_key).'</strong>')?>
 		</div>
-		<a class="btn btn-primary" href="<?=pb_blog_url()?>">블로그 목록으로 돌아가기</a>
+		<a class="btn btn-primary" href="<?=pb_blog_url()?>"><?=__('블로그 목록으로 돌아가기', PB_THEME_DOMAIN)?></a>
 	</div>
 	<?php
 	pb_theme_footer();
@@ -65,7 +65,7 @@ $results_ = pb_post_list($conditions_);
 
 $post_types_ = pb_post_types();
 $no_results_text_ = (string)@$post_types_['blog']['label']['no_results'];
-$no_results_text_ = strlen($no_results_text_) ? $no_results_text_ : "검색된 글이 없습니다.";
+$no_results_text_ = strlen($no_results_text_) ? $no_results_text_ : __("검색된 글이 없습니다.", PB_THEME_DOMAIN);
 
 /* ---------- querystring 유지 헬퍼(카테고리/검색어 보존) ---------- */
 function _sample_blog_extra_query($keyword_){
@@ -76,34 +76,34 @@ function _sample_blog_extra_query($keyword_){
 <div class="container sample-blog-page">
 
 	<ul class="breadcrumb">
-		<li><a href="<?=pb_home_url()?>">홈</a></li>
+		<li><a href="<?=pb_home_url()?>"><?=__('홈', PB_THEME_DOMAIN)?></a></li>
 		<?php if(isset($current_category_data_)){ ?>
-			<li><a href="<?=pb_blog_url()?>">블로그</a></li>
+			<li><a href="<?=pb_blog_url()?>"><?=__('블로그', PB_THEME_DOMAIN)?></a></li>
 			<li><?=htmlspecialchars((string)$current_category_data_['title'])?></li>
 		<?php }else{ ?>
-			<li>블로그</li>
+			<li><?=__('블로그', PB_THEME_DOMAIN)?></li>
 		<?php } ?>
 	</ul>
 
 	<div class="sample-blog-page__header">
-		<h1>블로그</h1>
-		<p class="text-muted">pbpress <code>blog</code> post_type 쇼케이스 — 목록·카테고리·검색·무한스크롤</p>
+		<h1><?=__('블로그', PB_THEME_DOMAIN)?></h1>
+		<p class="text-muted"><?=sprintf(__('pbpress %s post_type 쇼케이스 — 목록·카테고리·검색·무한스크롤', PB_THEME_DOMAIN), '<code>blog</code>')?></p>
 	</div>
 
 	<form class="sample-blog-search field" method="get" action="<?=pb_blog_url()?>">
-		<label class="label" for="sample-blog-keyword">검색</label>
+		<label class="label" for="sample-blog-keyword"><?=__('검색', PB_THEME_DOMAIN)?></label>
 		<div class="flex gap-2 flex-wrap">
-			<input class="input" type="text" id="sample-blog-keyword" name="keyword" placeholder="제목/작성자로 검색" value="<?=htmlspecialchars($current_keyword_)?>">
-			<button type="submit" class="btn btn-primary">검색</button>
+			<input class="input" type="text" id="sample-blog-keyword" name="keyword" placeholder="<?=__('제목/작성자로 검색', PB_THEME_DOMAIN)?>" value="<?=htmlspecialchars($current_keyword_)?>">
+			<button type="submit" class="btn btn-primary"><?=__('검색', PB_THEME_DOMAIN)?></button>
 			<?php if(strlen($current_keyword_)){ ?>
-				<a class="btn btn-ghost" href="<?=pb_blog_url()?>">초기화</a>
+				<a class="btn btn-ghost" href="<?=pb_blog_url()?>"><?=__('초기화', PB_THEME_DOMAIN)?></a>
 			<?php } ?>
 		</div>
 	</form>
 
 	<?php if(count($blog_categories_)){ ?>
-	<div class="sample-blog-chips" role="group" aria-label="카테고리 필터">
-		<a class="chip <?=!isset($current_category_data_) ? 'is-active' : ''?>" href="<?=pb_blog_url(_sample_blog_extra_query($current_keyword_))?>">전체</a>
+	<div class="sample-blog-chips" role="group" aria-label="<?=__('카테고리 필터', PB_THEME_DOMAIN)?>">
+		<a class="chip <?=!isset($current_category_data_) ? 'is-active' : ''?>" href="<?=pb_blog_url(_sample_blog_extra_query($current_keyword_))?>"><?=__('전체', PB_THEME_DOMAIN)?></a>
 		<?php foreach($blog_categories_ as $cat_){ ?>
 			<a class="chip <?=(isset($current_category_data_) && (string)$current_category_data_['id'] === (string)$cat_['id']) ? 'is-active' : ''?>" href="<?=pb_blog_category_url($cat_['slug'], _sample_blog_extra_query($current_keyword_))?>"><?=htmlspecialchars((string)$cat_['title'])?></a>
 		<?php } ?>
@@ -153,7 +153,7 @@ function _sample_blog_extra_query($keyword_){
 		$total_pages_ = max(1, (int)ceil($total_count_ / $page_limit_));
 		if($total_pages_ > 1){
 		?>
-		<nav class="sample-blog-pagination" id="sample-blog-pagination-fallback" aria-label="페이지네이션(점진적 향상 — JS 미지원 환경 폴백)">
+		<nav class="sample-blog-pagination" id="sample-blog-pagination-fallback" aria-label="<?=__('페이지네이션(점진적 향상 — JS 미지원 환경 폴백)', PB_THEME_DOMAIN)?>">
 			<ul class="pagination">
 				<li class="<?=($current_page_ <= 1) ? 'disabled' : ''?>">
 					<?php
@@ -161,7 +161,7 @@ function _sample_blog_extra_query($keyword_){
 					if($current_page_ - 1 > 1) $prev_query_['page'] = $current_page_ - 1;
 					$prev_url_ = isset($current_category_data_) ? pb_blog_category_url($current_category_data_['slug'], $prev_query_) : pb_blog_url($prev_query_);
 					?>
-					<a href="<?=$prev_url_?>" aria-label="이전 페이지">이전</a>
+					<a href="<?=$prev_url_?>" aria-label="<?=__('이전 페이지', PB_THEME_DOMAIN)?>"><?=__('이전', PB_THEME_DOMAIN)?></a>
 				</li>
 				<?php for($p_ = 1; $p_ <= $total_pages_; ++$p_){ ?>
 					<li class="<?=($p_ === $current_page_) ? 'active' : ''?>">
@@ -179,7 +179,7 @@ function _sample_blog_extra_query($keyword_){
 					$next_query_['page'] = $current_page_ + 1;
 					$next_url_ = isset($current_category_data_) ? pb_blog_category_url($current_category_data_['slug'], $next_query_) : pb_blog_url($next_query_);
 					?>
-					<a href="<?=$next_url_?>" aria-label="다음 페이지">다음</a>
+					<a href="<?=$next_url_?>" aria-label="<?=__('다음 페이지', PB_THEME_DOMAIN)?>"><?=__('다음', PB_THEME_DOMAIN)?></a>
 				</li>
 			</ul>
 		</nav>

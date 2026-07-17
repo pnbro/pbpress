@@ -62,7 +62,7 @@ function _sample_theme_showcase_infinite_demo(){
 pb_add_ajax('sample-theme-showcase-error-demo', "_sample_theme_showcase_error_demo");
 
 function _sample_theme_showcase_error_demo(){
-	pb_ajax_error(__("의도된 에러 데모"), __("AJAX 에러 처리 흐름을 시연하기 위해 서버가 의도적으로 실패 응답을 반환했습니다."));
+	pb_ajax_error(__("의도된 에러 데모", PB_THEME_DOMAIN), __("AJAX 에러 처리 흐름을 시연하기 위해 서버가 의도적으로 실패 응답을 반환했습니다.", PB_THEME_DOMAIN));
 }
 
 ?>

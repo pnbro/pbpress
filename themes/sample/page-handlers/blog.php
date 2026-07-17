@@ -32,7 +32,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 function _pb_blog_register_rewrite(){
 	pb_rewrite_register('blog', array(
-		'title' => "블로그",
+		'title' => __("블로그", PB_THEME_DOMAIN),
 		'public' => true,
 		'rewrite_handler' => '_pb_rewrite_handler_blog',
 	));

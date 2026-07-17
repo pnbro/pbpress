@@ -14,3 +14,9 @@ lib/dev/concat-lib/dist/**/**.*
 dev!lib/dev/sass
 mcp-server
 .antigravity
+# AI 도구/OS 잡파일
+.DS_Store
+.claude/
+.agent/
+.mcp.json
+*.plugin

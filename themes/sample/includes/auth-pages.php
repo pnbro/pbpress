@@ -65,7 +65,7 @@ function _sample_theme_auth_rewrite_handler_login($rewrite_path_, $rewrite_data_
 }
 
 pb_rewrite_register('signup', array(
-	'title' => __('회원가입'),
+	'title' => __('회원가입', PB_THEME_DOMAIN),
 	'public' => true,
 	'rewrite_handler' => '_sample_theme_auth_rewrite_handler_signup',
 ));
@@ -158,7 +158,7 @@ function _sample_theme_auth_ajax_do_login(){
 	$plain_password_ = pb_crypt_decrypt((string)@$login_data_['user_pass']);
 
 	if(!strlen($user_email_) || $plain_password_ === false || !strlen($plain_password_)){
-		pb_ajax_error(__('로그인실패'), __('이메일과 비밀번호를 확인하세요.'));
+		pb_ajax_error(__('로그인실패'), __('이메일과 비밀번호를 확인하세요.', PB_THEME_DOMAIN));
 	}
 
 	$result_ = pb_user_login_by_both($user_email_, $plain_password_);
@@ -179,7 +179,7 @@ function _sample_theme_auth_ajax_check_email_exists(){
 	$user_email_ = strtolower(trim(_POST('user_email')));
 
 	if(!strlen($user_email_)){
-		pb_ajax_error(__('에러발생'), __('이메일을 입력하세요.'));
+		pb_ajax_error(__('에러발생'), __('이메일을 입력하세요.', PB_THEME_DOMAIN));
 	}
 
 	$user_data_ = pb_user_by_user_email($user_email_);
@@ -206,18 +206,18 @@ function _sample_theme_auth_ajax_do_signup(){
 	$plain_password_ = pb_crypt_decrypt((string)@$signup_data_['user_pass']);
 
 	if(!strlen($user_email_) || !strlen($user_name_) || $plain_password_ === false || strlen($plain_password_) < 4){
-		pb_ajax_error(__('가입실패'), __('입력값을 확인하세요.'));
+		pb_ajax_error(__('가입실패', PB_THEME_DOMAIN), __('입력값을 확인하세요.', PB_THEME_DOMAIN));
 	}
 
 	// 코어 pb_user_add()가 중복체크 필터 결과를 실제로 반영하지 않으므로(위 주석 참조) 직접 선체크한다.
 	$exists_email_ = pb_user_by_user_email($user_email_);
 	if(isset($exists_email_)){
-		pb_ajax_error(__('가입실패'), __('이미 가입된 이메일입니다.'));
+		pb_ajax_error(__('가입실패', PB_THEME_DOMAIN), __('이미 가입된 이메일입니다.', PB_THEME_DOMAIN));
 	}
 
 	$exists_login_ = pb_user_by_user_login($user_email_);
 	if(isset($exists_login_)){
-		pb_ajax_error(__('가입실패'), __('이미 가입된 이메일입니다.'));
+		pb_ajax_error(__('가입실패', PB_THEME_DOMAIN), __('이미 가입된 이메일입니다.', PB_THEME_DOMAIN));
 	}
 
 	$inserted_id_ = pb_user_register(array(
@@ -247,13 +247,13 @@ function _sample_theme_auth_ajax_request_resetpass(){
 	$user_email_ = strtolower(trim(_POST('user_email')));
 
 	if(!strlen($user_email_)){
-		pb_ajax_error(__('에러발생'), __('이메일을 입력하세요.'));
+		pb_ajax_error(__('에러발생'), __('이메일을 입력하세요.', PB_THEME_DOMAIN));
 	}
 
 	$user_data_ = pb_user_by_user_email($user_email_);
 
 	if(!isset($user_data_)){
-		pb_ajax_error(__('발송실패'), __('해당 이메일로 가입이력이 존재하지 않습니다.'));
+		pb_ajax_error(__('발송실패', PB_THEME_DOMAIN), __('해당 이메일로 가입이력이 존재하지 않습니다.'));
 	}
 
 	$validation_key_ = pb_user_gen_findpass_validation_key($user_data_['id']);
@@ -263,7 +263,7 @@ function _sample_theme_auth_ajax_request_resetpass(){
 		'vkey' => $validation_key_,
 	));
 
-	$mail_title_ = sprintf(__("[%s] 비밀번호 재설정 안내"), pb_option_value('site_name'));
+	$mail_title_ = sprintf(__("[%s] 비밀번호 재설정 안내", PB_THEME_DOMAIN), pb_option_value('site_name'));
 	$mail_content_ = '<a href="'.$reset_url_.'">'.__('새로운 비밀번호 설정').'</a>';
 
 	pb_mail_template_send($user_email_, $mail_title_, array(
@@ -292,7 +292,7 @@ function _sample_theme_auth_ajax_do_resetpass(){
 	$user_data_ = pb_user_by_user_email($user_email_);
 
 	if(!isset($user_data_)){
-		pb_ajax_error(__('실패'), __('해당 이메일로 가입이력이 존재하지 않습니다.'));
+		pb_ajax_error(__('실패', PB_THEME_DOMAIN), __('해당 이메일로 가입이력이 존재하지 않습니다.'));
 	}
 
 	$check_ = pb_user_check_findpass_validation_key($user_data_['id'], $vkey_);
@@ -302,7 +302,7 @@ function _sample_theme_auth_ajax_do_resetpass(){
 	}
 
 	if($plain_password_ === false || strlen($plain_password_) < 4){
-		pb_ajax_error(__('실패'), __('비밀번호를 확인하세요.'));
+		pb_ajax_error(__('실패', PB_THEME_DOMAIN), __('비밀번호를 확인하세요.', PB_THEME_DOMAIN));
 	}
 
 	pb_user_change_password($user_data_['id'], $plain_password_);

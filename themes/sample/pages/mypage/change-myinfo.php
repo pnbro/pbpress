@@ -25,50 +25,50 @@ pb_theme_header();
 		</div>
 		<div class="col-12 col-md-9">
 			<div class="card">
-				<div class="card-header">회원정보 수정</div>
+				<div class="card-header"><?=__('회원정보 수정', PB_THEME_DOMAIN)?></div>
 				<div class="card-body">
 					<form id="mypage-change-myinfo-form" data-validate novalidate>
 						<div class="field">
-							<label class="label label-required" for="mypage-user-name">이름</label>
+							<label class="label label-required" for="mypage-user-name"><?=__('이름', PB_THEME_DOMAIN)?></label>
 							<input type="text" id="mypage-user-name" name="user_name" class="input" maxlength="50"
-								data-required data-required-message="이름을 입력하세요."
+								data-required data-required-message="<?=__('이름을 입력하세요.', PB_THEME_DOMAIN)?>"
 								value="<?=htmlspecialchars((string)@$pb_mypage_user_['user_name'])?>">
 						</div>
 						<div class="field">
-							<label class="label label-required" for="mypage-user-email">이메일</label>
+							<label class="label label-required" for="mypage-user-email"><?=__('이메일', PB_THEME_DOMAIN)?></label>
 							<input type="email" id="mypage-user-email" name="user_email" class="input" maxlength="50"
-								data-required data-required-message="이메일을 입력하세요."
-								data-email data-email-message="올바른 이메일 형식이 아닙니다."
+								data-required data-required-message="<?=__('이메일을 입력하세요.', PB_THEME_DOMAIN)?>"
+								data-email data-email-message="<?=__('올바른 이메일 형식이 아닙니다.', PB_THEME_DOMAIN)?>"
 								value="<?=htmlspecialchars((string)@$pb_mypage_user_['user_email'])?>">
 						</div>
 
 						<div class="field">
-							<label class="label" for="mypage-profile-bio">자기소개(한 줄)</label>
+							<label class="label" for="mypage-profile-bio"><?=__('자기소개(한 줄)', PB_THEME_DOMAIN)?></label>
 							<input type="text" id="mypage-profile-bio" name="profile_bio" class="input" maxlength="200"
-								data-max="200" data-max-message="자기소개는 200자 이내로 입력하세요."
+								data-max="200" data-max-message="<?=__('자기소개는 200자 이내로 입력하세요.', PB_THEME_DOMAIN)?>"
 								value="<?=htmlspecialchars((string)$pb_mypage_profile_bio_)?>">
-							<p class="field-hint">마이페이지 프로필에만 쓰이는 한 줄 소개입니다. (users_meta 확장 필드 데모)</p>
+							<p class="field-hint"><?=__('마이페이지 프로필에만 쓰이는 한 줄 소개입니다. (users_meta 확장 필드 데모)', PB_THEME_DOMAIN)?></p>
 						</div>
 
 						<hr>
 
-						<p class="text-muted text-sm mb-4">비밀번호를 변경하려는 경우에만 아래 두 항목을 입력하세요.</p>
+						<p class="text-muted text-sm mb-4"><?=__('비밀번호를 변경하려는 경우에만 아래 두 항목을 입력하세요.', PB_THEME_DOMAIN)?></p>
 
 						<div class="field">
-							<label class="label" for="mypage-new-password">새 비밀번호</label>
+							<label class="label" for="mypage-new-password"><?=__('새 비밀번호', PB_THEME_DOMAIN)?></label>
 							<input type="password" id="mypage-new-password" name="new_password" class="input"
 								autocomplete="new-password"
-								data-min="6" data-min-message="비밀번호는 6자 이상이어야 합니다.">
-							<p class="field-hint">변경하지 않으려면 비워두세요.</p>
+								data-min="6" data-min-message="<?=__('비밀번호는 6자 이상이어야 합니다.', PB_THEME_DOMAIN)?>">
+							<p class="field-hint"><?=__('변경하지 않으려면 비워두세요.', PB_THEME_DOMAIN)?></p>
 						</div>
 						<div class="field">
-							<label class="label" for="mypage-new-password-confirm">새 비밀번호 확인</label>
+							<label class="label" for="mypage-new-password-confirm"><?=__('새 비밀번호 확인', PB_THEME_DOMAIN)?></label>
 							<input type="password" id="mypage-new-password-confirm" name="new_password_confirm" class="input"
 								autocomplete="new-password"
-								data-match="#mypage-new-password" data-match-message="새 비밀번호가 일치하지 않습니다.">
+								data-match="#mypage-new-password" data-match-message="<?=__('새 비밀번호가 일치하지 않습니다.', PB_THEME_DOMAIN)?>">
 						</div>
 
-						<button type="submit" class="btn btn-primary" id="mypage-change-myinfo-submit">저장</button>
+						<button type="submit" class="btn btn-primary" id="mypage-change-myinfo-submit"><?=__('저장', PB_THEME_DOMAIN)?></button>
 					</form>
 				</div>
 			</div>

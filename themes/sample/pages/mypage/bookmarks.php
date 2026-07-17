@@ -19,12 +19,12 @@ pb_theme_header();
 		</div>
 		<div class="col-12 col-md-9">
 			<div class="card">
-				<div class="card-header">찜 목록</div>
+				<div class="card-header"><?=__('찜 목록', PB_THEME_DOMAIN)?></div>
 				<div class="card-body">
 					<?php if(count($pb_mypage_bookmarks_) <= 0): ?>
 					<div class="mypage-empty text-center">
-						<p class="text-muted">아직 찜한 글이 없습니다.</p>
-						<a class="btn btn-ghost btn-sm" href="<?=pb_home_url()?>">둘러보러 가기</a>
+						<p class="text-muted"><?=__('아직 찜한 글이 없습니다.', PB_THEME_DOMAIN)?></p>
+						<a class="btn btn-ghost btn-sm" href="<?=pb_home_url()?>"><?=__('둘러보러 가기', PB_THEME_DOMAIN)?></a>
 					</div>
 					<?php else: ?>
 					<div class="grid mypage-bookmark-grid">
