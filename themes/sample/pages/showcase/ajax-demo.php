@@ -166,11 +166,6 @@ pb_theme_header();
 	<h1><?=__("코어 API 라이브 카탈로그", PB_THEME_DOMAIN)?></h1>
 	<p class="text-muted"><?=__("pbpress 코어가 제공하는 API(선언형 DO·훅 확장·rewrite 라우터·AJAX+CSRF·페이지빌더 요소·권한 게이팅)를 실제 동작 결과와 실제 코드로 함께 보여줍니다. 프론트 UI킷은 마지막 부속 섹션으로 축소했습니다.", PB_THEME_DOMAIN)?></p>
 
-	<nav class="tabs showcase-subnav" aria-label="<?=__("쇼케이스 내비게이션")?>">
-		<a class="tab is-active" href="<?=pb_home_url("showcase")?>"><?=__("코어 API 카탈로그", PB_THEME_DOMAIN)?></a>
-		<a class="tab" href="<?=pb_home_url("showcase/gallery")?>"><?=__("UI 목업(갤러리)", PB_THEME_DOMAIN)?></a>
-	</nav>
-
 	<!-- ================= ① 선언형 DO + 쿼리빌더 ================= -->
 	<section class="showcase-section" id="core-do-query">
 		<div class="showcase-section__head">

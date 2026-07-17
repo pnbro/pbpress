@@ -139,6 +139,17 @@ a.sample-card:hover {
 	border-color: var(--c-bg);
 	color: var(--c-primary-hover);
 }
+/* 파란 배너 위 보조(ghost) 버튼: 흰 테두리·흰 글씨로 대비 확보 */
+.sample-cta-banner .btn-ghost {
+	background: transparent;
+	border-color: var(--c-text-inverse);
+	color: var(--c-text-inverse);
+}
+.sample-cta-banner .btn-ghost:hover {
+	background: var(--c-text-inverse);
+	border-color: var(--c-text-inverse);
+	color: var(--c-primary);
+}
 
 /* ---------- 페이지빌더 요소 데모: 이미지 슬라이더 (pbx-slider*) ----------
    includes/page-builder-element-test.php 의 render() 마크업에 대응한다.

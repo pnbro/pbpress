@@ -9,7 +9,7 @@ if(!defined('PB_DOCUMENT_PATH')){
  * Rewrite: /showcase (public)
  *   - /showcase, /showcase/ajax-demo : 코어 API 라이브 카탈로그(DO·훅·rewrite·
  *                                       AJAX+CSRF·페이지빌더·권한) + 축소된 UI 목업 부속
- *   - /showcase/gallery              : UI 목업(이미지 그리드 + 라이트박스 + 업로드 데모)
+ *   (devplan004 part006 후속: /showcase/gallery 이미지 갤러리 데모는 제거됨)
  * functions.php 통합 시 아래 1줄 추가 필요(본 파일은 신규이며 include만 되면 동작):
  *   include pb_current_theme_path()."page-handlers/showcase.php";
  * ============================================================ */
@@ -30,7 +30,6 @@ function _sample_theme_showcase_rewrite_handler($rewrite_path_, $rewrite_data_){
 
 	$view_map_ = array(
 		"ajax-demo" => "ajax-demo.php",
-		"gallery" => "gallery.php",
 	);
 
 	if(!isset($view_map_[$sub_view_])){
