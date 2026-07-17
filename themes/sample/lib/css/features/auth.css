@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Sample Theme — Auth pages (devplan002 part004)
+   로그인 / 회원가입 / 비밀번호 재설정 공용 레이아웃.
+   로드: login/signup/resetpass 페이지에서만 pb_head 훅으로 주입
+   (includes/auth-pages.php 참조. header.php/theme.css는 건드리지 않음)
+
+   신규 재사용 클래스: .auth-shell / .auth-shell__card / .auth-shell__title
+   / .auth-shell__form / .auth-shell__links
+   part001 .card/.field/.input/.btn-primary/.alert 와 조합해서만 사용한다.
+   모든 색상/간격/타이포/라운드/그림자는 tokens.css 변수만 참조(하드코딩 금지).
+
+   브레이크포인트 규약(README-tokens.md 동일): sm 640 / md 768 / lg 1024 / xl 1280
+   ========================================================================== */
+
+.auth-shell{
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	min-height: calc(100vh - 320px);
+	padding: var(--sp-9) var(--sp-4);
+}
+
+.auth-shell__card{
+	width: 100%;
+	max-width: 420px;
+}
+
+.auth-shell__title{
+	margin: 0 0 var(--sp-1);
+	font-size: var(--fs-xl);
+	font-weight: var(--fw-semibold);
+	color: var(--c-text);
+}
+
+.auth-shell__form .field{
+	margin-bottom: var(--sp-4);
+}
+
+.auth-shell__form .field:last-of-type{
+	margin-bottom: var(--sp-5);
+}
+
+.auth-shell__links{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: var(--sp-3);
+	font-size: var(--fs-sm);
+}
+
+.auth-shell__links a{
+	color: var(--c-text-muted);
+	text-decoration: none;
+	transition: color var(--transition-fast);
+}
+
+.auth-shell__links a:hover,
+.auth-shell__links a:focus-visible{
+	color: var(--c-primary);
+	text-decoration: underline;
+}
+
+/* sm 미만: 여백 축소 */
+@media (max-width: 639px){
+	.auth-shell{
+		padding: var(--sp-6) var(--sp-3);
+	}
+
+	.auth-shell__links{
+		justify-content: center;
+		text-align: center;
+	}
+}

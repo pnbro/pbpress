@@ -4,6 +4,16 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+/* ============================================================
+ * devplan002 part002 — 페이지빌더 요소 데모(마크업/스타일 토큰화)
+ * 등록 로직(pb_page_builder_add_element 호출부)은 그대로 유지하고,
+ * 프론트 렌더 마크업만 Bootstrap carousel 클래스에서 자체 토큰 기반
+ * 클래스(pbx-slider*)로 교체했다. Bootstrap JS(carousel)가 제거된
+ * 상태이므로 JS 제어 없이도 동작하는 가로 스크롤(scroll-snap) 갤러리로
+ * 점진적 향상 원칙(SSR 우선)에 맞춰 재구성한다.
+ * 스타일 정의: lib/css/features/home.css 참조.
+ * ============================================================ */
+
 class PBPageBuilderElement_image_slider extends PBPageBuilderElement{
 
 	function initialize(){
@@ -15,22 +25,13 @@ class PBPageBuilderElement_image_slider extends PBPageBuilderElement{
 		$id_ = isset($element_data_['id']) && strlen($element_data_['id']) ? $element_data_['id'] : "pb_image_slider_".pb_random_string(5);
 		$class_ = isset($element_data_['class']) ? $element_data_['class'] : null;
 		$unique_class_name_ = isset($element_data_['unique_class_name']) ? $element_data_['unique_class_name'] : null;
-
-		global $_is_first_slide;
-		$_is_first_slide = true;
 		?>
-<div class="image-slider-group <?=$class_?> <?=$unique_class_name_?>" id="<?=$id_?>">
-	<div class="carousel slide"  data-ride="carousel">
-
-		<div class="carousel-inner" role="listbox">
-			<?=$this->render_content($data_['elementcontent'])?>
-		</div>
+<div class="pbx-slider <?=$class_?> <?=$unique_class_name_?>" id="<?=$id_?>">
+	<div class="pbx-slider__track">
+		<?=$this->render_content($data_['elementcontent'])?>
 	</div>
 </div>
 		<?php
-
-		unset($_is_first_slide);
-		
 	}
 	function render_admin_form($element_data_ = array(), $content_ = null){}
 }
@@ -55,19 +56,16 @@ class PBPageBuilderElement_image_slider_item extends PBPageBuilderElement{
 		$title_ = isset($element_data_['title']) && strlen($element_data_['title']) ? $element_data_['title'] : null;
 		$bottom_text_ = isset($element_data_['bottom_text']) && strlen($element_data_['bottom_text']) ? $element_data_['bottom_text'] : null;
 
-		global $_is_first_slide;
-
 		?>
-<div class="carousel-item <?=$_is_first_slide ? "active" : ""?>">
-	<img src="<?=$slide_image_?>" class="d-block w-100">
-	<h5><?=$title_?></h5>
-	<p><?=$bottom_text_?></p>
+<div class="pbx-slider__slide">
+	<img src="<?=$slide_image_?>" class="pbx-slider__img" alt="<?=$title_?>">
+	<div class="pbx-slider__caption">
+		<h5 class="pbx-slider__title"><?=$title_?></h5>
+		<p class="pbx-slider__text text-muted"><?=$bottom_text_?></p>
+	</div>
 </div>
 
 		<?php
-
-		$_is_first_slide = false;
-		
 	}
 	function render_admin_form($element_data_ = array(), $content_ = null){
 		$slide_image_ = isset($element_data_['slide_image']) && strlen($element_data_['slide_image']) ? $element_data_['slide_image'] : null;

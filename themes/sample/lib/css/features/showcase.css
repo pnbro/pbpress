@@ -1,0 +1,302 @@
+/* ==========================================================================
+   Sample Theme — Showcase Feature (devplan002 part009 → devplan004 part004)
+   코어 API 라이브 카탈로그(ajax-demo.php) + UI 목업(gallery.php) 전용 스타일.
+   색상/간격/타이포/라운드/그림자는 반드시 tokens.css 변수만 참조한다.
+   이 파일은 header.php/footer.php에서 전역 로드되지 않으며,
+   pages/showcase/*.php 각 파일이 자체적으로 <link>로 로드한다.
+   ========================================================================== */
+
+/* ---------- 서브 내비게이션(쇼케이스 페이지 간 이동, .tabs/.tab 재사용, data-tab 미사용) ---------- */
+.showcase-subnav {
+	margin-bottom: var(--sp-7);
+}
+
+/* ---------- 섹션 공통 ---------- */
+.showcase-section {
+	margin-bottom: var(--sp-9);
+}
+.showcase-section__head {
+	margin-bottom: var(--sp-5);
+}
+.showcase-section__desc {
+	color: var(--c-text-muted);
+	font-size: var(--fs-sm);
+}
+
+/* ---------- AJAX 데모 ---------- */
+.showcase-ajax-result {
+	min-height: 48px;
+	display: flex;
+	align-items: center;
+	gap: var(--sp-2);
+	font-size: var(--fs-sm);
+	color: var(--c-text-muted);
+}
+.showcase-ajax-result[data-state="loading"] { color: var(--c-text-muted); }
+.showcase-ajax-result[data-state="success"] { color: var(--c-success); }
+.showcase-ajax-result[data-state="error"] { color: var(--c-danger); }
+
+.showcase-spinner {
+	width: 16px;
+	height: 16px;
+	border-radius: var(--radius-full);
+	border: 2px solid var(--c-border);
+	border-top-color: var(--c-primary);
+	animation: showcase-spin 700ms linear infinite;
+}
+@keyframes showcase-spin {
+	100% { transform: rotate(360deg); }
+}
+
+/* ---------- 인터랙션 카탈로그 / AJAX+CSRF 데모 카드 그리드 ---------- */
+.showcase-catalog-grid {
+	gap: var(--sp-5);
+}
+.showcase-toast-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--sp-2);
+}
+
+/* ---------- Before/After 콜아웃 (① DO+쿼리빌더) ---------- */
+.showcase-callout {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--sp-3);
+	margin-bottom: var(--sp-4);
+}
+.showcase-callout__item {
+	padding: var(--sp-4);
+	border-radius: var(--radius-md);
+	border: 1px solid var(--c-border);
+	background: var(--c-surface);
+	font-size: var(--fs-sm);
+	color: var(--c-text-muted);
+}
+.showcase-callout__item p {
+	margin: 0;
+}
+.showcase-callout__item--after {
+	border-color: var(--c-primary);
+	background: var(--c-primary-soft);
+	color: var(--c-text);
+}
+.showcase-callout__tag {
+	display: inline-block;
+	margin-bottom: var(--sp-2);
+	padding: 2px var(--sp-2);
+	border-radius: var(--radius-sm);
+	font-size: var(--fs-xs);
+	font-weight: var(--fw-semibold);
+	background: var(--c-bg);
+	color: var(--c-text-muted);
+}
+.showcase-callout__item--after .showcase-callout__tag {
+	background: var(--c-primary);
+	color: var(--c-text-inverse);
+}
+@media (min-width: 768px) {
+	.showcase-callout {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+/* ---------- view-source 코드 패널 (① ~ ⑥ 공통) ---------- */
+.showcase-source-panel {
+	margin-top: var(--sp-4);
+}
+.showcase-source-panel__label {
+	font-size: var(--fs-xs);
+	color: var(--c-text-muted);
+	margin-bottom: var(--sp-2);
+	font-family: monospace;
+}
+.showcase-source {
+	margin: 0;
+	padding: var(--sp-4);
+	border-radius: var(--radius-md);
+	border: 1px solid var(--c-border);
+	background: var(--c-text);
+	color: var(--c-text-inverse);
+	font-size: var(--fs-xs);
+	line-height: var(--lh-normal);
+	overflow-x: auto;
+}
+.showcase-source code {
+	font-family: monospace;
+	white-space: pre;
+}
+
+/* ---------- 방명록 검색 라이브 데모 (① DO+쿼리빌더) ---------- */
+.showcase-guestbook-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--sp-3);
+	min-height: 48px;
+}
+.showcase-guestbook-item {
+	padding: var(--sp-3);
+	border: 1px solid var(--c-border);
+	border-radius: var(--radius-sm);
+	background: var(--c-bg);
+}
+.showcase-guestbook-item__head {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	gap: var(--sp-2);
+	margin-bottom: var(--sp-1);
+}
+
+/* ---------- 상태 뱃지 (⑥ 권한 게이팅) ---------- */
+.showcase-badge {
+	display: inline-block;
+	padding: var(--sp-1) var(--sp-3);
+	border-radius: var(--radius-full);
+	font-size: var(--fs-sm);
+	font-weight: var(--fw-medium);
+}
+.showcase-badge--admin {
+	background: var(--c-success-soft);
+	color: var(--c-success);
+}
+.showcase-badge--member {
+	background: var(--c-info-soft);
+	color: var(--c-info);
+}
+.showcase-badge--muted {
+	background: var(--c-bg);
+	color: var(--c-text-muted);
+	border: 1px solid var(--c-border);
+}
+.showcase-admin-only {
+	margin-top: var(--sp-4);
+}
+
+/* ---------- 이미지 갤러리 ---------- */
+.showcase-gallery-grid {
+	gap: var(--sp-4);
+}
+.showcase-gallery__item {
+	display: block;
+	width: 100%;
+	padding: 0;
+	border: 1px solid var(--c-border);
+	border-radius: var(--radius-md);
+	overflow: hidden;
+	background: var(--c-surface);
+	cursor: pointer;
+	box-shadow: var(--shadow-sm);
+	transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.showcase-gallery__item:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-md);
+}
+.showcase-gallery__thumb {
+	aspect-ratio: 4 / 3;
+	width: 100%;
+	display: block;
+}
+.showcase-gallery__caption {
+	padding: var(--sp-3) var(--sp-4);
+	font-size: var(--fs-sm);
+	color: var(--c-text-muted);
+	text-align: left;
+	border-top: 1px solid var(--c-border);
+}
+
+/* ---------- 라이트박스(모달 확장) ---------- */
+.showcase-lightbox .modal-dialog {
+	background: var(--c-text);
+}
+.showcase-lightbox .modal-header {
+	border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+.showcase-lightbox .modal-title,
+.showcase-lightbox .modal-close {
+	color: var(--c-text-inverse);
+}
+.showcase-lightbox__stage {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 320px;
+}
+.showcase-lightbox__image {
+	max-height: 60vh;
+	width: 100%;
+}
+.showcase-lightbox__nav {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	background: rgba(255, 255, 255, 0.12);
+	color: var(--c-text-inverse);
+	border: none;
+	border-radius: var(--radius-full);
+	width: 40px;
+	height: 40px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	font-size: var(--fs-lg);
+}
+.showcase-lightbox__nav:hover {
+	background: rgba(255, 255, 255, 0.24);
+}
+.showcase-lightbox__nav--prev { left: var(--sp-2); }
+.showcase-lightbox__nav--next { right: var(--sp-2); }
+.showcase-lightbox__caption {
+	color: var(--c-text-inverse);
+	opacity: 0.75;
+	font-size: var(--fs-sm);
+	text-align: center;
+	margin-top: var(--sp-3);
+}
+
+/* ---------- 업로드 데모 ---------- */
+.showcase-upload__dropzone {
+	border: 1px dashed var(--c-border-strong);
+	border-radius: var(--radius-md);
+	padding: var(--sp-6);
+	text-align: center;
+	color: var(--c-text-muted);
+	background: var(--c-bg);
+}
+.showcase-upload__preview {
+	display: flex;
+	align-items: center;
+	gap: var(--sp-4);
+	margin-top: var(--sp-4);
+}
+.showcase-upload__preview-img {
+	width: 96px;
+	height: 96px;
+	object-fit: cover;
+	border-radius: var(--radius-md);
+	border: 1px solid var(--c-border);
+	background: var(--c-surface);
+}
+.showcase-upload__progress {
+	height: 6px;
+	border-radius: var(--radius-full);
+	background: var(--c-border);
+	overflow: hidden;
+	margin-top: var(--sp-3);
+}
+.showcase-upload__progress-bar {
+	height: 100%;
+	width: 0%;
+	background: var(--c-primary);
+	transition: width var(--transition-base);
+}
+
+@media (max-width: 767px) {
+	.showcase-lightbox__nav {
+		width: 32px;
+		height: 32px;
+	}
+}

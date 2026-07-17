@@ -1,0 +1,58 @@
+/* ==========================================================================
+   Sample Theme — Mypage (devplan002 part005)
+   좌측 aside 메뉴 + 우측 콘텐츠 셸. 색상/간격/타이포는 반드시 tokens.css
+   CSS 변수만 참조(하드코딩 금지). /mypage 라우트에서만 로드된다
+   (page-handlers/mypage.php의 pb_head 훅 참고).
+   ========================================================================== */
+
+.mypage-shell {
+	padding-top: var(--sp-2);
+}
+
+.mypage-aside {
+	position: sticky;
+	top: calc(var(--sp-10) + var(--sp-4));
+}
+
+.mypage-menu {
+	display: flex;
+	flex-direction: column;
+	gap: var(--sp-1);
+}
+.mypage-menu__item { list-style: none; }
+.mypage-menu__link {
+	display: block;
+	padding: var(--sp-2) var(--sp-3);
+	border-radius: var(--radius-sm);
+	color: var(--c-text);
+	font-weight: var(--fw-medium);
+}
+.mypage-menu__link:hover { background: var(--c-bg); text-decoration: none; }
+.mypage-menu__link.is-active { background: var(--c-primary-soft); color: var(--c-primary); }
+
+.mypage-activity-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--sp-3);
+}
+.mypage-activity-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--sp-3);
+	padding-bottom: var(--sp-3);
+	border-bottom: 1px solid var(--c-border);
+}
+.mypage-activity-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+.mypage-empty { padding: var(--sp-8) var(--sp-4); }
+
+.mypage-bookmark-card { height: 100%; }
+
+/* 모바일(md 768px 미만): aside가 콘텐츠 위로 접혀 쌓인다(그리드 col-12) */
+@media (max-width: 767px) {
+	.mypage-aside {
+		position: static;
+		margin-bottom: var(--sp-6);
+	}
+}

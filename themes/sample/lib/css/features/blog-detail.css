@@ -1,0 +1,127 @@
+/* ==========================================================================
+   devplan002 part007 — 블로그 상세 / 댓글 전용 레이아웃
+   .prose(features/prose.css) 및 part001 공통 컴포넌트(.card/.badge/.avatar/
+   .user-card/.breadcrumb 등)로 해결 안 되는 이 페이지만의 배치만 정의한다.
+   ========================================================================== */
+
+.blog-detail {
+	max-width: 860px;
+	padding-top: var(--sp-6);
+	padding-bottom: var(--sp-10);
+}
+
+.blog-detail__hero {
+	margin-bottom: var(--sp-6);
+}
+
+.blog-detail__title {
+	font-size: var(--fs-2xl);
+	font-weight: var(--fw-bold);
+	line-height: var(--lh-tight);
+	margin: 0 0 var(--sp-4);
+}
+
+.blog-detail__meta {
+	margin-bottom: var(--sp-4);
+}
+
+.blog-detail__thumb img {
+	width: 100%;
+	height: auto;
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-sm);
+}
+
+.blog-detail__body {
+	margin-bottom: var(--sp-8);
+}
+
+/* ---------- 이전/다음 글 ---------- */
+.blog-detail__siblings {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--sp-3);
+	margin: var(--sp-8) 0;
+}
+@media (min-width: 768px) {
+	.blog-detail__siblings {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+.blog-detail__sibling {
+	display: flex;
+	flex-direction: column;
+	gap: var(--sp-1);
+	padding: var(--sp-4);
+	border: 1px solid var(--c-border);
+	border-radius: var(--radius-md);
+	color: var(--c-text);
+	transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.blog-detail__sibling:hover {
+	border-color: var(--c-primary);
+	box-shadow: var(--shadow-sm);
+	text-decoration: none;
+}
+.blog-detail__sibling--next {
+	text-align: right;
+	align-items: flex-end;
+}
+.blog-detail__sibling-title {
+	font-weight: var(--fw-medium);
+}
+
+.blog-detail__back {
+	margin-bottom: var(--sp-4);
+}
+
+/* ---------- 댓글 ---------- */
+.blog-comments__title {
+	font-size: var(--fs-lg);
+	font-weight: var(--fw-semibold);
+	margin: 0;
+}
+
+.blog-comment-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--sp-4);
+}
+
+.blog-comment {
+	display: flex;
+	gap: var(--sp-3);
+	align-items: flex-start;
+}
+
+.blog-comment__body {
+	flex: 1;
+	min-width: 0;
+}
+
+.blog-comment__meta {
+	display: flex;
+	align-items: center;
+	gap: var(--sp-2);
+	margin-bottom: var(--sp-1);
+}
+
+.blog-comment__delete {
+	margin-left: auto;
+}
+
+.blog-comment__content {
+	margin: 0;
+	color: var(--c-text);
+	word-break: break-word;
+}
+
+.blog-comment-empty {
+	color: var(--c-text-muted);
+	font-size: var(--fs-sm);
+	list-style: none;
+}

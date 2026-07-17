@@ -1,0 +1,183 @@
+/* ==========================================================================
+   Sample Theme — Nav feature (devplan002 part003)
+   메뉴 walker(includes/menu-render.php)가 출력하는
+   .nav / .nav-item / .nav-link / .has-children / .nav-caret / .submenu 전용 스타일.
+   part001 레이아웃 셸(.pb-header, .pb-header__nav.drawer)과 조합해서 사용한다.
+   색상/간격/타이포/라운드/그림자는 반드시 tokens.css 변수만 참조(하드코딩 금지).
+   브레이크포인트: md 768px (base.css 규약과 동일)
+   ========================================================================== */
+
+/* ---------- 공용(모바일 우선) ---------- */
+.nav {
+	display: flex;
+	flex-direction: column;
+	gap: var(--sp-1);
+	margin: 0;
+	padding: var(--sp-2) 0;
+	width: 100%;
+}
+
+.nav-item {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.nav-item > .nav-link {
+	flex: 1 1 auto;
+}
+
+.nav-link {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--sp-1);
+	padding: var(--sp-2) var(--sp-3);
+	color: var(--c-text);
+	font-weight: var(--fw-medium);
+	border-radius: var(--radius-sm);
+}
+.nav-link:hover,
+.nav-link:focus {
+	color: var(--c-primary);
+	text-decoration: none;
+	background: var(--c-bg);
+}
+.nav-item.active > .nav-link,
+.nav-link[aria-current="page"] {
+	color: var(--c-primary);
+}
+
+/* 하위메뉴 토글(디스클로저) 버튼 — 앵커와 별도로 aria-expanded/aria-controls 관리 */
+.nav-caret {
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	border: none;
+	background: transparent;
+	color: var(--c-text-muted);
+	cursor: pointer;
+	border-radius: var(--radius-sm);
+}
+.nav-caret:hover,
+.nav-caret:focus-visible {
+	color: var(--c-primary);
+	background: var(--c-bg);
+}
+.nav-caret svg {
+	width: 11px;
+	height: 11px;
+	transition: transform var(--transition-fast);
+}
+.nav-item.has-children.is-open > .nav-caret svg {
+	transform: rotate(180deg);
+}
+
+/* 모바일: 드로어 안에서는 하위메뉴를 항상 펼쳐서 보여준다(별도 아코디언 불필요) */
+.submenu {
+	list-style: none;
+	margin: 0;
+	padding: 0 0 var(--sp-1) var(--sp-4);
+}
+.submenu .nav-link {
+	font-size: var(--fs-sm);
+	color: var(--c-text-muted);
+	padding: var(--sp-2) var(--sp-3);
+}
+.submenu .nav-link:hover,
+.submenu .nav-link:focus {
+	color: var(--c-primary);
+}
+
+/* 로그인/마이페이지 링크 슬롯 */
+.pb-header__auth {
+	display: flex;
+	align-items: center;
+	gap: var(--sp-2);
+}
+
+/* 모바일 드로어 안에서는 인증 슬롯을 nav 하단에 세로로 붙인다 */
+.pb-header__nav .pb-header__auth {
+	flex-direction: column;
+	align-items: stretch;
+	width: 100%;
+	margin-top: var(--sp-3);
+	padding: var(--sp-3) var(--sp-3) 0;
+	border-top: 1px solid var(--c-border);
+}
+
+/* ---------- 데스크탑(>=768px): 수평 메뉴 + 드롭다운 ---------- */
+@media (min-width: 768px) {
+	.nav {
+		flex-direction: row;
+		align-items: center;
+		gap: var(--sp-1);
+		padding: 0;
+		width: auto;
+	}
+
+	.nav-item {
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.nav-link {
+		padding: var(--sp-2) var(--sp-3);
+	}
+
+	.nav-item.has-children > .nav-link {
+		padding-right: calc(var(--sp-3) + 16px);
+	}
+
+	.nav-caret {
+		position: static;
+		width: 24px;
+		height: 24px;
+		margin-left: calc(-1 * var(--sp-2));
+	}
+
+	.submenu {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		margin-top: var(--sp-1);
+		min-width: 200px;
+		background: var(--c-surface);
+		border: 1px solid var(--c-border);
+		border-radius: var(--radius-md);
+		box-shadow: var(--shadow-md);
+		padding: var(--sp-2);
+		display: none;
+		z-index: var(--z-header);
+	}
+
+	.nav-item.has-children.is-open > .submenu {
+		display: block;
+	}
+
+	.submenu .nav-item {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.submenu .nav-link {
+		width: 100%;
+		color: var(--c-text);
+		padding: var(--sp-2) var(--sp-3);
+	}
+
+	.pb-header__nav .pb-header__auth {
+		flex-direction: row;
+		align-items: center;
+		width: auto;
+		margin-top: 0;
+		margin-left: var(--sp-4);
+		padding: 0;
+		border-top: none;
+	}
+}

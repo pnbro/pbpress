@@ -1,0 +1,149 @@
+/* ==========================================================================
+   devplan002 part006 — 블로그 목록 / 카테고리 / 검색
+   part001 토큰/컴포넌트(.card, .chip, .badge, .field, .pagination, .skeleton,
+   .grid/.col-*)만 조합해서 사용한다. 신규 클래스는 sample-blog-* 접두사로
+   한정하고, 색상/간격/타이포/라운드/그림자는 tokens.css 변수만 참조한다.
+   part007(블로그 상세)과 공유 가능하도록 카드/썸네일 관련 클래스는 범용으로 둔다.
+   ========================================================================== */
+
+.sample-blog-page {
+	padding-top: var(--sp-8);
+	padding-bottom: var(--sp-10);
+}
+
+.sample-blog-page__header {
+	margin-bottom: var(--sp-6);
+}
+.sample-blog-page__header p {
+	margin-bottom: 0;
+}
+
+/* ---------- 검색바 ---------- */
+.sample-blog-search {
+	max-width: 480px;
+}
+
+/* ---------- 카테고리 칩 필터 ---------- */
+.sample-blog-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--sp-2);
+	margin-bottom: var(--sp-6);
+}
+.sample-blog-chips .chip {
+	cursor: pointer;
+	text-decoration: none;
+	transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+.sample-blog-chips .chip:hover {
+	text-decoration: none;
+	border-color: var(--c-border-strong);
+}
+.sample-blog-chips .chip.is-active {
+	background: var(--c-primary);
+	border-color: var(--c-primary);
+	color: var(--c-text-inverse);
+}
+
+/* ---------- 카드 그리드 ---------- */
+.sample-blog-grid {
+	margin-bottom: var(--sp-6);
+}
+
+/* ---------- 블로그 카드(sample/post/001, part007 상세 링크 카드도 재사용 가능) ---------- */
+.sample-blog-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow: hidden;
+	color: inherit;
+}
+.sample-blog-card:hover {
+	box-shadow: var(--shadow-md);
+	text-decoration: none;
+}
+.sample-blog-card:hover .sample-blog-card__title {
+	color: var(--c-primary);
+}
+
+.sample-blog-card__thumb {
+	aspect-ratio: 16 / 9;
+	background-color: var(--c-bg);
+	background-image: var(--sample-blog-thumb-url, none);
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-bottom: 1px solid var(--c-border);
+}
+.sample-blog-card__thumb-empty {
+	font-size: var(--fs-sm);
+	color: var(--c-text-muted);
+}
+
+.sample-blog-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--sp-2);
+	flex: 1;
+}
+
+.sample-blog-card__badges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--sp-1);
+}
+
+.sample-blog-card__title {
+	margin: 0;
+	font-size: var(--fs-lg);
+	line-height: var(--lh-tight);
+	font-weight: var(--fw-semibold);
+	color: var(--c-text);
+	transition: color var(--transition-fast);
+}
+
+.sample-blog-card__excerpt {
+	margin: 0;
+	font-size: var(--fs-sm);
+	color: var(--c-text-muted);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.sample-blog-card__meta {
+	margin-top: auto;
+	font-size: var(--fs-xs);
+}
+
+/* ---------- 빈 상태 ---------- */
+.sample-blog-empty {
+	padding: var(--sp-10) var(--sp-4);
+	text-align: center;
+	border: 1px dashed var(--c-border);
+	border-radius: var(--radius-md);
+	background: var(--c-surface);
+}
+
+/* ---------- 무한스크롤 sentinel(관측용, 시각적으로는 표시하지 않음) ---------- */
+.sample-blog-sentinel {
+	height: 1px;
+}
+
+/* ---------- 스켈레톤 로딩 그리드 ---------- */
+#sample-blog-skeleton[hidden] {
+	display: none;
+}
+
+/* ---------- 페이지네이션 폴백 ---------- */
+.sample-blog-pagination {
+	display: flex;
+	justify-content: center;
+	margin-top: var(--sp-6);
+}
+.sample-blog-pagination[hidden] {
+	display: none;
+}

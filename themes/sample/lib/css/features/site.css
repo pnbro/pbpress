@@ -1,0 +1,47 @@
+/* ==========================================================================
+   devplan002 part008 — 사이트운영: 관리자 테마설정 & 다국어
+   header.php(로고/포인트컬러/언어전환)·footer.php(카피라이트/SNS) 전용 스타일.
+   색상/간격/타이포는 반드시 tokens.css 변수만 참조(하드코딩 금지).
+   ========================================================================== */
+
+/* ---------- 로고 이미지(옵션값 있을 때) ---------- */
+.pb-header__logo-img {
+	display: block;
+	height: 32px;
+	width: auto;
+}
+
+/* ---------- 언어 전환 드롭다운 (components.css .dropdown 재사용) ---------- */
+.pb-header__lang {
+	display: flex;
+	align-items: center;
+}
+.pb-header__lang .dropdown-item.is-active {
+	color: var(--c-primary);
+	font-weight: var(--fw-semibold);
+}
+
+/* ---------- 푸터 카피라이트 & SNS ---------- */
+.pb-footer__copyright {
+	color: var(--c-text-muted);
+	font-size: var(--fs-sm);
+	margin-bottom: var(--sp-2);
+}
+.pb-footer__sns {
+	margin-top: var(--sp-2);
+}
+.pb-footer__sns-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: var(--radius-full);
+	background: var(--c-surface);
+	color: var(--c-text-muted);
+	transition: var(--transition-fast);
+}
+.pb-footer__sns-link:hover {
+	background: var(--c-primary-soft);
+	color: var(--c-primary);
+}

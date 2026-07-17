@@ -1,0 +1,114 @@
+/* ==========================================================================
+   devplan002 part007 — .prose (재사용형 본문 타이포그래피)
+   pb_post_html()/pb_page_html() 등 코어가 반환하는 사용자 입력 HTML 본문을
+   감싸는 컨테이너에 붙인다. 다른 part(마이페이지 상세, 공지사항 등)에서도
+   본문 타이포가 필요하면 이 클래스를 그대로 재사용할 것.
+   색상/간격/타이포는 tokens.css 변수만 참조(하드코딩 금지).
+   ========================================================================== */
+
+.prose {
+	color: var(--c-text);
+	font-size: var(--fs-md);
+	line-height: var(--lh-loose);
+	word-break: break-word;
+}
+
+.prose > *:first-child { margin-top: 0; }
+.prose > *:last-child { margin-bottom: 0; }
+
+.prose p {
+	margin: 0 0 var(--sp-4);
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+	color: var(--c-text);
+	font-weight: var(--fw-semibold);
+	line-height: var(--lh-tight);
+	margin: var(--sp-8) 0 var(--sp-3);
+}
+
+.prose h1 { font-size: var(--fs-2xl); }
+.prose h2 { font-size: var(--fs-xl); }
+.prose h3 { font-size: var(--fs-lg); }
+.prose h4,
+.prose h5,
+.prose h6 { font-size: var(--fs-md); }
+
+.prose a {
+	color: var(--c-primary);
+	text-decoration: underline;
+}
+.prose a:hover { color: var(--c-primary-hover); }
+
+.prose strong { font-weight: var(--fw-semibold); }
+.prose em { font-style: italic; }
+
+.prose ul,
+.prose ol {
+	margin: 0 0 var(--sp-4);
+	padding-left: var(--sp-6);
+}
+.prose li { margin-bottom: var(--sp-1); }
+
+.prose blockquote {
+	margin: var(--sp-5) 0;
+	padding: var(--sp-3) var(--sp-5);
+	border-left: 3px solid var(--c-border-strong);
+	color: var(--c-text-muted);
+	background: var(--c-bg);
+	border-radius: var(--radius-sm);
+}
+
+.prose img {
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--radius-md);
+	margin: var(--sp-4) 0;
+}
+
+.prose hr {
+	border: none;
+	border-top: 1px solid var(--c-border);
+	margin: var(--sp-8) 0;
+}
+
+.prose table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: var(--sp-5) 0;
+	font-size: var(--fs-sm);
+}
+.prose th,
+.prose td {
+	border: 1px solid var(--c-border);
+	padding: var(--sp-2) var(--sp-3);
+	text-align: left;
+}
+.prose th {
+	background: var(--c-bg);
+	font-weight: var(--fw-semibold);
+}
+
+.prose code {
+	font-size: var(--fs-sm);
+	background: var(--c-bg);
+	border-radius: var(--radius-sm);
+	padding: 2px var(--sp-1);
+}
+.prose pre {
+	background: var(--c-bg);
+	border: 1px solid var(--c-border);
+	border-radius: var(--radius-md);
+	padding: var(--sp-4);
+	overflow-x: auto;
+	margin: 0 0 var(--sp-4);
+}
+.prose pre code {
+	background: none;
+	padding: 0;
+}

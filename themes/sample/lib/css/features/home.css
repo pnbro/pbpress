@@ -1,0 +1,184 @@
+/* ==========================================================================
+   Sample Theme — Home & Page-builder/Component Showcase (devplan002 part002)
+   신규 파일(다른 part와 공유하지 않는 전용 CSS). base.css/components.css의
+   .card/.btn-primary/.grid/.col-*/text-* 클래스와 tokens.css 변수만으로
+   해결되지 않는 이 파트 전용 스타일만 여기 정의한다.
+   색상/간격/타이포/라운드/그림자는 반드시 tokens.css 변수만 참조.
+   ========================================================================== */
+
+/* ---------- 스크롤 reveal (lib/js/features/home.js IntersectionObserver 연동) ---------- */
+[data-reveal] {
+	opacity: 0;
+	transform: translateY(16px);
+	transition: opacity var(--transition-base), transform var(--transition-base);
+}
+[data-reveal].is-revealed {
+	opacity: 1;
+	transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+	[data-reveal] {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}
+
+/* ---------- 카드 쇼케이스 (sample/card/001) ---------- */
+.sample-card {
+	display: block;
+	height: 100%;
+	color: var(--c-text);
+	transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+}
+a.sample-card:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-md);
+	border-color: var(--c-border-strong);
+	color: var(--c-text);
+	text-decoration: none;
+}
+.sample-card__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	margin-bottom: var(--sp-3);
+	border-radius: var(--radius-md);
+	background: var(--c-primary-soft);
+	color: var(--c-primary);
+}
+.sample-card__title {
+	font-size: var(--fs-lg);
+	margin-bottom: var(--sp-2);
+}
+.sample-card__desc {
+	margin-bottom: 0;
+}
+
+/* ---------- 기능 그리드 (sample/feature/001) ---------- */
+.sample-feature {
+	height: 100%;
+	text-align: center;
+}
+.sample-feature__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	margin-bottom: var(--sp-4);
+	border-radius: var(--radius-full);
+	background: var(--c-primary-soft);
+	color: var(--c-primary);
+}
+.sample-feature__title {
+	font-size: var(--fs-lg);
+	margin-bottom: var(--sp-2);
+}
+.sample-feature__desc {
+	margin-bottom: 0;
+}
+
+/* ---------- 통계 섹션 (sample/stat/001) ---------- */
+.sample-stats {
+	background: var(--c-surface);
+	border: 1px solid var(--c-border);
+	border-radius: var(--radius-lg);
+}
+.sample-stat {
+	text-align: center;
+}
+.sample-stat__value {
+	font-size: var(--fs-2xl);
+	font-weight: var(--fw-bold);
+	color: var(--c-primary);
+	line-height: var(--lh-tight);
+}
+.sample-stat__label {
+	margin-top: var(--sp-1);
+}
+
+/* ---------- 코어 API 카드 인라인 코드 스니펫 (devplan004 part003) ---------- */
+.sample-code-inline {
+	display: inline-block;
+	margin-top: var(--sp-2);
+	padding: var(--sp-1) var(--sp-2);
+	border-radius: var(--radius-sm);
+	background: var(--c-bg);
+	border: 1px solid var(--c-border);
+	color: var(--c-text);
+	font-family: monospace;
+	font-size: var(--fs-xs);
+	word-break: break-all;
+}
+
+/* ---------- CTA 배너 ---------- */
+.sample-cta-banner {
+	border-radius: var(--radius-lg);
+	background: var(--c-primary);
+	color: var(--c-text-inverse);
+}
+.sample-cta-banner__title {
+	color: var(--c-text-inverse);
+	margin-bottom: var(--sp-2);
+}
+.sample-cta-banner__desc {
+	color: var(--c-text-inverse);
+	opacity: .9;
+	margin-bottom: 0;
+}
+.sample-cta-banner .btn-primary {
+	background: var(--c-surface);
+	border-color: var(--c-surface);
+	color: var(--c-primary);
+}
+.sample-cta-banner .btn-primary:hover {
+	background: var(--c-bg);
+	border-color: var(--c-bg);
+	color: var(--c-primary-hover);
+}
+
+/* ---------- 페이지빌더 요소 데모: 이미지 슬라이더 (pbx-slider*) ----------
+   includes/page-builder-element-test.php 의 render() 마크업에 대응한다.
+   Bootstrap carousel JS 없이도 가로 스크롤(scroll-snap)로 동작(SSR 우선). */
+.pbx-slider {
+	margin-bottom: var(--sp-6);
+}
+.pbx-slider__track {
+	display: flex;
+	gap: var(--sp-4);
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	padding-bottom: var(--sp-2);
+	-webkit-overflow-scrolling: touch;
+}
+.pbx-slider__slide {
+	flex: 0 0 78%;
+	scroll-snap-align: start;
+}
+@media (min-width: 768px) {
+	.pbx-slider__slide {
+		flex: 0 0 32%;
+	}
+}
+.pbx-slider__img {
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	border-radius: var(--radius-md);
+	box-shadow: var(--shadow-sm);
+	background: var(--c-bg);
+}
+.pbx-slider__caption {
+	margin-top: var(--sp-2);
+}
+.pbx-slider__title {
+	font-size: var(--fs-md);
+	font-weight: var(--fw-semibold);
+	margin-bottom: var(--sp-1);
+}
+.pbx-slider__text {
+	margin-bottom: 0;
+}
