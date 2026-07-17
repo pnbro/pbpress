@@ -4,17 +4,45 @@ if(!defined('PB_DOCUMENT_PATH')){
 }
 
 /* ============================================================
- * devplan002 part007 — 블로그 댓글 저장소 + AJAX 핸들러
+ * devplan004 part005(축소범위) — 블로그 댓글 정식 DO 테이블화
  * ------------------------------------------------------------
- * 코어에 전용 댓글 테이블/API가 없어(guide MCP 확인 결과) 기존 게시물 메타
- * 인프라(pb_post_meta_*, posts_meta 테이블)를 재사용해 댓글을 저장한다.
- * posts_meta.meta_value 는 VARCHAR(500) 한도이므로
- *   "{user_id}|{content}" 형식으로 인코딩하고 content는 400자로 제한한다.
- * 신규 물리 테이블을 만들지 않으므로 별도 설치/마이그레이션이 필요 없다.
+ * before(devplan002 part007): 전용 댓글 테이블이 없어 posts_meta에
+ *   "{user_id}|{content}" 문자열을 인코딩해 저장했다. posts_meta.meta_value가
+ *   VARCHAR(500)이라 content를 400자로 제한해야 했고, 삭제 시에도
+ *   meta_name 문자열 매칭에만 의존했다.
+ * after(본 파일): includes/demo-backend.php의 sample_guestbook DO 선언
+ *   패턴을 그대로 재사용해 sample_board_comments 정식 테이블을 둔다.
+ *   post_id/user_id/content/reg_date가 진짜 컬럼으로 분리되므로 문자열
+ *   인코딩/디코딩 헬퍼(_sample_blog_comment_encode/decode)가 사라지고,
+ *   content 제한도 400자 → 1000자(VARCHAR(1000))로 완화된다.
+ *
+ * 테이블 생성 트리거: 아래 pbdb_data_object() 호출은 "선언"만 한다.
+ *   실제 CREATE TABLE은 관리자 화면의 "테이블 재설치"
+ *   (admin/_ajax_reinstall_tables.php → $pbdb->install_tables())를
+ *   실행하는 시점에 만들어진다(includes/demo-backend.php와 동일 규약).
+ *
+ * 회귀 방지: AJAX 액션명(user-blog-comment-list/add/delete)과
+ *   pages/blog/comments.php · lib/js/features/blog-detail.js가 기대하는
+ *   JS 계약(list: {html,count}, add: {html}, delete: 성공만)은 그대로
+ *   유지한다. sample_blog_comment_render_item()/render_empty()의
+ *   마크업도 변경하지 않는다.
  * ============================================================ */
 
-define('SAMPLE_BLOG_COMMENT_META_NAME', 'blog_comment');
-define('SAMPLE_BLOG_COMMENT_CONTENT_MAX', 400);
+define('SAMPLE_BLOG_COMMENT_CONTENT_MAX', 1000);
+
+global $sample_board_comments_do;
+$sample_board_comments_do = pbdb_data_object("sample_board_comments", array(
+	"id"       => array("type" => PBDB_DO::TYPE_INT,      "nn" => true, "pk" => true, "ai" => true, "comment" => "PK"),
+	"post_id"  => array("type" => PBDB_DO::TYPE_INT,      "nn" => true, "index" => true, "comment" => "대상 게시물 id"),
+	"user_id"  => array("type" => PBDB_DO::TYPE_INT,      "nn" => true, "comment" => "작성 회원 id"),
+	"content"  => array("type" => PBDB_DO::TYPE_VARCHAR,  "length" => 1000, "nn" => true, "comment" => "댓글 내용"),
+	"reg_date" => array("type" => PBDB_DO::TYPE_DATETIME, "comment" => "작성일시"),
+), "샘플테마 블로그 댓글");
+
+function sample_board_comments_do(){
+	global $sample_board_comments_do;
+	return $sample_board_comments_do;
+}
 
 function _sample_blog_comment_is_logged_in(){
 	// pb_current_user_id()는 미로그인 시 -1(sentinel)을 반환한다(null/false 아님) — 반드시 값 비교로 체크.
@@ -28,37 +56,23 @@ function _sample_blog_login_url(){
 	return pb_home_url('login');
 }
 
-function _sample_blog_comment_encode($user_id_, $content_){
-	return $user_id_.'|'.$content_;
-}
-
-function _sample_blog_comment_decode($meta_value_){
-	$parts_ = explode('|', (string)$meta_value_, 2);
-	return array(
-		'user_id' => isset($parts_[0]) ? $parts_[0] : null,
-		'content' => isset($parts_[1]) ? $parts_[1] : '',
-	);
-}
-
 function sample_blog_comment_list($post_id_){
-	$rows_ = pb_post_meta_list(array(
-		'post_id' => $post_id_,
-		'meta_name' => SAMPLE_BLOG_COMMENT_META_NAME,
-		'orderby' => 'posts_meta.id ASC',
-	));
+	$statement_ = sample_board_comments_do()->statement();
+	$statement_->add_field("DATE_FORMAT(sample_board_comments.reg_date, '%Y.%m.%d %H:%i') reg_date_ymdhi");
+	$statement_->add_compare_condition('post_id', $post_id_, '=', PBDB::TYPE_NUMBER);
+	$rows_ = $statement_->select('id ASC');
 
 	$comments_ = array();
 	foreach($rows_ as $row_){
-		$decoded_ = _sample_blog_comment_decode($row_['meta_value']);
-		$author_data_ = strlen($decoded_['user_id']) ? pb_user_simply_data($decoded_['user_id']) : null;
+		$author_data_ = strlen($row_['user_id']) ? pb_user_simply_data($row_['user_id']) : null;
 		$author_name_ = (isset($author_data_['user_name']) && strlen($author_data_['user_name']))
 			? $author_data_['user_name']
-			: '탈퇴회원';
+			: __('탈퇴회원', PB_THEME_DOMAIN);
 
 		$comments_[] = array(
 			'id' => $row_['id'],
-			'user_id' => $decoded_['user_id'],
-			'content' => $decoded_['content'],
+			'user_id' => $row_['user_id'],
+			'content' => $row_['content'],
 			'reg_date' => isset($row_['reg_date_ymdhi']) ? $row_['reg_date_ymdhi'] : '',
 			'author_name' => $author_name_,
 		);
@@ -156,8 +170,13 @@ function _sample_blog_ajax_comment_add(){
 	}
 
 	$user_id_ = pb_current_user_id();
-	$meta_value_ = _sample_blog_comment_encode($user_id_, $content_);
-	$inserted_id_ = pb_post_meta_update($post_id_, SAMPLE_BLOG_COMMENT_META_NAME, $meta_value_, false);
+
+	$inserted_id_ = sample_board_comments_do()->insert(array(
+		'post_id' => $post_id_,
+		'user_id' => $user_id_,
+		'content' => $content_,
+		'reg_date' => pb_current_time(),
+	));
 
 	$author_data_ = pb_user_simply_data($user_id_);
 	$comment_ = array(
@@ -165,7 +184,7 @@ function _sample_blog_ajax_comment_add(){
 		'user_id' => $user_id_,
 		'content' => $content_,
 		'reg_date' => date('Y.m.d H:i'),
-		'author_name' => (isset($author_data_['user_name']) && strlen($author_data_['user_name'])) ? $author_data_['user_name'] : '회원',
+		'author_name' => (isset($author_data_['user_name']) && strlen($author_data_['user_name'])) ? $author_data_['user_name'] : __('회원', PB_THEME_DOMAIN),
 	);
 
 	return pb_ajax_success(array(
@@ -187,20 +206,21 @@ function _sample_blog_ajax_comment_delete(){
 		return pb_ajax_error('잘못된 요청입니다.');
 	}
 
-	$row_ = pb_post_meta_data($comment_id_);
-	if(!isset($row_) || $row_['meta_name'] !== SAMPLE_BLOG_COMMENT_META_NAME){
+	$row_statement_ = sample_board_comments_do()->statement();
+	$row_statement_->add_compare_condition('id', $comment_id_, '=', PBDB::TYPE_NUMBER);
+	$row_ = $row_statement_->get_first_row();
+
+	if(!isset($row_)){
 		return pb_ajax_error('댓글을 찾을 수 없습니다.');
 	}
 
-	$decoded_ = _sample_blog_comment_decode($row_['meta_value']);
 	$current_user_id_ = pb_current_user_id();
 
-	if((string)$decoded_['user_id'] !== (string)$current_user_id_){
+	if((string)$row_['user_id'] !== (string)$current_user_id_){
 		return pb_ajax_error('본인 댓글만 삭제할 수 있습니다.');
 	}
 
-	global $pbdb;
-	$pbdb->delete('posts_meta', array('id' => $comment_id_));
+	sample_board_comments_do()->delete($comment_id_);
 
 	return pb_ajax_success();
 }

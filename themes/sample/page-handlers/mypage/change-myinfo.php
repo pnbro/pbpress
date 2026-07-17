@@ -25,6 +25,15 @@ function _pb_mypage_ajax_update_myinfo(){
 	$new_password_ = (string)@$_POST['new_password'];
 	$new_password_confirm_ = (string)@$_POST['new_password_confirm'];
 
+	/* devplan004 part005(축소범위) — 회원메타 프로필 필드 데모.
+	 * "스키마 변경 없이 회원 임의 필드 확장"을 보여주기 위해 코어
+	 * includes/user/user-meta.php의 users_meta(메타테이블)에 저장한다.
+	 * 200자 방어(폼 maxlength와 동일 한도, 이중 방어). */
+	$profile_bio_ = trim((string)@$_POST['profile_bio']);
+	if(mb_strlen($profile_bio_) > 200){
+		$profile_bio_ = mb_substr($profile_bio_, 0, 200);
+	}
+
 	if(!strlen($user_name_)){
 		pb_ajax_error(__("입력오류"), __("이름을 입력하세요."));
 	}
@@ -61,10 +70,14 @@ function _pb_mypage_ajax_update_myinfo(){
 		pb_ajax_error($result_);
 	}
 
+	// 기존 정보수정과 무관한 별도 메타 필드이므로 pb_user_update 성공 이후 독립 저장.
+	pb_user_meta_update($user_id_, 'profile_bio', $profile_bio_, true);
+
 	pb_ajax_success(array(
 		'message' => __("회원정보가 저장되었습니다."),
 		'user_name' => $user_name_,
 		'user_email' => $user_email_,
+		'profile_bio' => $profile_bio_,
 	));
 }
 

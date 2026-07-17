@@ -11,6 +11,11 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 $pb_mypage_user_ = pb_current_user();
 
+/* devplan004 part005(축소범위) — 회원메타 프로필 필드 데모.
+ * users_meta 테이블 스키마 변경 없이 pb_user_meta_value()로 임의 필드를
+ * 확장할 수 있음을 보여준다(코어: includes/user/user-meta.php). */
+$pb_mypage_profile_bio_ = pb_user_meta_value(pb_current_user_id(), 'profile_bio', '');
+
 pb_theme_header();
 ?>
 <div class="container mypage-shell">
@@ -35,6 +40,14 @@ pb_theme_header();
 								data-required data-required-message="이메일을 입력하세요."
 								data-email data-email-message="올바른 이메일 형식이 아닙니다."
 								value="<?=htmlspecialchars((string)@$pb_mypage_user_['user_email'])?>">
+						</div>
+
+						<div class="field">
+							<label class="label" for="mypage-profile-bio">자기소개(한 줄)</label>
+							<input type="text" id="mypage-profile-bio" name="profile_bio" class="input" maxlength="200"
+								data-max="200" data-max-message="자기소개는 200자 이내로 입력하세요."
+								value="<?=htmlspecialchars((string)$pb_mypage_profile_bio_)?>">
+							<p class="field-hint">마이페이지 프로필에만 쓰이는 한 줄 소개입니다. (users_meta 확장 필드 데모)</p>
 						</div>
 
 						<hr>

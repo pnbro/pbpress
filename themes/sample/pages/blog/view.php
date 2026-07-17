@@ -120,6 +120,45 @@ pb_theme_header();
 		<?=$post_html_?>
 	</div>
 
+	<?php
+	/* devplan004 part005(축소범위) — 리비전(수정이력) 노출
+	 * 코어 includes/post/post-revision.php의 pb_post_revision_list()를 그대로 사용.
+	 * 반환 필드는 pb_post_revision_statement()에서 확인: id, post_id, post_html,
+	 * reg_date, reg_date_ymdhis/ymdhi/ymd(가공), post_type(조인). 지금까지 프론트
+	 * 어디에서도 노출되지 않던 코어 자산이라 여기서 최초로 노출한다. */
+	$post_revisions_ = pb_post_revision_list(array(
+		'post_id' => $post_data_['id'],
+		'orderby' => 'posts_revision.id DESC',
+	));
+	?>
+	<section class="blog-detail__revisions card mt-8">
+		<div class="card-body">
+			<h2 class="blog-comments__title"><?=__('수정 이력', PB_THEME_DOMAIN)?></h2>
+			<?php if(count($post_revisions_) <= 0): ?>
+			<p class="text-muted mt-4"><?=__('수정 이력이 없습니다.', PB_THEME_DOMAIN)?></p>
+			<?php else: ?>
+			<div class="table-responsive mt-4">
+				<table class="table">
+					<thead>
+						<tr>
+							<th><?=__('리비전', PB_THEME_DOMAIN)?></th>
+							<th><?=__('수정일시', PB_THEME_DOMAIN)?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach($post_revisions_ as $revision_): ?>
+						<tr>
+							<td>#<?=(int)$revision_['id']?></td>
+							<td class="text-muted"><?=htmlspecialchars(isset($revision_['reg_date_ymdhi']) ? $revision_['reg_date_ymdhi'] : '')?></td>
+						</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+			<?php endif; ?>
+		</div>
+	</section>
+
 	<nav class="blog-detail__siblings" aria-label="이전/다음 글">
 		<?php if(isset($prev_post_)): ?>
 		<a class="blog-detail__sibling blog-detail__sibling--prev" href="<?=htmlspecialchars(_sample_blog_view_url_($prev_post_))?>">

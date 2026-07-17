@@ -35,12 +35,14 @@
 
 			var nameInput = form.querySelector("[name=user_name]");
 			var emailInput = form.querySelector("[name=user_email]");
+			var profileBioInput = form.querySelector("[name=profile_bio]");
 			var newPasswordInput = form.querySelector("[name=new_password]");
 			var newPasswordConfirmInput = form.querySelector("[name=new_password_confirm]");
 
 			var payload = {
 				user_name: nameInput ? nameInput.value : "",
 				user_email: emailInput ? emailInput.value : "",
+				profile_bio: profileBioInput ? profileBioInput.value : "",
 				new_password: newPasswordInput ? newPasswordInput.value : "",
 				new_password_confirm: newPasswordConfirmInput ? newPasswordConfirmInput.value : ""
 			};
