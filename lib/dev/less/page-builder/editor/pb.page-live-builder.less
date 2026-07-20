@@ -1065,7 +1065,7 @@ body.pb-live-editor-body{
 	position: absolute;
 	top: -1px;
 	right: -1px;
-	min-width: 190px;
+	min-width: 234px;
 	max-height: 260px;
 	overflow-y: auto;
 	background: #fff;
@@ -1084,18 +1084,38 @@ body.pb-live-editor-body{
 		position: sticky;
 		top: 0;
 	}
+	.le-child-list{
+		// Sortable 컨테이너
+	}
 	.le-child-item{
+		position: relative;
 		display: flex;
 		align-items: center;
-		gap: 8px;
-		padding: 9px 12px;
+		gap: 6px;
+		padding: 9px 12px 9px 6px;
 		font-size: 13px;
 		cursor: pointer;
 		border-bottom: 1px solid #f4f5f6;
+		background: #fff;
 
 		&:last-child{ border-bottom: none; }
 		&:hover{ background: lighten(@le-select-color, 42%); }
 
+		.le-child-drag{
+			flex: 0 0 18px;
+			width: 18px;
+			height: 18px;
+			overflow: hidden;          // 폰트에 글리프 없을 때 레이아웃 붕괴 방지
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #bcc2c9;
+			cursor: grab;
+
+			.material-icons{ font-size: 17px; line-height: 1; }
+			&:hover{ color: @le-select-color; }
+			&:active{ cursor: grabbing; }
+		}
 		.le-child-idx{
 			width: 18px;
 			height: 18px;
@@ -1111,11 +1131,53 @@ body.pb-live-editor-body{
 		.le-child-icon{
 			font-size: 15px;
 			color: @le-select-color;
+			flex-shrink: 0;
 		}
 		.le-child-name{
+			flex: 1 1 auto;
+			min-width: 0;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
+		}
+		// 액션: 절대배치 → hover 시 나타나도 행 레이아웃이 밀리지 않음
+		.le-child-actions{
+			position: absolute;
+			top: 0;
+			right: 4px;
+			bottom: 0;
+			display: flex;
+			align-items: center;
+			gap: 2px;
+			padding-left: 10px;
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.12s ease;
+			background: lighten(@le-select-color, 42%);   // hover 행 배경과 동일 → 이름 끝을 자연스럽게 가림
+
+			.le-child-action{
+				width: 22px;
+				height: 22px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: 4px;
+				color: #8a8f96;
+				cursor: pointer;
+
+				.material-icons{ font-size: 15px; }
+				&:hover{ background: #ffffff; color: @le-select-color; }
+				&[data-child-action="delete"]:hover{ background: #fdecec; color: #e04444; }
+			}
+		}
+		&:hover .le-child-actions{
+			opacity: 1;
+			visibility: visible;
+		}
+
+		&.le-child-ghost{
+			opacity: 0.5;
+			background: lighten(@le-select-color, 38%);
 		}
 	}
 }
