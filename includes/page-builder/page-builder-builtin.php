@@ -46,6 +46,10 @@ function _pb_page_builder_add_shared_modal_to_footer(){
 						</span>
 					</div>
 				</form>
+				<div class="element-view-toggle" data-element-view-toggle>
+					<a href="" class="view-btn" data-view="grid" title="<?=__('그리드 보기')?>"><i class="material-icons">view_module</i></a>
+					<a href="" class="view-btn" data-view="list" title="<?=__('리스트 보기')?>"><i class="material-icons">view_list</i></a>
+				</div>
 				<div class="loading-frame">
 					<div class="pb-loading-indicator loading-indicator"></div>
 				</div>

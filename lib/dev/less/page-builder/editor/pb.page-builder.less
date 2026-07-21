@@ -109,6 +109,25 @@
 			}
 		}
 
+		.element-view-toggle{
+			float: right;
+			margin: -4px 0 8px 0;
+
+			> .view-btn{
+				display: inline-block;
+				padding: 4px 8px;
+				color: @gray;
+				text-decoration: none;
+				cursor: pointer;
+
+				> .material-icons{ font-size: 20px; vertical-align: middle; }
+
+				&:hover{ color: @gray-dark; }
+
+				&.active{ color: @brand-primary; }
+			}
+		}
+
 		.picker-tab-content > .loading-frame{
 			position: relative;
 			display: block;
@@ -127,6 +146,7 @@
 			position: relative;
 			display: block;
 			padding: 20px 0px;
+			clear: both;
 			.clearfix();
 
 
@@ -142,13 +162,17 @@
 				display: block;
 				float: left;
 				padding: 5px;
-				width: 33.3333%;
+				width: 25%;
 
 				@media screen and (min-width: @screen-sm-min) and (max-width: @screen-sm-max){
-					width: 50%;
+					width: 33.3333%;
 				}
 
 				@media screen and (max-width: @screen-sm-max){
+					width: 50%;
+				}
+
+				@media screen and (max-width: 480px){
 					width: 100%;
 				}
 
@@ -160,13 +184,13 @@
 					color: @gray-base;
 					// border: 1px solid @gray-light2;
 					background-color: @gray-light2-l1;
-					padding: 10px;
+					padding: 8px;
 
 					box-shadow: 0px 2px 2px rgba(0,0,0,0.1);
 
 					-webkit-transition: box-shadow .3s;
 							transition: box-shadow .3s;
-	
+
 
 					&:hover{
 						box-shadow: 0px 3px 2px rgba(0,0,0,0.2);
@@ -180,7 +204,7 @@
 					}
 
 					> .col-icon{
-						width: 60px;
+						width: 48px;
 						padding-right: 10px;
 
 						> .icon-wrap{
@@ -188,8 +212,8 @@
 							display: block;
 							// border: 1px solid #ababab;
 							// border-radius: 5px;
-							width: 50px;
-							height: 50px;
+							width: 40px;
+							height: 40px;
 							// box-shadow: 0px 2px 2px rgba(0,0,0,0.1);
 
 							background-position: center;
@@ -204,13 +228,21 @@
 							}
 						}
 
-							
+
 					}
 
 					> .col-name{
+						min-width: 0;
+
+						> .name,
+						> .desc{
+							overflow: hidden;
+							white-space: nowrap;
+							text-overflow: ellipsis;
+						}
 
 						> .name{
-							font-size: 14px;
+							font-size: 13px;
 							font-weight: normal;
 							color: @gray-base;
 							line-height: 1.2;
@@ -218,10 +250,45 @@
 
 						> .desc{
 							color: @gray;
-							font-size: 12px;
+							font-size: 11px;
 						}
 					}
 
+				}
+			}
+		}
+	}
+
+	&.element-view-list{
+		.modal-body{
+			.picker-tab-content > .element-list,
+			.saved-layouts-list{
+				> .element-item{
+					width: 100%;
+					float: none;
+					padding: 0;
+
+					> .wrap{
+						box-shadow: none;
+						background-color: transparent;
+						border-bottom: 1px solid @gray-light2;
+						padding: 8px 4px;
+
+						&:hover{
+							box-shadow: none;
+							background-color: @gray-light2-l1;
+						}
+
+						> .col-icon{
+							width: 40px;
+							padding-right: 8px;
+
+							> .icon-wrap{
+								width: 28px;
+								height: 28px;
+							}
+						}
+					}
 				}
 			}
 		}
