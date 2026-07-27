@@ -1,22 +1,38 @@
 pb-config.php
-# 저장소 루트의 pbpress 플러그인 폴더만 무시한다.
+
+# 저장소 루트 폴더만 무시한다(앞의 / 가 앵커 역할).
 # 앞에 슬래시가 없으면 lib/dev/editors/*/plugins 같은 하위 폴더까지 전부 잡혀서
 # 위지윅 에디터 라이브러리가 통째로 누락된다.
-/plugins/
-!/plugins/clock
-uploads
-extensions
+# 폴더 자체가 아니라 폴더 안 항목(/*)을 제외해야 !예외 규칙이 실제로 동작한다.
+/plugins/*
+!/plugins/clock/
+/uploads/
+/extensions/
+/mcp-server/
+/.htaccess
+/package-lock.json
+/.antigravity
+
+# 의존성 (하위 경로 포함이 정상)
 node_modules
-package-lock.json
-.htaccess
+
+# 빌드 산출물
 lib/dist
 lib/dev/css
 lib/dev/comp-lib
 lib/dev/concat-lib/dist
 lib/dev/concat-lib/dist/**/**.*
-dev!lib/dev/sass
-mcp-server
-.antigravity
+
+# trumbowyg(구 위지윅 에디터) 벤더 잔여 파일.
+# 실제로는 압축 안 된 원본(.js)만 로드하므로 압축본·sass 원본은 저장소에 두지 않는다.
+lib/dev/editors/trumbowyg/plugins/**/*.min.js
+lib/dev/editors/trumbowyg/plugins/**/*.min.css
+lib/dev/editors/trumbowyg/plugins/**/ui/sass/*
+# 단, 아래 3종은 예전부터 저장소에 들어와 있으므로 규칙과 충돌하지 않게 예외 처리한다.
+!lib/dev/editors/trumbowyg/plugins/mathml/ui/**
+!lib/dev/editors/trumbowyg/plugins/specialchars/ui/**
+!lib/dev/editors/trumbowyg/plugins/table/ui/**
+
 # AI 도구/OS 잡파일
 .DS_Store
 .claude/
