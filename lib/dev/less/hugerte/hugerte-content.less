@@ -1,0 +1,50 @@
+//==============================================================================
+// HugeRTE 위지윅 - 에디터 "본문(iframe) 안쪽" 스타일
+//
+// 에디터 본문은 iframe 이라 관리자 CSS 가 상속되지 않는다.
+// 그래서 글꼴·글자색을 따로 넣어줘야 편집화면과 실제 관리자 화면의 느낌이 같아진다.
+// (HugeRTE 의 content_css 옵션으로 이 파일이 iframe 안에 주입된다)
+//
+// [빌드 주의]
+//   산출물은 반드시 `lib/dev/css/` 바로 아래에 떨어져야 한다.
+//   pb-admin.css 와 같은 깊이여야 fonts.less 안의 url(../assets/fonts/...) 이
+//   그대로 맞아떨어진다. (Gruntfile less 태스크 dest 확인)
+//
+// [색상 변수 주의]
+//   @text-color / @input-border 같은 상위 변수는 값이 var(--root-*) 라서
+//   :root 정의가 없는 iframe 안에서는 적용되지 않는다.
+//   → 여기서는 원본 @root-* (실제 색상값) 변수를 쓴다. 출처는 동일하므로 하드코딩 아님.
+//==============================================================================
+
+@import (reference) "../pb/bootstrap/variables.less";
+@import "../pb/pb/fonts.less";
+
+body{
+	//관리자 입력폼(.form-control)과 같은 글꼴·크기 → 편집중 모습 = 실제 저장 결과
+	font-family: @font-family-base;
+	font-size: @font-size-large;
+	line-height: @line-height-base;
+	color: @root-gray-base;
+	background-color: #fff;
+
+	//툴바와 본문이 붙어보이지 않게
+	margin: 12px;
+}
+
+a{
+	color: @root-brand-primary;
+}
+
+//표 경계 : 편집중에만 보이면 되므로 관리자 인풋 테두리 톤으로
+table,
+table td,
+table th{
+	border-color: @root-gray-light2;
+}
+
+//placeholder(내용 없을 때 안내문구)
+.mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before{
+	color: lighten(@root-gray-light, 5%);
+	font-family: @font-family-base;
+	font-size: @font-size-large;
+}

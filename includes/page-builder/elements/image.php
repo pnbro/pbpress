@@ -45,8 +45,15 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 		$alt_ = isset($element_data_['alt']) && strlen($element_data_['alt']) ? $element_data_['alt'] : null;
 		
 		?>
-		<div class="pb-image-group <?=$class_?> <?=$unique_class_name_?> align-<?=$image_align_?>" <?=strlen($id_) ? "id='".$id_."'" : "" ?>>
-			<img class="pb-image " src="<?=pb_filebase_url(pb_parse_uploaded_file_path($image_data_))?>" style="<?=strlen($max_width_) ? "max-width:".$max_width_ : "" ?>" alt="<?=$alt_?>">
+		<?php
+		// 이미지가 지정되지 않았으면 src 를 비워둔다. (예전에는 '.../uploads/' 가 그대로 나가 요소마다 403/404 가 났다)
+		$image_path_ = pb_parse_uploaded_file_path($image_data_);
+		$image_url_ = strlen((string)$image_path_) ? pb_filebase_url($image_path_) : '';
+		?>
+		<div class="pb-image-group <?=$class_?> <?=$unique_class_name_?> align-<?=$image_align_?>" <?=strlen((string)$id_) ? "id='".$id_."'" : "" ?>>
+			<?php if(strlen($image_url_)){ ?>
+			<img class="pb-image " src="<?=$image_url_?>" style="<?=strlen((string)$max_width_) ? "max-width:".$max_width_ : "" ?>" alt="<?=$alt_?>">
+			<?php } ?>
 		</div>
 		
 		<?php
@@ -57,7 +64,7 @@ class PBPageBuilderElement_image extends PBPageBuilderElement{
 
 		$image_data_ = isset($element_data_['src']) ? $element_data_['src'] : null;
 		$image_data_ = pb_encode_json_uploaded_file($image_data_);
-		$image_data_ = strlen($image_data_) ? htmlentities($image_data_) : $image_data_;
+		$image_data_ = strlen((string)$image_data_) ? htmlentities($image_data_) : '';
 
 		?>
 

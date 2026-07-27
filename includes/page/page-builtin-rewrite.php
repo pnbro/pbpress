@@ -22,7 +22,7 @@ function _pb_page_hook_for_rewrite_handler(){
 		return new PBError(404, __("페이지를 찾을 수 없습니다."), __("404"));
 	}
 
-	if($pbpage['id'] === pb_front_page_id()){
+	if((string)$pbpage['id'] === (string)pb_front_page_id()){
 		pb_redirect(pb_home_url());
 		pb_end();
 	}

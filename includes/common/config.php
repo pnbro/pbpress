@@ -68,7 +68,7 @@ class PBConfig{
 		$this->crypt_static_iv_size = (defined("PB_CRYPT_STATIC_IV_SIZE")) ? PB_CRYPT_STATIC_IV_SIZE : 16;
 		$this->crypt_static_cipher_mode = (defined("PB_CRYPT_STATIC_CIPHER_MODE")) ? PB_CRYPT_STATIC_CIPHER_MODE : 'AES-256-CBC';
 
-		$this->wysiwyg_editor = (defined("PB_WYSIWYG_EDITOR")) ? PB_WYSIWYG_EDITOR : "summernote";
+		$this->wysiwyg_editor = (defined("PB_WYSIWYG_EDITOR")) ? PB_WYSIWYG_EDITOR : "hugerte";
 		$this->file_upload_handler = (defined("PB_FILE_UPLOAD_HANDLER")) ? PB_FILE_UPLOAD_HANDLER : "default";
 		$this->file_chunksize = (defined("FILE_CHUNKSIZE")) ? FILE_CHUNKSIZE : 1024 * 1024;
 

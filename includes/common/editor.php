@@ -118,7 +118,7 @@ function pb_wysiwyg_editor_renderers(){
 	if(isset($_pb_wysiwyg_editor_renderers)) return $_pb_wysiwyg_editor_renderers;
 
 	$_pb_wysiwyg_editor_renderers = pb_hook_apply_filters('pb_wysiwyg_editor_renderers', array(
-		'trumbowyg' => '_pb_wysiwyg_editor_for_trumbowyg',
+		'hugerte' => '_pb_wysiwyg_editor_for_hugerte',
 		'summernote' => '_pb_wysiwyg_editor_for_summernote',
 	));
 
@@ -253,6 +253,133 @@ function pb_editor_load_summernote_library(){
 
 		$_pb_editor_load_summernote_library = true;
 	}
+}
+
+function _pb_wysiwyg_editor_for_hugerte($name_, $content_, $data_){
+	global $pb_config;
+	$editor_id_ = $data_['id'];
+	$placeholder_ = isset($data_['placeholder']) ? $data_['placeholder'] : null;
+	$min_height_ = isset($data_['min_height']) ? $data_['min_height'] : 300;
+	$max_height_ = isset($data_['max_height']) ? $data_['max_height'] : 800;
+	$height_ = isset($data_['height']) ? $data_['height'] : 400;
+	$lang_ = isset($data_['lang']) ? $data_['lang'] : $pb_config->default_locale();
+	$lang_ = pb_editor_hugerte_language($lang_);
+	$placeholder_ = htmlentities((string)$placeholder_, ENT_QUOTES, $pb_config->charset);
+	?>
+	<?php pb_editor_load_hugerte_library(); ?>
+	<textarea name="<?=$name_?>" id="<?=$editor_id_?>" placeholder="<?=$placeholder_?>"><?=stripslashes((string)$content_)?></textarea>
+	<script type="text/javascript">
+	jQuery(document).ready(function(){
+		$("#<?=$editor_id_?>").pb_wysiwyg_editor_hugerte({
+			lang : "<?=$lang_?>",
+			base_url : "<?=PB_LIBRARY_URL?>editors/hugerte",
+			content_css : "<?=pb_editor_hugerte_content_css_url()?>",
+			min_height : <?=$min_height_?>,
+			max_height : <?=$max_height_?>,
+			height : <?=$height_?>,
+			placeholder : "<?=$placeholder_?>",
+			input : <?= isset($data_['input']) ? '"'.$data_['input'].'"' : 'null' ?>
+		});
+	});
+	</script>
+	<?php
+}
+
+function pb_editor_load_hugerte_library(){
+	global $pb_config, $_pb_editor_load_hugerte_library;
+	if(!$_pb_editor_load_hugerte_library){
+		$default_locale_ = pb_editor_hugerte_language($pb_config->default_locale());
+		$current_locale_ = pb_editor_hugerte_language(pb_current_locale());
+
+		$locales_to_load_ = array($default_locale_);
+		if($current_locale_ !== $default_locale_){
+			$locales_to_load_[] = $current_locale_;
+		}
+		?>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/hugerte/hugerte.min.js?version=<?=PB_SCRIPT_VERSION?>"></script>
+		<?php foreach($locales_to_load_ as $locale_){
+			if($locale_ === "en") continue;
+			$lang_file_path_ = PB_LIBRARY_PATH."editors/hugerte/langs/{$locale_}.js";
+			if(!file_exists($lang_file_path_)) continue;
+			?>
+			<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/hugerte/langs/<?=$locale_?>.js?version=<?=PB_SCRIPT_VERSION?>"></script>
+			<?php
+		} ?>
+		<script type="text/javascript" src="<?=PB_LIBRARY_URL?>editors/hugerte/hugerte.pb.extends.js?v=<?=PB_SCRIPT_VERSION?>"></script>
+
+		<link rel="stylesheet" type="text/css" href="<?=PB_LIBRARY_URL?>css/hugerte/hugerte.css?version=<?=PB_SCRIPT_VERSION?>">
+
+		<?php
+
+		pb_hook_do_action('pb_editor_load_hugerte_library');
+
+		$_pb_editor_load_hugerte_library = true;
+	}
+}
+
+//에디터 본문(iframe)에 주입할 관리자 글꼴 CSS 경로.
+//iframe 은 관리자 CSS 를 상속하지 않아서 별도로 넣어줘야 편집화면 글자 느낌이 관리자와 같아진다.
+function pb_editor_hugerte_content_css_url(){
+	return PB_LIBRARY_URL."css/hugerte-content.css?version=".PB_SCRIPT_VERSION;
+}
+
+function pb_editor_hugerte_language($locale_){
+	$map_ = array(
+		"ko_KR" => "ko_KR",
+		"ko" => "ko_KR",
+
+		"ja_JP" => "ja",
+		"ja" => "ja",
+
+		"zh_CN" => "zh-Hans",
+		"zh_SG" => "zh-Hans",
+		"zh" => "zh-Hans",
+
+		"zh_TW" => "zh-Hant",
+		"zh_MO" => "zh-Hant",
+
+		"zh_HK" => "zh_HK",
+
+		"fr_FR" => "fr_FR",
+		"fr" => "fr_FR",
+
+		"pt_BR" => "pt_BR",
+		"pt" => "pt_BR",
+
+		"th_TH" => "th_TH",
+		"th" => "th_TH",
+
+		"de_DE" => "de",
+		"de" => "de",
+
+		"es_ES" => "es",
+		"es" => "es",
+
+		"it_IT" => "it",
+		"it" => "it",
+
+		"nl_NL" => "nl",
+		"nl" => "nl",
+
+		"ru_RU" => "ru",
+		"ru" => "ru",
+
+		"tr_TR" => "tr",
+		"tr" => "tr",
+
+		"vi_VN" => "vi",
+		"vi" => "vi",
+
+		"id_ID" => "id",
+		"id" => "id",
+
+		"ar_SA" => "ar",
+		"ar" => "ar",
+	);
+
+	if(isset($map_[$locale_])) return $map_[$locale_];
+
+	return "en";
 }
 
 function _pb_editor_rendering_for_editor($content_, $data_){

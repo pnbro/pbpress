@@ -41,7 +41,7 @@ pb_easytable_register("pb-admin-page-table", function($offset_, $per_page_, $ord
 
 		'class' => 'col-8 link-action',
 		'render' => function($table_, $item_, $page_index_){
-			$is_front_page_ = pb_front_page_id() === (string)$item_['id'];
+			$is_front_page_ = (string)pb_front_page_id() === (string)$item_['id'];
 			$page_url_ = pb_page_url($item_['id']);
 			
 			?>

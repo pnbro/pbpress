@@ -236,15 +236,16 @@ function pb_remove_protocol_from_url($url_){
 
 // pb_parse_json_uploaded_file
 function pb_decode_json_uploaded_file($file_data_){
-	if(!is_object($file_data_)){
-		if(!isset($file_data_) || !strlen($file_data_)) return null;
-		$parsed_data_ = json_decode($file_data_, true);
-		if(json_last_error() === JSON_ERROR_SYNTAX) return $file_data_;
+	// 업로드 값은 3가지 형태로 들어온다: JSON 문자열 / 이미 디코딩된 배열·객체 / 단일 문자열(r_name)
+	// PHP8 부터는 배열·null 을 strlen() 에 넘기면 죽으므로 타입별로 먼저 걸러낸다.
+	if(is_array($file_data_) || is_object($file_data_)) return $file_data_;
+	if(!isset($file_data_) || !strlen((string)$file_data_)) return null;
 
-		if(isset($parsed_data_)) return $parsed_data_;
-	}else{
-		return $file_data_;
-	}
+	$parsed_data_ = json_decode($file_data_, true);
+	if(json_last_error() === JSON_ERROR_SYNTAX) return $file_data_;
+
+	if(isset($parsed_data_)) return $parsed_data_;
+	return null;
 }
 function pb_encode_json_uploaded_file($file_data_){
 	if(!is_string($file_data_) && $file_data_ !== null){
@@ -257,14 +258,25 @@ function pb_encode_json_uploaded_file($file_data_){
 		return $file_data_;
 		
 	}else{
-		return (strlen($file_data_) ? $file_data_ : null);
+		return (strlen((string)$file_data_) ? $file_data_ : null);
 	}
 }
 
 function pb_parse_uploaded_file_path($file_data_, $index_ = 0, $column_ = "r_name"){
 	$file_data_ = pb_decode_json_uploaded_file($file_data_);
-	if(isset($file_data_[$index_])) return $file_data_[$index_][$column_];
-	return null;
+	if(!isset($file_data_)) return null;
+
+	// 단일 문자열(r_name) 저장 방식 — 그대로 경로로 사용
+	if(is_string($file_data_)) return strlen($file_data_) ? $file_data_ : null;
+
+	if(is_object($file_data_)) $file_data_ = (array)$file_data_;
+	if(!is_array($file_data_) || !isset($file_data_[$index_])) return null;
+
+	$row_ = $file_data_[$index_];
+	if(is_object($row_)) $row_ = (array)$row_;
+	if(is_string($row_)) return strlen($row_) ? $row_ : null;
+
+	return (is_array($row_) && isset($row_[$column_])) ? $row_[$column_] : null;
 }
 
 

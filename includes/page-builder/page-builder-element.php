@@ -268,7 +268,23 @@ function pb_page_builder_element_make_styles($element_data_ = array()){
 	
 	$data_['background-color'] = isset($element_data_['background_color']) ? $element_data_['background_color'] : null;
 
-	$data_['background-image'] = isset($element_data_['background_image']) && strlen($element_data_['background_image']) ? "url('".pb_filebase_url(pb_parse_uploaded_file_path($element_data_['background_image']))."')" : null;
+	// 빈 JSON 배열("[]")도 strlen 이 2라 참이 되어 url('.../uploads/') 가 출력되고 요소마다 403 이 발생한다.
+	// → 저장 포맷(JSON 배열 / 단일 문자열 r_name / 배열)을 구분해서 실제 경로가 있을 때만 출력한다.
+	$bg_raw_ = isset($element_data_['background_image']) ? $element_data_['background_image'] : null;
+	$bg_path_ = null;
+
+	if(is_array($bg_raw_)){
+		$bg_path_ = isset($bg_raw_[0]['r_name']) ? $bg_raw_[0]['r_name'] : null;
+	}else if(is_string($bg_raw_) && strlen(trim($bg_raw_))){
+		$bg_first_char_ = substr(ltrim($bg_raw_), 0, 1);
+		if($bg_first_char_ === '[' || $bg_first_char_ === '{'){
+			$bg_path_ = pb_parse_uploaded_file_path($bg_raw_);
+		}else{
+			$bg_path_ = $bg_raw_;	// 단일 문자열(r_name) 저장 방식
+		}
+	}
+
+	$data_['background-image'] = strlen((string)$bg_path_) ? "url('".pb_filebase_url($bg_path_)."')" : null;
 	$data_['background-size'] = isset($element_data_['background_size']) ? $element_data_['background_size'] : null;
 	$data_['background-position'] = isset($element_data_['background_position']) ? $element_data_['background_position'] : null;
 
@@ -402,9 +418,11 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 
 			$image_input_id_ = 'pb-page-builder-image-input-'.pb_random_string(5);
 			$image_limit_ = isset($edit_data_['limit']) ? $edit_data_['limit'] : 1;
+			// 배열(JSON 저장 포맷)이 그대로 htmlentities 로 가면 PHP8 에서 Fatal 이 난다 → 먼저 JSON 문자열로 인코딩
+			$image_input_value_ = (string)pb_encode_json_uploaded_file(is_null($input_value_) ? '' : $input_value_);
 
 		?>
-			<input type="hidden" name="<?=$name_?>" data-upload-path="/" id='<?=$image_input_id_?>' value="<?=htmlentities($input_value_)?>"  data-limit="<?=$image_limit_?>">
+			<input type="hidden" name="<?=$name_?>" data-upload-path="/" id='<?=$image_input_id_?>' value="<?=htmlentities($image_input_value_)?>"  data-limit="<?=$image_limit_?>">
 			<script type="text/javascript">jQuery("#<?=$image_input_id_?>").pb_image_input();</script>
 			
 		<?php break;
@@ -412,9 +430,11 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 
 			$file_input_id_ = 'pb-page-builder-file-input-'.pb_random_string(5);
 			$file_limit_ = isset($edit_data_['limit']) ? $edit_data_['limit'] : 1;
+			// 배열(JSON 저장 포맷)이 그대로 htmlentities 로 가면 PHP8 에서 Fatal 이 난다 → 먼저 JSON 문자열로 인코딩
+			$file_input_value_ = (string)pb_encode_json_uploaded_file(is_null($input_value_) ? '' : $input_value_);
 
 		?>
-			<input type="hidden" name="<?=$name_?>" data-upload-path="/" id='<?=$image_input_id_?>' value="<?=htmlentities($input_value_)?>" data-limit="<?=$file_limit_?>">
+			<input type="hidden" name="<?=$name_?>" data-upload-path="/" id='<?=$file_input_id_?>' value="<?=htmlentities($file_input_value_)?>" data-limit="<?=$file_limit_?>">
 			<script type="text/javascript">jQuery("#<?=$file_input_id_?>").pb_file_input();</script>
 			
 		<?php break;
@@ -434,7 +454,9 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 		case 'radio' : 
 
 			$options_ = $edit_data_['options'];
-			$input_value_ = gettype($input_value_) !== "array" ? explode(",", $input_value_) : array();
+			if(!is_array($input_value_)){
+				$input_value_ = strlen((string)$input_value_) ? explode(",", (string)$input_value_) : array();
+			}
 		?>
 
 		<div>

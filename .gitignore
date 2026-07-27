@@ -1,6 +1,9 @@
 pb-config.php
-plugins/
-!plugins/clock
+# 저장소 루트의 pbpress 플러그인 폴더만 무시한다.
+# 앞에 슬래시가 없으면 lib/dev/editors/*/plugins 같은 하위 폴더까지 전부 잡혀서
+# 위지윅 에디터 라이브러리가 통째로 누락된다.
+/plugins/
+!/plugins/clock
 uploads
 extensions
 node_modules

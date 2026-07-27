@@ -194,6 +194,26 @@ module.exports = function (grunt) {
             return dest + src.replace('.less','.css');
           }
         },
+        {
+          expand: true,
+          cwd: 'lib/dev/less/hugerte',
+          src: ['hugerte.less'],
+          dest: 'lib/dev/css/hugerte/',
+          rename : function(dest, src){
+            return dest + src.replace('.less','.css');
+          }
+        },
+        {
+          //에디터 본문(iframe) 주입용. fonts.less 의 url(../assets/...) 가 맞으려면
+          //반드시 pb-admin.css 와 같은 깊이인 lib/dev/css/ 바로 아래로 떨어져야 한다.
+          expand: true,
+          cwd: 'lib/dev/less/hugerte',
+          src: ['hugerte-content.less'],
+          dest: 'lib/dev/css/',
+          rename : function(dest, src){
+            return dest + src.replace('.less','.css');
+          }
+        },
 
         ]
       }
@@ -210,7 +230,9 @@ module.exports = function (grunt) {
             '!**/*.js',
             '!**/*.less',
             '!**/concat-lib/**',
-            '!**/less/**'],
+            '!**/less/**',
+            'editors/hugerte/**/*.js',
+            'editors/hugerte/**/*.css'],
           dest: 'lib/dist'
         }]
       }
@@ -224,6 +246,7 @@ module.exports = function (grunt) {
           src: [
             '**/*.js',
             '!**/concat-lib/**',
+            '!**/editors/hugerte/**',
           ],
           dest: 'lib/dist'
         }]
@@ -236,7 +259,8 @@ module.exports = function (grunt) {
         cwd: 'lib/dev/',
         src: [
           '**/*.css',
-          '!**/concat-lib/**'
+          '!**/concat-lib/**',
+          '!**/editors/hugerte/**'
         ],
         dest: 'lib/dist/'
       }
