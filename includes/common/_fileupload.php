@@ -4,7 +4,7 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
-if(!pb_hook_apply_filters('pb_fileupload_before', true)){
+if(!pb_fileupload_is_allowed()){
 	echo json_encode(array(
 		'success' => false,
 		'deny' => true,

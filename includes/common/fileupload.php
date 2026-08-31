@@ -16,6 +16,10 @@ function pb_filebase_url($file_path_ = null, $params_ = array(), $handler_ = nul
 	return pb_hook_apply_filters('pb_filebase_url', $file_upload_handler_->filebase_url($file_path_, $params_), $file_path_, $params_);
 }
 
+function pb_fileupload_is_allowed(){
+	return pb_hook_apply_filters('pb_fileupload_before', pb_is_user_logged_in());
+}
+
 function _pb_fileupload_add_to_rewrite($results_){
 	$results_['fileupload'] = array(
 		'page' => PB_DOCUMENT_PATH."includes/common/_fileupload.php",

@@ -140,6 +140,10 @@ function pb_user_authority_delete($id_){
 }
 
 function pb_user_has_authority($user_id_, $authority_){
+	if(!is_numeric($user_id_) || intval($user_id_) <= 0){
+		return pb_hook_apply_filters("pb_user_has_authority", false, $user_id_, $authority_);
+	}
+
 	$auth_data_ = pb_authority_by_slug($authority_);
 	if(!isset($auth_data_)) return false;
 
@@ -152,6 +156,10 @@ function pb_user_has_authority($user_id_, $authority_){
 }
 
 function pb_user_has_authority_task($user_id_, $authority_task_){
+	if(!is_numeric($user_id_) || intval($user_id_) <= 0){
+		return pb_hook_apply_filters("pb_user_has_authority_task", false, $user_id_, $authority_task_);
+	}
+
 	$user_auth_data_ = pb_user_authority_list(array(
 		'user_id' => $user_id_,
 		'auth_task_slug' => $authority_task_,

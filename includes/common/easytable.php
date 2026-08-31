@@ -114,6 +114,9 @@ class PB_easytable{
 
 		if(!strlen($sort_key_)) return null;
 
+		$sort_dir_ = (strtolower(trim((string)$sort_dir_)) === 'desc') ? 'DESC' : 'ASC';
+		if(preg_match('/[^A-Za-z0-9_.]/', (string)$sort_key_)) return null;
+
 		foreach($data_ as $column_key_ => $column_data_){
 			if(!isset($column_data_['sort'])) continue;
 
@@ -449,6 +452,24 @@ function _pb_ajax_easytable_load_html(){
 	}
 
 	$easytable_ = $pb_easytable_map[$table_id_];
+	$easytable_options_ = $easytable_->options();
+	$authority_task_ = pb_hook_apply_filters(
+		'pb_easytable_authority_task',
+		(isset($easytable_options_['authority_task']) ? $easytable_options_['authority_task'] : null),
+		$table_id_
+	);
+
+	if($authority_task_ !== false){
+		if(!pb_is_user_logged_in()){
+			pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
+		}
+
+		$easytable_task_ = strlen((string)$authority_task_) ? $authority_task_ : 'access_adminpage';
+		if(!pb_user_has_authority_task(pb_current_user_id(), $easytable_task_)){
+			pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
+		}
+	}
+
 	$table_data_ = $easytable_->data();
 	$orderby_ = $easytable_->render_orderby($table_data_, $sort_key_, $sort_dir_);
 

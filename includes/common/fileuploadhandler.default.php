@@ -4,6 +4,47 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+if(!function_exists('pb_upload_denied_extensions')){
+	function pb_upload_denied_extensions(){
+		return pb_hook_apply_filters('pb_upload_denied_extensions', array(
+			'php', 'php2', 'php3', 'php4', 'php5', 'php6', 'php7', 'php8', 'phps', 'pht', 'phtm', 'phtml', 'phar',
+			'inc', 'cgi', 'pl', 'py', 'sh', 'bash', 'jsp', 'jspx', 'asp', 'aspx', 'asa', 'asax', 'cer', 'shtml',
+			'htaccess', 'htpasswd',
+		));
+	}
+}
+
+if(!function_exists('pb_upload_sanitize_name')){
+	function pb_upload_sanitize_name($name_){
+		$name_ = (string)$name_;
+		if(!strlen($name_)) return $name_;
+
+		$name_ = str_replace(array("\0", "\\"), array('', '/'), $name_);
+		$name_ = basename($name_);
+		$name_ = preg_replace('/[^\p{L}\p{N}._\-\(\)\[\] ]/u', '_', $name_);
+		if(!is_string($name_)) return '';
+
+		return ltrim($name_, '.');
+	}
+}
+
+if(!function_exists('pb_upload_is_denied_name')){
+	function pb_upload_is_denied_name($name_){
+		$name_ = strtolower((string)$name_);
+		if(!strlen($name_)) return false;
+
+		$parts_ = explode('.', $name_);
+		array_shift($parts_);
+		$denied_extensions_ = (array)pb_upload_denied_extensions();
+
+		foreach($parts_ as $extension_){
+			if(in_array($extension_, $denied_extensions_, true)) return true;
+		}
+
+		return false;
+	}
+}
+
 class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 
 	function initialize(){
@@ -49,6 +90,7 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 		for($file_index_= 0; $file_index_ < $total_file_count_; ++$file_index_){
 			$original_file_name_ = basename(urlencode($files_['name'][$file_index_]));
 			$original_file_name_ = urldecode($original_file_name_);
+			$original_file_name_ = pb_upload_sanitize_name($original_file_name_);
 			$origianl_file_path_ = $files_['tmp_name'][$file_index_];
 
 			switch($files_['error'][$file_index_]){
@@ -85,6 +127,10 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 			}
 
 			$file_extension_ = pathinfo($original_file_name_, PATHINFO_EXTENSION);
+
+			if(pb_upload_is_denied_name($original_file_name_)){
+				return new PBError(-403, __("업로드실패"), __("업로드할 수 없는 파일형식입니다."));
+			}
 
 			if(strlen($file_extension_)){
 				$renamed_file_name_ .= ".".$file_extension_;
@@ -142,6 +188,12 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 		$chunk_size_ = $data_['chunk_size'];
 		$r_name_ = @$data_['r_name'];
 		$o_name_ = @$data_['o_name'];
+
+		$r_name_ = pb_upload_sanitize_name($r_name_);
+		$o_name_ = pb_upload_sanitize_name($o_name_);
+		if(pb_upload_is_denied_name($r_name_) || pb_upload_is_denied_name($o_name_)){
+			return new PBError(-403, __("업로드실패"), __("업로드할 수 없는 파일형식입니다."));
+		}
 
 		$yyymmdd_ = date("Ymd")."/";
 

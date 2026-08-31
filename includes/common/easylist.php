@@ -217,6 +217,23 @@ function _pb_ajax_easylist_load_html(){
 	}
 
 	$easylist_ = $pb_easylist_map[$table_id_];
+	$easylist_options_ = $easylist_->options();
+	$authority_task_ = pb_hook_apply_filters(
+		'pb_easylist_authority_task',
+		(array_key_exists('authority_task', $easylist_options_) ? $easylist_options_['authority_task'] : false),
+		$table_id_
+	);
+
+	if($authority_task_ !== false){
+		if(!pb_is_user_logged_in()){
+			pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
+		}
+
+		$easylist_task_ = strlen((string)$authority_task_) ? $authority_task_ : 'access_adminpage';
+		if(!pb_user_has_authority_task(pb_current_user_id(), $easylist_task_)){
+			pb_ajax_error(__("권한없음"), __("접근권한이 없습니다."));
+		}
+	}
 
 	ob_start();
 	$easylist_->render($page_index_);
