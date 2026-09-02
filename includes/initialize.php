@@ -28,6 +28,9 @@ if(!pb_exists_rewrite()){
 	pb_hook_do_action('pb_ended');
 	exit;
 }
+if(!pb_rewrite_has_filebase_rule()){
+	pb_upgrade_rewrite_for_filebase();
+}
 
 //set timzone
 $timezone_ = pb_option_value("timezone");

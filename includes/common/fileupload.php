@@ -4,6 +4,9 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+include_once(PB_DOCUMENT_PATH . "includes/common/fileupload.storage.php");
+include_once(PB_DOCUMENT_PATH . "includes/common/fileupload.serve.php");
+
 function pb_fileupload_url($params_ = array()){
 	return pb_make_url(pb_home_url("fileupload"), $params_);
 }
@@ -27,6 +30,9 @@ function _pb_fileupload_add_to_rewrite($results_){
 	$results_['chunkfileupload'] = array(
 		'page' => PB_DOCUMENT_PATH."includes/common/_fileupload_chunk.php",
 	);
+	$results_['uploads'] = array(
+		'rewrite_handler' => '_pb_filebase_rewrite_handler',
+	);
 
 	return $results_;
 };
@@ -36,6 +42,8 @@ function _pb_fileupload_add_to_header_pbvar($results_){
 	$results_['fileupload_url'] = pb_fileupload_url();
 	$results_['chunk_fileupload_url'] = pb_chunk_fileupload_url();
 	$results_['filebase_url'] = pb_filebase_url();
+	$file_upload_handler_ = pb_fileupload_handler();
+	$results_['file_chunk_upload_supported'] = !pb_is_error($file_upload_handler_) && $file_upload_handler_->supports_chunk_upload();
 
 	global $pb_config;
 	$results_['file_chunksize'] = $pb_config->file_chunksize;
@@ -68,9 +76,12 @@ function pb_fileupload_handler($handler_ = null){
 
 	if(!class_exists($file_upload_handler_)) return pb_error(500, __("잘못된 요청"), __("파일핸들러가 존재하지 않습니다."));
 
-	$pb_fileupload_handler[$handler_] = new $file_upload_handler_;
-	$pb_fileupload_handler[$handler_]->initialize();
-	return $pb_fileupload_handler[$handler_];
+	$file_upload_handler_instance_ = new $file_upload_handler_;
+	$initialize_result_ = $file_upload_handler_instance_->initialize();
+	if(pb_is_error($initialize_result_)) return $initialize_result_;
+
+	$pb_fileupload_handler[$handler_] = $file_upload_handler_instance_;
+	return $file_upload_handler_instance_;
 }
 
 function pb_fileupload_handle($files_, $options_ = array()){
@@ -97,8 +108,15 @@ abstract class PBPressFileUPloadHandler{
 	abstract function filebase_url($file_path_ = null, $params_ = array());
 	
 	abstract function handle($files_, $options_ = array());
-	abstract function handle_chunk($chunk_, $data_, $options_ = array());
-	abstract function post_process($result_, $options_ = array());
+	function handle_chunk($chunk_, $data_, $options_ = array()){
+		return new PBError(-400, __('업로드실패'), __('이 파일핸들러는 청크 업로드를 지원하지 않습니다.'));
+	}
+	function post_process($result_, $options_ = array()){
+		return $result_;
+	}
+	function supports_chunk_upload(){
+		return false;
+	}
 }
 
 // include(PB_DOCUMENT_PATH . "includes/common/fileupload.resource.php");

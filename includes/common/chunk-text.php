@@ -35,10 +35,14 @@ function pb_chunk_text_handle($complete_callback_, $options_ = array()){
 		pb_ajax_error(__("잘못된 요청"), __("업로드 키가 유효하지 않습니다."));
 	}
 
-	$temp_dir_ = isset($options_['temp_dir']) ? $options_['temp_dir'] : PB_DOCUMENT_PATH . "uploads/_chunk_text_temp/";
+	$temp_dir_ = isset($options_['temp_dir']) ? $options_['temp_dir'] : _pb_chunk_text_temp_path();
+	if($temp_dir_ === false){
+		pb_ajax_error(__("저장 실패"), __("임시 청크 저장경로를 준비할 수 없습니다."));
+	}
+	$temp_dir_ = rtrim($temp_dir_, '/\\').DIRECTORY_SEPARATOR;
 
 	if(!is_dir($temp_dir_)){
-		mkdir($temp_dir_, 0755, true);
+		mkdir($temp_dir_, 0750, true);
 	}
 
 	if(!file_exists($temp_dir_ . ".htaccess")){
@@ -111,6 +115,20 @@ function _pb_chunk_text_cleanup($temp_dir_, $upload_key_, $chunk_length_){
 	}
 }
 
+function _pb_chunk_text_temp_path($create_ = true){
+	$upload_root_ = pb_upload_root_path($create_);
+	if($upload_root_ === false) return false;
+
+	$temp_dir_ = $upload_root_.DIRECTORY_SEPARATOR.'_temp'.DIRECTORY_SEPARATOR.'chunk-text';
+	if($create_){
+		$temp_dir_ = pb_upload_directory($upload_root_, '_temp/chunk-text');
+	}else if(!is_dir($temp_dir_) || is_link($temp_dir_) || !pb_upload_path_is_inside($upload_root_, $temp_dir_)){
+		return false;
+	}
+
+	return $temp_dir_ === false ? false : rtrim($temp_dir_, '/\\').DIRECTORY_SEPARATOR;
+}
+
 /**
  * pb_chunk_text_register
  *
@@ -132,8 +150,8 @@ function pb_chunk_text_register($action_name_, $authority_check_, $complete_call
  * 오래된 임시 청크 파일 정리 (1시간 이상)
  */
 function _pb_chunk_text_cleanup_stale(){
-	$temp_dir_ = PB_DOCUMENT_PATH . "uploads/_chunk_text_temp/";
-	if(!is_dir($temp_dir_)) return;
+	$temp_dir_ = _pb_chunk_text_temp_path(false);
+	if($temp_dir_ === false) return;
 
 	$expire_time_ = time() - 3600;
 	$files_ = glob($temp_dir_ . "*.part*");
@@ -147,8 +165,6 @@ function _pb_chunk_text_cleanup_stale(){
 	}
 }
 
-if(is_dir(PB_DOCUMENT_PATH . "uploads/_chunk_text_temp/")){
-	pb_hook_add_action('pb_init', '_pb_chunk_text_cleanup_stale', 99);
-}
+pb_hook_add_action('pb_init', '_pb_chunk_text_cleanup_stale', 99);
 
 ?>

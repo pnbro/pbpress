@@ -29,6 +29,8 @@ class PBConfig{
 	public $wysiwyg_editor;
 	public $file_upload_handler = "default";
 	public $file_chunksize = 1024 * 1024; // 1MB
+	public $file_upload_storage_path = null;
+	public $file_upload_legacy_fallback = true;
 
 	private $default_locale = "ko_KR";
 
@@ -71,6 +73,8 @@ class PBConfig{
 		$this->wysiwyg_editor = (defined("PB_WYSIWYG_EDITOR")) ? PB_WYSIWYG_EDITOR : "hugerte";
 		$this->file_upload_handler = (defined("PB_FILE_UPLOAD_HANDLER")) ? PB_FILE_UPLOAD_HANDLER : "default";
 		$this->file_chunksize = (defined("FILE_CHUNKSIZE")) ? FILE_CHUNKSIZE : 1024 * 1024;
+		$this->file_upload_storage_path = (defined("PB_FILE_UPLOAD_STORAGE_PATH")) ? PB_FILE_UPLOAD_STORAGE_PATH : null;
+		$this->file_upload_legacy_fallback = (defined("PB_FILE_UPLOAD_LEGACY_FALLBACK")) ? PB_FILE_UPLOAD_LEGACY_FALLBACK === true : true;
 
 		$this->default_locale = (defined("PB_DEFAULT_LOCALE")) ? PB_DEFAULT_LOCALE : "ko_KR";
 		

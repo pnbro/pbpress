@@ -5,10 +5,54 @@ if(!defined('PB_DOCUMENT_PATH')){
 }
 
 define('PB_REWRITE_BASE', str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH));
+define('PB_REWRITE_FILEBASE_MARKER', '# PBPress protected uploads route v2');
 
 
 function pb_exists_rewrite(){
 	return file_exists(PB_DOCUMENT_PATH.".htaccess");
+}
+function pb_rewrite_has_filebase_rule(){
+	if(!pb_exists_rewrite()) return false;
+	$rewrite_contents_ = @file_get_contents(PB_DOCUMENT_PATH.".htaccess");
+	if($rewrite_contents_ === false) return false;
+	return strpos($rewrite_contents_, PB_REWRITE_FILEBASE_MARKER) !== false;
+}
+function pb_rewrite_filebase_rules(){
+	$rewrite_base_ = trim(PB_REWRITE_BASE, '/');
+	$rewrite_base_parts_ = strlen($rewrite_base_) ? explode('/', $rewrite_base_) : array();
+	foreach($rewrite_base_parts_ as &$rewrite_base_part_) $rewrite_base_part_ = rawurlencode($rewrite_base_part_);
+	unset($rewrite_base_part_);
+	$request_prefix_ = count($rewrite_base_parts_) ? preg_quote(implode('/', $rewrite_base_parts_), '~').'/' : '';
+
+	return PB_REWRITE_FILEBASE_MARKER."\n"
+		.'RewriteCond %{THE_REQUEST} "\\s/+'.$request_prefix_.'uploads(?:/|%2[fF])" [NC]'."\n"
+		.'RewriteRule ^ index.php [L]'."\n"
+		.'RewriteRule ^uploads(?:/.*)?$ index.php [L]';
+}
+function pb_upgrade_rewrite_for_filebase(){
+	if(!pb_exists_rewrite() || pb_rewrite_has_filebase_rule()) return true;
+	$rewrite_path_ = PB_DOCUMENT_PATH.".htaccess";
+	$rewrite_contents_ = @file_get_contents($rewrite_path_);
+	if($rewrite_contents_ === false || stripos($rewrite_contents_, 'RewriteEngine On') === false) return false;
+
+	$replacement_ = "RewriteEngine On\n\n".pb_rewrite_filebase_rules();
+	$upgraded_contents_ = preg_replace('/RewriteEngine\s+On/i', $replacement_, $rewrite_contents_, 1, $replace_count_);
+	if($replace_count_ !== 1 || !strlen($upgraded_contents_)) return false;
+
+	$temp_path_ = @tempnam(PB_DOCUMENT_PATH, '.pb-rewrite-');
+	if($temp_path_ === false) return false;
+	$written_ = @file_put_contents($temp_path_, $upgraded_contents_, LOCK_EX);
+	if($written_ !== strlen($upgraded_contents_)){
+		@unlink($temp_path_);
+		return false;
+	}
+	@chmod($temp_path_, fileperms($rewrite_path_) & 0777);
+	if(!@rename($temp_path_, $rewrite_path_)){
+		@unlink($temp_path_);
+		return false;
+	}
+
+	return pb_rewrite_has_filebase_rule();
 }
 function pb_install_rewrite(){
 
@@ -20,6 +64,8 @@ function pb_install_rewrite(){
 	}
 
 	fwrite($rewrite_file_, "RewriteEngine On
+
+\n".pb_rewrite_filebase_rules()."
 \nRewriteCond %{REQUEST_FILENAME} !-f
 \nRewriteCond %{REQUEST_FILENAME} !-d
 \nRewriteRule ^admin/(.+)$ admin/index.php [L]

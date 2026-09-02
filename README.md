@@ -2,7 +2,7 @@
 
 **MCP Model 기반 PHP 프레임워크** — 빠르고 확장 가능한 웹사이트 & 관리자 시스템 제작을 위한 경량 풀스택 프레임워크
 
-> **현재 버전**: 7.7.0
+> **현재 버전**: 7.9.2
 
 ---
 
@@ -16,6 +16,7 @@
 - **EasyList / EasyTable** — 페이지네이션, AJAX 기반 목록·테이블 컴포넌트 (PHP + JS 연동)
 - **Theme System** — `themes/` 디렉토리에서 테마 단위로 프론트엔드 완전 분리, 라이브 전환 지원
 - **Plugin System** — `plugins/` 디렉토리에서 플러그인 활성화/비활성화, 훅 기반 확장
+- **비공개 업로드 저장소** — 첨부파일은 웹 공개 경로 밖에 저장하고 기존 `/uploads/{경로}` URL로 안전하게 전달
 - **Page Builder** — 비주얼 페이지 에디터 (XML 기반)
 - **Menu Editor** — 계층형 드래그&드롭 메뉴 관리
 - **다국어 지원** — `__()` 함수 기반 다국어 시스템
@@ -74,9 +75,16 @@ define('PB_DB_CHARSET', 'utf8mb4');
 
 define("PB_CRYPT_PASSWORD", "change-this-to-random-string");
 
+// 선택: pb-config.php 기준 상대경로 또는 절대경로
+// 미설정 시 웹 공개 경로 밖의 설치별 기본 저장소를 사용합니다.
+// define('PB_FILE_UPLOAD_STORAGE_PATH', '../private/uploads');
+// define('PB_FILE_UPLOAD_LEGACY_FALLBACK', true);
+
 // 개발 모드 (lib/dev/ 직접 참조, 에러 표시)
 // define('PB_DEV', true);
 ```
+
+기존 `uploads` 파일을 이전할 때는 먼저 `php /절대경로/dev/migrate-uploads.php`로 dry-run 결과를 확인한 뒤 `--apply`를 사용하세요. 자세한 절차는 [`docs/upload-storage-migration.md`](docs/upload-storage-migration.md)에 있습니다.
 
 ### 4. 브라우저 접속
 

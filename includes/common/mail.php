@@ -35,17 +35,16 @@ function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ 
 	$mail_template_upload_path_ = @$mail_template_upload_path_data_[0]['r_name'];
 
 	if(strlen($mail_template_upload_path_)){
-		$mail_template_upload_path_ = PB_DOCUMENT_PATH."uploads/".$mail_template_upload_path_;
-
 		global $_pb_last_mail_template_path, $_pb_last_mail_template_file_content;
 
 		if($_pb_last_mail_template_path === $mail_template_upload_path_){
 			$mail_template_ = $_pb_last_mail_template_file_content;
 		}else{
-			if(file_exists($mail_template_upload_path_)){
+			$mail_template_read_result_ = pb_filebase_read($mail_template_upload_path_);
+			if(!pb_is_error($mail_template_read_result_)){
 
 				$_pb_last_mail_template_path = $mail_template_upload_path_;
-				$_pb_last_mail_template_file_content = file_get_contents($mail_template_upload_path_);
+				$_pb_last_mail_template_file_content = $mail_template_read_result_;
 				
 				$mail_template_ = $_pb_last_mail_template_file_content;
 				

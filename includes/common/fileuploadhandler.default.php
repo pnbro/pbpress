@@ -156,65 +156,6 @@ if(!function_exists('pb_upload_max_chunk_size')){
 	}
 }
 
-if(!function_exists('pb_upload_root_path')){
-	function pb_upload_root_path(){
-		$document_path_ = realpath(PB_DOCUMENT_PATH);
-		if($document_path_ === false) return false;
-
-		$upload_path_ = $document_path_.DIRECTORY_SEPARATOR.'uploads';
-		if(!file_exists($upload_path_) && !@mkdir($upload_path_, 0755)) return false;
-
-		$upload_path_ = realpath($upload_path_);
-		if($upload_path_ === false) return false;
-
-		$document_prefix_ = rtrim($document_path_, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-		if($upload_path_ !== $document_path_ && strpos($upload_path_, $document_prefix_) !== 0) return false;
-
-		return $upload_path_;
-	}
-}
-
-if(!function_exists('pb_upload_path_is_inside')){
-	function pb_upload_path_is_inside($upload_root_, $target_path_){
-		$upload_root_ = realpath($upload_root_);
-		if($upload_root_ === false) return false;
-
-		if(file_exists($target_path_) || is_link($target_path_)){
-			$target_path_ = realpath($target_path_);
-			if($target_path_ === false) return false;
-		}else{
-			$parent_path_ = realpath(dirname($target_path_));
-			if($parent_path_ === false) return false;
-			$target_path_ = $parent_path_.DIRECTORY_SEPARATOR.basename($target_path_);
-		}
-
-		$upload_prefix_ = rtrim($upload_root_, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-		return $target_path_ === $upload_root_ || strpos($target_path_, $upload_prefix_) === 0;
-	}
-}
-
-if(!function_exists('pb_upload_directory')){
-	function pb_upload_directory($upload_root_, $relative_path_){
-		$upload_root_ = realpath($upload_root_);
-		if($upload_root_ === false) return false;
-
-		$current_path_ = $upload_root_;
-		$path_parts_ = strlen($relative_path_) ? explode('/', trim($relative_path_, '/')) : array();
-		foreach($path_parts_ as $path_part_){
-			if(!preg_match('/\A[a-zA-Z0-9_-]+\z/D', $path_part_)) return false;
-
-			$next_path_ = $current_path_.DIRECTORY_SEPARATOR.$path_part_;
-			if(!file_exists($next_path_) && !@mkdir($next_path_, 0755)) return false;
-
-			$next_path_ = realpath($next_path_);
-			if($next_path_ === false || !pb_upload_path_is_inside($upload_root_, $next_path_)) return false;
-			$current_path_ = $next_path_;
-		}
-
-		return $current_path_;
-	}
-}
-
 if(!function_exists('pb_upload_unlink_inside')){
 	function pb_upload_unlink_inside($upload_root_, $target_path_){
 		if((file_exists($target_path_) || is_link($target_path_)) && pb_upload_path_is_inside($upload_root_, $target_path_)){
@@ -291,6 +232,9 @@ if(!function_exists('pb_upload_cleanup_server_upload')){
 }
 
 class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
+	function supports_chunk_upload(){
+		return true;
+	}
 
 	function initialize(){
 		$upload_root_ = pb_upload_root_path();

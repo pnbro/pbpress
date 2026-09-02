@@ -55,7 +55,9 @@ function pb_redirect_error($code_, $message_ = null, $title_ = "ERROR!"){
 		return;
 	}
 
-	header($_SERVER["SERVER_PROTOCOL"]." Error", true, $code_);
+	$code_ = (int)$code_;
+	if($code_ < 100 || $code_ > 599) $code_ = 500;
+	http_response_code($code_);
 
 	$error_map_ = array(
 		'error_code' => $code_,
