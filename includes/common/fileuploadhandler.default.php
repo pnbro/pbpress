@@ -239,7 +239,7 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 	function initialize(){
 		$upload_root_ = pb_upload_root_path();
 		if($upload_root_ === false){
-			return new PBError(-1, __("에러발생"), __("업로드 경로가 올바르지 않습니다."));
+			return new PBError(-1, __("에러발생"), __("PB_FILE_UPLOAD_STORAGE_PATH 설정을 확인하세요."));
 		}
 
 		//prevent injection

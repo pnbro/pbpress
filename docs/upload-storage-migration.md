@@ -4,7 +4,7 @@ PBPress 7.9.2 keeps public file URLs under `/uploads/{path}` but stores new loca
 
 ## Configuration
 
-Set an absolute path or a path relative to `PB_DOCUMENT_PATH` in `pb-config.php`:
+The default local upload handler requires `PB_FILE_UPLOAD_STORAGE_PATH`. Set an absolute path or a path relative to `PB_DOCUMENT_PATH` in `pb-config.php`. PBPress returns an initialization error when the value is missing or empty:
 
 ```php
 define('PB_FILE_UPLOAD_STORAGE_PATH', '../private/uploads');

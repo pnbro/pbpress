@@ -59,21 +59,10 @@ function pb_upload_resolve_candidate_path($target_path_){
 	return $existing_path_;
 }
 
-function pb_upload_default_storage_path(){
-	$document_path_ = realpath(PB_DOCUMENT_PATH);
-	if($document_path_ === false) return false;
-
-	$site_key_ = substr(hash('sha256', $document_path_), 0, 16);
-	return dirname($document_path_, 2).DIRECTORY_SEPARATOR.'.pbpress-uploads'.DIRECTORY_SEPARATOR.$site_key_;
-}
-
 function pb_upload_configured_storage_path(){
 	global $pb_config;
 	$configured_path_ = isset($pb_config) && isset($pb_config->file_upload_storage_path) ? $pb_config->file_upload_storage_path : null;
-	if(!isset($configured_path_) || !strlen(trim((string)$configured_path_))){
-		$configured_path_ = pb_upload_default_storage_path();
-	}
-	if($configured_path_ === false) return false;
+	if(!isset($configured_path_) || !strlen(trim((string)$configured_path_))) return false;
 
 	$configured_path_ = trim((string)$configured_path_);
 	if(!strlen($configured_path_) || strpos($configured_path_, "\0") !== false || preg_match('/[\x00-\x1F\x7F]/', $configured_path_)) return false;

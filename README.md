@@ -75,9 +75,9 @@ define('PB_DB_CHARSET', 'utf8mb4');
 
 define("PB_CRYPT_PASSWORD", "change-this-to-random-string");
 
-// 선택: pb-config.php 기준 상대경로 또는 절대경로
-// 미설정 시 웹 공개 경로 밖의 설치별 기본 저장소를 사용합니다.
-// define('PB_FILE_UPLOAD_STORAGE_PATH', '../private/uploads');
+// 필수(기본 업로드 핸들러): PB_DOCUMENT_PATH 기준 상대경로 또는 절대경로
+// 미설정·빈값이면 업로드 핸들러 초기화가 실패합니다.
+define('PB_FILE_UPLOAD_STORAGE_PATH', '../private/uploads');
 // define('PB_FILE_UPLOAD_LEGACY_FALLBACK', true);
 
 // 개발 모드 (lib/dev/ 직접 참조, 에러 표시)
@@ -148,7 +148,7 @@ pbpress/
 │
 ├── themes/                # 테마 디렉토리
 ├── plugins/               # 플러그인 디렉토리
-└── uploads/               # 업로드 파일 저장소
+└── uploads/               # 기존 파일 읽기 전용 폴백(신규 파일은 설정한 웹루트 밖 저장소 사용)
 ```
 
 ---
