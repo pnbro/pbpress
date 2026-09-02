@@ -17,7 +17,7 @@ function pb_filebase_url($file_path_ = null, $params_ = array(), $handler_ = nul
 }
 
 function pb_fileupload_is_allowed(){
-	return pb_hook_apply_filters('pb_fileupload_before', pb_is_user_logged_in());
+	return pb_hook_apply_filters('pb_fileupload_before', true);
 }
 
 function _pb_fileupload_add_to_rewrite($results_){
