@@ -115,10 +115,17 @@ function pb_rewrite_path(){
 	global $pb_rewrite_path;
 	if(isset($pb_rewrite_path)) return pb_hook_apply_filters('pb_rewrite_path', $pb_rewrite_path);
 
-	if(!isset($_SERVER['REDIRECT_URL'])) return null;
-	if(strpos($_SERVER['REQUEST_URI'], PB_REWRITE_BASE) === false) return null;
+	$request_path_ = strtok($_SERVER['REQUEST_URI'], "?");
+	if(strpos($request_path_, PB_REWRITE_BASE) !== 0) return null;
 
-	$subpath_string_ = preg_replace('/'.preg_quote(PB_REWRITE_BASE,"/").'/', '', strtok($_SERVER['REQUEST_URI'], "?"), 1);
+	$script_path_ = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
+
+	if(strlen($script_path_) && $request_path_ === $script_path_ && basename($script_path_) !== 'index.php'){
+		return null;
+	}
+
+	$subpath_string_ = substr($request_path_, strlen(PB_REWRITE_BASE));
+
 	$subpath_string_ = ltrim($subpath_string_,"/");
 	$subpath_string_ = rtrim($subpath_string_,"/");
 	$subpath_string_ = preg_replace('/(\/+)/','/',$subpath_string_);
@@ -127,7 +134,7 @@ function pb_rewrite_path(){
 
 	global $pb_rewrite_path;
 	$pb_rewrite_path = $subpath_map_;
-	
+
 	return pb_hook_apply_filters('pb_rewrite_path', $pb_rewrite_path);
 }
 
@@ -153,9 +160,11 @@ function pb_is_current_slug($slug_){
 	return ($target_slug_ === $slug_);
 }
 function pb_is_home(){
-	return $_SERVER['REQUEST_URI'] === PB_REWRITE_BASE;
-	// if(strpos($_SERVER['REQUEST_URI'], PB_REWRITE_BASE) === false) return false;
-	// return !isset($_SERVER['REDIRECT_STATUS']);
+	$request_path_ = strtok($_SERVER['REQUEST_URI'], "?");
+	$request_path_ = rtrim($request_path_, "/")."/";
+	$rewrite_base_ = rtrim(PB_REWRITE_BASE, "/")."/";
+
+	return $request_path_ === $rewrite_base_;
 }
 
 function pb_rewrite_common_handler($rewrite_path_, $rewrite_data_){

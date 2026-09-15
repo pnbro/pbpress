@@ -101,22 +101,28 @@ function pb_adminpage_rewrite_path(){
 	global $pb_adminpage_rewrite_path;
 	if(isset($pb_adminpage_rewrite_path)) return pb_hook_apply_filters('pb_adminpage_rewrite_path', $pb_adminpage_rewrite_path);
 
-	if(!isset($_SERVER['REDIRECT_URL'])) return null;
-	if(strpos($_SERVER['REQUEST_URI'], PB_ADMINPAGE_REWRITE_BASE) === false) return null;
+	$request_path_ = strtok($_SERVER['REQUEST_URI'], "?");
+	if(strpos($request_path_, PB_ADMINPAGE_REWRITE_BASE) !== 0) return null;
 
-	$admin_subpath_map_ = preg_replace('/'.preg_quote(PB_ADMINPAGE_REWRITE_BASE,"/").'/', '', strtok($_SERVER['REQUEST_URI'], "?"), 1);
+	$script_path_ = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
+
+	if(strlen($script_path_) && $request_path_ === $script_path_ && basename($script_path_) !== 'index.php'){
+		return null;
+	}
+
+	$admin_subpath_map_ = substr($request_path_, strlen(PB_ADMINPAGE_REWRITE_BASE));
+
 	$admin_subpath_map_ = rtrim($admin_subpath_map_, '/');
 
 	if(strlen($admin_subpath_map_)){
-		$admin_subpath_map_ = explode("/", $admin_subpath_map_);	
+		$admin_subpath_map_ = explode("/", $admin_subpath_map_);
 	}else{
 		$admin_subpath_map_ = array();
 	}
-	
 
 	global $pb_adminpage_rewrite_path;
 	$pb_adminpage_rewrite_path = $admin_subpath_map_;
-	
+
 	return pb_hook_apply_filters('pb_adminpage_rewrite_path', $pb_adminpage_rewrite_path);
 }
 
