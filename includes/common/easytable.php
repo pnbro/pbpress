@@ -113,7 +113,7 @@ class PB_easytable{
 	function render_orderby($data_, $sort_key_, $sort_dir_){
 		$orderby_ = null;
 
-		if(!strlen($sort_key_ ?? "")) return null;
+		if(!is_scalar($sort_key_) || !strlen($sort_key_)) return null;
 
 		$sort_dir_ = (strtolower(trim((string)$sort_dir_)) === 'desc') ? 'DESC' : 'ASC';
 		if(preg_match('/[^A-Za-z0-9_.]/', (string)$sort_key_)) return null;
@@ -448,7 +448,7 @@ function _pb_ajax_easytable_load_html(){
 	$sort_key_ = _GET('__ez_sort');
 	$sort_dir_ = _GET('__ez_sort_dir');
 
-	if(!isset($pb_easytable_map[$table_id_])){
+	if(!is_scalar($table_id_) || !isset($pb_easytable_map[$table_id_])){
 		pb_ajax_error(__('잘못된 접근'),__('잘못된 접근입니다.'));
 	}
 

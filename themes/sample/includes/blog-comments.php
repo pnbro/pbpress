@@ -152,7 +152,7 @@ function _sample_blog_ajax_comment_add(){
 	}
 
 	$post_id_ = isset($_POST['post_id']) ? (int)$_POST['post_id'] : 0;
-	$content_ = isset($_POST['content']) ? trim($_POST['content']) : '';
+	$content_ = (isset($_POST['content']) && is_string($_POST['content'])) ? trim($_POST['content']) : '';
 
 	if($post_id_ <= 0){
 		return pb_ajax_error('잘못된 요청입니다.');

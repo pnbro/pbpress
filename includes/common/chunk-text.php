@@ -20,7 +20,7 @@ function pb_chunk_text_handle($complete_callback_, $options_ = array()){
 	$chunk_length_  = _POST('_chunk_length', null, PB_PARAM_INT);
 	$chunk_data_    = _POST('_chunk_data');
 
-	if(!strlen($upload_key_) || !isset($chunk_current_) || !isset($chunk_length_) || !isset($chunk_data_)){
+	if(!is_scalar($upload_key_) || !strlen($upload_key_) || !isset($chunk_current_) || !isset($chunk_length_) || !isset($chunk_data_)){
 		pb_ajax_error(__("잘못된 요청"), __("청크 파라미터가 누락되었습니다."));
 	}
 

@@ -59,7 +59,8 @@ function pb_install_rewrite(){
 	$rewrite_base_ = str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH);
 	$rewrite_file_ = fopen(PB_DOCUMENT_PATH.".htaccess", "w");
 
-	if(!isset($rewrite_file_)){
+	//fopen 실패 시 false 반환(PHP 8부터 fwrite(false)는 TypeError)
+	if(!isset($rewrite_file_) || $rewrite_file_ === false){
 		return new PBError(-1, __("에러발생"), __("Rewrite를 생성할 수 없습니다. 파일권한을 확인하세요."));
 	}
 

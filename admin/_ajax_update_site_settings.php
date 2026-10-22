@@ -18,7 +18,7 @@ header("Content-Type:application/json; charset=".$pb_config->charset);
 
 $settings_data_ = _POST('settings_data');
 
-if(!isset($settings_data_)){
+if(!isset($settings_data_) || !is_array($settings_data_)){
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => __('에러발생'),

@@ -32,9 +32,10 @@ function pb_mail_send($to_, $subject_, $body_, $attachments_ = array(), $options
 }
 function pb_mail_template_send($to_, $subject_, $data_ = array(), $attachments_ = array(), $options_ = array()){
 	$mail_template_upload_path_data_ = pb_clob_option_value('mail_template_upload', "");
-	$mail_template_upload_path_ = @$mail_template_upload_path_data_[0]['r_name'];
+	//PHP 8부터 문자열에 배열 오프셋 접근 시 TypeError가 발생하므로, 저장형태(빈값/JSON/배열)와 무관한 공통 파서 사용
+	$mail_template_upload_path_ = pb_parse_uploaded_file_path($mail_template_upload_path_data_);
 
-	if(strlen($mail_template_upload_path_)){
+	if(strlen($mail_template_upload_path_ ?? "")){
 		global $_pb_last_mail_template_path, $_pb_last_mail_template_file_content;
 
 		if($_pb_last_mail_template_path === $mail_template_upload_path_){

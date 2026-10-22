@@ -190,6 +190,11 @@ function _pb_page_builder_ajax_render_element_custom_preview(){
 		}
 	}
 
+	//PHP 8부터 호출불가 대상 전달 시 TypeError가 발생하므로 사전 차단
+	if(!isset($target_preview_data_['func']) || !is_callable($target_preview_data_['func'])){
+		pb_ajax_error(__("잘못된 요청"), __("잘못된 요청입니다."));
+	}
+
 	ob_start();
 	call_user_func_array($target_preview_data_['func'], array($element_data_, $content_));
 	$preview_html_ = ob_get_clean();
@@ -212,8 +217,13 @@ function _pb_page_builder_ajax_render_element_render_preview(){
 
 	$temp_page_builder_elements_ = pb_page_builder_elements();
 
-	$target_element_ = $temp_page_builder_elements_[$element_id_];
-	$preview_render_ = $target_element_['preview'];
+	$target_element_ = (is_scalar($element_id_) && isset($temp_page_builder_elements_[$element_id_])) ? $temp_page_builder_elements_[$element_id_] : null;
+	$preview_render_ = isset($target_element_['preview']) ? $target_element_['preview'] : null;
+
+	//PHP 8부터 호출불가 대상 전달 시 TypeError가 발생하므로 사전 차단
+	if(!is_callable($preview_render_)){
+		pb_ajax_error(__("잘못된 요청"), __("잘못된 요청입니다."));
+	}
 	
 	ob_start();
 	call_user_func_array($preview_render_, array($element_data_, $content_));
@@ -237,7 +247,7 @@ function _pb_live_editor_ajax_render_page(){
 	}
 
 	$builder_json_str_ = _POST('builder_json');
-	if(!strlen($builder_json_str_)){
+	if(!is_scalar($builder_json_str_) || !strlen($builder_json_str_)){
 		pb_ajax_error(__("잘못된 요청"), __("빌더 데이터가 누락되었습니다."));
 	}
 
@@ -256,7 +266,7 @@ function _pb_live_editor_ajax_render_page(){
 	// ── 글로벌 $pbpage 설정 (테마 header/footer가 참조) ──
 	global $pbpage, $pbpage_meta_map;
 	$page_id_ = _POST('page_id');
-	if(strlen($page_id_)){
+	if(is_scalar($page_id_) && strlen($page_id_)){
 		$pbpage = pb_page($page_id_);
 		if(!isset($pbpage_meta_map)) $pbpage_meta_map = array();
 	}
@@ -335,7 +345,7 @@ function _pb_live_editor_ajax_render_page(){
 		echo '<span id="pb-live-edit-content-end" style="display:none"></span>';
 
 		pb_theme_footer($footer_name_);
-	} catch (Exception $e_) {
+	} catch (Throwable $e_) { // PHP 8부터 TypeError 등 Error 계열도 정리 대상(Throwable: PHP 7.0+)
 		// 렌더링 중 생성된 중첩 ob 버퍼 모두 정리
 		while(ob_get_level() > $_ob_level_) {
 			ob_end_clean();
@@ -443,7 +453,7 @@ function _pb_live_editor_ajax_render_element(){
 	$element_json_ = _POST('element_json'); // 전체 요소 JSON
 	$element_path_ = _POST('element_path');
 
-	if(!strlen($element_name_)){
+	if(!is_scalar($element_name_) || !strlen($element_name_)){
 		pb_ajax_error(__("잘못된 요청"), __("요소 이름이 누락되었습니다."));
 	}
 
@@ -463,7 +473,7 @@ function _pb_live_editor_ajax_render_element(){
 	$content_ = isset($element_data_['elementcontent']) ? $element_data_['elementcontent'] : '';
 
 	// 자식 요소 마커를 위해 필터 등록 (경로 기반)
-	$base_path_ = strlen($element_path_) ? $element_path_ : '0';
+	$base_path_ = (is_scalar($element_path_) && strlen($element_path_)) ? $element_path_ : '0';
 	$GLOBALS['_live_edit_counter'] = array();
 	$GLOBALS['_live_edit_depth'] = 0;
 

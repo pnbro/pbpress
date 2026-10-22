@@ -6,7 +6,7 @@ header("Content-Type:application/json; charset=UTF-8");
 
 $request_data_ = _POST('request_data');
 
-if(!isset($request_data_)){
+if(!isset($request_data_) || !is_array($request_data_)){
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => __('에러발생'),

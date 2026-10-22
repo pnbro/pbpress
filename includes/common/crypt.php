@@ -28,7 +28,8 @@ function pb_crypt_shared_keys(){
 		'config' => OPENSSL_CONF_PATH,
 	));
 
-	$public_key_ = openssl_pkey_get_details($key_);
+	//PHP 8부터 키생성 실패(false) 전달 시 TypeError가 발생하므로, 하위버젼과 동일하게 실패(false)로 처리
+	$public_key_ = ($key_ !== false) ? openssl_pkey_get_details($key_) : false;
 	$public_key_ = $public_key_['key'];
 	
 	$matches_ = array();

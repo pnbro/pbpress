@@ -171,12 +171,13 @@ function _pb_param_from_($map_, $key_, $default_ = null, $type_ = PB_PARAM_PLAIN
 
 	switch($type_){
 		case PB_PARAM_INT : 
-			if(!strlen($param_value_)) return $default_;
+			//PHP 8부터 배열 전달 시 strlen()이 TypeError를 발생하므로 기본값 처리(하위버젼과 동일 결과)
+			if(is_array($param_value_) || !strlen($param_value_)) return $default_;
 			return (int)$param_value_;
 
 		break;
 		case PB_PARAM_FLOAT : 
-			if(!strlen($param_value_)) return $default_;
+			if(is_array($param_value_) || !strlen($param_value_)) return $default_;
 			return (float)$param_value_; 
 
 		break;

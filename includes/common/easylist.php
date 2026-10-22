@@ -213,7 +213,7 @@ function _pb_ajax_easylist_load_html(){
 	$table_id_ = _GET('table_id', -1);
 	$page_index_ = _GET('page_index', 0, PB_PARAM_INT);
 
-	if(!isset($pb_easylist_map[$table_id_])){
+	if(!is_scalar($table_id_) || !isset($pb_easylist_map[$table_id_])){
 		pb_ajax_error(__('잘못된 접근'),__('잘못된 접근입니다.'));
 	}
 

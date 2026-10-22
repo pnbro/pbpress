@@ -644,8 +644,11 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 				break;
 				case IMAGETYPE_PNG : 
 					$image_resource_ = imagecreatefrompng($r_file_path_);
-					imageAlphaBlending($image_resource_, true);
-					imageSaveAlpha($image_resource_, true);
+					//PHP 8부터 손상된 이미지(false) 전달 시 TypeError가 발생하므로 정상 로드된 경우만 처리
+					if($image_resource_ !== false){
+						imageAlphaBlending($image_resource_, true);
+						imageSaveAlpha($image_resource_, true);
+					}
 				break;
 				case IMAGETYPE_GIF : 
 					$image_resource_ = imagecreatefromgif($r_file_path_);
@@ -699,6 +702,10 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 					$image_dst_width_ = $image_dst_height_ * ($original_rate_);
 				}
 
+				//PHP 8부터 소수/1 미만 크기 전달 시 사용중단 경고·ValueError가 발생하므로, 하위버젼과 동일하게 정수로 버림하되 최소 1px 보장
+				$image_dst_width_ = max(1, (int)$image_dst_width_);
+				$image_dst_height_ = max(1, (int)$image_dst_height_);
+
 				$resize_dst_instance_ = imagecreatetruecolor($image_dst_width_, $image_dst_height_);
 				imagealphablending($resize_dst_instance_, false);
 				imagesavealpha($resize_dst_instance_,true);
@@ -722,7 +729,7 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 			//make thumbnail
 			$thumbnail_dst_width_ = isset($options_['thumbnail_size']) ? (int)$options_['thumbnail_size'] : 500;
 			$thumbnail_dst_width_ = max(1, min(4096, $thumbnail_dst_width_));
-			$thumbnail_dst_height_ = $thumbnail_dst_width_ / $original_rate_;
+			$thumbnail_dst_height_ = max(1, (int)($thumbnail_dst_width_ / $original_rate_));
 			
 			$thumbnail_dst_instance_ = imagecreatetruecolor($thumbnail_dst_width_, $thumbnail_dst_height_);
 			imagecopyresampled($thumbnail_dst_instance_, $image_resource_, 0, 0, 0, 0, $thumbnail_dst_width_, $thumbnail_dst_height_, $original_width_, $original_height_);

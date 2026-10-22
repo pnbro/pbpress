@@ -45,7 +45,7 @@ function _pb_theme_ajax_do_update(){
 
 	$theme_data_ = _POST('theme_data');
 
-	if(!isset($theme_data_)){
+	if(!isset($theme_data_) || !is_array($theme_data_)){
 		echo json_encode(array(
 			'success' => false,
 			'error_title' => __('에러발생'),

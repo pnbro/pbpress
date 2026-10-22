@@ -150,7 +150,7 @@ pb_add_ajax('user-do-login', '_sample_theme_auth_ajax_do_login');
 function _sample_theme_auth_ajax_do_login(){
 	$login_data_ = _POST('login_data');
 
-	if(!isset($login_data_) || !pb_verify_request_token('sample-theme-auth-login', (string)@$login_data_['_request_chip'])){
+	if(!isset($login_data_) || !is_array($login_data_) || !pb_verify_request_token('sample-theme-auth-login', (string)@$login_data_['_request_chip'])){
 		pb_ajax_error(__('에러발생'), __('요청값이 잘못되었습니다.'));
 	}
 
@@ -197,7 +197,7 @@ pb_add_ajax('user-do-signup', '_sample_theme_auth_ajax_do_signup');
 function _sample_theme_auth_ajax_do_signup(){
 	$signup_data_ = _POST('signup_data');
 
-	if(!isset($signup_data_) || !pb_verify_request_token('sample-theme-auth-signup', (string)@$signup_data_['_request_chip'])){
+	if(!isset($signup_data_) || !is_array($signup_data_) || !pb_verify_request_token('sample-theme-auth-signup', (string)@$signup_data_['_request_chip'])){
 		pb_ajax_error(__('에러발생'), __('요청값이 잘못되었습니다.'));
 	}
 
@@ -281,7 +281,7 @@ pb_add_ajax('user-do-resetpass', '_sample_theme_auth_ajax_do_resetpass');
 function _sample_theme_auth_ajax_do_resetpass(){
 	$resetpass_data_ = _POST('resetpass_data');
 
-	if(!isset($resetpass_data_) || !pb_verify_request_token('sample-theme-auth-resetpass', (string)@$resetpass_data_['_request_chip'])){
+	if(!isset($resetpass_data_) || !is_array($resetpass_data_) || !pb_verify_request_token('sample-theme-auth-resetpass', (string)@$resetpass_data_['_request_chip'])){
 		pb_ajax_error(__('에러발생'), __('요청값이 잘못되었습니다.'));
 	}
 

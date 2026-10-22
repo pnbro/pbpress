@@ -139,7 +139,7 @@ pb_add_ajax("pb-admin-manage-user-do-update", function(){
 
 	$request_data_ = _POST('request_data');
 
-	if(!pb_verify_request_token("pbpress_manage_user", $request_data_['_request_chip'])){
+	if(!is_array($request_data_) || !pb_verify_request_token("pbpress_manage_user", $request_data_['_request_chip'])){
 		echo json_encode(array(
 			'success' => false,
 			'error_title' => __('에러발생'),
@@ -206,7 +206,7 @@ pb_add_ajax("pb-admin-manage-user-do-add", function(){
 
 	$request_data_ = _POST('request_data');
 
-	if(!pb_verify_request_token("pbpress_manage_user", $request_data_['_request_chip'])){
+	if(!is_array($request_data_) || !pb_verify_request_token("pbpress_manage_user", $request_data_['_request_chip'])){
 		echo json_encode(array(
 			'success' => false,
 			'error_title' => __('에러발생'),

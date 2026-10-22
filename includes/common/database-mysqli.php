@@ -106,9 +106,13 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 	}
 
 	public function num_rows($resource_){
+		//PHP 8부터 실패한 쿼리결과(false) 전달 시 TypeError가 발생하므로 결과객체만 처리
+		if(!($resource_ instanceof mysqli_result)) return null;
 		return @mysqli_num_rows($resource_); 
 	}
 	public function fetch_array($resource_, $option_ = null){
+		//PHP 8부터 실패한 쿼리결과(false) 전달 시 TypeError가 발생하므로 결과객체만 처리
+		if(!($resource_ instanceof mysqli_result)) return null;
 		switch($option_){
 			case PB_MYSQL_NUM :
 				$option_ = MYSQLI_NUM;	

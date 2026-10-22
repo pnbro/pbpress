@@ -11,6 +11,8 @@ define("PB_OPTION_ACTIVATED_PLUGINS_NAME", "activated_plugins");
 
 function pb_activated_plugins($with_data_ = false){
 	$temp_ = pb_clob_option_value(PB_OPTION_ACTIVATED_PLUGINS_NAME, array());
+	//저장값 손상(false 등) 시 PHP 8부터 in_array()가 TypeError를 발생하므로 빈 목록으로 처리(하위버젼과 동일 결과)
+	if(!is_array($temp_)) $temp_ = array();
 
 	if(!$with_data_) return $temp_;
 

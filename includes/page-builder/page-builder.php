@@ -243,9 +243,10 @@ function _pb_page_builder_compile_css_map(){
 	$screen_md_min_ = pb_option_value('pb_page_builder_screen_md', 992);
 	$screen_lg_min_ = pb_option_value('pb_page_builder_screen_lg', 1220);
 
-	$screen_xs_max_ = $screen_sm_min_ - 1;
-	$screen_sm_max_ = $screen_md_min_ - 1;
-	$screen_md_max_ = $screen_lg_min_ - 1;
+	//PHP 8부터 숫자가 아닌 문자열 연산 시 TypeError가 발생하므로, 하위버젼과 동일하게 앞자리 숫자만 사용(빈값=0)
+	$screen_xs_max_ = (float)$screen_sm_min_ - 1;
+	$screen_sm_max_ = (float)$screen_md_min_ - 1;
+	$screen_md_max_ = (float)$screen_lg_min_ - 1;
 
 	$default_padding_ = pb_option_value('pb_page_builder_default_padding', 20);
 
@@ -258,8 +259,8 @@ function _pb_page_builder_compile_css_map(){
 		'screen_md_max' => $screen_md_max_.'px',
 		'screen_lg_min' => $screen_lg_min_.'px',
 		'default_padding' => $default_padding_.'px',
-		'default_padding_double' => ($default_padding_ * 2).'px',
-		'default_padding_half' => ($default_padding_ / 2).'px',
+		'default_padding_double' => ((float)$default_padding_ * 2).'px',
+		'default_padding_half' => ((float)$default_padding_ / 2).'px',
 	);
 
 	$style_data_ = pb_hook_apply_filters('pb_page_builder_compile_css_style_data', $style_data_);

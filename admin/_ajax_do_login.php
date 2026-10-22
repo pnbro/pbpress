@@ -6,7 +6,7 @@ header("Content-Type:application/json; charset=UTF-8");
 
 $login_data_ = _POST('login_data');
 
-if(!isset($login_data_)){
+if(!isset($login_data_) || !is_array($login_data_)){
 	echo json_encode(array(
 		'success' => false,
 		'error_title' => __('에러발생'),
