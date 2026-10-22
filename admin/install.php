@@ -74,7 +74,7 @@
 								$timezone_offset_prefix_ = $timezone_offset_ < 0 ? '-' : '+';
 								$timezone_offset_formatted_ = gmdate( 'H:i', abs($timezone_offset_) );
 
-								$pretty_offset_ = "${timezone_offset_prefix_}${timezone_offset_formatted_}";
+								$pretty_offset_ = $timezone_offset_prefix_.$timezone_offset_formatted_;
 							?>
 							<option value="<?=$timezone_?>" <?=pb_selected($timezone_guess_, $timezone_)?>><?=$timezone_?> (GMT<?=$pretty_offset_?>)</option>
 							<?php } ?>

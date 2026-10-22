@@ -167,7 +167,7 @@ function pb_clob_option_update($option_name_, $option_value_, $crypt_ = false){
 		unset($_pb_clob_option_map[$option_name_]);
 	}
 
-	if(strlen($option_id_)){
+	if(strlen($option_id_ ?? "")){
 		pb_hook_do_action('pb_clob_option_updated', $option_id_);	
 	}
 

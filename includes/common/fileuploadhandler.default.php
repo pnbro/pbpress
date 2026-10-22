@@ -4,6 +4,15 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+//PHP 8.0부터 GD 이미지는 객체로 자동 해제되고 8.5부터 imagedestroy()가 사용중단되었으므로, 하위버젼에서만 명시적으로 해제
+if(!function_exists('_pb_fileupload_image_destroy')){
+	function _pb_fileupload_image_destroy($image_resource_){
+		if(PHP_VERSION_ID < 80000){
+			imagedestroy($image_resource_);
+		}
+	}
+}
+
 if(!function_exists('pb_upload_denied_extensions')){
 	function pb_upload_denied_extensions(){
 		return pb_hook_apply_filters('pb_upload_denied_extensions', array(
@@ -649,15 +658,15 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 				switch($exif_data_['Orientation']) {
 					case 3:
 					$temp_resource_ = imagerotate($image_resource_, 180, 0);
-					imagedestroy($image_resource_);
+					_pb_fileupload_image_destroy($image_resource_);
 					break;
 					case 6:
 					$temp_resource_ = imagerotate($image_resource_, -90, 0);
-					imagedestroy($image_resource_);
+					_pb_fileupload_image_destroy($image_resource_);
 					break;
 					case 8:
 					$temp_resource_ = imagerotate($image_resource_, 90, 0);
-					imagedestroy($image_resource_);
+					_pb_fileupload_image_destroy($image_resource_);
 					break;
 					default:
 					$temp_resource_ = $image_resource_;
@@ -697,7 +706,7 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 				imagefilledrectangle($resize_dst_instance_, 0, 0, $image_dst_width_, $image_dst_height_, $transparent_);
 				imagecopyresampled($resize_dst_instance_, $image_resource_, 0, 0, 0, 0, $image_dst_width_, $image_dst_height_, $original_width_, $original_height_);
 
-				imagedestroy($image_resource_);
+				_pb_fileupload_image_destroy($image_resource_);
 				$image_resource_ = $resize_dst_instance_;
 				$did_resized_ = true;
 			}
@@ -719,7 +728,7 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 			imagecopyresampled($thumbnail_dst_instance_, $image_resource_, 0, 0, 0, 0, $thumbnail_dst_width_, $thumbnail_dst_height_, $original_width_, $original_height_);
 
 			imagejpeg($thumbnail_dst_instance_, $thumbnail_file_path_);
-			imagedestroy($thumbnail_dst_instance_);
+			_pb_fileupload_image_destroy($thumbnail_dst_instance_);
 
 			$result_['thumbnail'] = $relative_directory_."/thumbnail/".$thumbnail_file_name_;
 
@@ -737,7 +746,7 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 				}
 			}
 
-			imagedestroy($image_resource_);
+			_pb_fileupload_image_destroy($image_resource_);
 		}
 
 		return $result_;

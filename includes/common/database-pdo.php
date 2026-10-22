@@ -59,6 +59,8 @@ class PBDatabase_connection_pdo extends PBDatabase_connection{
 
 		$this->_connection = new PDO($dsn_, $this->_username, $this->_userpass) Or die("Error On DB Connection : PDO");
 		$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		//PHP 8.1부터 정수/실수 컬럼이 숫자형으로 반환되므로, 하위버젼과 동일하게 문자열로 반환하도록 고정
+		$this->_connection->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, true);
 
 		return isset($this->_connection);
 	}

@@ -49,7 +49,7 @@ function pb_mypage_menu_data(){
 }
 
 function pb_mypage_url($key_ = null){
-	if(!strlen($key_) || $key_ === 'home'){
+	if(!strlen($key_ ?? "") || $key_ === 'home'){
 		return pb_home_url('mypage');
 	}
 	return pb_home_url('mypage/'.$key_);

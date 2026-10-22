@@ -17,6 +17,7 @@ function pb_easylist_default_loading_indicator(){
 
 class PB_easylist{
 
+	private $_id;
 	private $_loader;
 	private $_render;
 	private $_options;

@@ -57,7 +57,7 @@ function pb_request_token($name_){
     return urlencode(_pb_request_token_encrypt($name_));
 }
 function pb_verify_request_token($name_, $chiper_){
-    $plain_text_ = _pb_request_token_decrypt(urldecode($chiper_));
+    $plain_text_ = _pb_request_token_decrypt(urldecode($chiper_ ?? ""));
     if($plain_text_ === FALSE) return false;
     return ($plain_text_ === $name_);
 }

@@ -29,7 +29,7 @@ pb_authority_task_add_type('manage_page', array(
 ));
 pb_authority_initial_register(PB_AUTHORITY_SLUG_ADMINISTRATOR, "manage_page");
 
-function _pb_rewrite_unique_slug_for_page($result_, $original_slug_, $retry_count_ = 0, $extra_data_){
+function _pb_rewrite_unique_slug_for_page($result_, $original_slug_, $retry_count_ = 0, $extra_data_ = array()){
 	$check_data_ = pb_page_by_slug($result_);
 	
 	if(!isset($check_data_)){

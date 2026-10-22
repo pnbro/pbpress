@@ -434,7 +434,7 @@ function pb_post_featured_image_url($id_ = null){
 
 	$post_data_ = pb_post($id_);
 	if(!isset($post_data_)) return null;
-	if(!strlen($post_data_['featured_image_path'])) return null;
+	if(!strlen($post_data_['featured_image_path'] ?? "")) return null;
 	return pb_hook_apply_filters('pb_post_featured_image_url', pb_filebase_url($post_data_['featured_image_path']), $post_data_);
 }
 

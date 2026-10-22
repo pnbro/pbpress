@@ -114,7 +114,7 @@
 						<?php if(!$is_new_){ ?>
 						<div class="form-group">
 							<label><?=__('마지막수정일자')?></label>
-							<p class="form-control-static"><?=strlen($pbpage['mod_date_ymdhi']) ? $pbpage['mod_date_ymdhi'] : $pbpage['reg_date_ymdhi']?></p>
+							<p class="form-control-static"><?=strlen($pbpage['mod_date_ymdhi'] ?? "") ? $pbpage['mod_date_ymdhi'] : $pbpage['reg_date_ymdhi']?></p>
 							<div class="help-block with-errors"></div>
 							<div class="clearfix"></div>
 						</div>

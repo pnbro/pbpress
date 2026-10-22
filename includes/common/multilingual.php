@@ -119,7 +119,7 @@ function __($text_, $domain_ = PBDOMAIN, $locale_ = null){
 	global $pb_lang_domain_maps;
 	if(!isset($pb_lang_domain_maps[$domain_])) return $text_;
 
-	if(!strlen($locale_)){
+	if(!strlen($locale_ ?? "")){
 		$locale_ = pb_current_locale();
 	}
 	if(!isset($pb_lang_domain_maps[$domain_]['locales'][$locale_])) return $text_;

@@ -65,11 +65,11 @@ function pb_crypt_decrypt($ciphertext_, $private_key_ = null, $password_ = null)
 	$shared_key_ = pb_crypt_shared_keys();
 	global $pb_config;
 
-	if(!strlen($private_key_)){
+	if(!strlen($private_key_ ?? "")){
 		$private_key_ = $shared_key_['private_key'];
 	}
 
-	if(!strlen($password_)){
+	if(!strlen($password_ ?? "")){
 		$password_ = $pb_config->crypt_password;
 	}
 
@@ -91,13 +91,13 @@ function pb_crypt_decrypt($ciphertext_, $private_key_ = null, $password_ = null)
 function pb_static_crypt_encrypt($plaintext_, $password_ = null, $iv_ = null){
 	global $pb_config;
 
-	if(!strlen($password_)){
+	if(!strlen($password_ ?? "")){
 		$password_ = $pb_config->crypt_password;
 	}
 
 	$encryption_key_ = base64_decode($password_);
 	
-	if(!strlen($iv_)){
+	if(!strlen($iv_ ?? "")){
 		$iv_ = pb_random_string($pb_config->crypt_static_iv_size);	
 	}
 	
@@ -111,7 +111,7 @@ function pb_static_crypt_encrypt($plaintext_, $password_ = null, $iv_ = null){
 function pb_static_crypt_decrypt($encrypted_data_, $iv_, $password_ = null){
 	global $pb_config;
 
-	if(!strlen($password_)){
+	if(!strlen($password_ ?? "")){
 		$password_ = $pb_config->crypt_password;
 	}
 

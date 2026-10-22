@@ -26,9 +26,11 @@ class PBSessionHandlerDatabase implements SessionHandlerInterface{
 		}
 	}
 	
+	#[\ReturnTypeWillChange]
 	function open($save_path_, $id_){
 		return true;
 	}
+	#[\ReturnTypeWillChange]
 	function close(){
 		return true;
 	}
@@ -41,11 +43,13 @@ class PBSessionHandlerDatabase implements SessionHandlerInterface{
 		return $session_statement_->get_first_row();
 	}
 
+	#[\ReturnTypeWillChange]
 	function read($id_){
 		$session_data_ = $this->session_data($id_);
 		if(!isset($session_data_) || $session_data_['expire_time'] < time()) return "";
 		return (string) $session_data_['session_data'];
 	}
+	#[\ReturnTypeWillChange]
 	function write($id_, $data_){
 		$check_data_ = $this->session_data($id_);
 
@@ -92,12 +96,14 @@ class PBSessionHandlerDatabase implements SessionHandlerInterface{
 
 		return $result_;
 	}
+	#[\ReturnTypeWillChange]
 	function destroy($id_){
 		global $sessions_do;
 		$sessions_do->delete($id_);
 		return true;
 	}
 
+	#[\ReturnTypeWillChange]
 	function gc($timeout_){
 		global $pbdb;
 		$pbdb->query("DELETE FROM sessions WHERE sessions.expire_time < ".time());

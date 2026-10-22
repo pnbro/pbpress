@@ -189,7 +189,7 @@ function _pb_mail_hook_render_manage_site($menu_data_){
 				<div class="form-group">
 					<label><?=__('메일서식업로드')?><br/><small class="help-block"><?=__('*메일서식을 업로드 시, 위 메일서식을 대체합니다.')?></small></label>
 
-					<input type="text" name="mail_template_upload" value="<?=htmlentities($mail_template_upload_path_)?>" class="hidden" id="pb-manage-site-form-mail_template_uploader" data-limit="1">
+					<input type="text" name="mail_template_upload" value="<?=htmlentities($mail_template_upload_path_ ?? "")?>" class="hidden" id="pb-manage-site-form-mail_template_uploader" data-limit="1">
 					
 					<div class="help-block with-errors"></div>
 					<div class="clearfix"></div>

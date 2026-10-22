@@ -63,7 +63,7 @@ function pb_switch_theme($theme_){
 function pb_current_theme(){
 	global $_pb_current_theme;
 
-	if(strlen($_pb_current_theme)) return $_pb_current_theme;
+	if(strlen($_pb_current_theme ?? "")) return $_pb_current_theme;
 
 	$theme_ = pb_option_value(PB_OPTION_THEME_NAME);
 	$_pb_current_theme = $theme_;
@@ -85,7 +85,7 @@ function pb_theme_part($part_name_){
 }
 
 function pb_theme_header($header_name_ = null){
-	if(strlen($header_name_)){
+	if(strlen($header_name_ ?? "")){
 		$header_name_ = "header-".$header_name_;
 	}else{
 		$header_name_ = "header";
@@ -94,7 +94,7 @@ function pb_theme_header($header_name_ = null){
 }
 
 function pb_theme_footer($footer_name_ = null){
-	if(strlen($footer_name_)){
+	if(strlen($footer_name_ ?? "")){
 		$footer_name_ = "footer-".$footer_name_;
 	}else{
 		$footer_name_ = "footer";

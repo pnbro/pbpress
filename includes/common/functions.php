@@ -21,7 +21,7 @@ function pb_admin_url($sub_path_ = "", $params_ = array()){
 function pb_admin_login_url($redirect_url_ = null){
 	$adminpage_login_url_ = pb_hook_apply_filters("pb_admin_login_url", pb_home_url("admin/login.php"));
 
-	if(strlen($redirect_url_)){
+	if(strlen($redirect_url_ ?? "")){
 		$adminpage_login_url_ = pb_make_url($adminpage_login_url_, array(
 			"redirect_url" => $redirect_url_,
 		));

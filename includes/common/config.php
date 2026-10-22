@@ -4,6 +4,18 @@ if(!defined('PB_DOCUMENT_PATH')){
 	die( '-1' );
 }
 
+//PHP 버젼업에 따른 사용중단 예고(Deprecated)는 화면에 출력하지 않고 에러로그로만 남김
+//(개발모드에서 화면 출력 시 헤더/세션/AJAX 응답(JSON)이 깨지는 것을 방지)
+function pb_log_deprecated_error($severity_, $message_, $filename_, $lineno_){
+	if(!($severity_ & (E_DEPRECATED | E_USER_DEPRECATED))) return false;
+	error_log("PHP Deprecated:  ".$message_." in ".$filename_." on line ".$lineno_);
+	return true;
+}
+function _pb_devmode_error_handler($severity_, $message_, $filename_, $lineno_){
+	if(!(error_reporting() & $severity_)) return false;
+	return pb_log_deprecated_error($severity_, $message_, $filename_, $lineno_);
+}
+
 class PBConfig{
 
 	private $devmode = false;
@@ -109,6 +121,7 @@ class PBConfig{
 		if($this->devmode){
 			error_reporting(E_ALL);
 			ini_set("display_errors", 1);
+			set_error_handler('_pb_devmode_error_handler');
 		}else{
 			error_reporting(0);
 			ini_set("display_errors", 0);

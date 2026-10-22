@@ -16,14 +16,14 @@ function pb_easy_splited_view($id_, $master_table_id_, $detail_table_id_, $optio
 
 	$detail_table_ = null; 
 
-	if(strlen($detail_table_id_)){
+	if(strlen($detail_table_id_ ?? "")){
 		$detail_table_ = pb_easytable($detail_table_id_);
 		$detail_table_->update_option_value("ajax", true);
 	}	
 ?>
 
 	<div class="splitted-view-frame" id="<?=$id_?>" data-master-table-id="#<?=$master_table_id_?>"
-	 <?php if(strlen($detail_table_id_)){ ?>
+	 <?php if(strlen($detail_table_id_ ?? "")){ ?>
 			data-detail-table-id="#<?=$detail_table_id_?>"
 	 <?php } ?>
 	  data-master-loader="<?=$master_loader_?>"><div class="wrap">

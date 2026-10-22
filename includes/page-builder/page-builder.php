@@ -194,7 +194,7 @@ jQuery(document).ready(function(){
 	<div class="copyrights"><?=pb_hook_apply_filters('adminpage_footer_copyrights', '© 2019 Paul&Bro Company All Rights Reserved.')?> v<?=PB_PAGE_BUILDER_VERSION?></div>
 
 </div>
-<script type="text/xmldata" id="<?=$builder_id_?>-defaults"><?=htmlentities($content_, ENT_QUOTES, $pb_config->charset)?></script>
+<script type="text/xmldata" id="<?=$builder_id_?>-defaults"><?=htmlentities($content_ ?? "", ENT_QUOTES, $pb_config->charset)?></script>
 
 <script type="text/javascript">
 jQuery(document).ready(function(){

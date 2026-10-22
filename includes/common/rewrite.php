@@ -192,7 +192,7 @@ function pb_rewrite_unique_slug($slug_, $retry_count_ = 0, $extra_data_ = array(
 
 	return pb_rewrite_unique_slug($slug_, ++$retry_count_, $extra_data_);
 }
-function _pb_rewrite_unique_slug_for_reserved($result_, $original_slug_, $retry_count_ = 0, $extra_data_){
+function _pb_rewrite_unique_slug_for_reserved($result_, $original_slug_, $retry_count_ = 0, $extra_data_ = array()){
 	global $_pb_rewrite_reserved;
 
 	if(!isset($_pb_rewrite_reserved)){

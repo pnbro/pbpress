@@ -111,7 +111,7 @@ function _sample_guestbook_ajax_list(){
 
 	$items_ = array();
 	foreach($rows_ as $row_){
-		$can_delete_ = strlen($row_['user_id'])
+		$can_delete_ = strlen($row_['user_id'] ?? "")
 			? ($is_logged_in_ && ((string)$current_user_id_ === (string)$row_['user_id']))
 			: $is_admin_;
 

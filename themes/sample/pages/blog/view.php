@@ -109,7 +109,7 @@ pb_theme_header();
 			</div>
 		</div>
 
-		<?php if(strlen($featured_image_url_)): ?>
+		<?php if(strlen($featured_image_url_ ?? "")): ?>
 		<div class="blog-detail__thumb mt-4">
 			<img src="<?=htmlspecialchars($featured_image_url_)?>" alt="<?=htmlspecialchars($post_data_['post_title'])?>">
 		</div>

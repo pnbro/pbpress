@@ -136,7 +136,7 @@ function pb_current_adminpage_slug(){
 function pb_current_adminpage(){
 	$target_slug_ = pb_current_adminpage_slug();
 
-	if(!strlen($target_slug_)) return null;
+	if(!strlen($target_slug_ ?? "")) return null;
 
 	$pb_adminpage_list_ = pb_adminpage_list();
 	if(!isset($pb_adminpage_list_[$target_slug_])) return null;
@@ -171,7 +171,7 @@ function pb_adminpage_draw_error($code_, $message_, $title_ = "ERROR!"){
 }
 
 function pb_adminpage_register_back_url($url_ = null){
-	if(!strlen($url_)){
+	if(!strlen($url_ ?? "")){
 		$url_ = $_SERVER['REQUEST_URI'];
 	}
 

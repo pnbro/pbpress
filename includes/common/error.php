@@ -27,7 +27,7 @@ class PBError{
 }
 
 function pb_is_error($obj_){
-    return @get_class($obj_) === "PBError";
+    return is_object($obj_) && get_class($obj_) === "PBError";
 }
 function pb_error($error_code_, $error_title_, $error_message_){
     return new PBError($error_code_, $error_title_, $error_message_);

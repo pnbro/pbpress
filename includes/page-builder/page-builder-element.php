@@ -470,8 +470,8 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 			$editor_id_ = 'pb-page-builder-editor-'.pb_random_string(5);
 		?>
 	
-		<input type="text" name="<?=$name_?>" <?=$validator_attr_?> class="hidden" id="<?=$editor_id_?>-input" value="<?=htmlentities($input_value_)?>">
-		<?php pb_wysiwyg_editor('_'.$name_, stripslashes($input_value_), array(
+		<input type="text" name="<?=$name_?>" <?=$validator_attr_?> class="hidden" id="<?=$editor_id_?>-input" value="<?=htmlentities($input_value_ ?? "")?>">
+		<?php pb_wysiwyg_editor('_'.$name_, stripslashes($input_value_ ?? ""), array(
 			'id' => $editor_id_,
 		)); ?>
 		<script type="text/javascript">
@@ -487,7 +487,7 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 			$editor_id_ = 'pb-page-builder-html-editor-'.pb_random_string(5);
 		?>
 		
-		<textarea id="<?=$editor_id_?>" name="<?=$name_?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>"><?=stripslashes($input_value_)?></textarea>
+		<textarea id="<?=$editor_id_?>" name="<?=$name_?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>"><?=stripslashes($input_value_ ?? "")?></textarea>
 		<script type="text/javascript">
 		jQuery(document).ready(function(){
 			var target_textarea_ = $("#<?=$editor_id_?>");
@@ -516,14 +516,14 @@ function _pb_page_builder_element_edit_form_type_common_render($edit_data_, $ele
 		<?php break;
 		case 'text' :
 		default : ?>
-			<input type="text" name="<?=$name_?>" value="<?=htmlentities($input_value_)?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>" class="form-control">
+			<input type="text" name="<?=$name_?>" value="<?=htmlentities($input_value_ ?? "")?>" <?=$validator_attr_?> placeholder="<?=$placeholder_?>" class="form-control">
 		<?php break;
 	}
 
 	?>
 
 		<div class="help-block with-errors"></div>
-		<?php if(strlen($help_)){ ?>
+		<?php if(strlen($help_ ?? "")){ ?>
 			<div class="help-block"><?=$help_?></div>
 		<?php } ?>
 		<div class="clearfix"></div>

@@ -51,7 +51,10 @@ function _pb_filebase_detect_mime_type($file_path_){
 		$finfo_ = @finfo_open(FILEINFO_MIME_TYPE);
 		if($finfo_ !== false){
 			$mime_type_ = @finfo_file($finfo_, $file_path_);
-			finfo_close($finfo_);
+			//PHP 8.1부터 finfo는 객체로 자동 해제되고 8.5부터 finfo_close()가 사용중단되었으므로, 하위버젼에서만 명시적으로 해제
+			if(PHP_VERSION_ID < 80100){
+				finfo_close($finfo_);
+			}
 		}
 	}
 	if($mime_type_ === false && function_exists('mime_content_type')) $mime_type_ = @mime_content_type($file_path_);

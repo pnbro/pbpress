@@ -7,7 +7,7 @@ pb_hook_do_action("pb_started");
 
 $current_slug_ = pb_current_slug();
 
-if(strlen($current_slug_)){
+if(strlen($current_slug_ ?? "")){
 	$rewrite_ = pb_current_rewrite();
 	$rewrite_handler_ = isset($rewrite_["rewrite_handler"]) ? $rewrite_["rewrite_handler"] : pb_hook_apply_filters("pb_rewrite_common_handler", "pb_rewrite_common_handler");
 	$current_path_ = call_user_func_array($rewrite_handler_, array(pb_rewrite_path(), $rewrite_));

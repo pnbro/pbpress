@@ -178,7 +178,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 				$b_type_ = $data_['b_type'];
 				$compare_ = $data_['compare'];
 
-				if(strlen($b_type_)){
+				if(strlen($b_type_ ?? "")){
 					$param_values_[] = pb_database_escape_string($b_);
 					$param_types_[] = $b_type_;
 
@@ -295,7 +295,7 @@ class PBDB_select_statement_conditions extends ArrayObject{
 
 				foreach($or_conditions_ as $or_condition_data_){
 					$sub_cond_result_ = null;
-					if(@get_class($or_condition_data_) === "PBDB_select_statement_conditions"){
+					if(is_object($or_condition_data_) && get_class($or_condition_data_) === "PBDB_select_statement_conditions"){
 						$sub_cond_result_ = $or_condition_data_->build();
 					}else if(is_array($or_conditions_)){
 						$sub_cond_obj_ = new PBDB_select_statement_conditions();
@@ -408,7 +408,7 @@ class PBDB_select_statement{
 	private $_cond_list = null;
 
 	static function is_statement($obj_){
-		return @get_class($obj_) === "PBDB_select_statement";
+		return is_object($obj_) && get_class($obj_) === "PBDB_select_statement";
 	}
 
 	function __construct($from_table_, $from_table_alias_ = null, $pbdb_ = null){
@@ -657,7 +657,7 @@ class PBDB_select_statement{
 				$join_cond_ = pbdb_ss_conditions();
 
 				foreach($join_on_ as $join_args_){
-					call_user_func_array(array($join_cond_, "add"), $join_args_);
+					call_user_func_array(array($join_cond_, "add"), array_values($join_args_));
 				}
 					
 			}else{
@@ -705,7 +705,7 @@ class PBDB_select_statement{
 				$t_group_by_having_ = pbdb_ss_conditions();
 
 				foreach($group_by_having_ as $cond_args_){
-					call_user_func_array(array($t_group_by_having_, "add"), $cond_args_);
+					call_user_func_array(array($t_group_by_having_, "add"), array_values($cond_args_));
 				}
 
 				$group_by_having_ = $t_group_by_having_;
@@ -725,7 +725,7 @@ class PBDB_select_statement{
 			}
 		}
 
-		if(strlen($order_by_)){
+		if(strlen($order_by_ ?? "")){
 
 			if(stripos($order_by_, "order by") !== FALSE){
 				$query_ .= $order_by_." \n\r";				

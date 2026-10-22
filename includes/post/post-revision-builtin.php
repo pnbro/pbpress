@@ -91,7 +91,7 @@ function _pb_post_edit_form_after_hook_for_revision($post_data_){
 
 	$revision_statement_ = pb_post_revision_statement(array("post_id" => $post_data_['id']));
 
-	if(!strlen($post_data_['id'])) return; //post is new
+	if(!strlen($post_data_['id'] ?? "")) return; //post is new
 
 	$post_type_ = $post_data_['type'];
 

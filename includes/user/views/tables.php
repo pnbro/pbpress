@@ -6,7 +6,7 @@ pb_easytable_register("pb-user-listtable", function($offset_, $per_page_, $order
 		"keyword" => $keyword_,
 	));
 
-	if(!strlen($orderby_)){
+	if(!strlen($orderby_ ?? "")){
 		$orderby_ = "reg_date DESC";	
 	}
 	

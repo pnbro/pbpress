@@ -18,6 +18,7 @@ function pb_easytable_default_loading_indicator(){
 
 class PB_easytable{
 
+	private $_id;
 	private $_loader;
 	private $_data;
 	private $_options;
@@ -112,7 +113,7 @@ class PB_easytable{
 	function render_orderby($data_, $sort_key_, $sort_dir_){
 		$orderby_ = null;
 
-		if(!strlen($sort_key_)) return null;
+		if(!strlen($sort_key_ ?? "")) return null;
 
 		$sort_dir_ = (strtolower(trim((string)$sort_dir_)) === 'desc') ? 'DESC' : 'ASC';
 		if(preg_match('/[^A-Za-z0-9_.]/', (string)$sort_key_)) return null;
@@ -155,8 +156,8 @@ class PB_easytable{
 
 		$options_['sort'] = isset($options_) ? $options_ : array();
 
-		$sort_key_ = strlen($sort_key_) ? $sort_key_ : _GET('__ez_sort');
-		$sort_dir_ = strlen($sort_dir_) ? $sort_dir_ : _GET('__ez_sort_dir');
+		$sort_key_ = strlen($sort_key_ ?? "") ? $sort_key_ : _GET('__ez_sort');
+		$sort_dir_ = strlen($sort_dir_ ?? "") ? $sort_dir_ : _GET('__ez_sort_dir');
 
 		
 		?>

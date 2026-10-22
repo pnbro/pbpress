@@ -19,7 +19,7 @@ function pb_add_ajax($name_, $func_){
 function pb_ajax_url($action_ = null, $extras_ = null){
 	$ajax_base_url_ = pb_home_url("ajax");
 
-	if(strlen($action_)){
+	if(strlen($action_ ?? "")){
 		$ajax_base_url_ = pb_append_url($ajax_base_url_, $action_);
 	}
 

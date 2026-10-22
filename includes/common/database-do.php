@@ -123,7 +123,7 @@ class PBDB_DO extends ArrayObject{
 			case PBDB_DO::TYPE_MEDIUMINT : 
 			case PBDB_DO::TYPE_INT : 
 			case PBDB_DO::TYPE_BIGINT : 
-				return strlen($val_) ? $val_ : null;
+				return strlen($val_ ?? "") ? $val_ : null;
 
 			case PBDB_DO::TYPE_DOUBLE : 
 			case PBDB_DO::TYPE_REAL : 
@@ -507,7 +507,8 @@ class PBDB_DO extends ArrayObject{
 
 		$result_ = $this->_pbdb->update($this->_table_name, $update_values_, $keys_, $update_types_, $key_types_);
 		
-		$hook_params_ = array_merge(array("pbdb_do_{$this->_table_name}_updated"), $keys_);
+		//PHP 8부터 문자열 키 배열은 이름있는 인자(named parameter)로 해석되므로, 하위버젼과 동일하게 순서 인자로 전달
+		$hook_params_ = array_merge(array("pbdb_do_{$this->_table_name}_updated"), array_values($keys_));
 		call_user_func_array('pb_hook_do_action', $hook_params_);
 
 		return $result_;
@@ -551,7 +552,8 @@ class PBDB_DO extends ArrayObject{
 		}
 
 		$result_ = $this->_pbdb->delete($this->_table_name, $keys_, $key_types_);
-		$hook_params_ = array_merge(array("pbdb_do_{$this->_table_name}_delete"), $keys_);
+		//PHP 8부터 문자열 키 배열은 이름있는 인자(named parameter)로 해석되므로, 하위버젼과 동일하게 순서 인자로 전달
+		$hook_params_ = array_merge(array("pbdb_do_{$this->_table_name}_delete"), array_values($keys_));
 		call_user_func_array('pb_hook_do_action', $hook_params_);
 		return $result_;
 	}

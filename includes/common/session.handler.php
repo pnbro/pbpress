@@ -8,6 +8,7 @@ class PBSessionHandlerFile implements SessionHandlerInterface{
 
 	private $_session_save_path;
 	
+	#[\ReturnTypeWillChange]
 	function open($save_path_, $id_){
 		$this->_session_save_path = rtrim($save_path_)."/";
 
@@ -17,12 +18,15 @@ class PBSessionHandlerFile implements SessionHandlerInterface{
 
 		return true;
 	}
+	#[\ReturnTypeWillChange]
 	function close(){
 		return true;
 	}
+	#[\ReturnTypeWillChange]
 	function read($id_){
 		return (string) @file_get_contents($this->_session_save_path.$id_);
 	}
+	#[\ReturnTypeWillChange]
 	function write($id_, $data_){
 		$file_resource_ = @fopen($this->_session_save_path.$id_, "w+b");
 
@@ -34,9 +38,11 @@ class PBSessionHandlerFile implements SessionHandlerInterface{
 			return false;
 		}
 	}
+	#[\ReturnTypeWillChange]
 	function destroy($id_){
 		return @unlink($this->_session_save_path.$id_);
 	}
+	#[\ReturnTypeWillChange]
 	function gc($timeout_){
 		foreach(glob($this->_session_save_path."session_*") as $file_path_){
 			if(filemtime($file_path_) + $timeout_ < time()){

@@ -58,7 +58,7 @@ define('PB_FILE_UPLOAD_HANDLER_DEFAULT', "PBPressFileUPloadDefaultHandler");
 function pb_fileupload_handler($handler_ = null){
 	global $pb_config, $pb_fileupload_handler;
 
-	if(!strlen($handler_)){
+	if(!strlen($handler_ ?? "")){
 		$handler_ = $pb_config->file_upload_handler;
 	}
 	

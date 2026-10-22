@@ -10,6 +10,7 @@ define("PB_MYSQL_BOTH", 3);
 
 abstract class PBDatabase_connection{
 
+	private $_connection_type = null;
 	private $_last_query = null;
 	private $_last_query_parameters = null;
 

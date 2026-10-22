@@ -53,7 +53,7 @@ function pb_make_url($base_url_, $params_ = array()){
 			$concat_char_ = "&";
 		else $concat_char_ = "?";
 
-		$base_url_ .= $concat_char_.$key_."=".urlencode($value_);			
+		$base_url_ .= $concat_char_.$key_."=".urlencode($value_ ?? "");			
 	}
 
 	return $base_url_;

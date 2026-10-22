@@ -52,6 +52,9 @@ class PBDatabase_connection_mysqli extends PBDatabase_connection{
 		$this->_username = @strlen($options_['username']) ? $options_['username'] : $pb_config->db_username;
 		$this->_userpass = @strlen($options_['userpass']) ? $options_['userpass'] : $pb_config->db_userpass;
 
+		//PHP 8.1부터 mysqli 기본값이 예외발생이므로, 하위버젼과 동일하게 반환값으로 에러를 판정하도록 고정
+		mysqli_report(MYSQLI_REPORT_OFF);
+
 		$this->_connection = @mysqli_connect($this->_host, $this->_username, $this->_userpass, $this->_db_name, $this->_port) Or die("Error On DB Connection : MYSQLI");
 		mysqli_set_charset($this->_connection, $this->_charset);
 		return isset($this->_connection);

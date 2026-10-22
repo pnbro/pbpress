@@ -53,7 +53,7 @@
 					<div class="title-frame">
 						<div class="name">
 							<div class="text"><?=$plugin_data_['name']?></div>
-							<?php if(strlen($plugin_data_['version'])){ ?>
+							<?php if(strlen($plugin_data_['version'] ?? "")){ ?>
 								<small class="version">v<?=$plugin_data_['version']?></small>
 							<?php } ?>
 								
@@ -68,14 +68,14 @@
 						<?php } ?>
 					</div>
 					<div class="xs-visiable-info">
-						<?php if(strlen($plugin_data_['author'])){ ?>
+						<?php if(strlen($plugin_data_['author'] ?? "")){ ?>
 							<div class="subinfo"><i class="icon material-icons">person</i> <span class="text"><?=$plugin_data_['author']?></span></div>
 						<?php } ?>
 					</div>
 
 				</td>
 				<td class="author">
-					<?=strlen($plugin_data_['author']) ? $plugin_data_['author'] : "-"?>
+					<?=strlen($plugin_data_['author'] ?? "") ? $plugin_data_['author'] : "-"?>
 				</td>
 			</tr>
 			<?php } ?>

@@ -216,7 +216,7 @@ function pb_user_logout(){
 
 function pb_current_user($full_ = false){
 	$user_id_ = pb_session_get(PB_USER_SESSION_KEY);
-	if(!strlen($user_id_)) return pb_hook_apply_filters('pb_current_user', null);
+	if(!strlen($user_id_ ?? "")) return pb_hook_apply_filters('pb_current_user', null);
 
 	if($full_){
 		$user_data_ = pb_user($user_id_);
@@ -230,7 +230,7 @@ function pb_current_user($full_ = false){
 function pb_current_user_id(){
 	$user_id_ = pb_session_get(PB_USER_SESSION_KEY);
 	$user_id_ = pb_hook_apply_filters('pb_current_user_id', $user_id_);
-	if(!strlen($user_id_)) return -1;
+	if(!strlen($user_id_ ?? "")) return -1;
 	return $user_id_;
 }
 

@@ -202,7 +202,7 @@ function pb_page_title($id_ = null){
 	return pb_hook_apply_filters('pb_page_title', $page_data_['page_title'], $page_data_);
 }
 function pb_page_html($id_ = null){
-	if(!strlen($id_)){
+	if(!strlen($id_ ?? "")){
 		$current_page_data_ = pb_current_page();
 		if(!isset($current_page_data_)) return null;
 
@@ -237,7 +237,7 @@ function pb_change_front_page($page_id_){
 }
 function pb_front_page(){
 	$front_page_id_ = pb_front_page_id();
-	if(!strlen($front_page_id_)) return null;
+	if(!strlen($front_page_id_ ?? "")) return null;
 	return pb_page($front_page_id_);
 }
 function _pb_page_url_hook_for_front_page($result_, $page_data_){

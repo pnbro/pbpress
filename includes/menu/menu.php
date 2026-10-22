@@ -478,7 +478,7 @@ function pb_menu_tree($menu_data_, $cache_ = true){
 	));
 
 	foreach($temp_menu_list_ as $menu_item_data_){
-		if(strlen($menu_item_data_['parent_id'])) continue;
+		if(strlen($menu_item_data_['parent_id'] ?? "")) continue;
 
 		$row_data_ = array(
 			'item_data' => $menu_item_data_,
@@ -562,7 +562,7 @@ function pb_menu_render($options_ = array()){
 	$menu_data_ = null;
 	$menu_tree_ = null;
 
-	if(strlen($menu_id_)){
+	if(strlen($menu_id_ ?? "")){
 		$menu_data_ = pb_menu($menu_id_);
 		$menu_tree_ = pb_menu_tree($menu_data_);
 	}else if(strlen($menu_slug_)){
@@ -618,11 +618,11 @@ function _pb_menu_tree_for_render_level_hook($menu_tree_, $options_){
 	$level_max_ = isset($options_['level_max']) ? $options_['level_max'] : null;
 	$actived_children_only_ = isset($options_['actived_children_only']) ? $options_['actived_children_only'] : false;
 
-	if(strlen($parent_id_)){
+	if(strlen($parent_id_ ?? "")){
 		$menu_tree_ = _pb_menu_tree_recv_cut_by_standard_id($menu_tree_, $parent_id_);
 	}
 
-	if(strlen($level_max_)){
+	if(strlen($level_max_ ?? "")){
 		foreach($menu_tree_ as &$menu_data_){
 
 			if($menu_data_['level'] >= $level_max_){
