@@ -10,6 +10,9 @@ pb-config.php
 /extensions/
 /mcp-server/
 /.htaccess
+
+# AI 작업 문서(이력·설계·메모)는 로컬 전용 — 저장소에 올리지 않는다
+/pbpress-aidoc/
 /package-lock.json
 /.antigravity
 
