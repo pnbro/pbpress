@@ -33,8 +33,8 @@ define("PB_CRYPT_PASSWORD", "~W.7bNa[~$+aeP>u");
 define("PB_WYSIWYG_EDITOR", "summernote"); // trumbowyg or summernote
 
 // define("PB_FILE_UPLOAD_HANDLER", "default"); //default or class name
-define("PB_FILE_UPLOAD_STORAGE_PATH", "./_uploads"); // required for the default handler; PB_DOCUMENT_PATH relative or absolute path
-// define("PB_FILE_UPLOAD_LEGACY_FALLBACK", true); // read-only fallback to legacy public uploads
+// define("PB_FILE_UPLOAD_STORAGE_PATH", "../private/uploads"); // recommended: private storage outside the public web root (PB_DOCUMENT_PATH relative or absolute). if not set, PB_DOCUMENT_PATH/uploads is used
+// define("PB_FILE_UPLOAD_LEGACY_FALLBACK", true); // default true: read legacy uploads, and store to uploads when the storage path is not set. false = handler init error when not set
 
 // if you will use AWS S3 Fileupload Handler plugin,
 // define("PB_FILE_UPLOAD_HANDLER", "aws");

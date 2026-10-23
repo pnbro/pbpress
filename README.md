@@ -75,9 +75,11 @@ define('PB_DB_CHARSET', 'utf8mb4');
 
 define("PB_CRYPT_PASSWORD", "change-this-to-random-string");
 
-// 필수(기본 업로드 핸들러): PB_DOCUMENT_PATH 기준 상대경로 또는 절대경로
-// 미설정·빈값이면 업로드 핸들러 초기화가 실패합니다.
-define('PB_FILE_UPLOAD_STORAGE_PATH', '../private/uploads');
+// 권장(기본 업로드 핸들러): 공개 웹루트 밖 비공개 저장소. PB_DOCUMENT_PATH 기준 상대경로 또는 절대경로
+// 미설정·빈값이면 기존 PB_DOCUMENT_PATH/uploads 를 저장 위치로 사용합니다.
+// 값을 지정했는데 공개 웹루트 안이거나 만들 수 없는 경로면 업로드 핸들러 초기화 오류가 납니다.
+// define('PB_FILE_UPLOAD_STORAGE_PATH', '../private/uploads');
+// 기본 true: 기존 uploads 파일 읽기 + 저장 위치 미설정 시 uploads 에 저장. false 면 미설정 시 초기화 오류
 // define('PB_FILE_UPLOAD_LEGACY_FALLBACK', true);
 
 // 개발 모드 (lib/dev/ 직접 참조, 에러 표시)
