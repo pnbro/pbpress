@@ -5,7 +5,7 @@
 // =============================================================================
 @live-editor-navbar-height: 50px;
 @live-editor-icon-panel-width: 56px;
-@live-editor-side-panel-width: 480px;
+@live-editor-side-panel-width: 400px;
 @live-editor-status-bar-height: 36px;
 @live-editor-primary: #088edb;
 @live-editor-primary-dark: #0070b0;
@@ -304,10 +304,12 @@ body.pb-live-editor-body{
 	display: flex;
 	flex-direction: column;
 	transform: translateX(-@live-editor-side-panel-width);
+	visibility: hidden;
 	transition: transform 0.25s ease;
 
 	&.open{
 		transform: translateX(0);
+		visibility: visible;
 	}
 
 	.side-panel-header{
@@ -1060,128 +1062,6 @@ body.pb-live-editor-body{
 	}
 }
 
-// ── 자식 목록 드롭다운 (선택 오버레이 툴바에서 토글) ──
-.le-select-overlay .le-child-dropdown{
-	position: absolute;
-	top: -1px;
-	right: -1px;
-	min-width: 234px;
-	max-height: 260px;
-	overflow-y: auto;
-	background: #fff;
-	border: 1px solid #d0d5da;
-	border-radius: 6px;
-	box-shadow: 0 6px 22px rgba(0,0,0,0.16);
-	pointer-events: auto;
-	z-index: 10;
-
-	.le-child-dropdown-head{
-		font-size: 11px;
-		color: #8a8f96;
-		padding: 8px 12px;
-		border-bottom: 1px solid #eef0f2;
-		background: #fafbfc;
-		position: sticky;
-		top: 0;
-	}
-	.le-child-list{
-		// Sortable 컨테이너
-	}
-	.le-child-item{
-		position: relative;
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		padding: 9px 12px 9px 6px;
-		font-size: 13px;
-		cursor: pointer;
-		border-bottom: 1px solid #f4f5f6;
-		background: #fff;
-
-		&:last-child{ border-bottom: none; }
-		&:hover{ background: lighten(@le-select-color, 42%); }
-
-		.le-child-drag{
-			flex: 0 0 18px;
-			width: 18px;
-			height: 18px;
-			overflow: hidden;          // 폰트에 글리프 없을 때 레이아웃 붕괴 방지
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			color: #bcc2c9;
-			cursor: grab;
-
-			.material-icons{ font-size: 17px; line-height: 1; }
-			&:hover{ color: @le-select-color; }
-			&:active{ cursor: grabbing; }
-		}
-		.le-child-idx{
-			width: 18px;
-			height: 18px;
-			border-radius: 4px;
-			background: #eef0f3;
-			color: #7a8089;
-			font-size: 11px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-shrink: 0;
-		}
-		.le-child-icon{
-			font-size: 15px;
-			color: @le-select-color;
-			flex-shrink: 0;
-		}
-		.le-child-name{
-			flex: 1 1 auto;
-			min-width: 0;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-		// 액션: 절대배치 → hover 시 나타나도 행 레이아웃이 밀리지 않음
-		.le-child-actions{
-			position: absolute;
-			top: 0;
-			right: 4px;
-			bottom: 0;
-			display: flex;
-			align-items: center;
-			gap: 2px;
-			padding-left: 10px;
-			opacity: 0;
-			visibility: hidden;
-			transition: opacity 0.12s ease;
-			background: lighten(@le-select-color, 42%);   // hover 행 배경과 동일 → 이름 끝을 자연스럽게 가림
-
-			.le-child-action{
-				width: 22px;
-				height: 22px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				border-radius: 4px;
-				color: #8a8f96;
-				cursor: pointer;
-
-				.material-icons{ font-size: 15px; }
-				&:hover{ background: #ffffff; color: @le-select-color; }
-				&[data-child-action="delete"]:hover{ background: #fdecec; color: #e04444; }
-			}
-		}
-		&:hover .le-child-actions{
-			opacity: 1;
-			visibility: visible;
-		}
-
-		&.le-child-ghost{
-			opacity: 0.5;
-			background: lighten(@le-select-color, 38%);
-		}
-	}
-}
-
 // =============================================================================
 // ⑤ 하단 상태바
 // =============================================================================
@@ -1266,165 +1146,191 @@ body.pb-live-editor-body{
 	}
 }
 
-// =============================================================================
-// 반응형: 태블릿 (≤1024px)
-// =============================================================================
-@media (max-width: 1024px){
-	// 아이콘 패널 좁히기
-	.live-editor-icon-panel{
-		width: 48px;
-
-		.panel-btn{
-			width: 38px;
-			height: 38px;
-
-			> span{ display: none; }
-		}
-	}
-
-	// 사이드패널 위치 보정
-	.live-editor-side-panel{
-		left: 48px;
-	}
-
-	// 캔버스·오버레이·상태바 left 보정
-	.live-editor-canvas-area,
-	.canvas-overlay-layer,
-	.live-editor-status-bar{
-		left: 48px;
-	}
-
-	// 네비바: 페이지 제목 너비 줄이기
-	.live-editor-navbar .navbar-left .navbar-page-title{
-		max-width: 120px;
-	}
+// 편집 탐색과 터치 조작
+.pb-live-editor {
+  height: 100dvh;
+  button:focus-visible, [role="button"]:focus-visible, select:focus-visible {
+    outline: 3px solid @live-editor-primary-dark;
+    outline-offset: 2px;
+  }
+  button { touch-action: manipulation; }
 }
-
-// =============================================================================
-// 반응형: 태블릿 세로 (≤768px)
-// =============================================================================
-@media (max-width: 768px){
-	// 아이콘 패널 → 하단 가로 바
-	.live-editor-icon-panel{
-		top: auto;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		width: 100%;
-		height: 48px;
-		flex-direction: row;
-		justify-content: center;
-		padding: 0 8px;
-		gap: 4px;
-		z-index: 1001;
-
-		.panel-btn{
-			width: 40px;
-			height: 40px;
-
-			.material-icons{ font-size: 20px; }
-			> span{ display: none; }
-		}
-
-		.panel-divider{
-			width: 1px;
-			height: 24px;
-			margin: 0 4px;
-		}
-	}
-
-	// 상태바 숨김 (아이콘 바에 자리 양보)
-	.live-editor-status-bar{
-		display: none;
-	}
-
-	// 캔버스: 아이콘 패널이 하단으로 → left:0, bottom:48px
-	.live-editor-canvas-area,
-	.canvas-overlay-layer{
-		left: 0;
-		bottom: 48px;
-	}
-
-	// 사이드패널: 좌측 전체폭 오버레이
-	.live-editor-side-panel{
-		left: 0;
-		width: 100%;
-		right: 0;
-		bottom: 48px;
-		z-index: 950;
-	}
-
-	// 사이드패널 열림 시 캔버스 이동 없음 (오버레이 방식)
-	.pb-live-editor.side-panel-open{
-		.live-editor-canvas-area,
-		.canvas-overlay-layer{
-			left: 0;
-		}
-	}
-
-	// 캔버스 패딩 줄이기
-	.live-editor-canvas-area{
-		padding: 12px;
-	}
-
-	// 네비바: 디바이스 토글 숨김, 미리보기 텍스트 숨김
-	.live-editor-navbar{
-		.navbar-center{
-			display: none;
-		}
-		.navbar-right{
-			.preview-btn span:not(.material-icons){ display: none; }
-			.save-btn span:not(.material-icons){ display: none; }
-			.nav-status-select{ font-size: 11px; padding: 0 4px; }
-		}
-		.navbar-left .navbar-page-title{
-			max-width: 100px;
-		}
-	}
+.live-editor-navbar {
+  .navbar-left { min-width: 0; gap: 8px; }
+  .navbar-center, .navbar-right { flex-shrink: 0; }
+  .navbar-left .navbar-page-title { max-width: 180px; }
+  .le-save-state { color: #fff; font-size: 11px; white-space: nowrap; }
 }
-
-// =============================================================================
-// 반응형: 모바일 (≤480px)
-// =============================================================================
-@media (max-width: 480px){
-	// 네비바 더 간소화
-	.live-editor-navbar{
-		padding: 0 8px;
-
-		.navbar-left .navbar-page-title{
-			max-width: 70px;
-			font-size: 12px;
-		}
-
-		.navbar-right{
-			gap: 3px;
-
-			// Undo/Redo 숨김
-			.undo-btn, .redo-btn{ display: none; }
-
-			.nav-btn{
-				height: 30px;
-				padding: 0 8px;
-				font-size: 12px;
-			}
-		}
-	}
-
-	// 캔버스 패딩 최소화
-	.live-editor-canvas-area{
-		padding: 4px;
-	}
-
-	// 아이콘 패널 간격 줄이기
-	.live-editor-icon-panel{
-		gap: 2px;
-		padding: 0 4px;
-
-		.panel-btn{
-			width: 36px;
-			height: 36px;
-
-			.material-icons{ font-size: 18px; }
-		}
-	}
+.live-editor-side-panel {
+  max-width: calc(100vw - @live-editor-icon-panel-width);
+  .side-panel-header { gap: 8px; padding: 8px 12px; }
+  .side-panel-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .side-panel-header .side-panel-close-btn { width: auto; min-width: 90px; height: 44px; padding: 0 10px; gap: 4px; font-size: 12px; flex-shrink: 0; }
+  .side-panel-body { min-height: 0; overscroll-behavior: contain; }
+  .side-panel-footer { flex-wrap: wrap; padding: 8px 12px; }
+  .side-panel-footer .btn { min-height: 44px; }
+  .side-panel-footer .material-icons { font-size: 18px; }
+}
+.le-edit-hint { width: 100%; margin: 0; color: #5b6470; font-size: 11px; line-height: 1.5; }
+.le-hierarchy > summary { display: none; min-height: 44px; align-items: center; cursor: pointer; color: @live-editor-primary-dark; font-weight: 600; }
+.le-hierarchy:not([open]) > summary { display: flex; }
+.le-canvas-error { position: absolute; top: 12px; left: 12px; right: 12px; padding: 16px; border: 1px solid #cf9651; border-radius: 6px; background: #fff8ed; z-index: 2; .btn { min-height: 44px; } }
+.le-empty-canvas { position: absolute; top: 25%; left: 20px; right: 20px; padding: 24px; margin: auto; max-width: 460px; text-align: center; border: 1px dashed #a9bdcc; border-radius: 12px; background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  h2 { font-size: 20px; margin: 0 0 12px; }
+  p { font-size: 13px; color: #66717e; line-height: 1.7; }
+  .btn { min-height: 44px; margin-top: 8px; }
+}
+.le-edit-navigation {
+  flex-shrink: 0; padding: 8px 12px; border-bottom: 1px solid #e1e5eb; background: #f7f9fc;
+  max-height: 34vh; overflow: auto; overscroll-behavior: contain;
+  button { background: #fff; border: 1px solid #d8e0e8; border-radius: 5px; color: #344253; min-height: 36px; padding: 6px 8px; }
+  button:hover { border-color: @live-editor-primary; color: @live-editor-primary-dark; }
+  .material-icons { font-size: 18px; }
+}
+.le-edit-path { display: flex; align-items: center; gap: 4px; overflow-x: auto; padding-bottom: 6px;
+  button { flex-shrink: 0; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+  [aria-current] { color: @live-editor-primary-dark; border-color: @live-editor-primary; background: #edf6ff; }
+}
+.le-sibling-picker { display: block; color: #5b6470; font-size: 11px; font-weight: normal; margin: 4px 0 8px;
+  select { margin-top: 4px; width: 100%; font-size: 13px; }
+}
+.le-edit-children-head { display: flex; align-items: center; justify-content: space-between; font-size: 12px;
+  button { display: inline-flex; align-items: center; gap: 2px; }
+}
+.le-edit-children { margin-top: 4px;
+  button { display: flex; width: 100%; align-items: center; gap: 8px; margin-top: 4px; text-align: left; font-size: 12px;
+    span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  }
+  p { color: #66717e; font-size: 12px; padding: 8px 0; margin: 0; }
+}
+.le-edit-child-row { display: flex; gap: 4px; align-items: center;
+  [data-edit-path] { flex: 1; min-width: 0; }
+  button[data-child-move], button[data-child-delete] { width: 36px; flex: 0 0 36px; justify-content: center; padding: 0; }
+  button:disabled { opacity: .35; cursor: default; }
+  button[data-child-delete]:hover { color: #b42318; border-color: #b42318; }
+}
+.le-layer-toggle { border: 0; padding: 0; background: transparent; min-height: 36px; }
+.le-layer-label { min-height: 36px; }
+.le-layer-action { width: 30px; height: 30px; }
+.le-layer-label:focus-within .le-layer-actions { display: inline-flex; }
+.le-element-card { color: #344253; background: #fff; font: inherit; width: 100%; }
+.le-overlay-toolbar {
+  position: fixed; background: #fff; border: 1px solid #d8e0e8; border-radius: 8px; padding: 4px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.16); overflow-x: auto; right: auto; gap: 2px;
+  .le-toolbar-btn { width: 36px; height: 36px; flex-shrink: 0; border-radius: 5px; background: #fff; color: #344253;
+    &:hover { background: #eaf3fc; color: @live-editor-primary-dark; }
+    &:disabled { opacity: .35; cursor: default; }
+    &.le-toolbar-edit { width: auto; padding: 0 12px; gap: 5px; background: @live-editor-primary; color: #fff; }
+  }
+}
+.pb-live-editor.side-panel-open {
+  .live-editor-canvas-area, .canvas-overlay-layer { left: @live-editor-icon-panel-width + @live-editor-side-panel-width; }
+  .le-overlay-toolbar { display: none; }
+}
+.live-editor-status-bar {
+  gap: 12px;
+  .status-breadcrumb { min-width: 0; overflow-x: auto; white-space: nowrap;
+    .breadcrumb-item { border: 0; background: none; font: inherit; color: #536171; min-height: 30px; flex-shrink: 0; }
+  }
+  .status-zoom { flex-shrink: 0; }
+}
+@media (max-width: 1100px) and (min-width: 769px) {
+  .live-editor-navbar .le-save-state { display: none; }
+  .live-editor-navbar .navbar-left .navbar-page-title { max-width: 110px; }
+  .live-editor-side-panel { width: 360px; }
+  .pb-live-editor.side-panel-open {
+    .live-editor-canvas-area, .canvas-overlay-layer { left: @live-editor-icon-panel-width + 360px; }
+  }
+}
+@media (max-width: 768px) {
+  @mobile-nav-height: 104px;
+  @mobile-menu-height: 64px;
+  @mobile-path-height: 44px;
+  .live-editor-navbar {
+    height: @mobile-nav-height; padding: 4px 8px; display: grid;
+    grid-template-columns: minmax(0,1fr) auto; grid-template-rows: 44px 48px; gap: 4px 8px;
+    .navbar-left { overflow: hidden; gap: 4px; position: relative; padding-bottom: 12px;
+      .navbar-logo { display: none; }
+      .navbar-back-btn { width: 44px; height: 44px; flex-shrink: 0; }
+      .navbar-page-title { max-width: none; font-size: 13px; }
+    }
+    .le-save-state { display: block; position: absolute; left: 48px; bottom: 0; font-size: 10px; }
+    .navbar-center { display: block; .device-toggle { padding: 0;
+      .device-btn { width: 44px; height: 44px; }
+    }}
+    .navbar-right { grid-column: ~"1 / -1"; justify-content: space-between; gap: 4px;
+      .nav-btn { height: 44px; padding: 0 10px; }
+      .nav-btn.undo-btn, .nav-btn.redo-btn { display: flex; width: 44px; }
+      .preview-btn { width: 44px; justify-content: center; span { display: none; } }
+      .nav-status-select { height: 44px; margin: 0; min-width: 64px; font-size: 14px; padding: 0 4px; }
+    }
+  }
+  .live-editor-icon-panel {
+    top: auto; bottom: 0; left: 0; right: 0; width: 100%;
+    height: calc(@mobile-menu-height + env(safe-area-inset-bottom, 0px));
+    padding: 0 4px env(safe-area-inset-bottom, 0px); flex-direction: row; justify-content: space-around; gap: 0; z-index: 1001;
+    .panel-btn { flex: 1; width: auto; max-width: 100px; height: 56px; gap: 3px;
+      .material-icons { font-size: 22px; }
+      > span { display: block; font-size: 11px; }
+    }
+    .panel-divider { display: none; }
+  }
+  .live-editor-canvas-area, .canvas-overlay-layer {
+    top: @mobile-nav-height; left: 0;
+    bottom: calc(@mobile-menu-height + @mobile-path-height + env(safe-area-inset-bottom, 0px));
+  }
+  .live-editor-canvas-area { padding: 8px 8px 60px; }
+  .canvas-device-frame { min-height: 100%; }
+  .canvas-device-frame #live-editor-canvas-iframe { min-height: 100%; }
+  .live-editor-status-bar {
+    display: flex; left: 0; height: @mobile-path-height; padding: 0 8px;
+    bottom: calc(@mobile-menu-height + env(safe-area-inset-bottom, 0px));
+    .status-breadcrumb { width: 100%; .breadcrumb-item { min-height: 44px; } }
+    .status-zoom { display: none; }
+  }
+  .live-editor-side-panel {
+    top: @mobile-nav-height; left: 0; right: 0; width: 100%; max-width: none;
+    bottom: calc(@mobile-menu-height + env(safe-area-inset-bottom, 0px)); z-index: 950;
+    transform: translateX(-100%);
+    .side-panel-body { padding: 12px; }
+    .side-panel-header { min-height: 52px; padding: 4px 12px; }
+    .side-panel-footer { gap: 6px; .btn { flex: 1; justify-content: center; } }
+  }
+  .pb-live-editor.side-panel-open {
+    .live-editor-canvas-area, .canvas-overlay-layer { left: 0; }
+  }
+  .le-edit-navigation { max-height: 28vh; padding: 6px 12px;
+    button, select { min-height: 44px; }
+  }
+  .le-edit-child-row button[data-child-move], .le-edit-child-row button[data-child-delete] { width: 44px; flex-basis: 44px; }
+  .le-edit-form-wrap {
+    .form-control, select.form-control { min-height: 44px; height: auto; font-size: 16px; }
+    .pb-page-builder-element-edit-nav-tabs > .nav-tabs > li > a { min-height: 44px; padding: 12px; }
+    table.form-table, table.form-table tbody, table.form-table tr, table.form-table th, table.form-table td { display: block; width: 100%; }
+  }
+  .le-overlay-toolbar {
+    top: auto; left: 8px; right: 8px; max-width: none;
+    bottom: calc(@mobile-menu-height + @mobile-path-height + 8px + env(safe-area-inset-bottom, 0px));
+    .le-toolbar-btn { width: 44px; height: 44px; }
+  }
+  .le-layer-toggle { width: 44px; min-height: 44px; }
+  .le-layer-toggle-spacer { width: 36px; }
+  .le-layer-label { min-height: 44px; }
+  .le-layer-actions { display: none !important; }
+  .le-layer-item > .le-layer-list { padding-left: 12px; }
+  .le-element-picker .le-element-search input { height: 44px; font-size: 16px; }
+  .pb-live-editor.keyboard-open {
+    .live-editor-icon-panel, .live-editor-status-bar { visibility: hidden; }
+    .live-editor-side-panel { bottom: var(--le-keyboard-gap, 0px); }
+    .le-edit-navigation { max-height: 64px; }
+    .le-edit-hint { display: none; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pb-live-editor *, .pb-live-editor *::before, .pb-live-editor *::after { transition: none !important; scroll-behavior: auto !important; }
+}
+@media (max-height: 540px) {
+  .le-hierarchy > summary { display: flex; }
+  .le-edit-navigation { max-height: 120px; }
+  .le-edit-hint { display: none; }
 }

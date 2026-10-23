@@ -75,6 +75,7 @@ window.pb_live_editor_config = {
 				<i class="material-icons">arrow_back</i>
 			</a>
 			<span class="navbar-page-title" data-page-title><?=htmlspecialchars($pbpage['page_title'] ?: __('새 페이지'))?></span>
+			<span class="le-save-state" data-save-state role="status" aria-live="polite"></span>
 		</div>
 		<div class="navbar-center">
 			<div class="device-toggle" data-device-toggle>
@@ -86,21 +87,21 @@ window.pb_live_editor_config = {
 		<div class="navbar-right">
 			<button type="button" class="nav-btn undo-btn" data-undo-btn disabled title="<?=__('실행취소')?>"><i class="material-icons">undo</i></button>
 			<button type="button" class="nav-btn redo-btn" data-redo-btn disabled title="<?=__('다시실행')?>"><i class="material-icons">redo</i></button>
-			<button type="button" class="nav-btn preview-btn" data-preview-btn title="<?=__('미리보기')?>"><i class="material-icons">visibility</i> <?=__('미리보기')?></button>
-			<select class="nav-status-select" data-page-status><?=PB_PAGE_STATUS::make_options($pbpage['status'])?></select>
-			<button type="button" class="nav-btn save-btn" data-save-btn title="<?=__('저장')?>"><i class="material-icons">save</i> <?=__('저장')?></button>
+			<button type="button" class="nav-btn preview-btn" data-preview-btn title="<?=__('미리보기')?>"><i class="material-icons">visibility</i><span><?=__('미리보기')?></span></button>
+			<select class="nav-status-select" data-page-status aria-label="<?=__('페이지 공개 상태')?>"><?=PB_PAGE_STATUS::make_options($pbpage['status'])?></select>
+			<button type="button" class="nav-btn save-btn" data-save-btn title="<?=__('저장')?>"><i class="material-icons">save</i><span><?=__('저장')?></span></button>
 		</div>
 	</div>
 
 	<!-- ===== ② 좌측 아이콘 패널 ===== -->
 	<div class="live-editor-icon-panel" data-live-editor-icon-panel>
-		<button type="button" class="panel-btn active" data-panel="elements" title="<?=__('요소추가')?>">
+		<button type="button" class="panel-btn" data-panel="elements" title="<?=__('요소추가')?>">
 			<i class="material-icons">add_circle</i>
 			<span><?=__('요소')?></span>
 		</button>
-		<button type="button" class="panel-btn" data-panel="layers" title="<?=__('레이어')?>">
+		<button type="button" class="panel-btn" data-panel="layers" title="<?=__('구조')?>">
 			<i class="material-icons">layers</i>
-			<span><?=__('레이어')?></span>
+			<span><?=__('구조')?></span>
 		</button>
 		<button type="button" class="panel-btn" data-panel="saved-layouts" title="<?=__('저장서식')?>">
 			<i class="material-icons">bookmark</i>
@@ -112,30 +113,31 @@ window.pb_live_editor_config = {
 			<span><?=__('설정')?></span>
 		</button>
 		<div class="panel-divider"></div>
-		<button type="button" class="panel-btn" data-panel="history" title="<?=__('히스토리')?>">
+		<button type="button" class="panel-btn" data-panel="history" title="<?=__('기록')?>">
 			<i class="material-icons">history</i>
-			<span><?=__('히스토리')?></span>
+			<span><?=__('기록')?></span>
 		</button>
 	</div>
 
 	<!-- ===== ③ 사이드패널 ===== -->
-	<div class="live-editor-side-panel" data-live-editor-side-panel>
+	<section class="live-editor-side-panel" data-live-editor-side-panel aria-label="<?=__('편집 패널')?>">
 		<div class="side-panel-header" data-side-panel-header>
 			<h3 class="side-panel-title" data-side-panel-title></h3>
-			<button type="button" class="side-panel-close-btn" data-side-panel-close><i class="material-icons">close</i></button>
+			<button type="button" class="side-panel-close-btn" data-side-panel-close title="<?=__('입력을 유지하고 화면으로')?>"><span><?=__('화면으로')?></span><i class="material-icons">close</i></button>
 		</div>
+		<div class="le-edit-navigation" data-edit-navigation style="display:none;"></div>
 		<div class="side-panel-body" data-side-panel-body>
 			<!-- 패널 콘텐츠가 동적으로 로드됨 -->
 		</div>
 		<div class="side-panel-footer" data-side-panel-footer style="display:none;">
 			<!-- 적용/취소 버튼 영역 (편집 모드에서 사용) -->
 		</div>
-	</div>
+	</section>
 
 	<!-- ===== ④ 캔버스 영역 ===== -->
 	<div class="live-editor-canvas-area" data-live-editor-canvas-area>
 		<div class="canvas-device-frame" data-canvas-device-frame>
-			<iframe id="live-editor-canvas-iframe" data-live-editor-canvas-iframe frameborder="0"></iframe>
+			<iframe id="live-editor-canvas-iframe" data-live-editor-canvas-iframe title="<?=__('페이지 편집 화면')?>" frameborder="0"></iframe>
 		</div>
 		<!-- 오버레이 레이어 (iframe 위에 절대위치) -->
 		<div class="canvas-overlay-layer" data-canvas-overlay-layer></div>
@@ -144,12 +146,12 @@ window.pb_live_editor_config = {
 	<!-- ===== ⑤ 하단 상태바 ===== -->
 	<div class="live-editor-status-bar" data-live-editor-status-bar>
 		<div class="status-breadcrumb" data-status-breadcrumb>
-			<span class="breadcrumb-item">Body</span>
+			<button type="button" class="breadcrumb-item" data-breadcrumb-path=""><?=__('페이지 구조')?></button>
 		</div>
 		<div class="status-zoom" data-status-zoom>
-			<button type="button" class="zoom-btn" data-zoom-out><i class="material-icons">remove</i></button>
+			<button type="button" class="zoom-btn" data-zoom-out aria-label="<?=__('축소')?>"><i class="material-icons">remove</i></button>
 			<span class="zoom-value" data-zoom-value>100%</span>
-			<button type="button" class="zoom-btn" data-zoom-in><i class="material-icons">add</i></button>
+			<button type="button" class="zoom-btn" data-zoom-in aria-label="<?=__('확대')?>"><i class="material-icons">add</i></button>
 			<button type="button" class="zoom-btn" data-zoom-fit title="<?=__('화면맞춤')?>"><i class="material-icons">fit_screen</i></button>
 		</div>
 	</div>

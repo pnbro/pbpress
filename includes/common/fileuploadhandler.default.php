@@ -638,12 +638,14 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 
 			$image_resource_ = null;
 
+			// GD의 색상 프로필/손상 이미지 경고가 업로드 JSON에 섞이지 않도록 한다.
+			// 디코딩 실패(false)는 아래의 기존 원본 파일 반환 경로에서 처리한다.
 			switch($image_type_){
 				case IMAGETYPE_JPEG : 
-					$image_resource_ = imagecreatefromjpeg($r_file_path_);
+					$image_resource_ = @imagecreatefromjpeg($r_file_path_);
 				break;
 				case IMAGETYPE_PNG : 
-					$image_resource_ = imagecreatefrompng($r_file_path_);
+					$image_resource_ = @imagecreatefrompng($r_file_path_);
 					//PHP 8부터 손상된 이미지(false) 전달 시 TypeError가 발생하므로 정상 로드된 경우만 처리
 					if($image_resource_ !== false){
 						imageAlphaBlending($image_resource_, true);
@@ -651,7 +653,7 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 					}
 				break;
 				case IMAGETYPE_GIF : 
-					$image_resource_ = imagecreatefromgif($r_file_path_);
+					$image_resource_ = @imagecreatefromgif($r_file_path_);
 				break;
 			}
 			if($image_resource_ === null || $image_resource_ === false) return $result_;
