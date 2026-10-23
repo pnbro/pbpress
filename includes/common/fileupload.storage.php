@@ -59,6 +59,19 @@ function pb_upload_resolve_candidate_path($target_path_){
 	return $existing_path_;
 }
 
+//PB_FILE_UPLOAD_STORAGE_PATH 에 값을 지정했는지 여부(형식 검사 전 원래 값 기준)
+function pb_upload_storage_path_is_configured(){
+	global $pb_config;
+	$configured_path_ = isset($pb_config) && isset($pb_config->file_upload_storage_path) ? $pb_config->file_upload_storage_path : null;
+	return isset($configured_path_) && strlen(trim((string)$configured_path_)) > 0;
+}
+
+//저장 위치를 지정하지 않았고 legacy fallback 이 켜져 있으면 기존 PB_DOCUMENT_PATH/uploads 를 저장 위치로 사용
+//(지정했지만 값이 잘못된 경우는 기존 uploads 로 대신하지 않고 오류로 남긴다)
+function pb_upload_uses_legacy_storage(){
+	return !pb_upload_storage_path_is_configured() && pb_upload_legacy_fallback_enabled();
+}
+
 function pb_upload_configured_storage_path(){
 	global $pb_config;
 	$configured_path_ = isset($pb_config) && isset($pb_config->file_upload_storage_path) ? $pb_config->file_upload_storage_path : null;
@@ -76,6 +89,8 @@ function pb_upload_configured_storage_path(){
 }
 
 function pb_upload_root_path($create_ = true){
+	if(pb_upload_uses_legacy_storage()) return pb_upload_legacy_storage_root_path($create_);
+
 	$upload_path_ = pb_upload_configured_storage_path();
 	if($upload_path_ === false) return false;
 	$upload_path_ = pb_upload_resolve_candidate_path($upload_path_);
@@ -106,6 +121,18 @@ function pb_upload_legacy_root_path(){
 	return pb_upload_path_is_same_or_inside(PB_DOCUMENT_PATH, $legacy_path_) ? $legacy_path_ : false;
 }
 
+//기존 uploads 를 저장 위치로 쓸 때의 루트(없으면 생성). 링크·문서경로 밖 판정은 pb_upload_legacy_root_path() 와 동일
+function pb_upload_legacy_storage_root_path($create_ = true){
+	$document_path_ = rtrim(PB_DOCUMENT_PATH, '/\\');
+	$legacy_path_ = $document_path_.DIRECTORY_SEPARATOR.'uploads';
+	if(!file_exists($legacy_path_) && !is_link($legacy_path_)){
+		if(!$create_ || !is_dir($document_path_) || !is_writable($document_path_)) return false;
+		if(!mkdir($legacy_path_, 0755) && !is_dir($legacy_path_)) return false;
+	}
+
+	return pb_upload_legacy_root_path();
+}
+
 function pb_upload_legacy_fallback_enabled(){
 	global $pb_config;
 	$enabled_ = isset($pb_config) && isset($pb_config->file_upload_legacy_fallback) ? $pb_config->file_upload_legacy_fallback : true;
@@ -129,7 +156,13 @@ function pb_upload_path_is_inside($upload_root_, $target_path_){
 	return $target_path_ === $upload_root_ || strpos($target_path_, $upload_prefix_) === 0;
 }
 
-function pb_upload_directory($upload_root_, $relative_path_, $mode_ = 0750){
+//하위 폴더 권한: 비공개 저장소 0750 / 기존 uploads 사용 시 예전 코어와 같은 0755(웹서버가 직접 읽는 환경 호환)
+function pb_upload_directory_mode(){
+	return pb_upload_uses_legacy_storage() ? 0755 : 0750;
+}
+
+function pb_upload_directory($upload_root_, $relative_path_, $mode_ = null){
+	if(!isset($mode_)) $mode_ = pb_upload_directory_mode();
 	$upload_root_ = realpath($upload_root_);
 	if($upload_root_ === false) return false;
 

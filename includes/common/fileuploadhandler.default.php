@@ -248,6 +248,9 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 	function initialize(){
 		$upload_root_ = pb_upload_root_path();
 		if($upload_root_ === false){
+			if(pb_upload_uses_legacy_storage()){
+				return new PBError(-1, __("에러발생"), __("uploads 폴더를 준비할 수 없습니다. 폴더 권한을 확인하거나 PB_FILE_UPLOAD_STORAGE_PATH 를 설정하세요."));
+			}
 			return new PBError(-1, __("에러발생"), __("PB_FILE_UPLOAD_STORAGE_PATH 설정을 확인하세요."));
 		}
 
