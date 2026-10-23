@@ -6,7 +6,7 @@ pb_easytable_register("pb-admin-gcode-table", function($offset_, $per_page_, $or
 		"keyword" => $keyword_,
 	));
 
-	$order_by_ = strlen($order_by_) ? $order_by_ : "code_id ASC";
+	$order_by_ = strlen($order_by_ ?? "") ? $order_by_ : "code_id ASC";
 
 	return array(
 		'count' => $statement_->count(),

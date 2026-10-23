@@ -6,7 +6,7 @@ pb_easytable_register("pb-admin-authority-table", function($offset_, $per_page_,
 		"keyword" => $keyword_,
 	));
 
-	$order_by_ = strlen($order_by_) ? $order_by_ : "reg_date ASC";
+	$order_by_ = strlen($order_by_ ?? "") ? $order_by_ : "reg_date ASC";
 
 	return array(
 		'count' => $statement_->count(),
@@ -61,7 +61,7 @@ pb_easytable_register("pb-admin-authority-table", function($offset_, $per_page_,
 pb_easytable_register("pb-admin-authority-task-table", function($offset_, $per_page_){
 	$auth_id_ = _GET('master_id', null);
 
-	if(!strlen($auth_id_) || $auth_id_ < 0){
+	if(!strlen($auth_id_ ?? "") || $auth_id_ < 0){
 		return array(
 			'count' => 0,
 			'list' => array(),
