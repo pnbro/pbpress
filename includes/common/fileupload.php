@@ -70,7 +70,8 @@ function pb_fileupload_handler($handler_ = null){
 
 	switch($file_upload_handler_){
 		case "default" : $file_upload_handler_ = PB_FILE_UPLOAD_HANDLER_DEFAULT;
-			require(PB_DOCUMENT_PATH . 'includes/common/fileuploadhandler.default.php');
+			//한 요청에서 처리기를 여러 번 불러도 클래스가 중복선언되지 않도록 1회만 로드
+			require_once(PB_DOCUMENT_PATH . 'includes/common/fileuploadhandler.default.php');
 			break;
 	}
 
@@ -78,7 +79,11 @@ function pb_fileupload_handler($handler_ = null){
 
 	$file_upload_handler_instance_ = new $file_upload_handler_;
 	$initialize_result_ = $file_upload_handler_instance_->initialize();
-	if(pb_is_error($initialize_result_)) return $initialize_result_;
+	if(pb_is_error($initialize_result_)){
+		//초기화 실패도 같은 요청 안에서는 결과를 재사용(매 호출마다 재초기화 방지)
+		$pb_fileupload_handler[$handler_] = $initialize_result_;
+		return $initialize_result_;
+	}
 
 	$pb_fileupload_handler[$handler_] = $file_upload_handler_instance_;
 	return $file_upload_handler_instance_;
