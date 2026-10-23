@@ -197,6 +197,52 @@ pb_chunk_text_register(
 	}
 );
 
+// Each preview is a session-bound snapshot: refresh and other tabs never consume it.
+function _pb_page_store_preview($page_html_, $params_ = array()){
+	$previews_ = pb_session_get('_page_preview_snapshots');
+	if(!is_array($previews_)) $previews_ = array();
+	$now_ = time();
+	foreach($previews_ as $key_ => $preview_){
+		if(!is_array($preview_) || ($preview_['expires_at'] ?? 0) <= $now_
+			|| (string)($preview_['user_id'] ?? '') !== (string)pb_current_user_id()) unset($previews_[$key_]);
+	}
+	// Retain the five most recent snapshots for at most two hours.
+	while(count($previews_) >= 5) array_shift($previews_);
+	$token_ = bin2hex(random_bytes(16));
+	$preview_ = array('page_html' => $page_html_, 'user_id' => pb_current_user_id(), 'expires_at' => $now_ + 7200);
+	foreach(array('page_id', 'page_title', 'page_slug', 'page_status') as $key_){
+		if(isset($params_[$key_]) && is_scalar($params_[$key_])) $preview_[$key_] = (string)$params_[$key_];
+	}
+	$previews_[$token_] = $preview_;
+	pb_session_put('_page_preview_snapshots', $previews_);
+	return array('preview_id' => $token_, 'preview_url' => pb_home_url('__page-live-edit-preview?preview_id='.$token_));
+}
+
+function _pb_page_preview_snapshot($token_){
+	if(!is_string($token_) || !preg_match('/^[a-f0-9]{32}$/D', $token_)) return null;
+	$previews_ = pb_session_get('_page_preview_snapshots');
+	$preview_ = is_array($previews_) && isset($previews_[$token_]) ? $previews_[$token_] : null;
+	if(!is_array($preview_) || ($preview_['expires_at'] ?? 0) <= time()
+		|| (string)($preview_['user_id'] ?? '') !== (string)pb_current_user_id()) return null;
+	return $preview_;
+}
+
+function _pb_page_ajax_load_preview(){
+	if(!pb_user_has_authority_task(pb_current_user_id(), 'manage_page')){
+		pb_ajax_error(__('권한없음'), __('접근권한이 없습니다.'));
+	}
+	$token_ = _POST('preview_id');
+	$preview_ = _pb_page_preview_snapshot($token_);
+	$page_id_ = _POST('page_id');
+	if(!$preview_ || !is_scalar($page_id_) || (string)($preview_['page_id'] ?? '') !== (string)$page_id_){
+		pb_ajax_error(__('미리보기 만료'), __('미리보기 보관 시간이 지났습니다. 편집 화면에서 다시 미리보기를 눌러 주세요.'));
+	}
+	unset($preview_['user_id']);
+	$preview_['preview_url'] = pb_home_url('__page-live-edit-preview?preview_id='.$token_);
+	pb_ajax_success($preview_);
+}
+pb_add_ajax('load-page-preview', '_pb_page_ajax_load_preview');
+
 // 미리보기 임시저장 AJAX
 function _pb_page_ajax_preview(){
 	if(!pb_user_has_authority_task(pb_current_user_id(), "manage_page")){
@@ -205,15 +251,14 @@ function _pb_page_ajax_preview(){
 
 	$page_html_ = _POST('page_html');
 
-	if(!strlen($page_html_)){
+	if(!is_string($page_html_) || !strlen($page_html_)){
 		pb_ajax_error(__("잘못된 요청"), __("미리보기 데이터가 누락되었습니다."));
 	}
 
-	pb_session_put('_preview_page_html', $page_html_);
-
-	pb_ajax_success(array(
-		'preview_url' => pb_home_url('__page-live-edit-preview'),
-	));
+	pb_ajax_success(_pb_page_store_preview($page_html_, array(
+		'page_id' => _POST('page_id'), 'page_title' => _POST('page_title'),
+		'page_slug' => _POST('page_slug'), 'page_status' => _POST('page_status'),
+	)));
 }
 pb_add_ajax('preview-page', "_pb_page_ajax_preview");
 
@@ -225,11 +270,7 @@ pb_chunk_text_register(
 		}
 	},
 	function($merged_text_, $params_){
-		pb_session_put('_preview_page_html', $merged_text_);
-
-		return array(
-			'preview_url' => pb_home_url('__page-live-edit-preview'),
-		);
+		return _pb_page_store_preview($merged_text_, $params_);
 	}
 );
 

@@ -70,7 +70,6 @@ window.pb_live_editor_config = {
 	<!-- ===== ① 상단 네비바 ===== -->
 	<div class="live-editor-navbar" data-live-editor-navbar>
 		<div class="navbar-left">
-			<img src="<?=PB_LIBRARY_URL?>img/page-builder/icon.png" class="navbar-logo" alt="">
 			<a href="<?=pb_admin_url('manage-page')?>" class="navbar-back-btn" title="<?=__('페이지 목록')?>">
 				<i class="material-icons">arrow_back</i>
 			</a>
@@ -123,7 +122,7 @@ window.pb_live_editor_config = {
 	<section class="live-editor-side-panel" data-live-editor-side-panel aria-label="<?=__('편집 패널')?>">
 		<div class="side-panel-header" data-side-panel-header>
 			<h3 class="side-panel-title" data-side-panel-title></h3>
-			<button type="button" class="side-panel-close-btn" data-side-panel-close title="<?=__('입력을 유지하고 화면으로')?>"><span><?=__('화면으로')?></span><i class="material-icons">close</i></button>
+			<button type="button" class="side-panel-close-btn" data-side-panel-close title="<?=__('입력을 유지하고 화면으로')?>"><i class="material-icons">close</i></button>
 		</div>
 		<div class="le-edit-navigation" data-edit-navigation style="display:none;"></div>
 		<div class="side-panel-body" data-side-panel-body>
