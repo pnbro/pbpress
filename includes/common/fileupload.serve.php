@@ -12,7 +12,27 @@ function _pb_filebase_request_context(){
 	);
 }
 
+define('PB_FILEBASE_ROUTE_PROBE_NAME', '_pb_route_probe.txt');
+
+//공개 uploads 폴더를 웹서버가 PBPress 를 거치지 않고 직접 내려주는지 점검할 프로브 파일 URL.
+//PBPress 를 거친 응답에는 X-PB-Filebase 헤더가 붙으므로, 헤더 없이 200 이면 보호 규칙이 빠진 것이다.
+//공개 uploads 폴더가 없으면 점검 대상이 없으므로 null
+function pb_filebase_route_probe_url(){
+	$legacy_root_ = pb_upload_legacy_root_path();
+	if($legacy_root_ === false) return null;
+
+	$probe_path_ = $legacy_root_.DIRECTORY_SEPARATOR.PB_FILEBASE_ROUTE_PROBE_NAME;
+	if(is_link($probe_path_)) return null;
+	if(!is_file($probe_path_) && @file_put_contents($probe_path_, "PBPress uploads route probe\n", LOCK_EX) === false){
+		return null;
+	}
+
+	return pb_home_url('uploads/'.PB_FILEBASE_ROUTE_PROBE_NAME);
+}
+
 function _pb_filebase_rewrite_handler($rewrite_path_, $rewrite_data_){
+	if(!headers_sent()) header('X-PB-Filebase: 1');
+
 	if(!is_array($rewrite_path_) || count($rewrite_path_) <= 1){
 		return new PBError(404, __('파일없음'), __('파일을 찾을 수 없습니다.'));
 	}

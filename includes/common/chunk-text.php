@@ -45,7 +45,7 @@ function pb_chunk_text_handle($complete_callback_, $options_ = array()){
 		mkdir($temp_dir_, 0750, true);
 	}
 
-	if(!file_exists($temp_dir_ . ".htaccess")){
+	if(pb_rewrite_uses_htaccess() && !file_exists($temp_dir_ . ".htaccess")){
 		$htaccess_ = @fopen($temp_dir_ . ".htaccess", "w+b");
 		if($htaccess_){
 			fwrite($htaccess_, "Deny from all");

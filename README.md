@@ -32,7 +32,7 @@
 | **MySQL** | 5.x+ (InnoDB) | 8.0+ |
 | **DB 드라이버** | mysql / mysqli / pdo 중 택 1 | pdo |
 | **Node.js** | 14+ (프론트엔드 빌드용) | 18+ |
-| **Apache** | mod_rewrite 활성화 필요 | - |
+| **웹서버** | Apache(mod_rewrite) 또는 nginx(+php-fpm) | - |
 
 ---
 
@@ -88,7 +88,16 @@ define("PB_CRYPT_PASSWORD", "change-this-to-random-string");
 
 기존 `uploads` 파일을 이전할 때는 먼저 `php /절대경로/dev/migrate-uploads.php`로 dry-run 결과를 확인한 뒤 `--apply`를 사용하세요. 자세한 절차는 [`docs/upload-storage-migration.md`](docs/upload-storage-migration.md)에 있습니다.
 
-### 4. 브라우저 접속
+### 4. 웹서버 설정
+
+- **Apache**: 추가 작업 없음. 첫 접속 시 PBPress 가 `.htaccess` 를 자동 생성합니다(`mod_rewrite` 활성화, 해당 폴더 `AllowOverride All` 필요).
+- **nginx**: `.htaccess` 를 읽지 않으므로 아래 두 가지를 직접 적용합니다.
+  1. `pb-config.php` 에 `define("PB_SERVER_TYPE", "nginx");` 추가
+  2. [`nginx.conf.sample`](nginx.conf.sample) 의 rewrite 규칙을 서버 설정에 넣고 reload
+
+> `/uploads/` 규칙이 빠지면 첨부파일이 권한 확인 없이 열립니다. 관리자 대시보드에 빨간 경고가 보이면 웹서버 설정을 확인하세요.
+
+### 5. 브라우저 접속
 
 ```
 http://your-domain/
@@ -96,7 +105,7 @@ http://your-domain/
 
 설치 화면이 표시되면 안내에 따라 초기 설정을 완료합니다.
 
-### 5. 관리자 접속
+### 6. 관리자 접속
 
 ```
 http://your-domain/admin

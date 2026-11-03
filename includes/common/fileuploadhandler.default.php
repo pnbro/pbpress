@@ -255,8 +255,9 @@ class PBPressFileUPloadDefaultHandler extends PBPressFileUPloadHandler{
 		}
 
 		//prevent injection
+		//nginx 는 .htaccess 를 읽지 않으며 업로드 경로 실행 차단은 서버 설정(nginx.conf.sample)이 담당한다
 		$rewrite_path_ = $upload_root_.DIRECTORY_SEPARATOR.'.htaccess';
-		if(!file_exists($rewrite_path_)){
+		if(pb_rewrite_uses_htaccess() && !file_exists($rewrite_path_)){
 			$rewrite_file_ = @fopen($rewrite_path_, "x+b");
 
 			if($rewrite_file_ === false){

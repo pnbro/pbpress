@@ -23,7 +23,10 @@ ini_set('default_charset', $pb_config->charset);
 
 //check rewrite rule
 if(!pb_exists_rewrite()){
-	pb_install_rewrite();
+	$rewrite_installed_ = pb_install_rewrite();
+	if(pb_is_error($rewrite_installed_)){
+		pb_rewrite_install_failed($rewrite_installed_);
+	}
 	header('Location: '.pb_home_url());
 	pb_hook_do_action('pb_ended');
 	exit;

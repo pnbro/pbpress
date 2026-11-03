@@ -23,6 +23,11 @@ define("PB_DOCUMENT_URL", ($https_ ? 'https' : 'http') . '://' . PB_DOCUMENT_DOM
 
 include(dirname( __FILE__ )."/pb-config.php");
 
+//웹서버 종류: apache(기본, .htaccess 사용) 또는 nginx(서버 설정 파일에 rewrite 규칙 직접 작성, nginx.conf.sample 참고)
+if(!defined('PB_SERVER_TYPE')){
+	define('PB_SERVER_TYPE', 'apache');
+}
+
 if(defined("PB_DEV") && PB_DEV){
 	define('PB_VERSION', __PB_VERSION."_".time());
 	define('PB_SCRIPT_VERSION', __PB_SCRIPT_VERSION."_".time());

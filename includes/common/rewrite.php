@@ -8,10 +8,21 @@ define('PB_REWRITE_BASE', str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT
 define('PB_REWRITE_FILEBASE_MARKER', '# PBPress protected uploads route v2');
 
 
+function pb_server_type(){
+	$server_type_ = defined('PB_SERVER_TYPE') ? strtolower(trim((string)PB_SERVER_TYPE)) : 'apache';
+	return $server_type_ === 'nginx' ? 'nginx' : 'apache';
+}
+//.htaccess 로 rewrite 규칙을 관리하는 서버인지. nginx 는 규칙을 서버 설정에 직접 작성하므로 .htaccess 를 만들거나 확인하지 않는다
+function pb_rewrite_uses_htaccess(){
+	return pb_server_type() === 'apache';
+}
+
 function pb_exists_rewrite(){
+	if(!pb_rewrite_uses_htaccess()) return true;
 	return file_exists(PB_DOCUMENT_PATH.".htaccess");
 }
 function pb_rewrite_has_filebase_rule(){
+	if(!pb_rewrite_uses_htaccess()) return true;
 	if(!pb_exists_rewrite()) return false;
 	$rewrite_contents_ = @file_get_contents(PB_DOCUMENT_PATH.".htaccess");
 	if($rewrite_contents_ === false) return false;
@@ -55,6 +66,7 @@ function pb_upgrade_rewrite_for_filebase(){
 	return pb_rewrite_has_filebase_rule();
 }
 function pb_install_rewrite(){
+	if(!pb_rewrite_uses_htaccess()) return true;
 
 	$rewrite_base_ = str_replace($_SERVER["DOCUMENT_ROOT"], "", PB_DOCUMENT_PATH);
 	$rewrite_file_ = fopen(PB_DOCUMENT_PATH.".htaccess", "w");
@@ -76,6 +88,21 @@ function pb_install_rewrite(){
 	fclose($rewrite_file_);
 
 	return true;
+}
+
+//.htaccess 생성 실패 시 안내 후 중단. 다시 이동하면 무한 새로고침이 되고, 테마 로드 전 단계라 테마 오류화면도 쓸 수 없다
+function pb_rewrite_install_failed($error_){
+	if(!headers_sent()){
+		http_response_code(500);
+		header('Content-Type: text/html; charset=UTF-8');
+	}
+	echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'.htmlspecialchars($error_->error_title()).'</title></head><body>'
+		.'<h1>'.htmlspecialchars($error_->error_title()).'</h1>'
+		.'<p>'.htmlspecialchars($error_->error_message()).'</p>'
+		.'<p>'.htmlspecialchars(__('nginx를 사용한다면 pb-config.php에 PB_SERVER_TYPE을 nginx로 지정하고 nginx.conf.sample의 규칙을 서버 설정에 넣으세요.')).'</p>'
+		.'</body></html>';
+	pb_hook_do_action('pb_ended');
+	exit;
 }
 
 function pb_rewrite_list(){

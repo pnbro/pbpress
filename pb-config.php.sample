@@ -9,6 +9,8 @@ if(!defined('PB_DOCUMENT_PATH')){
 
 define('PB_CHARSET', 'UTF-8');
 
+// define("PB_SERVER_TYPE", "apache"); // apache(default, .htaccess) or nginx. nginx: write rewrite rules in the server config (see nginx.conf.sample)
+
 define('PB_DB_CONNECTION_TYPE', 'pdo'); //mysql, mysqli, pdo
 define('PB_DB_HOST', '');
 define('PB_DB_PORT', '');
