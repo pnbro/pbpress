@@ -1,55 +1,39 @@
 # PBPress nginx 설정 예시
 #
-# 1) pb-config.php 에 아래 한 줄을 추가합니다. (PBPress 가 .htaccess 를 만들거나 확인하지 않게 됩니다)
-#      define("PB_SERVER_TYPE", "nginx");
-# 2) 아래 server 블록을 환경에 맞게 고쳐 nginx 설정에 넣고 `nginx -t` 후 reload 합니다.
-#    - 도메인 루트에 설치: 아래 그대로 사용
-#    - 하위 폴더(예: /pbpress/)에 설치: 각 location 경로와 index.php 경로 앞에 /pbpress 를 붙입니다
-#      (예: location ^~ /pbpress/uploads/ { rewrite ^ /pbpress/index.php last; })
-# 3) 관리자 대시보드에 "업로드 파일 보호 규칙이 웹서버에 적용되지 않았습니다" 경고가 보이면
-#    uploads 규칙이 빠졌거나 다른 location 에 가려진 것입니다.
+# nginx 는 .htaccess 를 읽지 않으므로, PHP 사이트라면 공통으로 쓰는 아래 "try_files 한 줄"만 서버 설정에 있으면 됩니다.
+# (nginx 호스팅·서버 패널의 WordPress 용 기본 설정과 같습니다. 이미 있으면 추가 작업 없음)
+#
+# 나머지는 pb-config.php 에서 끝납니다.
+#   define("PB_SERVER_TYPE", "nginx");                          // .htaccess 를 만들거나 확인하지 않음
+#   define("PB_FILE_UPLOAD_STORAGE_PATH", "../private/uploads"); // 업로드를 웹 폴더 밖에 저장 → 모든 첨부파일이 권한 확인을 거침
+#
+# 업로드 저장 위치를 지정하지 않으면 관리자 대시보드에 빨간 경고가 표시됩니다.
 
 server {
 	listen 80;
 	server_name example.com;
-
-	root /var/www/pbpress;   # PBPress 폴더 (index.php, defined.php 가 있는 곳)
+	root /var/www/pbpress;   # PBPress 폴더 (index.php 가 있는 곳)
 	index index.php;
 
-	client_max_body_size 64m;
-
-	# 숨김 파일 차단 (.git, .htaccess, .mcp.json 등). 인증서 발급용 /.well-known 은 허용
-	location ~ /\.(?!well-known/) {
-		deny all;
-	}
-
-	# 업로드 파일은 반드시 PBPress 를 거쳐 권한 확인 후 전달 (Apache 의 "protected uploads route" 와 동일)
-	# ^~ 로 아래 PHP 실행 규칙보다 먼저 적용되어, 업로드 폴더 안의 .php 파일도 실행되지 않습니다.
-	location ^~ /uploads/ {
-		rewrite ^ /index.php last;
-	}
-
-	# 관리자: 실제 파일·폴더가 아니면 admin/index.php 로
-	location /admin/ {
-		try_files $uri $uri/ /admin/index.php$is_args$args;
-	}
-
-	# 사이트: 실제 파일·폴더가 아니면 index.php 로
+	# ★ 필수: 실제 파일이 아니면 index.php 로 (사이트·관리자·/uploads 모두 PBPress 가 처리)
+	#   하위 폴더(예: /pbpress/)에 설치했다면: location /pbpress/ { try_files $uri $uri/ /pbpress/index.php?$args; }
 	location / {
-		try_files $uri $uri/ /index.php$is_args$args;
+		try_files $uri $uri/ /index.php?$args;
 	}
 
+	# PHP 실행 (호스팅 기본값을 그대로 쓰면 됩니다)
 	location ~ \.php$ {
 		try_files $uri =404;
 		include fastcgi_params;
 		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-		fastcgi_param DOCUMENT_ROOT $document_root;
-		fastcgi_param HTTPS $https if_not_empty;
 		fastcgi_pass unix:/run/php/php-fpm.sock;   # 또는 127.0.0.1:9000
 	}
+
+	# (선택) 숨김 파일(.git 등) 차단
+	# location ~ /\.(?!well-known/) { deny all; }
+
+	# (선택) 기존 공개 uploads 폴더에 옛 파일이 남아 있고 아직 옮기지 못했다면, 아래 규칙으로 PBPress 를 거치게 할 수 있습니다.
+	# location ^~ /uploads/ { rewrite ^ /index.php last; }
 }
 
-# 참고
-# - 주소는 REQUEST_URI 로 해석하므로 rewrite 후에도 원래 주소가 PBPress 에 그대로 전달됩니다.
-# - root 대신 alias 로 설치하면 DOCUMENT_ROOT 기준 경로 계산이 어긋나므로 root 방식을 사용하세요.
-# - 리버스 프록시(로드밸런서) 뒤에서 https 를 쓰면 X-Forwarded-Proto 헤더를 넘겨주세요.
+# 참고: root 대신 alias 로 설치하면 경로 계산이 어긋나므로 root 방식을 사용하세요.

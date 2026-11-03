@@ -17,9 +17,30 @@ define('PB_FILEBASE_ROUTE_PROBE_NAME', '_pb_route_probe.txt');
 //공개 uploads 폴더를 웹서버가 PBPress 를 거치지 않고 직접 내려주는지 점검할 프로브 파일 URL.
 //PBPress 를 거친 응답에는 X-PB-Filebase 헤더가 붙으므로, 헤더 없이 200 이면 보호 규칙이 빠진 것이다.
 //공개 uploads 폴더가 없으면 점검 대상이 없으므로 null
+function _pb_filebase_legacy_has_files($legacy_root_){
+	$entries_ = @scandir($legacy_root_);
+	if($entries_ === false) return false;
+	foreach($entries_ as $entry_){
+		if(in_array($entry_, array('.', '..', '.htaccess', '.DS_Store', PB_FILEBASE_ROUTE_PROBE_NAME), true)) continue;
+		return true;
+	}
+	return false;
+}
+
+//nginx 는 웹 폴더 안 파일을 PBPress 를 거치지 않고 바로 내려주므로, 기본 처리기가 공개 uploads 에 저장하면 첨부파일이 권한 확인 없이 열린다
+function pb_filebase_public_storage_warning(){
+	global $pb_config;
+	if(pb_rewrite_uses_htaccess()) return false;
+	$handler_ = pb_hook_apply_filters('pb_fileupload_handler', isset($pb_config) ? $pb_config->file_upload_handler : 'default');
+	return $handler_ === 'default' && pb_upload_uses_legacy_storage();
+}
+
 function pb_filebase_route_probe_url(){
 	$legacy_root_ = pb_upload_legacy_root_path();
 	if($legacy_root_ === false) return null;
+
+	//저장 위치를 웹 폴더 밖으로 지정했고 기존 uploads 에 남은 파일도 없으면 노출될 것이 없으므로 점검하지 않는다
+	if(!pb_upload_uses_legacy_storage() && !_pb_filebase_legacy_has_files($legacy_root_)) return null;
 
 	$probe_path_ = $legacy_root_.DIRECTORY_SEPARATOR.PB_FILEBASE_ROUTE_PROBE_NAME;
 	if(is_link($probe_path_)) return null;

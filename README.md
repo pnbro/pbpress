@@ -91,11 +91,16 @@ define("PB_CRYPT_PASSWORD", "change-this-to-random-string");
 ### 4. 웹서버 설정
 
 - **Apache**: 추가 작업 없음. 첫 접속 시 PBPress 가 `.htaccess` 를 자동 생성합니다(`mod_rewrite` 활성화, 해당 폴더 `AllowOverride All` 필요).
-- **nginx**: `.htaccess` 를 읽지 않으므로 아래 두 가지를 직접 적용합니다.
-  1. `pb-config.php` 에 `define("PB_SERVER_TYPE", "nginx");` 추가
-  2. [`nginx.conf.sample`](nginx.conf.sample) 의 rewrite 규칙을 서버 설정에 넣고 reload
+- **nginx**: `pb-config.php` 에 두 줄을 추가하고, 서버 설정에는 PHP 사이트 공통 `try_files` 한 줄만 있으면 됩니다([`nginx.conf.sample`](nginx.conf.sample)).
+  ```php
+  define("PB_SERVER_TYPE", "nginx");                          // .htaccess 미사용
+  define("PB_FILE_UPLOAD_STORAGE_PATH", "../private/uploads"); // 업로드를 웹 폴더 밖에 저장
+  ```
+  ```nginx
+  location / { try_files $uri $uri/ /index.php?$args; }
+  ```
 
-> `/uploads/` 규칙이 빠지면 첨부파일이 권한 확인 없이 열립니다. 관리자 대시보드에 빨간 경고가 보이면 웹서버 설정을 확인하세요.
+> nginx 에서 업로드 저장 위치를 웹 폴더 밖으로 지정하지 않으면 첨부파일이 권한 확인 없이 열릴 수 있습니다. 이 경우 관리자 대시보드에 빨간 경고가 표시됩니다.
 
 ### 5. 브라우저 접속
 

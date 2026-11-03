@@ -1,5 +1,16 @@
 <?php
 	
+//웹서버가 모든 요청을 이 파일로 보내는 경우(nginx 기본 try_files 등) 관리자 주소는 관리자 화면으로 넘긴다.
+//Apache 는 .htaccess 가 관리자 주소를 admin/index.php 로 바로 보내므로 여기까지 오지 않는다
+$_pb_request_path_ = rawurldecode((string)strtok(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '', '?'));
+$_pb_admin_base_ = rtrim(str_replace('\\', '/', dirname(isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '/index.php')), '/').'/admin/';
+if(strpos($_pb_request_path_, $_pb_admin_base_) === 0){
+	unset($_pb_request_path_, $_pb_admin_base_);
+	require(dirname( __FILE__ ) . '/admin/index.php');
+	exit;
+}
+unset($_pb_request_path_, $_pb_admin_base_);
+
 require(dirname( __FILE__ ) . '/defined.php');
 require(PB_DOCUMENT_PATH . 'includes/initialize.php');
 
